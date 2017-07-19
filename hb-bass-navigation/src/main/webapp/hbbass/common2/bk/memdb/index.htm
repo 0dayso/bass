@@ -1,0 +1,118 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Mem DB Index</title>
+	<link rel="stylesheet" type="text/css"href="../resources/css/ext-all.css" />
+	<script type="text/javascript" src="../ext-base.js"></script>
+	<script type="text/javascript" src="../ext-all.js"></script>
+	<script type="text/javascript">
+    Ext.onReady(function(){
+    	var viewport = new Ext.Viewport({
+		    layout:'border',
+		    items:[{
+		        title: 'west',
+		        region: 'west',
+		        contentEl: 'west-div',
+		        split: true,
+		        border: true,
+		        collapsible: true,
+		        width: 200,
+		        minSize: 200,
+		        maxSize: 200
+		    },{
+		        
+		        region: 'center',
+		        contentEl: 'center-div',
+		        split: true,
+		        border: true,
+		        collapsible: true
+		    }]
+		});
+
+		var tree = new Ext.tree.TreePanel({
+   			el:'west-div',
+   			autoHeight :true,
+   			border :false,
+   			animate : false,
+   			style : "font-size: 12px;",
+   			columns:[ {text:'not leaf',"singleClickExpand":true},
+   					{text:'is leaf',leaf:true,href:true,"singleClickExpand":true}
+					],
+		    loader: new Ext.tree.TreeLoader({dataUrl: 'memDBAction.jsp?method=treeList',preloadChildren: true,clearOnLoad: false}),
+		    root : new Ext.tree.AsyncTreeNode({text:'MemDataBase',"singleClickExpand":true})
+		});
+
+		tree.render();
+			
+		var tabs = new Ext.TabPanel({
+	        renderTo: 'center-div',
+	        height:600,
+	        activeTab: 0,
+					//frame:true,
+	        defaults:{autoScroll: true},
+	        //maskDisabled: false,
+	        buttons: [
+	        	new Ext.Button({
+			        text: 'Update Table',
+			        handler: function(){
+			        	var mask = new Ext.LoadMask('center-div');
+			        	
+			        	mask.show();
+			        	
+			        	//alert(tabs.getActiveTab().title);
+			        	Ext.Ajax.request({
+							   	url: 'memDBAction.jsp?method=updateTable',
+							   	callback: function(){mask.hide();},
+							   	//success: function(){alert("suc");},
+							   	failure: function(){alert("fal")},
+							   	params: { table: tabs.getActiveTab().title }
+							});
+							//Ext.Ajax.on('beforerequest', function(){alert("bef")}, this);
+						}
+			        //iconCls:'new-tab'
+			    	}),
+			    	new Ext.Button({
+			        text: 'Query Table'
+			        //handler: addTab
+			        //iconCls:'new-tab'
+			    	})
+			    ],
+	       	border:false,
+	        items:[
+	            {title: 'Mem DB Cilent',html:'Client'}
+	        ]
+	    });
+		
+		tree.on('click', function(node, e){
+			if(node.isLeaf())
+			{
+        e.stopEvent();
+        loadClass(node.attributes.href, node.id);
+	    }
+    });
+		
+		var loadClass=function(href, id){
+						var tab = tabs.getComponent(id);
+						if(tab)
+						{
+							tabs.setActiveTab(tab);
+						}
+						else
+						{
+	            var p = tabs.add({
+	            	id: id,
+		            title: href.split("=")[1],
+		            autoLoad: {url: href, scripts: true},
+		            closable:true
+		        	});			
+							tabs.setActiveTab(p);
+						}
+    	};
+	});
+    </script>
+</head>
+<body>
+	<div id="west-div"></div>
+	<div id="center-div"></div>
+</body>
+</html>

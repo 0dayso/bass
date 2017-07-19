@@ -1,0 +1,362 @@
+<html xmlns:ai>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<title>核心客户预警报表</title>
+	<!-- 先加载ext,否则和my97datepicker冲突 -->
+	<!-- 
+		去掉mbuser_id 用户编码
+		20100802 : 一级改黄，三级改红
+	 -->
+    <script type="text/javascript" src="../../resources/js/ext/ext-base.js"></script>
+    <script type="text/javascript" src="../../resources/js/ext/ext-all.js"></script>
+	<script type="text/javascript" src="../../resources/js/default/default.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../../resources/js/default/tabext.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../../resources/js/datepicker/WdatePicker.js"></script>
+	<link rel="stylesheet" type="text/css" href="../../resources/css/default/default.css" />
+    <!-- ext -->
+    <link rel="stylesheet" type="text/css" href="../../resources/js/ext/resources/css/ext-all.css" />
+
+	<script type="text/javascript">
+	var _params = aihb.Util.paramsObj();	
+	var _header=[
+		{"name":"地区","dataIndex":"area_id","cellStyle":"grid_row_cell_text"}
+		,{"name":"账务日期","dataIndex":"op_time","cellStyle":"grid_row_cell_number"}
+		,{"name":"预警类型","dataIndex":"warn_type_id","cellStyle":"grid_row_cell_text"}
+		,{"name":"预警数值","dataIndex":"warn_value1","cellStyle":"grid_row_cell_number","cellFunc" : function(value,options) {
+			var color = options.record["warn_value2"];
+			value = value.replace(/^0*/,"");
+			if("红" == color)
+				color = "red";
+			else if('橙' == color)
+				color = "orange";
+			else if('黄' == color)
+				color = "eedd00";
+			else 
+				color = "black";
+			var _span = $C("span");
+			_span.style.color = color;
+			_span.appendChild($CT(value));
+			return _span;
+		}}
+		//,{"name":"用户编码","dataIndex":"mbuser_id"}
+		,{"name":"手机号码","dataIndex":"acc_nbr","cellStyle":"grid_row_cell_number",cellFunc : aihb.Util.fuzzFormat}
+		,{"name":"用户姓名","dataIndex":"cust_name","cellStyle":"grid_row_cell_text",cellFunc : aihb.Util.fuzzFormat}
+		
+		,{"name":"入网渠道编码","dataIndex":"channel_code","cellStyle":"grid_row_cell_text"}
+		,{"name":"客户经理姓名","dataIndex":"staff_name","cellStyle":"grid_row_cell_text"}
+		,{"name":"集团名称","dataIndex":"groupname","cellStyle":"grid_row_cell_text"}
+	];
+function genSQL(){
+	var condition = "";
+	var areaColName = "area_name";
+	if(document.forms[0].county.value) {
+		condition += " and a.area_id='" + document.forms[0].county.value + "'";
+		areaColName = "county_name";
+	}
+	else if(document.forms[0].city.value && document.forms[0].city.value != "0") {
+		condition += " and substr(a.area_id,1,5)='" + document.forms[0].city.value + "'";
+	}
+	if(document.forms[0].alertColor.value) {
+		condition += " and warn_value2='" + document.forms[0].alertColor.value + "'";
+	}
+	if(document.forms[0].warnType.value) {
+		condition += " and a.warn_type_id=" + document.forms[0].warnType.value;
+	}
+		
+	var sql = "select a.op_time," + 
+	"(select b.WARN_TYPE_NAME from NMK.DIM_CTT_WARNRULE b where b.WARN_TYPE_ID=a.WARN_TYPE_ID) as WARN_TYPE_ID,warn_value1," + 
+	"warn_value2,a.acc_nbr,a.cust_name," + 
+	"c.zone_code," + //added
+	"(select " + areaColName + " from MK.BT_AREA_ALL where county_code=a.AREA_ID) as area_id" + 
+	",a.channel_code,a.staff_name,a.groupname from NMK.CTT_USER_MONTHWARN_" + $("date1").value + " a , NMK.CTT_USER_BUREAU_" + $("date1").value + " c where a.mbuser_id=c.mbuser_id " + condition; // 表关联，为了到区域营销中心 20100721
+	return sql;
+}
+function query(){
+	
+	var grid = new aihb.AjaxGrid({
+		header:_header
+		,sql: genSQL()
+		,isCached : true
+		,callback:function(){
+			aihb.Util.watermark();
+		}
+	});
+	grid.run();
+}
+
+function down(){
+	aihb.AjaxHelper.down({
+		sql : genSQL()
+		,header : _header
+	});
+}
+
+window.onload=function(){
+	var _d=new Date();
+	_d.setDate(_d.getDate()-3);
+	_d.setMonth(_d.getMonth()-1);
+	$("date1").value=_d.format("yyyymm");
+	
+	aihb.Util.loadmask();
+	aihb.Util.watermark();
+	
+	var cityStr = aihb.BassDimHelper.areaCodeHtml("city",_params.cityId,"areacombo(1)");
+	$("cityTd").innerHTML = cityStr;
+}
+function edit() {
+	loadmask2.style.display = "block";
+	editable.style.display = "block";
+}
+</script>
+<script type="text/javascript">
+	
+	function test1() {
+		loadmask.style.display = "block";
+		editable.style.display = "block";
+	}
+	
+	Ext.onReady(function(){
+		Ext.BLANK_IMAGE_URL = '../../resources/js/ext/resources/images/default/s.gif';//防止从网上加载,我的理解
+    	Ext.QuickTips.init();
+   		var fm = Ext.form;
+		var cm = new Ext.grid.ColumnModel([
+		{
+           id: 'WARN_TYPE_ID',
+           header: '预警类型ID',
+           dataIndex: 'warn_type_id',
+           width: 100
+        },{
+           header: '预警类型名称',
+           dataIndex: 'warn_type_name',
+           width: 170
+        },{
+           header: '预警周期',
+           dataIndex: 'warn_type_cycle',
+           width: 100
+        },{
+           header: '默认预警级别',
+           dataIndex: 'default_warn_level',
+           width: 100
+        },
+        {
+           header: '<span style="color : eedd00">黄色</span>预警阀值',
+           dataIndex: 'first_warn_value',
+           width: 100,
+			editor: new fm.NumberField({
+			   allowBlank: false,
+			   allowNegative: false,
+			   maxValue: 100,
+			   minValue: 0
+		   })
+        },
+        {
+           header: '<span style="color : orange">橙色</span>预警阀值',
+           dataIndex: 'sec_warn_value',
+           width: 100,
+		    editor: new fm.NumberField({
+               allowBlank: false,
+               allowNegative: false,
+               maxValue: 100,
+               minValue: 0
+           })
+        },
+        {
+           header: '<span style="color : red">红色</span>预警阀值',
+           dataIndex: 'third_warn_value',
+           width: 100,
+		    editor: new fm.NumberField({
+               allowBlank: false,
+               allowNegative: false,
+               maxValue: 100,
+               minValue: 0
+           })
+        }
+    ]);
+    	cm.defaultSortable = true;
+    	
+   	   var sql = "select WARN_TYPE_ID,WARN_TYPE_NAME,WARN_TYPE_CYCLE,DEFAULT_WARN_LEVEL,FIRST_WARN_VALUE,SEC_WARN_VALUE,THIRD_WARN_VALUE from NMK.DIM_CTT_WARNRULE order by 1 asc ";
+       var store = new Ext.data.Store({
+        url: 'coreCustAction.jsp?action=query&sql=' + encodeURIComponent(sql),
+        reader: new Ext.data.JsonReader(
+            {
+                root: 'records'
+            },
+            [
+                {name: 'warn_type_id', type: 'string'},
+                {name: 'warn_type_name', type: 'string'},
+                {name: 'warn_type_cycle', type: 'string'},
+                {name: 'default_warn_level', type: 'string'},
+                {name: 'first_warn_value', type: 'string'},
+                {name: 'sec_warn_value', type: 'string'},
+                {name: 'third_warn_value', type: 'string'}             
+            ]
+        )
+    });
+    	 var grid = new Ext.grid.EditorGridPanel({
+    	//added mask
+    	loadMask:{
+    		msg:'数据加载中，请稍后...',
+    		removeMask:true
+    	},
+        store: store,
+        cm: cm,
+        renderTo: 'editableGrid',
+        width: 800,
+        height: 121,
+        title: '修改预警级别',
+        frame: true,
+        clicksToEdit: 1,
+        tbar: [{
+            text: '保存',
+            handler : function(){
+       
+            	var newRecords = store.getModifiedRecords();
+            	 if(newRecords.length==0){  // 确认修改记录数量
+			       alert("没有修改数据！");
+       				return false;
+     			}
+     			var ids = "",firsts = "",seconds = "",thirds="";
+     			for(var i = 0 ; i< newRecords.length; i++) {
+     				var dataObj = newRecords[i].data;
+     				ids += dataObj['warn_type_id'];
+     				firsts += dataObj['first_warn_value'];
+     				seconds += dataObj['sec_warn_value'];
+     				thirds += dataObj['third_warn_value'];
+     				/**/
+     				if(i<newRecords.length -1) {
+	     				ids += ",";
+	     				firsts += ",";
+	     				seconds += ",";
+	     				thirds += ",";
+     				}
+     			}
+				alert(ids);
+				alert(firsts);
+				alert(seconds);
+				alert(thirds);
+     			newRecords.length = 0; //试图清空
+     			Ext.Ajax.request({
+					url: 'coreCustAction.jsp',
+					params: {
+						action : 'modify',
+						ids : ids,
+						firsts : firsts,
+						seconds : seconds,
+						thirds : thirds
+					},
+					success: function(response, options) {
+				            var respObj;
+				            try{
+				            	respObj = eval("(" + response.responseText + ")"); 
+				            } catch(e) {
+				            	respObj = {success : false, errorInfo : '数据库原因'};
+				            	debugger;
+				            }
+				            if (respObj.success == true) {
+				           		alert("设置成功");
+				           		store.reload();
+				            } 
+				            else {
+				            	 alert("设置不成功，原因如下：" +respObj.errorInfo);
+				            	 store.reload();
+				            }
+					},
+					failure: function() {
+						alert("设置失败！请联系管理员.");
+						store.reload();
+					}
+				});
+     			//ajax request end
+            }
+        },
+        {
+        //新加
+        text: '取消',
+        handler : function() {
+        	loadmask2.style.display = "none";
+			editable.style.display = "none";
+        }
+        }
+        ]
+    });
+    store.load();
+    })
+</script>
+</head>
+
+<body>
+<form method="post" action="">
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'dim_div')" title="点击隐藏"><img flag='1' src="../../resources/image/default/ns-expand.gif"></img>&nbsp;查询条件区域：</td>
+	</tr></table></legend>
+	<div id="dim_div">
+	<table align='center' width='99%' class='grid-tab-blue' cellspacing='1' cellpadding='0' border='0'>
+			<tr class='dim_row'>
+				<td class='dim_cell_title'>选择月份 </td>
+				<td class='dim_cell_content'>
+					<input align="right" type="text" id="date1" name="date1" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyyMM'})" class="Wdate"/>
+				</td>
+				<td class='dim_cell_title'>地市</td>
+				<td class='dim_cell_content' id="cityTd">
+				</td>
+				
+				<td class='dim_cell_title'>县市 
+				</td>
+				<td class='dim_cell_content'><ai:dim id='aidim_county' name='county' dbName='county_id' operType='varchar'><select name='county' class='form_select'><option value=''>全部</option></select></ai:dim></td>
+			</tr>
+			<tr class='dim_row'>
+				<td class='dim_cell_title' >预警色</td>
+				<td class='dim_cell_content'>
+					<select name="alertColor"><option value="">全部</option><option value="红">红</option><option value="橙">橙</option><option value="黄">黄</option> </select>
+				</td>
+				
+				<td class='dim_cell_title' >预警类型</td>
+				<td class='dim_cell_content' colspan="3">
+					<select name="warnType"><option value="">全部</option>
+						<option value="5">捆绑到期还有1月</option>
+						<option value="9">呼转竞争对手预警</option>
+						<option value="1">消费下降30%</option>
+						<option value="8">拨打竞争对手客服电话</option>
+					</select>
+				</td>
+				
+			</tr>
+		</table>
+		
+	<table align="center" width="99%">
+		<tr class="dim_row_submit">
+			<td align="right" bgcolor="">
+				<input type="button" class="form_button" value="查询" onClick="query()">&nbsp;
+				<input type="button" class="form_button" value="下载" onclick="down()">&nbsp;
+				<input type="button" class="form_button" value="编辑预警级别" onClick="edit()">&nbsp;
+			</td>
+		</tr>
+	</table>
+	</div>
+</fieldset>
+</div><br>
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'show_div')" title="点击隐藏"><img flag='1' src="../../resources/image/default/ns-expand.gif"></img>&nbsp;数据展现区域：</td>
+		<td></td>
+	</tr></table></legend>
+	<div id="grid" style="display:none;"></div>
+</fieldset>
+</div><br>
+</form>
+
+	
+	<DIV style="display : none" id=loadmask2>
+		<DIV style="Z-INDEX: 20000; POSITION: absolute; WIDTH: 100%; BACKGROUND: #c3daf9; HEIGHT: 120%; TOP: 0px; LEFT: 0px;FILTER: alpha(opacity=60)" id=loadingmask>&nbsp;
+		</DIV>
+</DIV>
+	<div id="editable" style="display : none;Z-INDEX: 20001;POSITION: absolute;top: 200px; left : 200px">
+		<div id="editableGrid">
+		</div>
+	</div>
+
+</body>
+</html>

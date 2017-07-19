@@ -1,0 +1,340 @@
+<html xmlns:ai>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<title>按集团展示信息化收入报表</title>
+	<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/default/default.js" charset="utf-8"></script>
+	<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/default/tabext.js" charset="utf-8"></script>
+	<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/datepicker/WdatePicker.js"></script>
+	<link rel="stylesheet" type="text/css" href="/hb-bass-navigation/hbapp/resources/css/default/default.css" />
+	<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/ext/ext-base.js"></script>
+	<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/ext/ext-all.js"></script>
+	<link rel="stylesheet" type="text/css" href="/hb-bass-navigation/hbapp/resources/js/ext/resources/css/ext-all.css" />
+	<script type="text/javascript">
+	//aihb.URL="/hbapp";
+var win;
+function getAonclick(target_groupcode){
+    tabAdd({title:target_groupcode,id:target_groupcode,url:"/hbapp/conf/update_GRID_TARGETENT_LIST.jsp?target_groupcode="+target_groupcode});
+}
+var _header= [
+	{"cellStyle":"grid_row_cell","dataIndex":"target_groupcode","name":["目标客户编码"],"title":""
+		,cellFunc:function(val,options){
+				var _a= $C("a");
+				_a.appendChild($CT(val));
+				_a.href="#";
+				_a.target_groupcode=val;
+				_a.target_groupname=options.record.target_groupname;
+				_a.onclick=function(){
+					
+					document.forms[1].grid_main.value=options.record.maingrid_id=="未分配"?"":options.record.maingrid_id;
+					gridcombo(1);
+					document.forms[1].grid_sub.value=options.record.subgrid_id=="未分配"?"":options.record.subgrid_id;
+					gridcombo(2);
+					document.forms[1].grid_micro.value=options.record.microgrid_id=="未分配"?"":options.record.microgrid_id;
+					$("staff_id").value=options.record.staff=="未分配"?"":options.record.staff.split(" ")[0];
+					$("staff_name").value=options.record.staff=="未分配"?"":options.record.staff.split(" ")[1];
+					
+			    	if(!win){
+				    	win=new  Ext.Window(
+		                {
+		                    title: this.target_groupname +" 网格归属"
+		                    ,closeAction:'hide'
+                			,plain: true
+		                    ,width: 600
+		                    ,height: 140 
+		                    ,items:[
+	             				{contentEl:'hidDip'}
+	        				]
+	        				,buttons: [{
+			                    text:'Submit',
+			                    handler:function(){
+			                    	if(confirm("确定添加？")){
+			        		
+				                    	var sql=encodeURIComponent("update NMK.GRID_TARGETENT_LIST set maingrid_id='"+document.forms[1].grid_main.value+"',subgrid_id='"+document.forms[1].grid_sub.value+"',microgrid_id='"+document.forms[1].grid_micro.value+"',staff_id='"+$("staff_id").value+"',staff_name='"+$("staff_name").value+"' where target_groupcode='"+win.target_groupcode+"'");
+										
+										//alert(sql);
+	
+										var ajax = new aihb.Ajax({
+											url : "/hbirs/action/sqlExec"
+											,parameters : "sqls="+sql
+											,loadmask : false
+											,callback : function(xmlrequest){
+												alert(xmlrequest.responseText);
+												win.hide();
+												query();
+											}
+										});
+										ajax.request();
+									}
+			                    }
+			                },{
+			                    text: 'Close',
+			                    handler: function(){
+			                        win.hide();
+			                    }
+			                }]
+		
+		                }); 
+		            }
+		            win.target_groupcode=this.target_groupcode;
+		            win.setTitle (this.target_groupname +" 网格归属");
+			    	win.show(this);
+				}
+				return _a;
+			}
+	}
+	,{"cellStyle":"grid_row_cell_text","dataIndex":"target_groupname","name":["目标客户名称"],"title":"","cellFunc":""}
+	,{"cellStyle":"grid_row_cell_text","dataIndex":"industry_name","name":["行业类型"],"title":"","cellFunc":""}
+	,{"cellStyle":"grid_row_cell_text","dataIndex":"country_area","name":["区域"],"title":"","cellFunc":""}
+	,{"cellStyle":"grid_row_cell_text","dataIndex":"town_area","name":["乡镇"],"title":"","cellFunc":""}
+	,{"cellStyle":"grid_row_cell_text","dataIndex":"customer_address","name":["地址"],"title":"","cellFunc":""}
+	//,{"cellStyle":"","dataIndex":"postcode","name":["邮编"],"title":"","cellFunc":""}
+	,{"cellStyle":"","dataIndex":"contact_tel1","name":["联系电话"],"title":"","cellFunc":""}
+	//,{"cellStyle":"","dataIndex":"contact_tel2","name":["联系电话2"],"title":"","cellFunc":""}
+	,{"cellStyle":"","dataIndex":"groupcode","name":["BOSS集团编码"],"title":"","cellFunc":""}
+	,{"cellStyle":"","dataIndex":"groupname","name":["BOSS集团名称"],"title":"","cellFunc":""}
+	,{"cellStyle":"","dataIndex":"maingrid_name","name":["主网名称"],"title":"","cellFunc":""}
+	,{"cellStyle":"","dataIndex":"subgrid_name","name":["子网名称"],"title":"","cellFunc":""}
+	,{"cellStyle":"","dataIndex":"microgrid_name","name":["微网名称"],"title":"","cellFunc":""}
+	,{"cellStyle":"","dataIndex":"staff","name":["客户经理"],"title":"","cellFunc":""}
+	,{"cellStyle":"","dataIndex":"lng","name":["经度"],"title":"","cellFunc":""}
+	,{"cellStyle":"","dataIndex":"lat","name":["维度"],"title":"","cellFunc":""}
+];
+function genSQL(){
+	var sql="select CITY_ID,TARGET_GROUPCODE,TARGET_GROUPNAME,INDUSTRY_NAME,COUNTRY_AREA,TOWN_AREA,CUSTOMER_ADDRESS,"
+		+ " CONTACT_TEL1,GROUPCODE,GROUPNAME,MAINGRID_ID,SUBGRID_ID,MICROGRID_ID"
+		+ ",value((select grid_name from nmk.grid_tree_info where grid_id= MAINGRID_ID),MAINGRID_ID) MAINGRID_name"
+		+ ",value((select grid_name from nmk.grid_tree_info where grid_id= SUBGRID_ID),SUBGRID_ID) SUBGRID_name"
+		+ ",value((select grid_name from nmk.grid_tree_info where grid_id= MICROGRID_ID),MICROGRID_ID) MICROGRID_name"
+		+ ",case when STAFF_ID='未分配' then '' else staff_id||' ' end||STAFF_NAME staff,LNG,LAT"
+		+ " from NMK.GRID_TARGETENT_LIST"
+		+ " where 1=1 " + aihb.AjaxHelper.parseCondition()
+		+ " with ur";
+	return sql;
+}
+
+function areacombo( level , sync ) {
+	var _elements = [];
+	var sqls = [];
+	_elements.push(document.forms[0].city);
+	if(document.forms[0].ent_grid_main){
+		_elements.push(document.forms[0].ent_grid_main);
+		sqls.push("select grid_id key,grid_name value from nmk.grid_tree_info where parentgrid_id = '#{value}' union all select * from (values('未分配','未分配')) as t(key,value) order by 1 with ur");
+	}
+	if(document.forms[0].ent_grid_sub){
+		_elements.push(document.forms[0].ent_grid_sub);
+		sqls.push("select grid_id key,grid_name value from nmk.grid_tree_info where parentgrid_id = '#{value}' union all select * from (values('未分配','未分配')) as t(key,value) order by 1 with ur");
+	}
+	if(document.forms[0].ent_grid_micro){
+		_elements.push(document.forms[0].ent_grid_micro);
+		sqls.push("select grid_id key,grid_name value from nmk.grid_tree_info where parentgrid_id = '#{value}' union all select * from (values('未分配','未分配')) as t(key,value) order by 1 with ur");
+	}
+	aihb.FormHelper.comboLink({
+		elements : _elements
+		,datas : sqls
+		,level : level
+	});
+}
+
+function query(){
+	var grid = new aihb.AjaxGrid({
+		header:_header
+		,sql: genSQL()
+		,isCached :false
+		,callback:function(){
+			aihb.Util.watermark();
+		}
+	});
+	grid.run();
+}
+
+function down(){
+	aihb.AjaxHelper.down({
+		sql : genSQL()
+		,header : _header
+	});
+}
+
+window.onload=function(){
+	//query();
+	aihb.BassDimHelper.renderArea({el:"area_id"});
+	
+	$("_btn").onclick=function(){
+		parent.addTab("未归属目标清单报表","/hbirs/action/confReport?method=render&sid=4172");
+	}
+}
+
+aihb.Util.loadmask();
+aihb.Util.watermark();
+//aihb.BassDimHelper.renderArea({el:"aidim_city"});
+</script>
+</head>
+<body>
+<form method="post" action="">
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'dim_div')" title="点击隐藏"><img flag='1' src="/hb-bass-navigation/hbapp/resources/image/default/ns-expand.gif"></img>&nbsp;查询条件区域：</td>
+	</tr></table></legend>
+	<div id="dim_div">
+		<table align='center' width='99%' class='grid-tab-blue' cellspacing='1' cellpadding='0' border='0'>
+		<tr class='dim_row'>
+		<td class='dim_cell_title' onclick='' title='点击切换时间类型' style='cursor:hand;'>地市</td><td class='dim_cell_content'>
+		 <ai:dim id='area_id' name='city' dbName="city_id" operType="varchar">
+		 
+		 </ai:dim> </td>
+		 <td class='dim_cell_title'>主网</td>
+		 <td class='dim_cell_content'>
+		 <ai:dim id="aidim_ent_grid_main" name='ent_grid_main' dbName="MAINGRID_ID">
+		 <select name="ent_grid_main" class='form_select' onchange="areacombo('2')"><option value=''>全部</option></select>
+		 </ai:dim>
+		 </td>
+		 <td class='dim_cell_title'>子网</td>
+		 <td class='dim_cell_content'>
+		 <ai:dim id='aidim_ent_grid_main' name='ent_grid_sub' dbName="subGRID_ID">
+		 <select name="ent_grid_sub" class='form_select' onchange="areacombo('3')"><option value=''>全部</option></select>
+		 </ai:dim>
+		 </td>
+		 </tr>
+		 <tr>
+		 <td class='dim_cell_title'>微网</td>
+		 <td class='dim_cell_content'>
+		 <ai:dim id='aidim_ent_grid_main' name='ent_grid_micro' dbName="microgrid_id">
+		 <select name="ent_grid_micro" class='form_select'><option value=''>全部</option></select>
+		 </ai:dim>
+		 </td>
+			
+		
+		<td class='dim_cell_title'></td>
+		 <td class='dim_cell_content'>
+		 </ai:dim>
+		 </td>
+		<td class='dim_cell_title'></td>
+		 <td class='dim_cell_content'>
+		 </ai:dim>
+		 </td>
+		 </tr>
+		 </table>
+	      
+	<table align="center" width="99%">
+		
+		<tr class="dim_row_submit">
+		<td >提示：目标清单的资料请在<span style="color: red">”BOSS前台-客户管理-集团客户管理“</span>菜单下维护 </td>
+			<td align="right">
+				<div id="Btn">
+					<input type="button" class="form_button" value="未分配汇总" id="_btn">&nbsp;
+					<input type="button" class="form_button" value="查询" onClick="query()">&nbsp;
+					<input type="button" class="form_button" value="下载" onclick="down()">&nbsp;
+				</div>
+			</td>
+		</tr>
+	</table>
+	</div>
+</fieldset>
+</form>
+</div><br>
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'show_div')" title="点击隐藏"><img flag='1' src="/hb-bass-navigation/hbapp/resources/image/default/ns-expand.gif"></img>&nbsp;数据展现区域：</td>
+		<td></td>
+	</tr></table></legend>
+	<div id="grid" style="display:none;"></div>
+</fieldset>
+</div><br>
+
+
+<div id="msg" style="display:none;">
+
+<div id="hidDip" >
+<form method="post" action="">
+	<table align='center' width='99%' class='grid-tab-blue' cellspacing='1' cellpadding='0' border='0'>
+		<tr class='dim_row'>
+		 <td class='dim_cell_title'>主网</td>
+		 <td class='dim_cell_content'>
+		 
+		 <select name="grid_main" class='form_select' onchange="gridcombo('1')"><option value=''>全部</option></select>
+		 
+		 </td>
+		 <td class='dim_cell_title'>子网</td>
+		 <td class='dim_cell_content'>
+		
+		 <select name="grid_sub" class='form_select' onchange="gridcombo('2');"><option value=''>全部</option></select>
+		 
+		 </td>
+		 </tr>
+		 <tr>
+		 <td class='dim_cell_title'>微网</td>
+		 <td class='dim_cell_content'>
+		 <select name="grid_micro" class='form_select' onchange="staffInit()"><option value=''>全部</option></select>
+		 </ai:dim>
+		 </td>
+			
+		
+		<td class='dim_cell_title'>客户经理编码</td>
+		 <td class='dim_cell_content'>
+		 	<input id="staff_id" />
+		 </td>
+		 </tr>
+		 <tr>
+		 <td class='dim_cell_title'>客户经理名称</td>
+		  <td class='dim_cell_content'>
+		 	<input id="staff_name" />
+		 </td>
+			
+		
+		<td class='dim_cell_title'></td>
+		 <td class='dim_cell_content'>
+		 	
+		 </td>
+		 </tr>
+		 </table>
+		 </form>
+</div>
+
+
+</div>
+<script>
+function staffInit(){
+	var _sql="select staff_id,staff_name from nmk.grid_basic where id='"+document.forms[1].grid_micro.value+"'";
+	
+	var ajax = new aihb.Ajax({
+		url : "/hbirs/action/jsondata?method=query"
+		,parameters : "sql="+encodeURIComponent(_sql)
+		,callback : function(xmlrequest){
+			var res = {};
+			try{
+				eval("res="+xmlrequest.responseText);
+			}catch(e){debugger;}
+			$("staff_id").value=res[0].staff_id
+			$("staff_name").value=res[0].staff_name
+		}
+	});
+	ajax.request();
+}
+
+function gridcombo( level ) {
+	var _elements = [];
+	var sqls = [];
+	_elements.push(document.forms[1].grid_main);
+	
+	_elements.push(document.forms[1].grid_sub);
+	sqls.push("select grid_id key,grid_name value from nmk.grid_tree_info where parentgrid_id = '#{value}' order by 1 with ur");
+	
+	_elements.push(document.forms[1].grid_micro);
+	sqls.push("select grid_id key,grid_name value from nmk.grid_tree_info where parentgrid_id = '#{value}' order by 1 with ur");
+	
+	aihb.FormHelper.comboLink({
+		elements : _elements
+		,datas : sqls
+		,level : level
+	});
+}
+aihb.FormHelper.fillSelectWrapper({
+	sql:"select grid_id key,grid_name value from nmk.grid_tree_info where level=3 order by 1 with ur"
+	,isHoldFirst : true
+	,isCached: false
+	,element : document.forms[1].grid_main
+})
+</script>
+</body>
+</html>

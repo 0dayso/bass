@@ -1,0 +1,302 @@
+@CHARSET "GBK";
+
+html,body{
+	margin: 0 0 0 0;
+	padding: 0;
+	font-size: 14px;
+	color: #323232;
+	font-family: "Î¢ÈíÑÅºÚ", "ºÚÌå", "ËÎÌå";
+}
+
+input{
+	margin: 0 0 0 0;
+	padding: 0;
+	color: #323232;
+	font-family: "Î¢ÈíÑÅºÚ", "ºÚÌå", "ËÎÌå";
+}
+
+a {
+	cursor: pointer;
+}
+
+.wrap {
+	margin: 0 100px 10px 100px;
+}
+
+.fl {
+	float: left;
+}
+
+.padT3{
+	padding-top:3px;
+}
+
+.mart14 {
+	margin-top: 14px;
+}
+
+.marl19{
+	margin-left: 19px;
+}
+
+.marl10{
+	margin-left: 10px;
+}
+
+.wid150{
+	width: 150px;
+}
+
+.dataSearch {
+	width: 100px;
+	float: left;
+	margin-left: 20px;
+}
+
+.channelSearch {
+	width: 200px;
+	float: left;
+	margin-left: 10px;
+}
+
+.tbHead {
+	background: #F7F3F7;
+	border-bottom: 1px solid #C5C5C5;
+	FILTER: progid:DXImageTransform.Microsoft.Gradient(gradientType=0,startColorStr=#FFFFFF,endColorStr=#E6E6E6);
+	background: -ms-linear-gradient(top, #FFFFFF,  #E6E6E6);
+}
+
+td {
+	font-size: 16px;
+	background-color: #ffffff;
+	height: 40px;
+	font-family: "Î¢ÈíÑÅºÚ", "ºÚÌå", "ËÎÌå";
+	font-size: 15px;
+}
+
+.tableInfo {
+	background: #DDDDDD;
+	width: auto;
+}
+
+.topBar1 {
+	background: #DEEBEF;
+	width: auto;
+	height: 35px;
+	line-height: 35px;
+	line-height: 35px\9;
+	*line-height: 35px;
+	_line-height: 35px;
+	border: 1px solid #C4D3E0;
+	border-radius: 5px 5px 0 0;
+}
+
+.content1 {
+	width: auto;
+	border: 1px solid #C4D3E0;
+	padding: 8px;
+}
+
+.iconCollapse {
+	background: url(../image/default/row-collapse.gif) no-repeat;
+	height: 9px;
+	width: 9px;
+	display: block;
+	margin: 0 3px 0 5px;
+	float: left;
+}
+
+.collImg{
+	margin: 0 5px;
+	cursor: pointer;
+}
+
+.iconExpand {
+	background: url(../image/default/row-expand.gif) no-repeat;
+	height: 9px;
+	width: 9px;
+	display: block;
+	margin: 0 3px 0 5px;
+	float: left;
+}
+
+.noneChild {
+	width: 17px;
+	display: inline;
+}
+
+.name {
+	height: 32px;
+	line-height: 32px;
+ 	line-height: 32px\9;
+	*line-height: 32px;
+	_line-height: 32px;
+}
+
+#detailTop{
+	position: fixed; 
+	top: 0; 
+	opacity: 0.75; 
+	_position: absolute; 
+	_bottom: auto; 
+	_top: expression(eval(document.documentElement.scrollTop));
+}
+
+.detailTop {
+	background-color: #E3EAF0;
+	height: 32px;
+	line-height: 32px;
+	line-height: 32px\9;
+	*line-height: 32px;
+	_line-height: 32px;
+	margin-left: 0;
+	margin-right: 0;
+	margin-top: 0;
+	padding: 0;
+}
+
+#detailTop ul {
+	width: 100%;
+	list-style: none;
+}
+
+#detailTop ul li {
+	float: left;
+}
+
+.detailTop li a {
+	color: #91adc0;
+}
+
+.detailTop li a {
+	color: #91adc0;
+}
+
+.divide {
+	padding: 0 10px;
+}
+
+.topTitle {
+	margin-left: 60px;
+}
+
+.homeIcon {
+	width: 20px;
+	height: 20px;
+	background: url(../image/default/home.png) no-repeat;
+	margin-left: 4px;
+	margin-right: 4px;
+	margin-top: 7px;
+	float: left;
+}
+
+.ifmContainer {
+	margin: 45px 60px 0 60px;
+}
+
+.loadingIcon {
+	display: inline-block;
+	width: 60px;
+	height: 60px;
+	background: url(../image/default/loading.gif);
+	margin-top: 15px;
+}
+
+#loadMask {
+	margin: 0;
+	padding: 0;
+	border: none;
+	width: 100%;
+	height: 100%;
+	background: #333;
+	opacity: 0.8;
+	filter: alpha(opacity = 80);
+	z-index: 99;
+	position: fixed;
+	top: 0;
+	left: 0;
+	display: none;
+	text-align: center;
+	_position: absolute; 
+    _clear: both;  
+    _top:expression(eval(document.compatMode &&  
+               document.compatMode=='CSS1Compat') ?  
+               documentElement.scrollTop  
+               +(documentElement.clientHeight-this.clientHeight) - 1  
+               : document.body.scrollTop  
+               +(document.body.clientHeight-this.clientHeight) - 1); 
+}
+
+.search{
+	float: left;
+}
+
+.searchPad{
+	padding: 6px 0 6px 10px;
+}
+#channel{
+	width: 150px;
+	height: 20px;
+}
+
+.maskBody {
+	position: fixed;
+	left: 45%;
+	top: 40%;
+	width: 150px;
+	height: 130px;
+	z-index: 100;
+	background:#fff;
+	color:#000;
+	font-size: 16px;
+	font-family:"ºÚÌå";
+	font-weight:bold;
+	border-radius: 6px;
+	_position: absolute; 
+    	_clear: both;  
+}
+
+.optBtn{
+	display:block;
+	width:49px;
+	height:27px;
+	border-color: #C5C5C5;
+	border-width:1px;
+	border-style:solid;
+	FILTER: progid:DXImageTransform.Microsoft.Gradient(gradientType=0,startColorStr=#FFFFFF,endColorStr=#E6E6E6);
+	background: -ms-linear-gradient(top, #FFFFFF,  #E6E6E6);
+	border-radius: 3px;
+	text-align: center;
+	line-height: 27px;
+	line-height: 27px\9;
+	*line-height: 27px;
+	_line-height: 27px;
+	font-size: 14px;
+}
+
+.downD{
+	float: right;
+	margin-right: 50px;
+}
+
+.downBtn{
+	display:block;
+	width:80px;
+	height:24px;
+	border-color: #C5C5C5;
+	border-width:1px;
+	border-style:solid;
+	FILTER: progid:DXImageTransform.Microsoft.Gradient(gradientType=0,startColorStr=#FFFFFF,endColorStr=#E6E6E6);
+	background: -ms-linear-gradient(top, #FFFFFF,  #E6E6E6);
+	border-radius: 3px;
+	text-align: center;
+	line-height: 24px;
+	line-height: 24px\9;
+	*line-height: 24px;
+	_line-height: 24px;
+	font-size: 14px;
+}
+
+a:hover.btn{
+	background: #DEEBEF;
+}

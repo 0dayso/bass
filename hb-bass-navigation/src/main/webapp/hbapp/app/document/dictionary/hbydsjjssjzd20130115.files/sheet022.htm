@@ -1,0 +1,971 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:x="urn:schemas-microsoft-com:office:excel"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=gb2312">
+<meta name=ProgId content=Excel.Sheet>
+<meta name=Generator content="Microsoft Excel 14">
+<link id=Main-File rel=Main-File href="../hbydsjjssjzd20130115.htm">
+<link rel=File-List href=filelist.xml>
+<link rel=Stylesheet href=stylesheet.css>
+<style>
+<!--table
+	{mso-displayed-decimal-separator:"\.";
+	mso-displayed-thousand-separator:"\,";}
+@page
+	{margin:.75in .7in .75in .7in;
+	mso-header-margin:.3in;
+	mso-footer-margin:.3in;}
+ruby
+	{ruby-align:left;}
+rt
+	{color:windowtext;
+	font-size:9.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:宋体;
+	mso-generic-font-family:auto;
+	mso-font-charset:134;
+	mso-char-type:none;
+	display:none;}
+-->
+</style>
+<![if !supportTabStrip]><script language="JavaScript">
+<!--
+function fnUpdateTabs()
+ {
+  if (parent.window.g_iIEVer>=4) {
+   if (parent.document.readyState=="complete"
+    && parent.frames['frTabs'].document.readyState=="complete")
+   parent.fnSetActiveSheet(21);
+  else
+   window.setTimeout("fnUpdateTabs();",150);
+ }
+}
+
+if (window.name!="frSheet")
+ window.location.replace("../hbydsjjssjzd20130115.htm");
+else
+ fnUpdateTabs();
+//-->
+</script>
+<![endif]>
+</head>
+
+<body link=blue vlink=purple>
+
+<table border=0 cellpadding=0 cellspacing=0 width=462 style='border-collapse:
+ collapse;table-layout:fixed;width:347pt'>
+ <col width=202 style='mso-width-source:userset;mso-width-alt:6464;width:152pt'>
+ <col width=151 style='mso-width-source:userset;mso-width-alt:4832;width:113pt'>
+ <col width=109 style='mso-width-source:userset;mso-width-alt:3488;width:82pt'>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl592 width=202 style='height:14.25pt;width:152pt'><a
+  name="RANGE!A1">DB_VGOP_HBGJ</a></td>
+  <td class=xl594 width=151 style='width:113pt'>号薄管家业务清单</td>
+  <td width=109 style='width:82pt'></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl590 style='height:14.25pt'>属性名称</td>
+  <td class=xl590 style='border-left:none'>属性类型</td>
+  <td class=xl590 style='border-left:none'>属性描述</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>统计日期</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar(8)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>statis_date</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>手机号码</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(15)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Serv_number</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>活跃用户标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Act_flag</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 colspan=3 style='height:14.25pt;mso-ignore:colspan'></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl592 style='height:14.25pt'><a name="RANGE!A7">DB_VGOP_SJZF</a></td>
+  <td class=xl594>手机支付业务清单</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl590 style='height:14.25pt'>属性名称</td>
+  <td class=xl590 style='border-left:none'>属性类型</td>
+  <td class=xl590 style='border-left:none'>属性描述</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>统计日期</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar(8)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>statis_date</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>手机号码</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (15)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Serv_number</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>手机支付用户到达标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Pay_arr_flag</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>手机钱包用户到达标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Bag_arr_flag</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>手机支付用户活跃标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Pay_act_flag</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>手机钱包用户活跃标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Bag_act_flag</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 colspan=3 style='height:14.25pt;mso-ignore:colspan'></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl592 style='height:14.25pt'><a name="RANGE!A16">DB_VGOP_KJTX</a></td>
+  <td class=xl594>开机提醒业务清单</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl590 style='height:14.25pt'>属性名称</td>
+  <td class=xl590 style='border-left:none'>属性类型</td>
+  <td class=xl590 style='border-left:none'>属性描述</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>统计日期</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (8)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>statis_date</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>手机号码</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (15)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Serv_number</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>开机提醒到达客户标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Arr_flag</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>开机提醒新增用户标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>New_flag</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>开机提醒注销用户标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Canl_flag</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>开机提醒收费用户标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Fee_flag</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>开机提醒免费用户标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Free_flag</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>开机提醒活跃客户标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Act_flag</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>开机提醒净增客户标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Onew_flag</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 colspan=3 style='height:14.25pt;mso-ignore:colspan'></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl592 style='height:14.25pt'><a name="RANGE!A28">DB_VGOP_KJZZD</a></td>
+  <td class=xl594>开机早知道业务清单</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl590 style='height:14.25pt'>属性名称</td>
+  <td class=xl590 style='border-left:none'>属性类型</td>
+  <td class=xl590 style='border-left:none'>属性描述</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>统计日期</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar2(8)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>statis_date</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>手机号码</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR2(15)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Serv_number</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>开机提醒到达客户标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>CHAR(1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Arr_flag</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 colspan=3 style='height:14.25pt;mso-ignore:colspan'></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl592 style='height:14.25pt'><a name="RANGE!A34">DB_VGOP_139MAIL</a></td>
+  <td class=xl594>手机邮箱业务清单</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl590 style='height:14.25pt'>属性名称</td>
+  <td class=xl590 style='border-left:none'>属性类型</td>
+  <td class=xl590 style='border-left:none'>属性描述</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>统计日期</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar(8)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>statis_date</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>手机号码</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (15)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Serv_number</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>139邮箱活跃用户标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Act_flag</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 colspan=3 style='height:14.25pt;mso-ignore:colspan'></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl592 style='height:14.25pt'><a name="RANGE!A40">DB_VGOP_SJSP</a></td>
+  <td class=xl594>手机视频业务清单</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl590 style='height:14.25pt'>属性名称</td>
+  <td class=xl590 style='border-left:none'>属性类型</td>
+  <td class=xl590 style='border-left:none'>属性描述</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>统计日期</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (8)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>statis_date</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>手机号码</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (15)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Serv_number</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>手机视频使用用户标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>User_flag</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>手机视频客户端使用用户标<span
+  style='display:none'>识</span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Client_flag</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>手机视频Wap使用用户标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Wap_flag</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 colspan=3 style='height:14.25pt;mso-ignore:colspan'></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl592 style='height:14.25pt'><a name="RANGE!A48">DB_VGOP_SJTS</a></td>
+  <td class=xl596 width=151 style='width:113pt'>手机图书业务清单</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl590 style='height:14.25pt'>属性名称</td>
+  <td class=xl590 style='border-left:none'>属性类型</td>
+  <td class=xl590 style='border-left:none'>属性描述</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>统计日期</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (8)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>statis_date</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>手机号码</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (15)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Serv_number</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>手机图书到达用户标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Arr_flag</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>wap图书用户标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Wap_flag</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>彩信图书用户标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>mms_flag</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 colspan=3 style='height:14.25pt;mso-ignore:colspan'></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl592 style='height:14.25pt'><a name="RANGE!A56">DB_VGOP_DXHD</a></td>
+  <td class=xl594>短信回电业务清单</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl590 style='height:14.25pt'>属性名称</td>
+  <td class=xl590 style='border-left:none'>属性类型</td>
+  <td class=xl590 style='border-left:none'>属性描述</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>统计日期</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (8)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>statis_date</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>手机号码</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (15)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Serv_number</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>短信回电到达用户标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Arr_flag</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>短信回电上行用户标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>po_flag</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>短信回电开通用户标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>open_flag</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>短信回电关闭用户标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Clo_flag</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 colspan=3 style='height:14.25pt;mso-ignore:colspan'></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl592 style='height:14.25pt'><a name="RANGE!A65">DB_VGOP_FETION</a></td>
+  <td class=xl594>12580业务清单</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl590 style='height:14.25pt'>属性名称</td>
+  <td class=xl590 style='border-left:none'>属性类型</td>
+  <td class=xl590 style='border-left:none'>属性描述</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>统计日期</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (8)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>statis_date</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>手机号码</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (15)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Serv_number</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>飞信活跃用户标识<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span><span style='display:none'><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;</span></span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Act_flag</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>飞信客户端活跃用户标识<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp; </span><span style='display:none'><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;</span></span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>飞信PC活跃用户标识<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span
+  style='display:none'><span style='mso-spacerun:yes'>&nbsp;&nbsp;</span></span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>飞信手机活跃用户标识<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span><span
+  style='display:none'><span style='mso-spacerun:yes'>&nbsp;&nbsp;</span></span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>飞信短信活跃用户标识<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span><span
+  style='display:none'><span style='mso-spacerun:yes'>&nbsp;&nbsp;</span></span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>飞信IVR活跃用户标识<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span
+  style='display:none'><span style='mso-spacerun:yes'>&nbsp;&nbsp;</span></span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>飞信活跃零消息发送用户标<span
+  style='display:none'>识<span style='mso-spacerun:yes'>&nbsp;</span></span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>飞信QQ到达用户标识<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span
+  style='display:none'><span style='mso-spacerun:yes'>&nbsp;&nbsp;</span></span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>飞信QQ活跃用户标识<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span
+  style='display:none'><span style='mso-spacerun:yes'>&nbsp;&nbsp;</span></span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>飞信POPO到达用户标识<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span><span
+  style='display:none'><span style='mso-spacerun:yes'>&nbsp;&nbsp;</span></span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>飞信POPO活跃用户标识<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span><span
+  style='display:none'><span style='mso-spacerun:yes'>&nbsp;&nbsp;</span></span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>Varchar(1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 colspan=3 style='height:14.25pt;mso-ignore:colspan'></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl592 style='height:14.25pt'><a name="RANGE!A81">DB_VGOP_12580</a></td>
+  <td class=xl594>12580业务清单</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl590 style='height:14.25pt'>属性名称</td>
+  <td class=xl590 style='border-left:none'>属性类型</td>
+  <td class=xl590 style='border-left:none'>属性描述</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>统计日期</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (8)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>statis_date</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>手机号码</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (15)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Serv_number</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>成功挂机数</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>12580综合信息服务用户标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>12580综合信息服务查询次标<span
+  style='display:none'>识</span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 colspan=3 style='height:14.25pt;mso-ignore:colspan'></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl592 style='height:14.25pt'><a name="RANGE!A89">DB_VGOP_SJB</a></td>
+  <td class=xl594>手机报业务清单</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl590 style='height:14.25pt'>属性名称</td>
+  <td class=xl590 style='border-left:none'>属性类型</td>
+  <td class=xl590 style='border-left:none'>属性描述</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>统计日期</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (8)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>statis_date</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>手机号码</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (15)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Serv_number</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>手机报下发用户标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>成功接收用户标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>手机报付费用户标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 colspan=3 style='height:14.25pt;mso-ignore:colspan'></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl592 style='height:14.25pt'><a name="RANGE!A97">DB_VGOP_CRING</a></td>
+  <td class=xl594>彩铃业务清单</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl590 style='height:14.25pt'>属性名称</td>
+  <td class=xl590 style='border-left:none'>属性类型</td>
+  <td class=xl590 style='border-left:none'>属性描述</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>统计日期</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (8)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>statis_date</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>手机号码</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (15)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Serv_number</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>下载彩铃铃音用户标识<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span><span
+  style='display:none'><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>付费铃音盒用户标识<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span
+  style='display:none'><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>下载付费彩铃铃音用户标识
+  <span style='display:none'><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>彩铃短信下载次标识<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span
+  style='display:none'><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>12530彩铃下载次标识<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span
+  style='display:none'><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>WAP彩铃下载次标识<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span
+  style='display:none'><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>WWW彩铃下载次标识<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span
+  style='display:none'><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>彩铃铃音下载次标识<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span
+  style='display:none'><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>到达用户标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 colspan=3 style='height:14.25pt;mso-ignore:colspan'></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl592 style='height:14.25pt'><a name="RANGE!A111">DB_VGOP_WXYY</a></td>
+  <td class=xl594>无线音乐业务清单</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl590 style='height:14.25pt'>属性名称</td>
+  <td class=xl590 style='border-left:none'>属性类型</td>
+  <td class=xl590 style='border-left:none'>属性描述</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>统计日期</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (8)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>statis_date</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>手机号码</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (15)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Serv_number</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>无线音乐俱乐部普通会员标<span
+  style='display:none'>识</span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>无线音乐俱乐部高级会员标<span
+  style='display:none'>识</span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>无线音乐俱乐部付费高级会<span
+  style='display:none'>员标识</span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>活跃的无线音乐俱乐部会员<span
+  style='display:none'>标识</span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>无线音乐俱乐部会员下载振<span
+  style='display:none'>铃量</span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>无线音乐俱乐部会员下载付<span
+  style='display:none'>费铃音标识</span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>无线音乐俱乐部会员下载付<span
+  style='display:none'>费振铃量</span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>中央音乐平台全曲下载次标<span
+  style='display:none'>识</span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>中央音乐平台按次全曲下载<span
+  style='display:none'>次标识</span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>中央音乐平台包月全曲下载<span
+  style='display:none'>次标识</span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 colspan=3 style='height:14.25pt;mso-ignore:colspan'></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl592 style='height:14.25pt'><a name="RANGE!A126">DB_VGOP_SJYD</a></td>
+  <td class=xl594>手机阅读业务清单</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl590 style='height:14.25pt'>属性名称</td>
+  <td class=xl590 style='border-left:none'>属性类型</td>
+  <td class=xl590 style='border-left:none'>属性描述</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>统计日期</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (8)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>statis_date</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>手机号码</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (15)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Serv_number</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>总注册用户标识<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>登录用户标识<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>wap登录用户标识<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>客户端登录用户标识<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>阅读器登录用户标识<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>www登录用户标识<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>下载用户标识<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>wap下载用户标识<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>www下载用户标识<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>客户端下载用户标识<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>阅读器下载用户标识<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>在线阅读用户标识<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 colspan=3 style='height:14.25pt;mso-ignore:colspan'></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl592 style='height:14.25pt'><a name="RANGE!A143">DB_VGOP_SJYX</a></td>
+  <td class=xl594>手机游戏业务清单</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl590 style='height:14.25pt'>属性名称</td>
+  <td class=xl590 style='border-left:none'>属性类型</td>
+  <td class=xl590 style='border-left:none'>属性描述</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>统计日期</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (8)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>statis_date</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>手机号码</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (15)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Serv_number</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>总下载用户标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>游戏包下载用户标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>客户端网游下载用户标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>客户端单机下载用户标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 colspan=3 style='height:14.25pt;mso-ignore:colspan'></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl593 style='height:14.25pt'><a name="RANGE!A152">VGOP_MM_USER</a></td>
+  <td class=xl595>MM<font class="font7">业务清单</font></td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl590 style='height:14.25pt'>属性名称</td>
+  <td class=xl590 style='border-left:none'>属性类型</td>
+  <td class=xl590 style='border-left:none'>属性描述</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>统计日期</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (8)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>statis_date</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>手机号码</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (15)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Serv_number</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>MM下载用户标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>MM下载次标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>开发者标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 colspan=3 style='height:14.25pt;mso-ignore:colspan'></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl592 style='height:14.25pt'><a name="RANGE!A160">DB_VGOP_DM</a></td>
+  <td class=xl593>DM<font class="font14">业务清单</font></td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl590 style='height:14.25pt'>属性名称</td>
+  <td class=xl590 style='border-left:none'>属性类型</td>
+  <td class=xl590 style='border-left:none'>属性描述</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>统计日期</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (8)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>statis_date</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>手机号码</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (15)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Serv_number</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>DM终端到达标识(终端数量)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 colspan=3 style='height:14.25pt;mso-ignore:colspan'></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl592 style='height:14.25pt'><a name="RANGE!A166">DB_VGOP_KX100</a></td>
+  <td class=xl594>快信<font class="font8">100</font><font class="font7">业务清单</font></td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl590 style='height:14.25pt'>属性名称</td>
+  <td class=xl590 style='border-left:none'>属性类型</td>
+  <td class=xl590 style='border-left:none'>属性描述</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>统计日期</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (8)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>statis_date</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>手机号码</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (15)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>Serv_number</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>快信100到达用户标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>快信100包月用户标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>快信100点播用户标识</td>
+  <td class=xl283 style='border-top:none;border-left:none'>varchar (1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+ </tr>
+ <![if supportMisalignedColumns]>
+ <tr height=0 style='display:none'>
+  <td width=202 style='width:152pt'></td>
+  <td width=151 style='width:113pt'></td>
+  <td width=109 style='width:82pt'></td>
+ </tr>
+ <![endif]>
+</table>
+
+</body>
+
+</html>

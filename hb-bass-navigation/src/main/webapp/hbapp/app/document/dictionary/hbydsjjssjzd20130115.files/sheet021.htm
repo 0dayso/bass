@@ -1,0 +1,939 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:x="urn:schemas-microsoft-com:office:excel"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=gb2312">
+<meta name=ProgId content=Excel.Sheet>
+<meta name=Generator content="Microsoft Excel 14">
+<link id=Main-File rel=Main-File href="../hbydsjjssjzd20130115.htm">
+<link rel=File-List href=filelist.xml>
+<link rel=Stylesheet href=stylesheet.css>
+<style>
+<!--table
+	{mso-displayed-decimal-separator:"\.";
+	mso-displayed-thousand-separator:"\,";}
+@page
+	{margin:.75in .7in .75in .7in;
+	mso-header-margin:.3in;
+	mso-footer-margin:.3in;}
+ruby
+	{ruby-align:left;}
+rt
+	{color:windowtext;
+	font-size:9.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:宋体;
+	mso-generic-font-family:auto;
+	mso-font-charset:134;
+	mso-char-type:none;
+	display:none;}
+-->
+</style>
+<![if !supportTabStrip]><script language="JavaScript">
+<!--
+function fnUpdateTabs()
+ {
+  if (parent.window.g_iIEVer>=4) {
+   if (parent.document.readyState=="complete"
+    && parent.frames['frTabs'].document.readyState=="complete")
+   parent.fnSetActiveSheet(20);
+  else
+   window.setTimeout("fnUpdateTabs();",150);
+ }
+}
+
+if (window.name!="frSheet")
+ window.location.replace("../hbydsjjssjzd20130115.htm");
+else
+ fnUpdateTabs();
+//-->
+</script>
+<![endif]>
+</head>
+
+<body link=blue vlink=purple>
+
+<table border=0 cellpadding=0 cellspacing=0 width=1004 style='border-collapse:
+ collapse;table-layout:fixed;width:754pt'>
+ <col width=130 style='mso-width-source:userset;mso-width-alt:4160;width:98pt'>
+ <col width=120 style='mso-width-source:userset;mso-width-alt:3840;width:90pt'>
+ <col width=508 style='mso-width-source:userset;mso-width-alt:16256;width:381pt'>
+ <col width=246 style='mso-width-source:userset;mso-width-alt:7872;width:185pt'>
+ <tr height=21 style='height:15.75pt'>
+  <td height=21 class=xl93 width=130 style='height:15.75pt;width:98pt'><a
+  name="RANGE!A1">B01710</a></td>
+  <td width=120 style='width:90pt'></td>
+  <td width=508 style='width:381pt'></td>
+  <td width=246 style='width:185pt'></td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td height=21 class=xl311 style='height:15.75pt'>权限令牌定义</td>
+  <td class=xl93></td>
+  <td class=xl93></td>
+  <td></td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td height=21 class=xl311 colspan=2 style='height:15.75pt;mso-ignore:colspan'>表名<font
+  class="font9">:T_UCP_AUTHELEMENT</font></td>
+  <td class=xl93></td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl312 style='height:14.25pt'>字段名称</td>
+  <td class=xl312 style='border-left:none'>字段类型</td>
+  <td class=xl312 style='border-left:none'>中文含义</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>AUTHID</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(80)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>权限编码</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>MODULEID</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(30)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>功能模块编码</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>AUTHCODE</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(60)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>权限代码</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>SUPERCODE</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(60)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>上级权限编码</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>AUTHNAME</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(64)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>权限名称</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>MENUFLAG</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>DESCRIPTION</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(256)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>权限描述</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>HOSTEDCCID</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(20)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>AUTHTYPE</td>
+  <td class=xl283 style='border-top:none;border-left:none'>DECIMAL(2)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>权限类别,BOSS客服融合</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>REGION</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(32)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>地区</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>CREATOR</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(64)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>创建人</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>CREATEORG</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(32)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>创建单位</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>ISPUBLIC</td>
+  <td class=xl283 style='border-top:none;border-left:none'>DECIMAL(1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>是否公共,0:否,1:是</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>CREATEDATE</td>
+  <td class=xl283 style='border-top:none;border-left:none'>TIMESTAMP</td>
+  <td class=xl283 style='border-top:none;border-left:none'>创建时间</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>STATUS</td>
+  <td class=xl283 style='border-top:none;border-left:none'>DECIMAL(2)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>状态,0失效，1在用</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>STATUSDATE</td>
+  <td class=xl283 style='border-top:none;border-left:none'>TIMESTAMP</td>
+  <td class=xl283 style='border-top:none;border-left:none'>状态时间</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>DISPLAYNO</td>
+  <td class=xl283 style='border-top:none;border-left:none'>DECIMAL(5)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>NOTES</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(256)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>说明</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>RIGHTGROUP</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(32)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>特权组</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>CREATETYPE</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>创建方式:1:手工创建;0:系统初始化</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 colspan=4 style='height:14.25pt;mso-ignore:colspan'></td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td height=21 class=xl93 style='height:15.75pt'><a name="RANGE!A26">B01711</a></td>
+  <td colspan=3 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td height=21 class=xl311 style='height:15.75pt'>工号基本信息</td>
+  <td class=xl93></td>
+  <td class=xl93></td>
+  <td></td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td height=21 class=xl311 colspan=2 style='height:15.75pt;mso-ignore:colspan'>表名<font
+  class="font9">:T_UCP_STAFFBASICINFO</font></td>
+  <td class=xl93></td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl312 style='height:14.25pt'>字段名称</td>
+  <td class=xl312 style='border-left:none'>字段类型</td>
+  <td class=xl312 style='border-left:none'>中文含义</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>STAFFID</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(20)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>工号</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>STAFFNAME</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(100)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>姓名</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>STAFFSTATE</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(2)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>是否离职(0:离职,1:在职）</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>STAFFIDSTATUS</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(2)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>是否正常在用（01:在用，02停用）</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>DLEVELID</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(20)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>DLMODULUS</td>
+  <td class=xl283 style='border-top:none;border-left:none'>decimal(4,2)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>SECONDPOST</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(20)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>DUTYID</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(20)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>SECONDDUTY</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(20)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>PTEAMID</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(20)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>ORGAID</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(32)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>归属节点</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>POSTID</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(20)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>STAFFACCOUNT</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(20)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>DISABLEBEGINDATE</td>
+  <td class=xl283 style='border-top:none;border-left:none'>timestamp</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>DISABLEENDDATE</td>
+  <td class=xl283 style='border-top:none;border-left:none'>timestamp</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>HOSTEDCCID</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(20)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>'001'</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>PERSONALCFGID</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(20)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>UPDATETIME</td>
+  <td class=xl283 style='border-top:none;border-left:none'>timestamp</td>
+  <td class=xl283 style='border-top:none;border-left:none'>工号最近一次变更时间</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>BATCHNO</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(30)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>STAFFTYPE</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(16)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>员工类型</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>ISMANAGER</td>
+  <td class=xl283 style='border-top:none;border-left:none'>decimal(1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>是否经理，1是，0否</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>HRSTATUS</td>
+  <td class=xl283 style='border-top:none;border-left:none'>decimal(1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>人力资源状态</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>CREATEDATE</td>
+  <td class=xl283 style='border-top:none;border-left:none'>timestamp</td>
+  <td class=xl283 style='border-top:none;border-left:none'>创建时间</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>STATUSDATE</td>
+  <td class=xl283 style='border-top:none;border-left:none'>timestamp</td>
+  <td class=xl283 style='border-top:none;border-left:none'>状态时间</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>REMARK</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(256)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>备注</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>REGION</td>
+  <td class=xl283 style='border-top:none;border-left:none'>decimal(5)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>地区</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>BEGINDATE</td>
+  <td class=xl283 style='border-top:none;border-left:none'>timestamp</td>
+  <td class=xl283 style='border-top:none;border-left:none'>启用时间</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>ENDDATE</td>
+  <td class=xl283 style='border-top:none;border-left:none'>timestamp</td>
+  <td class=xl283 style='border-top:none;border-left:none'>停用时间</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>RELESTAFFID</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(20)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>上级操作员工号</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>WORKEFFICIENCY</td>
+  <td class=xl283 style='border-top:none;border-left:none'>decimal(8)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>TELNO</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(20)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>LOGINTYPE</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(16)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>登录类型</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>WORKTYPE</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(16)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>区分客服工号和BOSS工号:0或者null:客服</td>
+  <td>其它:BOSS</td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>AREAID</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(32)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>分区编号</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>EMPLOYEETYPE</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(16)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>是否正式员工，即用工方式，0是正式职工，1是非正式职工</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>STAFFNUMBER</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(30)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>员工编号</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>STAFFIDUSE</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>工号用途（0业务与服务，1空中选号，2自助缴费机，3后台接口工号）</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 colspan=4 style='height:14.25pt;mso-ignore:colspan'></td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td height=21 class=xl93 style='height:15.75pt'><a name="RANGE!A68">B01712</a></td>
+  <td colspan=3 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td height=21 class=xl311 style='height:15.75pt'>工号附属信息</td>
+  <td class=xl93></td>
+  <td class=xl93></td>
+  <td></td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td height=21 class=xl311 colspan=3 style='height:15.75pt;mso-ignore:colspan'>表名<font
+  class="font9">:T_UCP_STAFFRESTRICTINFO</font></td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl312 style='height:14.25pt'>字段名称</td>
+  <td class=xl312 style='border-left:none'>字段类型</td>
+  <td class=xl312 style='border-left:none'>中文含义</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>STAFFID</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(20)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>人员工号</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>ISRESTRICT</td>
+  <td class=xl283 style='border-top:none;border-left:none'>DECIMAL(1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>是否登陆限制</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>STARTTIME</td>
+  <td class=xl283 style='border-top:none;border-left:none'>DECIMAL(2)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>登陆开始时间，格式为数字，比如14表示下午2点</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>ENDTIME</td>
+  <td class=xl283 style='border-top:none;border-left:none'>DECIMAL(2)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>登陆结束时间，</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>ENABLEGRPS</td>
+  <td class=xl283 style='border-top:none;border-left:none'>DECIMAL(1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>是否开通无线BOSS</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>GPRSSTARTTIME</td>
+  <td class=xl283 style='border-top:none;border-left:none'>DECIMAL(2)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>无线BOSS开始时间，格式为数字，比如14表示下午2点</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>GPRSENDTIME</td>
+  <td class=xl283 style='border-top:none;border-left:none'>DECIMAL(2)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>无线BOSS结束时间</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>MACMODE</td>
+  <td class=xl283 style='border-top:none;border-left:none'>DECIMAL(2)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>地址绑定模式,。0<font
+  class="font0">：不验证，</font><font class="font0">1</font><font class="font0">：个人</font><font
+  class="font0">MAC</font><font class="font0">地址绑定，</font><font class="font0">2</font><font
+  class="font0">：所属部门绑定，</font><span style='display:none'><font class="font0">3</font><font
+  class="font0">：上级部门绑定</font><font class="font0">,，4：个人IP地址绑定</font></span></td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>ACCESSFUNC</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(256)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>可操作业务</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>INVALIDATETIME</td>
+  <td class=xl283 style='border-top:none;border-left:none'>TIMESTAMP</td>
+  <td class=xl283 style='border-top:none;border-left:none'>失效时间：当地址绑定模式设置为不验证时，需要设置失效时间，失效<span
+  style='display:none'>后IP判断使用人员所属组织机构设定的判断模式</span></td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>LOGINSTARTTIME</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(5)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>登陆时间限制开始时间</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>LOGINENDTIME</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(5)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>登陆时间限制结束时间</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>ALLOWLOGIN</td>
+  <td class=xl283 style='border-top:none;border-left:none'>DECIMAL(1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>是否允许登录（0不允许,1允许）</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 colspan=4 style='height:14.25pt;mso-ignore:colspan'></td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td height=21 class=xl93 style='height:15.75pt'><a name="RANGE!A86">B01713</a></td>
+  <td colspan=3 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td height=21 class=xl311 style='height:15.75pt'>角色定义</td>
+  <td class=xl93></td>
+  <td class=xl93></td>
+  <td></td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td height=21 class=xl311 colspan=2 style='height:15.75pt;mso-ignore:colspan'>表名<font
+  class="font9">:T_UCP_ROLE</font></td>
+  <td class=xl93></td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl312 style='height:14.25pt'>字段名称</td>
+  <td class=xl312 style='border-left:none'>字段类型</td>
+  <td class=xl312 style='border-left:none'>中文含义</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>ROLEID</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(30)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>角色编码</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>ROLECODE</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(60)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>角色代码</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>SUPERCODE</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(60)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>上级角色编码</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>ROLENAME</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(100)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>角色名称</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>DESCRIPTION</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(100)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>角色描述</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>CTIFLAG</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(128)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>CTIROLEID</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(3)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>CCID</td>
+  <td class=xl283 style='border-top:none;border-left:none'>DECIMAL(10)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>VDNID</td>
+  <td class=xl283 style='border-top:none;border-left:none'>DECIMAL(10)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>HOSTEDCCID</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(20)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>ISPUBLIC</td>
+  <td class=xl283 style='border-top:none;border-left:none'>DECIMAL(1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>是否公共</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>CREATOR</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(32)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>创建人</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>CREATEDATE</td>
+  <td class=xl283 style='border-top:none;border-left:none'>TIMESTAMP</td>
+  <td class=xl283 style='border-top:none;border-left:none'>创建时间</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>CREATEORG</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(32)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>创建单位</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>STATUS</td>
+  <td class=xl283 style='border-top:none;border-left:none'>DECIMAL(1)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>状态</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>STATUSDATE</td>
+  <td class=xl283 style='border-top:none;border-left:none'>TIMESTAMP</td>
+  <td class=xl283 style='border-top:none;border-left:none'>状态时间</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>REGION</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(16)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>角色所属地市</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 colspan=4 style='height:14.25pt;mso-ignore:colspan'></td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td height=21 class=xl93 style='height:15.75pt'><a name="RANGE!A108">B01714</a></td>
+  <td colspan=3 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td height=21 class=xl311 colspan=2 style='height:15.75pt;mso-ignore:colspan'>角色对应权限和令牌</td>
+  <td class=xl93></td>
+  <td></td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td height=21 class=xl311 colspan=2 style='height:15.75pt;mso-ignore:colspan'>表名<font
+  class="font9">:T_UCP_ROLEAUTH</font></td>
+  <td class=xl93></td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl312 style='height:14.25pt'>字段名称</td>
+  <td class=xl312 style='border-left:none'>字段类型</td>
+  <td class=xl312 style='border-left:none'>中文含义</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>ROLEID</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(30)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>角色编码</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>MODULEID</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(20)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>功能模块编码</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>AUTHID</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(80)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>权限编码</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>CONDITIONSTR</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(500)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>HOSTEDCCID</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(20)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>STATUS</td>
+  <td class=xl283 style='border-top:none;border-left:none'>DECIMAL(2)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>状态</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>STATUSDATE</td>
+  <td class=xl283 style='border-top:none;border-left:none'>TIMESTAMP</td>
+  <td class=xl283 style='border-top:none;border-left:none'>状态时间</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>CREATEDATE</td>
+  <td class=xl283 style='border-top:none;border-left:none'>TIMESTAMP</td>
+  <td class=xl283 style='border-top:none;border-left:none'>创建时间</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 colspan=4 style='height:14.25pt;mso-ignore:colspan'></td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td height=21 class=xl93 style='height:15.75pt'><a name="RANGE!A121">B01715</a></td>
+  <td colspan=3 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td height=21 class=xl311 style='height:15.75pt'>工号对应角色</td>
+  <td class=xl93></td>
+  <td class=xl93></td>
+  <td></td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td height=21 class=xl311 colspan=2 style='height:15.75pt;mso-ignore:colspan'>表名<font
+  class="font9">:T_UCP_STAFFROLE</font></td>
+  <td class=xl93></td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl312 style='height:14.25pt'>字段名称</td>
+  <td class=xl312 style='border-left:none'>字段类型</td>
+  <td class=xl312 style='border-left:none'>中文含义</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>ROLEID</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(30)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>角色编码</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>STAFFID</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(20)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>工号</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>CONDITIONSTR</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(500)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>HOSTEDCCID</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(20)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>STATUS</td>
+  <td class=xl283 style='border-top:none;border-left:none'>DECIMAL(2)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>STATUSDATE</td>
+  <td class=xl283 style='border-top:none;border-left:none'>TIMESTAMP</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>CREATEDATE</td>
+  <td class=xl283 style='border-top:none;border-left:none'>TIMESTAMP</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>ORGAID</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(32)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 colspan=4 style='height:14.25pt;mso-ignore:colspan'></td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td height=21 class=xl93 style='height:15.75pt'><a name="RANGE!A134">B01716</a></td>
+  <td colspan=3 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td height=21 class=xl311 style='height:15.75pt'>工号个性化权限</td>
+  <td class=xl93></td>
+  <td class=xl93></td>
+  <td></td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td height=21 class=xl311 colspan=2 style='height:15.75pt;mso-ignore:colspan'>表名<font
+  class="font9">:T_UCP_USERAUTH</font></td>
+  <td class=xl93></td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl312 style='height:14.25pt'>字段名称</td>
+  <td class=xl312 style='border-left:none'>字段类型</td>
+  <td class=xl312 style='border-left:none'>中文含义</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>STAFFID</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(32)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>工号</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>MODULEID</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(20)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>功能模块编码</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>AUTHID</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(80)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>权限编码</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>CONDITIONSTR</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(500)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>HOSTEDCCID</td>
+  <td class=xl283 style='border-top:none;border-left:none'>VARCHAR(20)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>　</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>BEGINDATE</td>
+  <td class=xl283 style='border-top:none;border-left:none'>TIMESTAMP</td>
+  <td class=xl283 style='border-top:none;border-left:none'>开始时间</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>ENDDATE</td>
+  <td class=xl283 style='border-top:none;border-left:none'>TIMESTAMP</td>
+  <td class=xl283 style='border-top:none;border-left:none'>结束时间</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>STATUS</td>
+  <td class=xl283 style='border-top:none;border-left:none'>DECIMAL(2)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>状态</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>STATUSDATE</td>
+  <td class=xl283 style='border-top:none;border-left:none'>TIMESTAMP</td>
+  <td class=xl283 style='border-top:none;border-left:none'>状态时间</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>CREATEDATE</td>
+  <td class=xl283 style='border-top:none;border-left:none'>TIMESTAMP</td>
+  <td class=xl283 style='border-top:none;border-left:none'>创建时间</td>
+  <td></td>
+ </tr>
+ <tr height=19 style='height:14.25pt'>
+  <td height=19 class=xl283 style='height:14.25pt;border-top:none'>SORTORDER</td>
+  <td class=xl283 style='border-top:none;border-left:none'>DECIMAL(3)</td>
+  <td class=xl283 style='border-top:none;border-left:none'>序列号</td>
+  <td></td>
+ </tr>
+ <![if supportMisalignedColumns]>
+ <tr height=0 style='display:none'>
+  <td width=130 style='width:98pt'></td>
+  <td width=120 style='width:90pt'></td>
+  <td width=508 style='width:381pt'></td>
+  <td width=246 style='width:185pt'></td>
+ </tr>
+ <![endif]>
+</table>
+
+</body>
+
+</html>

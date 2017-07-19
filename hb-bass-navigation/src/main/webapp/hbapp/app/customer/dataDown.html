@@ -1,0 +1,119 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>���Ŀͻ��������ר��</title>
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">
+	<link rel="stylesheet" type="text/css" href="/hb-bass-navigation/hbapp/resources/css/bass21.css" />
+  </head>
+  <body>
+  	<div style="margin: 20 px;text-align: center;font-size: 22px;font-weight: bold;font-family: ����">���Ŀͻ��������ר��</div>
+	<form action="" method="post">
+	</form>
+  	<div style="padding: 10 px;"></div>
+  
+  	<table align="center" width="83%" class="grid-tab-blue" cellspacing="1" cellpadding="0" border="0">
+	  <tr class="grid_title_blue" height="26">
+	    <td width="10%" class="grid_title_cell">���</td>
+	    <td width="18%" class="grid_title_cell">������</td>
+	    <td width="52%" class="grid_title_cell">����</td>
+	    <td width="10%" class="grid_title_cell">����</td>
+	  </tr>
+	  <tr class="grid_row_alt_blue" height="26" >
+	  	<td width="10%" class="grid_row_cell"></td>
+	  	<td colspan="3" class="grid_row_cell_text" id="dateInfo">�·� ��</td>
+	  </tr>
+	  <tr class="grid_row_alt_blue" height="26">
+	    <td class="grid_row_cell">1</td>
+	    <td class="grid_row_cell_text">δ�ȶ��ͻ��嵥����</td>
+	    <td class="grid_row_cell_text">����û�л��Ѽ��ն��ȶ���ǩ��û��V���ҵ���ȶ���ǩ�ĺ��Ŀͻ�</td>
+	     <td class="grid_row_cell"><input type="button" name="downBtn" class="form_button_short" value="����"></td>
+	  </tr>
+	  <tr class="grid_row_alt_blue" height="26">
+	    <td class="grid_row_cell">2</td>
+	    <td class="grid_row_cell_text">�ȶ������ײ�����</td>
+	    <td class="grid_row_cell_text">������ײ�δ���룬����������з������</td>
+	     <td class="grid_row_cell"><input type="button" name="downBtn" class="form_button_short" value="����"></td>
+	  </tr>
+	</table>
+	<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/default/default.js" charset="utf-8"></script>
+<script type="text/javascript">
+	window.onload =function() {
+		var _d = new Date();
+		_d.setDate(_d.getDate()-3);
+		_d.setMonth(_d.getMonth()-1);
+		var month = _d.format("yyyymm");
+		$("dateInfo").appendChild($CT(month));
+		
+		var _params = aihb.Util.paramsObj();
+		var areaInfo = aihb.Constants.getArea(_params.cityId || 0);
+		
+		var downInfoArr=[];
+		downInfoArr[0]= function(){
+			var condition = "";
+			if(_params.cityId && _params.cityId != 0)
+				condition += " and substr(a.area_id,1,5)='" + areaInfo.cityCode + "'";
+			return {
+			fileName:month + "δ�ȶ��ͻ��嵥"
+			,header :[
+					{"name":"����","dataIndex":"area_id","cellStyle":"grid_row_cell_text"}
+					,{"name":"����Ӫ������","dataIndex":"zone_code","cellStyle":"grid_row_cell_text"}
+					,{"name":"����","dataIndex":"acc_nbr","cellStyle":"grid_row_cell_text"}
+					,{"name":"άϵ��Ա","dataIndex":"staff_name","cellStyle":"grid_row_cell_text"}
+			],
+			sql:"select (select county_name from  MK.BT_AREA_ALL where county_code=a.AREA_ID ) as area_id ,zone_code,acc_nbr,staff_name from NMK.CTT_USER_BUREAU_" + month + " a where CHARGE_STB_LABEL=0 and TERM_STB_LABEL=0 and VPMN_STB_LABEL=0 and BUSI_STB_LABEL=0 and CTT_FLAG=1 " + condition
+		}
+		}();
+		
+		downInfoArr[1]= function(){
+			var condition = "";
+			if(_params.cityId && _params.cityId != 0)
+				condition += " and area_id='" + areaInfo.cityCode + "'";
+			return {
+			fileName:month + "�ȶ������ײ�����"
+			,header :[
+					{"name":"����","dataIndex":"area_id","cellStyle":"grid_row_cell_text"}
+					,{"name":"��Ʒ���","dataIndex":"proc_tid","cellStyle":"grid_row_cell_text"}
+					,{"name":"��Ʒ���","dataIndex":"proc_name","cellStyle":"grid_row_cell_text"}
+					,{"name":"�ȶ�����","dataIndex":"bind_type","cellStyle":"grid_row_cell_text"}
+			],
+			sql:" select area_id, proc_tid, proc_name, bind_type from nmk.dim_bind_type where bind_type in ('1','2') " + condition
+		}
+		}();
+		
+		var downBtns = document.getElementsByName("downBtn");
+		for(var i = 0 ; i < downBtns.length ; i ++) {
+			var crtBtn = downBtns[i];
+			/*
+			var indx = crtBtn.parentNode.parentNode.firstChild.firstChild.nodeValue;
+			indx -= 1;
+			crtBtn.onclick = function(indx){
+				return function() {
+					var downInfo = downInfoArr[indx];
+					aihb.AjaxHelper.down({
+						sql : downInfo.sql
+						,fileName : downInfo.fileName
+						,header : downInfo.header
+					});
+				}
+			}(indx);
+			*/
+			/* ȥ���հ� */
+			crtBtn.onclick = function(){
+				var indx = this.parentNode.parentNode.firstChild.firstChild.nodeValue;
+				var downInfo = downInfoArr[indx-1];
+				aihb.AjaxHelper.down({
+					sql : downInfo.sql
+					,fileName : downInfo.fileName
+					,header : downInfo.header
+				});
+			}
+		}
+	}
+</script>
+  </body>
+</html>
+<%@ include file="/hbbass/common2/loadmask.htm"%>
+<div id="sqlview"></div>

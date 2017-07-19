@@ -1,0 +1,16 @@
+@charset "utf-8";
+.panel-fix-title{
+	color: $color-white;
+}
+.panel-fix-width{
+    width:100%;
+    border-color:$borderColor2;
+}
+.panel-fix-width > .panel-fix-head{
+	background-color: $bgColor-green;
+	color: $color-white;
+}
+.panel-container{
+    margin-top:0;
+    @include setPadding(column,3px);
+}

@@ -1,0 +1,103 @@
+<html xmlns:ai>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<title>报表下载</title>
+<script type="text/javascript" src="../../../resources/js/default/default.js" charset="utf-8"></script>
+<script type="text/javascript" src="../../../resources/js/default/scheduler.js" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css" href="../../../resources/js/codebase/dhtmlxvault.css" />
+<script language="JavaScript" type="text/javascript" src="../../../resources/js/codebase/dhtmlxvault.js"></script>		
+<link rel="stylesheet" type="text/css" href="../../../resources/css/default/default.css" />
+<script>
+var _params=aihb.Util.paramsObj();
+var _remoPath=_params.prefixPath;
+var loginname=_params.loginname;
+var hasRight=false;//具有操作权限
+if(_remoPath=="finance"){
+	var cityCode = _params.cityId=="0"?"HB.WH":aihb.Constants.getArea(_params.cityId).cityCode;
+	_remoPath+="/"+cityCode;
+	hasRight=(loginname=="wanchun"||loginname=="meikefu"||loginname=="zhaojing");
+}else if("countyRank"==_remoPath){
+	hasRight=(loginname=="xiekun"||loginname=="zhangtao2"||loginname=="meikefu");
+}
+
+function listFiles(){
+	//ajaxGetJson("/hbirs/action/filemanage?method=listRemoteFiles","remotePath="+_remoPath,listFiles);
+	var ajax = new aihb.Ajax({
+		url : "/hbirs/action/filemanage?method=listRemoteFiles"
+		,parameters : "&remotePath="+_remoPath
+		,callback : function(xmlrequest){
+			var datas = {}
+			try{
+				eval("datas="+xmlrequest.responseText);
+			}catch(e){}
+			var str="";
+			for(var i=0;i<datas.length;i++){
+				str+="<div>"
+				+"<a href='/hb-bass-navigation/hbirs/action/filemanage?method=downFromFtp&remotePath="+_remoPath+"&fileName="+datas[i]+"' target='_blank' onclick='aihb.AjaxHelper.log({params:\""+ encodeURI(_params._oriUri)+"&opertype=down&opername="+encodeURIComponent(datas[i])+"\"})'>"+datas[i]+"</a>"
+				
+				if("countyRank"==_remoPath && hasRight){//县域排名需要删除
+					str +=" <a href='#' onclick='delFile(\""+datas[i]+"\")'>删除</a>";
+				}
+				str+="</div>";
+			}
+			$("listFiles").innerHTML=str;
+		}
+	});
+	
+	ajax.request();
+}
+
+function delFile(fileName){
+	if(confirm("确定？")){
+		aihb.AjaxHelper.log({params: encodeURI(_params._oriUri)+"&opertype=delete&opername="+encodeURIComponent(fileName)})
+		var ajax = new aihb.Ajax({
+			url: "/hbirs/action/filemanage?method=delFromFtp&remotePath="+_remoPath 
+			,parameters : "&fileName="+encodeURIComponent(fileName)
+			,callback:function(xmlHttp){
+				listFiles();
+			}
+		});
+		ajax.request();
+	}
+}
+
+window.onload=function() {
+	
+	listFiles();
+	var _maskCont=$C("div");
+	var _mask = aihb.Util.windowMask({content:_maskCont});
+	if("countyRank"==_remoPath){//县市排名下载专用
+		var vault = new dhtmlXVaultObject();
+		   vault.setImagePath("../../../resources/js/codebase/imgs/");
+		   vault.setServerHandlers("/hbirs/action/filemanage?method=uploadToFtp&remotePath="+_remoPath, "/hbirs/action/filemanage?method=getInfoHandler", "/hbirs/action/filemanage?method=getIdHandler");
+		   //vault.setFilesLimit(1);
+		  	vault.create(_maskCont);
+		   
+		   vault.onUploadComplete=function(){
+		   	listFiles();
+		   	_mask.style.display='none';
+			this.removeAllItems();
+		   }
+		if(hasRight){
+		   	$("btnUpld").style.display="";
+		   	$("btnUpld").onclick=function(){
+		   		_mask.style.display='';
+		};
+		}
+	}else if(hasRight){//财务报表下载
+		var sched = new aihb.Scheduler({container:_maskCont,sql:"values '[经分系统温馨提示]@month月财务报表已经放到前台，请各位同事及时下载。'",ds:"web",contacts:"13476080947;13607153889;13971888686;13907210001;13733590303;13607201698;13971759996;13971723789;13971820000;13872888612;13807269192;13808688881;13972258567;13797211999;13507225882;15871520058"});
+		sched.render();
+		$("btnSend").style.display="";
+	   	$("btnSend").onclick=function(){
+	   		_mask.style.display="";
+		};
+	}
+}
+</script>
+</head>
+<body style="padding:10px;">
+<input id="btnUpld" type="button" class="form_button_short" value="上传" style="display: none;">
+<input id="btnSend" type="button" class="form_button_short" value="发短信" style="display: none;">
+<div id="listFiles" style="font-size : 14px;line-height:20px;"></div>
+</body>
+</html>

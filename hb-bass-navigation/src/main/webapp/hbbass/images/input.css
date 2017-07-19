@@ -1,0 +1,31 @@
+.input {
+	BORDER-RIGHT: 0px solid #333333;
+	BORDER-TOP: 0px solid #333333;
+	FONT-SIZE: 9pt;
+	BORDER-LEFT: 0px solid #333333;
+	COLOR: #ff8400;
+	BORDER-BOTTOM: 0px solid #333333;
+	FONT-FAMILY: "ËÎÌו";
+	padding: 1px;
+	clear: left;
+	float: left;
+	height: 20px;
+	width: 50px;
+
+
+
+}
+.bottom {
+	BORDER-RIGHT: 1px solid;
+	BORDER-TOP: 1px solid;
+	FONT-SIZE: 9pt;
+	BORDER-LEFT: 1px solid;
+	COLOR: #ffffff;
+	BORDER-BOTTOM: 1px solid;
+	FONT-FAMILY: "ËÎÌו";
+	HEIGHT: auto;
+	BACKGROUND-COLOR: #174b86;
+	TEXT-DECORATION: none;
+	padding: 1px;
+
+}

@@ -1,0 +1,163 @@
+<html xmlns:ai>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<title>策反数据导入不成功表单</title>
+	<script type="text/javascript" src="../../../hbapp/resources/js/default/default.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../../../hbapp/resources/js/datepicker/WdatePicker.js"></script>
+	<link rel="stylesheet" type="text/css" href="../../../hbapp/resources/css/default/default.css" />
+	<script type="text/javascript">
+	//aihb.URL="/hbapp";
+	var loginname = "";
+	var task_id = "";
+	function getLoginName(){
+		xmlHttp = new ActiveXObject("Msxml2.XMLHTTP.3.0");
+    	xmlHttp.onreadystatechange=addBack; // 设置回掉函数
+    	xmlHttp.open("POST","/hbapp/app/feedback/getSessionLogin.jsp",false);
+    	xmlHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+    	xmlHttp.setRequestHeader("X-Requested-With","XMLHttpRequest");
+    	var str = "";
+    	str = encodeURI(str,"utf-8");
+    	xmlHttp.send(str);
+	};
+	function addBack()
+	{
+		if(xmlHttp.readyState == 4)
+		{
+			if(xmlHttp.status == 200)
+			{
+				loginname = xmlHttp.responseText.replace(/(^\s*)|(\s*$)/g, "");
+				task_id = new Date().format("yyyymmdd") + "@" + loginname;
+				loadmask.style.display = "none";	
+			}
+		}
+	};
+	
+	var _header= [
+	{
+		"cellStyle":"grid_row_cell_text",
+		"dataIndex":"employee_num",
+		"name":["员工编号"],
+		"title":"",
+		"cellFunc":""
+	},
+	{
+		"cellStyle":"grid_row_cell_text",
+		"dataIndex":"employee_part_name",
+		"name":["参与员工姓名"],
+		"title":"",
+		"cellFunc":""
+	},
+	{
+		"cellStyle":"grid_row_cell_text",
+		"dataIndex":"net_portin",
+		"name":["回流异网号码"],
+		"title":"",
+		"cellFunc":""
+	},
+	{
+		"cellStyle":"grid_row_cell_text",
+		"dataIndex":"net_newacc_nbr",
+		"name":["新发展本网号码"],
+		"title":"",
+		"cellFunc":""
+	},
+	{
+		"cellStyle":"grid_row_cell_text",
+		"dataIndex":"group_custname",
+		"name":["回流集团名称"],
+		"title":"",
+		"cellFunc":""
+	},
+	{
+		"cellStyle":"grid_row_cell_text",
+		"dataIndex":"group_custid",
+		"name":["回流集团ID"],
+		"title":"",
+		"cellFunc":""
+	},
+	{
+		"cellStyle":"grid_row_cell_text",
+		"dataIndex":"opbackdate",
+		"name":["回流月份"],
+		"title":"",
+		"cellFunc":""
+	},
+	{
+		"cellStyle":"grid_row_cell_text",
+		"dataIndex":"flag",
+		"name":["不成功原因"],
+		"title":"",
+		"cellFunc":""
+	}
+	];
+aihb.Util.loadmask();
+var _params = aihb.Util.paramsObj();
+//var task_id = new Date().format("yyyymmdd") + "@" + loginname;
+function query(){
+	var grid = new aihb.SimpleGrid({
+		header:_header
+		,sql: "select employee_num,employee_part_name,net_portin,net_newacc_nbr,group_custname,group_custid,opbackdate,flag from COMPETE_OPPSTATE_PROVINCE_UPLOAD where task_id='" + task_id + "'"
+		,ds:"web"
+		,isCached : false
+		,callback:function(){
+			aihb.Util.watermark();
+		}
+	});
+	grid.run();
+}
+
+function down(){
+	aihb.AjaxHelper.down({
+		sql : "select employee_num,employee_part_name,net_portin,net_newacc_nbr,group_custname,group_custid,opbackdate,flag from COMPETE_OPPSTATE_PROVINCE_UPLOAD where task_id='" + task_id + "'"
+		,header : _header
+		,ds:"web"
+		,"url" : "/hb-bass-navigation/hbirs/action/jsondata?method=down&fileKind=excel"
+	});
+}
+
+function _delete() {
+	if(!window.confirm("确定要删除吗？删除前应先下载这些记录做备份"))
+		return;
+	var _params = aihb.Util.paramsObj();
+	var sql=encodeURIComponent("delete from COMPETE_OPPSTATE_PROVINCE_UPLOAD where task_id='" + task_id + "'");
+	var ajax = new aihb.Ajax({
+		url : "/hbirs/action/sqlExec"
+		,parameters : "sqls="+sql+"&ds=web"
+		,loadmask : false
+		,callback : function(xmlrequest){
+			var result = eval("(" + xmlrequest.responseText + ")");
+			alert(result.message);
+			query();
+		}
+	});
+	ajax.request();
+}
+
+window.onload=function(){
+	aihb.Util.loadmask();
+	aihb.Util.watermark();
+	getLoginName();
+	query();
+}
+	</script>
+</head>
+<body>
+<form method="post" action=""><br>
+<div style="text-align:right;">
+	<font color=red>请下载未成功导入的数据编辑后重新上传</font>
+	<input type="button" class="form_button" value="下载数据" onclick="down()">&nbsp;
+<input type="button" class="form_button" value="删除非法数据" onClick="_delete()">&nbsp;
+</div>
+
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'show_div')" title="点击隐藏"><img flag='1' src="../../../hbapp/resources/image/default/ns-expand.gif"></img>&nbsp;数据展现区域：</td>
+		<td></td>
+	</tr></table></legend>
+	<div id="grid" style="display:none;"></div>
+</fieldset>
+</div><br>
+</form>
+</body>
+</html>

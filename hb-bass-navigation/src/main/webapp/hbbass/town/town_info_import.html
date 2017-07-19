@@ -1,0 +1,226 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>湖北移动经营分析系统-乡镇基本信息导入</title>
+		<link rel="stylesheet" type="text/css" href="/hb-bass-navigation/hbapp/resources/js/codebase/dhtmlxvault.css" />
+		<link rel="stylesheet" type="text/css" href="/hb-bass-navigation/hbapp/resources/css/default/default.css" />
+	</head>
+	<body bgcolor="#EFF5FB" margin="0">
+		<fieldset width="96%" align="center" style="margin: 10px 0px 0px 10px;">
+			<legend>
+				数据导入3
+			</legend>
+			<table border="0" cellpadding="0" cellspacing="0">
+				<tr style="padding: 5px;">
+					<td width="450">
+						<div id="uploadDiv"></div>
+					</td>
+					<td valign="top">
+						<a style="text-decoration: underline;" href="/hb-bass-navigation/hbirs/action/filemanage?method=downFromFtp&amp;remotePath=town&amp;fileName=乡镇基本信息导入.xls"><font color="blue"><b>下载数据模板(Excel)</b>
+						</font>
+						</a>&nbsp;
+						<font color="red">请单击或右键点击“目标另存为”下载</font>
+						<div>
+							导入说明3：
+						</div>
+						<div>
+						</div>
+						<div>
+							请检查并上传数据文件。
+						</div>
+					</td>
+					<td>
+					</td>
+				</tr>
+			</table>
+		</fieldset>
+		<form method="post" action="">
+			<br>
+			<div style="text-align: right;">
+				<font color="red">请下载未成功导入的数据编辑后重新上传</font>
+				<input type="button" id="queryBtn" class="form_button" style="width: 120px" value="未导入成功号码查看" />
+				&nbsp;
+				<input type="button" id="downBtn" class="form_button" value="下载数据" onclick="down()">
+				&nbsp;
+				<input type="button" id="delBtn" class="form_button" value="删除非法数据" onclick="_delete()">
+				&nbsp;
+			</div>
+			<div class="divinnerfieldset">
+				<fieldset>
+					<legend>
+						<table>
+							<tr>
+								<td>
+									<img src="/hb-bass-navigation/hbapp/resources/image/default/ns-expand.gif" alt=""></img>
+									&nbsp;数据展现区域：
+								</td>
+								<td></td>
+							</tr>
+						</table>
+					</legend>
+					<div id="grid" style="display: none;"></div>
+				</fieldset>
+			</div>
+			<br>
+		</form>
+		<script language="JavaScript" type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/codebase/dhtmlxvault.js"></script>
+		<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/default/default.js" charset="utf-8"></script>
+		<script type="text/javascript">
+		+function(window,document,undefined){
+			var _params = aihb.Util.paramsObj();
+			var taskId = new Date().format("yyyymmdd") + "@" + _params.loginname;
+			function showPanel() {
+				var vault = new dhtmlXVaultObject();
+			    vault.setImagePath("/hb-bass-navigation/hbapp/resources/js/codebase/imgs/");
+			    vault.setServerHandlers("/hb-bass-navigation/hbirs/action/filemanage?method=importExcel", "/hb-bass-navigation/hbirs/action/filemanage?method=getInfoHandler", "/hb-bass-navigation/hbirs/action/filemanage?method=getIdHandler");
+			    vault.setFilesLimit(1);
+			   	vault.create("uploadDiv");
+	   	    	vault.onFileUpload=function(){
+	    			loadmask.style.display="";
+	    			return true;
+	    		}
+		   	
+				vault.onAddFile = function(fileName) {
+					var ext = this.getFileExtension(fileName);
+					if (ext != "xls") {
+						alert("本应用只支持扩展名.xls,请重新上传.");
+						return false;
+					} else return true;
+				};
+				
+				vault.enableAddButton(function(time){
+					if(time.getDate()>=15)
+						return true;
+					else {
+						alert("当前时间禁止导入。导入时间为每月15号之后。");
+						return false;
+					}
+				}(new Date()));
+			   	vault.setFormField("tableName", "nmk.bureau_town_info_temp");
+		    	vault.setFormField("columns", "taskid,area_code,county_code,zone_code,town_code,town_name,is_canton,total_usernum,agriculture_usernum,job_usernum,outward_usernum,man_usernum,total_familynum,gdp_num,user_failth,import_domain,income_average,competitive_chlnum,mobile_chlnum,tel_rate,telmarket_rate");
+		    	vault.setFormField("date", taskId);  
+	    	
+		    	vault.onUploadComplete = function(files) {
+					//debugger;
+		    		var tempDate = new Date();
+		    		tempDate.setMonth(tempDate.getMonth() - 1);//上个月的
+		    		tempDate.setDate(tempDate.getDate() - 2); //推迟两天
+					var _date = tempDate.format("yyyymm");
+		    		
+		    		//先全部置为成功
+		    		var sql = encodeURIComponent("update nmk.bureau_town_info_temp set flag='成功' where taskid='" + taskId + "'"); 
+
+					//删除表头
+					sql += "&sqls=" + encodeURIComponent("delete from nmk.bureau_town_info_temp where taskid='" + taskId + "' and area_code='LAC码'");
+					
+					 /* 剩余就是成功 */
+					sql += "&sqls=" + encodeURIComponent("insert into nmk.bureau_town_info(area_code,county_code,zone_code,town_code,town_name,is_canton,total_usernum,agriculture_usernum,job_usernum,outward_usernum,man_usernum,total_familynum,gdp_num,user_failth,import_domain,income_average,competitive_chlnum,mobile_chlnum,tel_rate,telmarket_rate) select area_code,county_code,zone_code,town_code,town_name,is_canton,total_usernum,agriculture_usernum,job_usernum,outward_usernum,man_usernum,total_familynum,gdp_num,user_failth,import_domain,income_average,competitive_chlnum,mobile_chlnum,tel_rate,telmarket_rate from nmk.bureau_town_info_temp where taskid='" + taskId +"'");
+					 
+					 /* 删除成功记录 */
+					sql += "&sqls=" + encodeURIComponent("delete from nmk.bureau_town_info_temp where taskid='" + taskId + "' and flag = '成功' ");
+					
+					var ajax = new aihb.Ajax({
+					url : "/hb-bass-navigation/hbirs/action/sqlExec"
+					,parameters : "sqls="+sql
+					,loadmask : false
+					,callback : function(xmlrequest){
+						alert("导入完成,正在查询未导入成功号码");
+						query();
+						//loadmask.style.display="none";
+						//tabAdd({title:'未导入成功号码',url:"/hbapp/app/report/college/uploadinfo.html?taskId=" + taskId + "&" + _params._oriUri});
+					}
+				});
+					ajax.request();
+		    	}
+			};
+			
+			var _header= [
+				{
+					"cellStyle":"grid_row_cell_text",
+					"dataIndex":"lac_dec",
+					"name":["LAC码"],
+					"title":"",
+					"cellFunc":""
+				},
+				{
+					"cellStyle":"grid_row_cell_text",
+					"dataIndex":"bureau_name",
+					"name":["基站名称"],
+					"title":"",
+					"cellFunc":""
+				},
+				{
+					"cellStyle":"grid_row_cell_text",
+					"dataIndex":"cellid_dec",
+					"name":["小区代码"],
+					"title":"",
+					"cellFunc":""
+				},
+				{
+					"cellStyle":"grid_row_cell_text",
+					"dataIndex":"type_remark",
+					"name":["行政区划划分"],
+					"title":"",
+					"cellFunc":""
+				}
+			];
+		
+			function query(){
+				var grid = new aihb.SimpleGrid({
+					header:_header
+					,sql: "select area_code,county_code,zone_code,town_code,town_name,is_canton,total_usernum,agriculture_usernum,job_usernum,outward_usernum,man_usernum,total_familynum,gdp_num,user_failth,import_domain,income_average,competitive_chlnum,mobile_chlnum,tel_rate,telmarket_rate, taskid from nmk.bureau_town_info_temp where taskid='" + taskId + "'"
+					,isCached : false
+					,callback : function() {
+						var _length = grid.grid.data.length;
+						//alert(_length);
+						if(_length == 0)alert("本次导入全部成功!");
+					}
+				});
+				grid.run();
+			}
+
+			function down(){
+				aihb.AjaxHelper.down({
+					sql : "select area_code,county_code,zone_code,town_code,town_name,is_canton,total_usernum,agriculture_usernum,job_usernum,outward_usernum,man_usernum,total_familynum,gdp_num,user_failth,import_domain,income_average,competitive_chlnum,mobile_chlnum,tel_rate,telmarket_rate from nmk.bureau_town_info_temp where taskid='" + taskId + "'"
+					,header : _header
+					,isCached : false
+					,"url" : "/hb-bass-navigation/hbirs/action/jsondata?method=down&fileKind=excel"
+				});
+			}
+
+			function _delete() {
+				if(!window.confirm("确定要删除吗？删除前应先下载这些记录做备份"))
+					return;
+				var sql=encodeURIComponent("delete from nmk.bureau_town_info_temp where taskid='" + taskId + "'");
+				var ajax = new aihb.Ajax({
+					url : "/hbirs/action/sqlExec"
+					,parameters : "sqls="+sql
+					,loadmask : false
+					,callback : function(xmlrequest){
+						var result = eval("(" + xmlrequest.responseText + ")");
+						alert(result.message);
+					}
+				});
+				ajax.request();
+			}
+			
+			window.onload=function(){
+				aihb.Util.loadmask();
+				showPanel();
+				/*
+				$("failNum").onclick=function(){
+		 			tabAdd({title:'未导入成功号码',url:"/hbapp/app/channel/uploadinfo.html?taskId=" + taskId + "&" +_params._oriUri})
+				}
+				*/
+				$("queryBtn").onclick = query;
+				$("delBtn").onclick = _delete;
+				$("downBtn").onclick = down;
+			}
+		
+		}(window,document);
+		
+	</script>
+	</body>
+</html>

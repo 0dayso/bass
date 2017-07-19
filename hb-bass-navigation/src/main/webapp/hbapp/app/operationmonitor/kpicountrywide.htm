@@ -1,0 +1,22 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>一经报表</title>
+<script type="text/javascript" src="../../resources/js/default/default.js" charset="utf-8"></script>
+<script>
+var _params = aihb.Util.paramsObj();
+var _src = "kpicountrywide_right.htm?"+_params._oriUri
+window.onload=function(){
+	$("exMainFrame").src=_src;
+	$("exLeftFrame").src="kpicountrywide_left.htm"
+}
+</script>
+</head>
+<frameset rows="*" cols="200,5,*" id="exFra" name="exFra" frameborder="no" border="0" framespacing="0">
+    <frame src="" name="exLeftFrame" scrolling="auto" noresize="noresize" id="exLeftFrame" />
+    <frame src="../../kpiportal/kpicompare/kpicompare_scroll.htm" name="exScrollFrame" scrolling="No" noresize="noresize" id="exScrollFrame" />
+	<frame src="" name="exMainFrame" id="exMainFrame" />
+</frameset>
+<noframes><body>
+</body></noframes>
+</html>

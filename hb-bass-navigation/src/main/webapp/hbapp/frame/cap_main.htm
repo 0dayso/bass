@@ -1,0 +1,346 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html xmlns:ai>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>湖北移动NGBASS领导聚焦</title>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Cache-Control" content="no-cache"/>
+
+<script type="text/javascript" src="/hb-bass-navigation/hbapp/kpiportal/localres/kpi.js"></script>
+<script type="text/javascript" src="../resources/js/default/default.js"></script>
+<script type="text/javascript" src="../resources/js/default/tabext.js"></script>
+<script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+<script type="text/javascript" src="../resources/js/jquery/ui/jquery.ui.js"></script>
+<link type="text/css" href="../resources/js/jquery/themes/cupertino/jquery.ui.css" rel="stylesheet" />
+<link type="text/css" href="../resources/css/default/default.css" rel="stylesheet" />
+<style type="text/css">
+
+
+.headerImg{vertical-align:bottom; padding-right: 5px; width: 22px;height: 22px;background:url('../resources/image/frame/rounds.png') no-repeat;}
+.headerText{padding-left:8px;position:relative;top:2px;font-family:华文细黑;font-size: 16px;color:#366388/*#810A87*/;}
+
+.ui-tabs  { border:0px!important;}
+.tabPiece{margin: 0px !important;padding: 0 !important;background-color: #fff!important;}
+/**/
+li a, li a:link, li a:visited {color:#366388;/*color: #2779aa;color: #000!important;font-weight: normal !important;font-family: 宋体!important;*/ text-decoration: none;}
+.ui-accordion .ui-state-default {border:0px;background-image:none;background-color:#fff;}
+/*.ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited { color: #000!important;font-weight: normal !important; font-family: 宋体!important;}*/
+
+td{line-height: 24px !important;}
+
+.ui-progressbar-value { background: red }
+
+.img1{padding-left:10px;}
+</style>
+<script type="text/javascript">
+jQuery.noConflict();
+var _params = aihb.Util.paramsObj();
+aihb.Grid.prototype.getPaging=function(){
+	return undefined;
+}
+function blackboard(){ 
+	var sql=encodeURIComponent(
+		"select date,title,title content from (values" 
++"('2010-10-03','武汉市江汉区常青营销中心电信用户数环比突增40％')"
++",('2010-10-03','恩施市巴东县集团客户成员离网数100户？')"
++",('2010-10-03','孝感VIP客户流失3户')"
++",('2010-10-03','宜昌市长阳县月收入环比下降3％')"
++") as t(date,title)"
+	);
+	var ajax=new aihb.Ajax({
+		url:"/hb-bass-navigation/hbirs/action/jsondata"
+		,parameters : "sql="+sql+"&ds=web"
+		,callback:function(xmlresponse){
+			var datas=[];
+			try{
+				eval("datas="+xmlresponse.responseText);
+			}catch(e){debugger;}
+			
+			
+			function f_acc(el,datas){
+				var _accordion=$(el);
+				for(var i=0;i<datas.length;i++){
+					var data=datas[i];
+					var _sect=$C("div");
+					var _a=$C("a");
+					_a.href="#";
+					if(i==0)_sect.id=el+"sec_first";
+					_a.appendChild($CT(data.date+" "));
+					_a.appendChild($CT(data.title));
+					_sect.appendChild(_a);
+					_sect.style.cssText="border-bottom:1px solid #bbbbbb;border-left:0px;border-right:0px;border-top:0px;";
+					var _cont=$C("a");
+					_cont.appendChild($CT(data.content));
+					_cont.style.cssText="border-top:1px solid #bbbbbb;border-left:0px;border-right:0px;border-bottom:0px;";
+					_cont.href="javascript:void(0)";
+					_cont.nid=data.id
+					_cont.ntitle=data.title;
+					_cont.onclick=function(){
+						tabAdd({url:"/newsshow.jsp?newsid="+this.nid,title:this.ntitle});
+					}
+					_accordion.appendChild(_sect);
+					_accordion.appendChild(_cont);
+				}
+				jQuery("#"+el).accordion({
+					autoHeight: false
+					,collapsible: true
+					//,event: "mouseover"
+					//,clearStyle:true
+				});
+				jQuery('#'+el+'sec_first').click();
+			}
+			f_acc("blackboard",datas)
+			f_acc("blackboard1",datas)
+			
+		}
+	});
+
+	ajax.request();
+}
+
+var threshold = new Threshold();
+threshold.path="/hbapp/resources/image/default/";
+function kpi(){
+	jQuery("#mycustome").tabs({
+		event: "mouseover"
+	});
+
+	var _header=[
+		{"name":["指标名称"],"dataIndex":"name","cellStyle":"grid_row_cell_text"
+			,cellFunc:function(val,options){
+				var _span=$C("span");
+				_span.title=options.record.instruction;
+				_span.style.cursor="hand";
+				_span.label=options.record.name;
+				_span.param="appName="+options.record.appName+"&zbcode="+options.record.id+"&zbname="+options.record.name+"&area="+(_params.cityId||0)+"&percentType="+(options.record.formatType||"")+"&brand="
+				_span.onclick=function(){
+					tabAdd({url:"/hbapp/kpiportal/kpiview/kpiviewDetail.jsp?"+this.param,title:this.label});
+				}
+				
+				var dateStr=options.record.date;
+				if(dateStr.length==8){
+					dateStr=dateStr.substring(4,6)+"月"+dateStr.substring(6,8)+"日";
+				}else{
+					dateStr=dateStr.substring(0,4)+"年"+dateStr.substring(4,6)+"月";	
+				}
+				
+				_span.appendChild($CT(dateStr+" "+val));
+				return _span;
+			}
+		}
+		,{"name":["当前数值"],"dataIndex":"current","cellStyle":"grid_row_cell_number"
+			,cellFunc:function(val,options){
+				return options.record.formatType!="percent"?aihb.Util.numberFormat(val):aihb.Util.percentFormat(val);		
+			}
+		}
+		,{"name":["环比增幅"],"dataIndex":"tongbi","cellStyle":"grid_row_cell_number",title:"与上月同期比"
+			/**/,cellFunc: function (val,options){
+				var str=aihb.Util.percentFormat(val);
+				str+=threshold.getTongbiImg(val);
+				return str;
+			}
+		}
+		,{"name":["同比增幅"],"dataIndex":"yeartongbi","cellStyle":"grid_row_cell_number",title:"与去年同期比"
+			/**/,cellFunc: function (val,options){
+				var str=aihb.Util.percentFormat(val);
+				str+=threshold.getTongbiImg(val);
+				return str;
+			}
+		}
+	];
+	
+	function getKpis(kpis,el){
+		var ajax = new aihb.Ajax({
+			url : "/hbirs/action/kpi?method=getKpis"
+			,parameters : "kpis="+kpis
+			,loadmask : true
+			,callback : function(xmlrequest){
+				var res = {}
+				try{
+					eval("res="+xmlrequest.responseText);
+				}catch(e){debugger;}
+				var _grid = new aihb.Grid({
+					container : $(el)
+					,data : res.data || res
+					,limit : (res.data || res).length
+					,header : _header
+					,pageSize : (res.data || res).length
+				});
+				
+				_grid.render();
+				
+			}
+		});
+		
+		ajax.request();
+	}
+	
+	var hotKpis="["
+		+"{\"appname\":\"ChannelD\",\"zbcode\":\"KC0005\"}]";
+	
+	getKpis(hotKpis,"hot");
+	
+	var chgKpis="["
+		+"{\"appname\":\"ChannelD\",\"zbcode\":\"K10002\"}"
+		+",{\"appname\":\"ChannelD\",\"zbcode\":\"K10001\"}"
+		+",{\"appname\":\"ChannelD\",\"zbcode\":\"KC0010\"}"
+		+",{\"appname\":\"ChannelD\",\"zbcode\":\"K10029\"}"
+		+",{\"appname\":\"ChannelD\",\"zbcode\":\"K10030\"}"
+		+",{\"appname\":\"ChannelD\",\"zbcode\":\"K10020\"}]";
+	
+	getKpis(chgKpis,"chg");
+	
+	var custKpis="["
+		+"{\"appname\":\"ChannelD\",\"zbcode\":\"K10003\"}"
+		+",{\"appname\":\"ChannelD\",\"zbcode\":\"KC0001\"}"
+		+",{\"appname\":\"ChannelD\",\"zbcode\":\"K11012\"}"
+		+",{\"appname\":\"ChannelD\",\"zbcode\":\"K00081\"}"
+		+",{\"appname\":\"ChannelD\",\"zbcode\":\"K10005\"}]";
+	
+	getKpis(custKpis,"cust");
+	
+	var cpeKpis="["
+		+"{\"appname\":\"ChannelD\",\"zbcode\":\"K11006\"}"
+		+",{\"appname\":\"ChannelD\",\"zbcode\":\"KC0001\"}"
+		+",{\"appname\":\"ChannelD\",\"zbcode\":\"KC0002\"}"
+		+",{\"appname\":\"ChannelD\",\"zbcode\":\"KC0003\"}"
+		+",{\"appname\":\"ChannelD\",\"zbcode\":\"KC0004\"}"
+		+",{\"appname\":\"ChannelD\",\"zbcode\":\"K11004\"}]";
+	
+	getKpis(cpeKpis,"cpe");
+	
+	var bizKpis="["
+		+"{\"appname\":\"ChannelD\",\"zbcode\":\"K10006\"}"
+		+",{\"appname\":\"ChannelD\",\"zbcode\":\"K10007\"}"
+		+",{\"appname\":\"ChannelD\",\"zbcode\":\"K10013\"}"
+		+",{\"appname\":\"ChannelD\",\"zbcode\":\"K10014\"}"
+		+",{\"appname\":\"ChannelD\",\"zbcode\":\"K10093\"}]";
+	
+	getKpis(bizKpis,"biz");
+	
+}
+
+function hotApp(){
+	var _data=[
+		{label:"“四个一”营销",uri:"",size:24}
+		,{label:"存活率提升",uri:"",size:16}
+		,{label:"高效开学营销季之深耕巩固",uri:"",size:20}
+		,{label:"WLAN发展",uri:"",size:24}
+		,{label:"合家欢",uri:"",size:16}
+	];
+	var _cont=$("hot");
+	for(var i=0;i<_data.length;i++){
+		var _span=$C("span");
+		_span.appendChild($CT(_data[i].label));
+		_span.style.cssText="font-size:"+_data[i].size+"px;margin:5px 10px;padding: 10px 5px;color:#006699;cursor:hand;height:30px;color:"+aihb.FusionChartHelper.COLOR_STYLE["default"][i+1]+"";
+		
+		_span.onmouseover=function(){
+			this.style.border="1px solid #c3daf9";
+			this.style.backgroundColor="#EFF5FB"
+		}
+		
+		_span.onmouseout=function(){
+			this.style.border="0px";
+			this.style.backgroundColor="#fff"
+		}
+		_cont.appendChild(_span);
+		
+	}
+}
+
+window.onload=function() {
+	
+	blackboard();
+	
+	kpi();
+	
+	var d1 = new Date();
+var d2 = new Date();
+d2.setMonth(0);
+d2.setDate(1);
+var rq = d1-d2;
+var s1 = Math.ceil(rq/(24*60*60*1000)/3.65);
+	
+	jQuery("#progressbar").progressbar({
+		value: s1
+	});
+	
+	$("barText").appendChild($CT(" 时间进度："+s1+"% "));
+	//hotApp();
+};
+</script>
+</head>
+<body>
+<table width="99%">
+<tr valign="top" ><td>
+<div class="column" >
+	<div class="portlet-main">
+		<div class="portlet-header"><span style="background-position: 0 0;" class="headerImg"></span><span class="headerText">市场动态</span></div>
+		<div class="portlet-content" style="position:relative;height:140px;overflow:auto;">
+			<table><tr>
+			<td width="49%" valign="top"><div id="blackboard" ></div></td>
+			<td></td>
+			<td width="49%" valign="top"><div id="blackboard1" ></div></td>
+			</tr></table>
+			
+			<div id="blackboard" ></div>
+		</div>
+	</div>
+</div>
+</td></tr>
+<tr valign="top" ><td>
+<div class="column" >
+	<div class="portlet-main">
+		<div class="portlet-header">
+		
+		<table width="100%"><tr>
+		<td><span style="background-position: 0 -104px;" class="headerImg"></span><span class="headerText">指标监控</span></td>
+		<td align="center"><span id="barText" style="color:red"></span><span id="progressbar" style="height: 18px;width: 300px;"></span></td>
+		</tr></table>
+		
+		
+		
+		</div>
+		<div class="portlet-content" style="position:relative;height:200px;overflow:auto;">
+			<div id="mycustome">
+			<ul style="border: 0px !important; background: url(1.jpg) !important;">
+				<li><a href="#hot" style="padding-top:4px;padding-bottom:4px;cursor: hand;" >近期热点</a></li>
+				<li><a href="#chg" style="padding-top:4px;padding-bottom:4px;cursor: hand;" >收入类</a></li>
+				<li><a href="#cust" style="padding-top:4px;padding-bottom:4px;cursor: hand;" >用户类</a></li>
+				<li><a href="#cpe" style="padding-top:4px;padding-bottom:4px;cursor: hand;" >市场竞争类</a></li>
+				<li><a href="#biz" style="padding-top:4px;padding-bottom:4px;cursor: hand;" >业务量类</a></li>
+				<!-- <li style="height: 22px;"><a href="#mycross">信息穿越</a></li>  -->
+			</ul>
+			<div id="hot" class="tabPiece"></div>
+			<div id="chg" class="tabPiece"></div>
+			<div id="cust" class="tabPiece"></div>
+			<div id="cpe" class="tabPiece"></div>
+			<div id="biz" class="tabPiece"></div>
+			<!-- <div id="mycross" class="tabPiece" style="position:relative;height:290px;overflow-y:auto;"></div>  -->
+		</div>
+		</div>
+	</div>
+</div>
+</td></tr>
+<tr valign="top" ><td>
+<div class="column" >
+	<div class="portlet-main">
+		<div class="portlet-header"><span style="background-position: 0 -52px;" class="headerImg"></span><span class="headerText">近期热点</span></div>
+		<div class="portlet-content" style="text-align:left;padding-left:5px;position:relative;height:80px;overflow:auto;">
+			<div id="hot" style="margin:3px;">
+			<img src="01.png" class="img1"></img>
+			<img src="02.png" class="img1"></img>
+			<img src="03.png" class="img1"></img>
+			</div>
+			<div id="hot" style="margin:3px;">
+			<img src="04.png" class="img1"></img>
+			<img src="05.png" class="img1"></img>
+			<img src="01.png" class="img1"></img>
+			</div>
+		</div>
+	</div>
+</div>
+</td></tr>
+</table>
+</body>
+</html>

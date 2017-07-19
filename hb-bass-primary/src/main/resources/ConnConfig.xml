@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<connection>	
+	<KeepAlive>on</KeepAlive>
+	<MaxKeepAliveRequests>30</MaxKeepAliveRequests>
+	<ServerMaxKeepAlive>30</ServerMaxKeepAlive>
+	<MinKeepAliveRequests>1</MinKeepAliveRequests>
+	<KeepAliveTimeout>100</KeepAliveTimeout>
+	<step>1</step>
+</connection>

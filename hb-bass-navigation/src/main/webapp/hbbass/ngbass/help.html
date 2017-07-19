@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>Windows</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="text/javascript">
+//<![CDATA[
+
+window.onload=function() {
+
+  var nmStr = opener.document.forms[0].elements[0].value;
+  document.writeln("<p>Hello " +  nmStr + "!</p>");
+  document.writeln("<p><a href='' onclick='self.close(); return false'>Close</a></p>");
+}
+
+//]]>
+</script>
+</head>
+<body>
+<p>some content</p>
+</body>
+</html>

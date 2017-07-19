@@ -1,0 +1,14 @@
+@charset "utf-8";
+.SelfInput{
+    @include setPadding(top,5px);
+    @include setPadding(left,3px);
+    @include setMargin(top,3px);
+    .SelfInput-name{
+    }
+    .SelfInput-split{
+        @include setPadding(right,3px);
+    }
+    .SelfInput-input{
+        @include setBorder(null);
+    }
+}

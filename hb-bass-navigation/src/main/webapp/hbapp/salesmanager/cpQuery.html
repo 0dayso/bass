@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>核心客户视图</title>
+  	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../../resources/js/ext/resources/css/ext-all.css"/>
+	<script type="text/javascript" src="../../resources/js/default/default.js"></script>
+ 	<script type="text/javascript" src="../../resources/js/ext/ext-base.js"></script>
+  	<script type="text/javascript" src="../../resources/js/ext/ext-all.js"></script>
+	<script type="text/javascript">
+	var _params = aihb.Util.paramsObj();
+	
+	Ext.BLANK_IMAGE_URL = '../../resources/js/ext/resources/images/default/s.gif';
+    Ext.onReady(function(){
+    	Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+		var viewport = new Ext.Viewport({
+		     layout:'border'
+		     ,items:[_tabPanel]
+		 });
+    });
+	
+	var _tabPanel =new Ext.TabPanel({
+	   region:'center',
+	   deferredRender:true,
+	   enableTabScroll:true,
+	   activeTab:0,
+	   items:[{
+	   	id:'index0',
+		title: "输入竞争对手号码",
+		closable:false,
+		autoScroll:true,
+		html:'<iframe id="indexFrame" scrolling="auto" frameborder="0" width="100%" height="100%" src="/mvc/report/3660"></iframe>',       
+		border:true
+	   },
+	   {
+	   	id:'index1',
+		title: "批量选取高端客户",
+		closable:false,
+		autoScroll:true,
+		html:'<iframe id="indexFrame" scrolling="auto" frameborder="0" width="100%" height="100%" src="/mvc/report/4318"></iframe>',       
+		border:true
+	   },
+	   {
+	   	id:'index2',
+		title: "批量选取竞争对手号码",
+		closable:false,
+		autoScroll:true,
+		html:'<iframe id="indexFrame" scrolling="auto" frameborder="0" width="100%" height="100%" src="custReport.html?type=1&' + _params._oriUri + '"></iframe>',       
+		border:true
+	   }
+	   ]
+	});
+</script>
+</head>
+<body>
+</body>
+</html>

@@ -1,0 +1,189 @@
+@charset "gb2312";
+/* CSS Document */
+*{
+	padding:0px;
+	margin:0px;
+	border:0px;
+	font-family:ËÎÌו, Verdana, Arial, Helvetica, sans-serif;
+	font-size:12px;
+	background: none;
+	text-decoration:none;
+}
+ul , li {
+	list-style:none;
+}
+body {
+	background:#fff;
+}
+.clearbox{
+	clear:both;
+	height:0px;
+	overflow:hidden;
+}
+.mainbox {
+	margin:50px auto 10px auto;
+	width: 853px;
+	height:300px;
+}
+.boxtop{
+	float:left;
+	width:853px;
+	height:86px;
+	background:url(../images/home_03.gif) no-repeat center center;
+}
+.boxcenter{
+	float:left;
+}
+.boxcenterL{
+	float:left;
+	width:564px;
+	height:256px;
+	background:url(../images/home_05.gif) no-repeat;
+}
+.boxcenterR{
+	float:left;
+	width:289px;
+	height:auto;
+}
+.boxcenterR li{
+	float:left;
+	width:288px;
+	height:auto;
+	color:#444;
+	border-right: 1px solid #0a439d;
+}
+.boxcenterR li.top {
+	height:130px;
+	background:url(../images/home_06.gif) no-repeat;
+}
+.boxcenterR li.center {
+	height:65px;
+	padding-top:6px;
+	background:url(../images/home_07.gif) no-repeat;
+}
+.boxcenterR li.center .inputbox{
+	float:left;
+	width:auto;
+	height:28px;
+	line-height:28px;
+	padding-left:50px;
+	display:block;
+}
+.boxcenterR li.center .inputbox input{
+	width: 120px;
+	height:20px;
+	line-height:20px;
+	margin-left:2px;
+	margin-top:-2px;
+	padding-left:2px;
+	vertical-align:middle;
+	border:1px solid #CCCCCC;
+	background:#fff;
+	font-size:12px;
+	font-family:Arial;
+	font-weight:normal;
+
+}
+.boxcenterR li.bottom {
+	height:55px;
+	background:url(../images/home_09.gif) no-repeat;
+}
+.boxcenterR li.bottom .btnbox1 {
+	float:left;
+	padding:5px 0px 5px 30px;
+}
+.boxcenterR li.bottom .btnbox2 {
+	float:left;
+	padding:5px 0px;
+}
+.boxcenterR li.bottom .btnbox1 .btnsub{
+	float:left;
+	margin:10px;
+	width:82px;
+	height:26px;
+	cursor:pointer;
+	background:url(../images/btn-login-1.gif) no-repeat;
+}
+.boxcenterR li.bottom .btnbox1 .btnsub:hover{
+	background:url(../images/btn-login-2.gif) no-repeat;
+}
+.boxcenterR li.bottom .btnbox2 .btnforget{
+	float:left;
+	margin:10px;
+	width:82px;
+	height:26px;
+	cursor:pointer;
+	background:url(../images/btn-login-forget-1.gif) no-repeat;
+}
+.boxcenterR li.bottom .btnbox2 .btnforget:hover{
+	background:url(../images/btn-login-forget-2.gif) no-repeat;
+}
+.boxmenu{
+	float:left;
+	width: 564px;
+	height:108px;
+	border-left: 1px solid #0a439d;
+	background:url(../images/home_10.gif) repeat-x;
+}
+.boxmenu .menu {
+	float:left;
+	display:none;
+	background:none;
+}
+.boxmenu .menu .jqDockWrap{
+	margin:26px auto 5px auto;
+	background:none;
+}
+.boxmenu .menu .jqDock{
+	cursor:pointer;
+}
+.boxmenu .menu a{
+	text-align:center;
+}
+.jqDockLabel{
+	font-size:14px;
+	position:absolute;
+	white-space:nowrap;
+	color:#00307c;
+	cursor:pointer;
+	z-index:888;
+}
+.jqDockLabelText{
+	width:73px;
+	height:19px;
+	line-height:19px;
+	color:#000;
+	font-size:12px;
+	white-space:nowrap;
+	background: url(../images/title_bg.png) no-repeat center center;
+}
+.boxmenuR{
+	float:left;
+	width:287px;
+	height:108px;
+	border-right: 1px solid #0a439d;
+	background:url(../images/home_11.gif) no-repeat;
+}
+.boxmenu .title {
+	float:left;
+	width:534px;
+	height:auto;
+	padding-left:15px;
+}
+.boxmenu .title span{
+	float: left;
+	font-size:12px;
+	color:#00307c;
+	width: 80px;
+	text-align:center;
+}
+.boxbottom {
+	margin:0 auto;	
+	width:853px;	
+	height:29px;
+	line-height:29px;
+	text-align:center;
+	font-size:12px;
+	color:#00307c;
+	background: url(../images/bottom_bg.gif) no-repeat;
+}

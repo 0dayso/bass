@@ -1,0 +1,148 @@
+<html xmlns:ai>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<title>@title</title>
+	<script type="text/javascript" src="../../../hbapp/resources/js/default/default.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../../../hbapp/resources/js/datepicker/WdatePicker.js"></script>
+	<script type="text/javascript" src="../../../hbapp/resources/js/default/tabext.js"></script>
+	<script type="text/javascript" src="../../../hbapp/resources/chart/FusionCharts.js"></script>
+	<script type="text/javascript" src="../../../hbapp/resources/js/default/conf_rpt_common.js" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="../../../hbapp/resources/css/default/default.css" />
+	<script type="text/javascript">
+	//aihb.URL="/hbapp";
+	
+	var _params = aihb.Util.paramsObj();
+	
+	aihb.Grid.prototype.headerInterceptor=function(elementTd,headData){
+		if(headData.appName.length>0){
+			var _img = $C("img");
+			_img.src="../../../hbapp/resources/image/default/preview.gif";
+			_img.title=headData.name+"深度分析";
+			_img.style.cursor="hand";
+			_img.bordor=0;
+			var percentFormat="";
+			_img.onclick=function(){
+				if(headData.cellFunc.toLowerCase().indexOf("percent")>0)
+					percentFormat="percent";
+				tabAdd({id:headData.key,title:headData.name,url:"../../../hbapp/kpiportal/kpiview/kpiviewDetail.jsp?appName="+headData.appName+"&zbcode="+headData.key+"&zbname="+headData.name+"&area="+"&date="+"&percentType="+percentFormat+"&brand="});
+			}
+			elementTd.appendChild(_img);
+		}
+	}
+	var grid=null;
+	var _header=@header;
+	function query(){
+		var ajax = new aihb.Ajax({
+			url : @url
+			,parameters : parseParams()+"&"+_params._oriUri
+			,loadmask : true
+			,callback : function(xmlrequest){
+				
+				$("grid").style.display="";
+				var res = null;
+				try{
+					eval("res="+xmlrequest.responseText);
+				}catch(e){debugger;}
+				if(res!=null){
+					var _data=res.data;
+					if(!_data && res instanceof Array)
+						_data=res;
+					
+					grid = new aihb.Grid({
+						container : $("grid")
+						,data : _data
+						,limit : _data.length
+						,dataAmount : res.dataAmount
+						,total :  res.total
+						,start :  res.start
+						,header : _header
+					});
+					
+					grid.render();
+					
+					$("chartMain").style.display="";
+					chartIndicator();
+				}
+			}
+		});
+		ajax.request();
+	}
+	
+	function down(){
+		aihb.AjaxHelper.down({url: @urlDown});
+	}
+	
+	function parseParams(){
+		var param = "";
+		var elems = document.getElementsByTagName("dim");
+		for( var i=0; i < elems.length; i++ ){
+			var obj = undefined; 
+			eval("obj=document.forms[0]."+elems[i].name);
+			if(obj && (obj.type!="checkbox" || obj.checked)){
+				if(param.length>0)param += "&";
+				param +=obj.name+"="+encodeURIComponent(obj.value);
+				if(elems[i].name=="time" && $("time_during").style.display!="none"){
+					param +="&time_from="+$("time_from").value
+					 +"&timeDetail="+$("timeDetail").checked;
+				}
+			}
+		}
+		return param;
+	}
+	
+	
+	aihb.Util.loadmask();
+	aihb.Util.watermark();
+	</script>
+</head>
+<body>
+<form method="post" action="">
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'dim_div')" title="点击隐藏"><img flag='1' src="../../../hbapp/resources/image/default/ns-expand.gif"></img>&nbsp;查询条件区域：</td>
+	</tr></table></legend>
+	<div id="dim_div">
+		@dimension
+		<table align="center" width="99%">
+			<tr class="dim_row_submit">
+				<td>
+				<ai:dim name='isPre'><input type="checkbox" name="isPre" value="1" >环比增长</ai:dim>
+				<ai:dim name='isBefore'><input type="checkbox" name="isBefore" value="1" >同比增长</ai:dim>
+				<ai:dim name='isYear'><input type="checkbox" name="isYear" value="1" onclick="{if(this.checked)alert('日指标有效')}">年同比增长</ai:dim>
+				<ai:dim name='isProgress'><input type="checkbox" name="isProgress" value="1" onclick="{if(this.checked)alert('设置了目标值的指标有效')}">完成进度</ai:dim>
+				</td>
+				<td align="right">
+					<input type="button" class="form_button" value="查询" onClick="query()">&nbsp;
+					<input type="button" class="form_button" value="下载" onclick="down()">&nbsp;
+				</td>
+			</tr>
+		</table>
+	</div>
+</fieldset>
+</div>
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'show_div')" title="点击隐藏"><img flag='1' src="../../../hbapp/resources/image/default/ns-expand.gif"></img>&nbsp;数据展现区域：</td>
+		<td></td>
+	</tr></table></legend>
+	<div id="grid" style="display:none;"></div>
+</fieldset>
+</div>
+<div class="divinnerfieldset" id="chartMain" style="display:none;">
+<fieldset>
+	<legend><table><tr>
+		<td title="点击隐藏" onclick="hideTitle(document.getElementById('chart_div_img'),'chart_div')"><img id="chart_div_img" flag='1' src="../../../hbapp/resources/image/default/ns-expand.gif"></img>&nbsp;图形展现区域：</td>
+		<td></td>
+	</tr></table></legend>
+	
+	<div id="chart_div" style="display: none;">
+	<div style="float: left;margin: 5px;"><select id="chart_oper" multiple="multiple" size="11" style="width:160px;"></select></div>
+	<div style="float: left;" id="chart"></div>
+	</div>
+</fieldset>
+</div>
+</form>
+</body>
+</html>

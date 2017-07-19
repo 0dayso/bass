@@ -1,0 +1,371 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=GBK">
+		<title>����������չ�������������ҳ</title>
+		<script type="text/javascript" src="/hbapp/resources/js/ext/ext-base.js"></script>
+		<script type="text/javascript" src="/hbapp/resources/js/ext/ext-all.js"></script>
+		<script type="text/javascript" src="/hbbass/flowInfo/js/jquery.min.js"></script>
+		<script src="/hbbass/flowInfo/js/highcharts.js"></script>
+		<script src="/hbbass/flowInfo/js/RowExpander.js"></script>
+		<script src="/hbbass/flowInfo/js/highcharts-more.js"></script>
+		<script src="/hbbass/flowInfo/js/modules/exporting.js"></script>
+		<script type="text/javascript" src="/hbapp/resources/js/default/default.js"></script>
+		<script type="text/javascript" src="/hbapp/resources/js/default/json2.js"></script>
+		<link rel="stylesheet" type="text/css" href="/hbapp/resources/js/ext/resources/css/ext-all.css" />
+		<script type="text/javascript" src="/hbapp/resources/js/default/default.js" charset="gbk"></script>
+		<link rel="stylesheet" type="text/css" href="/hbapp/resources/css/default/default.css" />
+		<script type="text/javascript">
+		/**
+ * ʱ�����ĸ�ʽ��;
+ */
+Date.prototype.format = function(format) {
+    /*
+     * eg:format="YYYY-MM-dd hh:mm:ss";
+     */
+    var o = {
+        "M+" :this.getMonth() + 1, // month
+        "d+" :this.getDate(), // day
+        "h+" :this.getHours(), // hour
+        "m+" :this.getMinutes(), // minute
+        "s+" :this.getSeconds(), // second
+        "q+" :Math.floor((this.getMonth() + 3) / 3), // quarter
+        "S" :this.getMilliseconds()
+    // millisecond
+    }
+
+    if (/(y+)/.test(format)) {
+        format = format.replace(RegExp.$1, (this.getFullYear() + "")
+                .substr(4 - RegExp.$1.length));
+    }
+
+    for ( var k in o) {
+        if (new RegExp("(" + k + ")").test(format)) {
+            format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k]
+                    : ("00" + o[k]).substr(("" + o[k]).length));
+        }
+    }
+    return format;
+};
+			var paramMap = {};
+			temp = window.location.search;
+			if (temp.length != 0) {
+				temp = temp.substr(1).split('&');
+				for (i = 0; i < temp.length; ++i) {
+					f = temp[i].split('=');
+					paramMap[f[0]] = f[1];
+				}
+			}
+			var showDate = paramMap.showDate || '201307';
+			function genMainSQL(){
+				var sql = "select area_name,channel_code, DECIMAL(ind1,10,2) ind1, DECIMAL(ind2,10,2) ind2, DECIMAL(ind3,10,2) ind3, DECIMAL(ind4,10,2) ind4, DECIMAL(ind5,10,2) ind5,DECIMAL(ind6,10,2) ind6 from "
+					+"(select channel_code, ind1, ind2, ind3, ind4, ind5,"
+					+"row_number() over(order by ind5 desc nulls last) ind6 "
+					+"from (select channel_code, "
+					+"sum(case when zb_code in ('D00001', 'D00002', 'D00003', 'D00004', 'D00005', 'D00006', 'D00007', 'D00008', 'D00009') then result else 0 end) as ind1,"
+					+"sum(case when zb_code in ('D00010', 'D00011', 'D00012', 'D00013', 'D00014', 'D00015', 'D00016') then result else 0 end) as ind2,"
+					+"sum(case when zb_code in ('D00017', 'D00018', 'D00019', 'D00020', 'D00021') then result else 0 end) as ind3, "
+					+"sum(case when zb_code in ('D00022', 'D00023') then result else 0 end) as ind4, sum(result) as ind5 "
+					+"from nmk.gprs_assess_monthly where time_id = '?' and length(channel_code) = 5 group by channel_code ) a ) b,(select area_name,area_code from mk.bt_area) c "
+					+"where b.channel_code=c.area_code with ur ";
+					return sql.replace("?",showDate);
+			};
+			function getAreaMainSQL(areaCode){
+				var sql = "select county_name,channel_code, DECIMAL(ind1,10,2) ind1, DECIMAL(ind2,10,2) ind2, DECIMAL(ind3,10,2) ind3, DECIMAL(ind4,10,2) ind4, DECIMAL(ind5,10,2) ind5,DECIMAL(ind6,10,2) ind6 from "
+						+"(select channel_code, ind1, ind2, ind3, ind4, ind5,"
+						+"row_number() over(order by ind5 desc nulls last) ind6 "
+						+"from (select channel_code, "
+						+"sum(case when zb_code in ('D00001', 'D00002', 'D00003', 'D00004', 'D00005', 'D00006', 'D00007', 'D00008', 'D00009') then result else 0 end) as ind1,"
+						+"sum(case when zb_code in ('D00010', 'D00011', 'D00012', 'D00013', 'D00014', 'D00015', 'D00016') then result else 0 end) as ind2,"
+						+"sum(case when zb_code in ('D00017', 'D00018', 'D00019', 'D00020', 'D00021') then result else 0 end) as ind3, "
+						+"sum(case when zb_code in ('D00022', 'D00023') then result else 0 end) as ind4, sum(result) as ind5 "
+						+"from nmk.gprs_assess_monthly where time_id = '?' and channel_code LIKE '^%' group by channel_code ) a ) b,(select county_name,COUNTY_CODE from MK.BT_AREA_ALL) c "
+						+"where b.channel_code=c.COUNTY_CODE with ur ";
+					return sql.replace("?",showDate).replace("^",areaCode);
+			};
+			function getSubSQL(){
+				var sql = "select (select groupname from NMK.GPRS_ASSESS_DIMENSIONS where groupid=zb_code) groupname,zb_code,zb_name,DECIMAL(sum((case when channel_code='HB.JM' then result end )),10,2) as jmvalue, "
+						+"DECIMAL(sum((case when channel_code='HB.HS' then result end )),10,2) as hsvalue, "
+						+"DECIMAL(sum((case when channel_code='HB.SZ' then result end )),10,2) as szvalue, "
+						+"DECIMAL(sum((case when channel_code='HB.WH' then result end )),10,2) as whvalue, "
+						+"DECIMAL(sum((case when channel_code='HB.XN' then result end )),10,2) as xnvalue, "
+						+"DECIMAL(sum((case when channel_code='HB.JH' then result end )),10,2) as jhvalue, "
+						+"DECIMAL(sum((case when channel_code='HB.SY' then result end )),10,2) as syvalue, "
+						+"DECIMAL(sum((case when channel_code='HB.EZ' then result end )),10,2) as ezvalue, "
+						+"DECIMAL(sum((case when channel_code='HB.XF' then result end )),10,2) as xyvalue, "
+						+"DECIMAL(sum((case when channel_code='HB.JZ' then result end )),10,2) as jzvalue, "
+						+"DECIMAL(sum((case when channel_code='HB.XG' then result end )),10,2) as xgvalue, "
+						+"DECIMAL(sum((case when channel_code='HB.YC' then result end )),10,2) as ycvalue, "
+						+"DECIMAL(sum((case when channel_code='HB.ES' then result end )),10,2) as esvalue, "
+						+"DECIMAL(sum((case when channel_code='HB.HG' then result end )),10,2) as hgvalue, "
+						+"DECIMAL(sum((case when channel_code='HB.TM' then result end )),10,2) as tmvalue, "
+						+"DECIMAL(sum((case when channel_code='HB.QJ' then result end )),10,2) as qjvalue,  "
+						+"DECIMAL(sum(result),10,2) as qsvalue"
+						+" from nmk.gprs_assess_monthly a,(select area_name,area_code from mk.bt_area) b  "
+						+" where a.channel_code=b.area_code and time_id = '?' and length(channel_code) = 5 group by zb_code,zb_name order by zb_code" ;
+						return sql.replace("?",showDate)
+			};
+
+			Ext.onReady(function(){
+				Ext.BLANK_IMAGE_URL = '/hbapp/resources/js/ext/resources/images/default/s.gif';
+				Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+				var mainds=new Ext.data.Store({
+		                    proxy: new Ext.data.HttpProxy({url:"/hbirs/action/jsondata?method=query&sql="+encodeURIComponent(genMainSQL())+"&isCached=false&qType=limit&start=1&limit=10000"}),
+		                    reader: new Ext.data.JsonReader({
+		                        root: 'data',
+		                        totalProperty:'total'
+		                   },[ 'area_name','channel_code', 'ind1', 'ind2', 'ind3', 'ind4', 'ind5', 'ind6']
+		                    ) 
+		               });
+				mainds.load();
+				var pn_title= new Ext.Toolbar.TextItem({xtype: 'tbtext',text:'��ѯ����:'});
+				var fd_date = new Ext.form.DateField({
+        				fieldLabel : '����ʱ��',
+       					name : 'endTime',
+        				id : 'endTimeId',
+				        enableKeyEvents : true,
+				        width : 110,
+				        format : 'Ym',
+       					value:showDate
+       				});
+				var btn_find= new Ext.Button({
+				     text: '��ѯ',
+				     cls:'x-btn-text-icon',
+				     icon:'../images/find.gif',
+				     handler:function(button,event){
+				     	 //alert(fd_date.getValue().format('yyyyMM'));
+				     	 //alert(window.location.href);
+				     	 if (fd_date.getValue()){
+				     	 	window.location.href="/hbbass/flowInfo/flowInfo.html?showDate="+fd_date.getValue().format('yyyyMM');
+				     	 }
+				     }
+  				});
+  				var btn_download= new Ext.Button({
+				     text: '���ؿھ�˵��',
+				     cls:'x-btn-text-icon',
+				     icon:'../images/find.gif',
+				     handler:function(button,event){
+				     	 //alert(fd_date.getValue().format('yyyyMM'));
+				     	 //alert(window.location.href);
+				     	 alert('download');
+				     }
+  				});
+				var expander = new Ext.grid.RowExpander({
+					id:'xarea',
+			        tpl : new Ext.Template(
+			             '<div id="{channel_code}"></div>' 	            
+			        ) 
+			    });
+			    expander.on("expand",function(d,r,body,rowIndex){
+			    	var areads=new Ext.data.Store({
+		                    proxy: new Ext.data.HttpProxy({url:"/hbirs/action/jsondata?method=query&sql="+encodeURIComponent(getAreaMainSQL(r.data.channel_code))+"&isCached=false&qType=limit&start=1&limit=10000"}),
+		                    reader: new Ext.data.JsonReader({
+		                        root: 'data',
+		                        totalProperty:'total'
+		                   },[ 'county_name','channel_code', 'ind1', 'ind2', 'ind3', 'ind4', 'ind5', 'ind6']
+		                    ) 
+		               });
+					areads.load();
+					var gd_3 = new Ext.grid.GridPanel({
+					         region:'center',
+					         //el: 'grid',
+					         id : 'gd_3',
+					         renderTo : r.data.channel_code,
+						     store: areads,
+						     width:450,
+			        		 height:120,	     
+						     columns:[
+						     	{header:"��������",width:180,sortable:true,dataIndex:"county_name"},
+					         	{header:"��ģЧ��",width:50,sortable:true,dataIndex:"ind1"},
+								{header:"�û�����",width:50,sortable:true,dataIndex:"ind2"},
+								{header:"Эͬ��չ",width:50,sortable:true,dataIndex:"ind3"},
+								{header:"�������",width:50,sortable:true,dataIndex:"ind4"},
+								{header:"������չ�ܵ÷�",width:50,sortable:true,dataIndex:"ind5"},
+								{header:"����",width:40,sortable:true,dataIndex:"ind6"}
+						     ],
+						     loadMask: true,		     
+						     border:false,
+						     bodyStyle:'Height:100%;',
+						     bodyStyle:'width:90%;',
+						     autoWidth:true
+						      });
+			    });
+				var smck_gd_1 = new Ext.grid.CheckboxSelectionModel({});
+				var gd_1 = new Ext.grid.GridPanel({
+		         region:'center',
+		         //el: 'grid',
+		         id : 'gd_1',
+			     store: mainds,		     
+			     width:468,
+        		 height:370,	     
+			     columns:[
+			     smck_gd_1,
+			     expander,
+			     	{header:"����",id:"area_name",width:30,sortable:true,dataIndex:"area_name"},
+		         	{header:"��ģЧ��",width:50,sortable:true,id:"ind1",dataIndex:"ind1"},
+					{header:"�û�����",width:50,sortable:true,id:"ind2",dataIndex:"ind2"},
+					{header:"Эͬ��չ",width:50,sortable:true,id:"ind3",dataIndex:"ind3"},
+					{header:"�������",width:50,sortable:true,id:"ind4",dataIndex:"ind4"},
+					{header:"������չ�ܵ÷�",width:50,sortable:true,id:"ind5",dataIndex:"ind5"},
+					{header:"����",width:50,sortable:true,id:"ind6",dataIndex:"ind6"}
+			     ],
+			     plugins: expander,
+			     sm: smck_gd_1,
+			     tbar : [pn_title,fd_date,btn_find,btn_download],
+	//		     bbar : ['->',
+	//		     new Ext.PagingToolbar({id:'pagingtoolbar',pageSize: 200, store: ds,displayInfo: true,loadMask: true,
+	//				displayMsg: '��ʾ�� {0} ���� {1} ����¼��һ�� {2} ��',
+	//				emptyMsg: "û�м�¼",width:400 })
+	//		     ],
+			     loadMask: true,		     
+			     border:false,
+			     /*rows:[[{},{},{header: 'Before', colspan: 4, align: 'center'},{},{ }]],
+			     plugins: [new Ext.ux.plugins.GroupHeaderGrid()],*/
+			     bodyStyle:'Height:100%;',
+			     bodyStyle:'width:90%;',
+			     autoWidth:true
+			     });
+				function getAllchecked(){
+					var sm = gd_1.getSelectionModel();
+					var records = sm.getSelections();
+					var areaName = '';
+					for (var i=0;i<records.length;i++){
+						areaName += records[i].get('channel_code')+',';
+					}
+					if (areaName.length>0){
+						areaName = areaName.substr(0,areaName.length-1);
+						$('picturedivid').innerHTML="<iframe id='ifim' height='100%' width='100%' src='renderGraph.html?showDate="+showDate+"&showArea="+areaName+"'></iframe>";
+					}
+				}
+				var f_gd_2_celldblclick = function(grid, rowIndex, columnIndex, e) {
+					//alert(1);
+					getAllchecked();
+					//alert(rec);
+				};
+				gd_1.on("click",f_gd_2_celldblclick);
+				var subds=new Ext.data.GroupingStore({
+		                    proxy: new Ext.data.HttpProxy({url:"/hbirs/action/jsondata?method=query&sql="+encodeURIComponent(getSubSQL())+"&isCached=false&qType=limit&start=1&limit=10000"}),
+		                    reader: new Ext.data.JsonReader({
+		                        root: 'data',
+		                        totalProperty:'total'
+		                   },['groupname','zb_code','zb_name','jmvalue','hsvalue','szvalue','whvalue','xnvalue','jhvalue','syvalue','ezvalue','xyvalue','jzvalue','xgvalue','ycvalue','esvalue','hgvalue','tmvalue','qjvalue','qsvalue']
+		                   
+		                    ),
+		                    sortInfo: {field:"zb_name", direction:"desc"},
+		                    groupField: "groupname"
+		               });
+				subds.load();
+				var gd_2 = new Ext.grid.GridPanel({
+		         region:'east',
+		         //el: 'grid',
+		         id : 'gd_2',
+			     ds: subds,
+			     width:810,
+        		 height:610,
+        		 view: new Ext.grid.GroupingView({  
+			        sortAscText: "����",  
+			        sortDescText: "����",  
+			        columnsText: "����ֶ�",  
+			        groupByText: "ʹ�õ�ǰ�ֶν��з���",  
+			        showGroupsText: "������",  
+			        groupTextTpl: "{text}(��{[values.rs.length]}��)"  
+    			}),   
+			     columns:[
+			     	{header:"����",width:50,sortable:true,dataIndex:"groupname"},
+			     	{header:"�÷�",width:160,sortable:true,dataIndex:"zb_name"},
+		         	{header:"�人",width:40,sortable:true,dataIndex:"whvalue"
+		         	/*,renderer:function(v){  
+      					return v.toFixed(2);
+      					return v; 
+    				}*/
+    				},
+					{header:"��ʯ",width:40,sortable:true,dataIndex:"hsvalue"},
+					{header:"����",width:40,sortable:true,dataIndex:"ezvalue"},
+					{header:"�˲�",width:40,sortable:true,dataIndex:"ycvalue"},
+					{header:"��ʩ",width:40,sortable:true,dataIndex:"esvalue"},
+					{header:"ʮ��",width:40,sortable:true,dataIndex:"syvalue"},
+					{header:"����",width:40,sortable:true,dataIndex:"xyvalue"},
+					{header:"����",width:40,sortable:true,dataIndex:"jhvalue"},
+					{header:"����",width:40,sortable:true,dataIndex:"xnvalue"},
+					{header:"����",width:40,sortable:true,dataIndex:"jzvalue"},
+					{header:"����",width:40,sortable:true,dataIndex:"jmvalue"},
+					{header:"����",width:40,sortable:true,dataIndex:"szvalue"},
+					{header:"�Ƹ�",width:40,sortable:true,dataIndex:"hgvalue"},
+					{header:"Т��",width:40,sortable:true,dataIndex:"xgvalue"},
+					{header:"Ǳ��",width:40,sortable:true,dataIndex:"qjvalue"},
+					{header:"����",width:40,sortable:true,dataIndex:"tmvalue"}
+					/*{header:"ȫʡ",width:40,sortable:true,dataIndex:"qsvalue"}*/
+			     ],
+			     loadMask: true,		     
+			     //border:false,
+			     autoScroll:true,
+			     //bodyStyle:'Height:100%;',
+			     //bodyStyle:'width:90%;',
+			     autoWidth:true
+			     });
+
+var panel=new Ext.Panel({ 
+        region:'south',
+        title:'����������չ��ά�ȵ÷ֶԱ�(���ϱ��й�ѡ�����жԱ�)', 
+        width:470,
+        height:220,
+        height:'auto', 
+        //html:"<div id='pictureid' style='width:100%; height:100%; background-color:#E6E6E6; z-index:1'>renderTo</div>"
+        html : "<div id='picturedivid' style='min-width: 440px; max-width: 440px; height: 450px; margin: 0 auto'>"
+      /*,tbar:[{text:'������������ť'}], 
+        bbar:[{text:'�ײ�������'}], 
+        buttons:[ 
+            { 
+                text:'���ײ���ť', 
+                handler:function() 
+                { 
+                    Ext.Msg.alert('��ʾ','���ײ���ť���¼���'); 
+                } 
+            } 
+        ] */
+    });
+				var ly_1_e = new Ext.FormPanel({
+    				 title:'�����зֹ�˾������չ�����÷�',
+     				split:false,collapsible:true,titleCollapse:true,
+     				height:672,width:480,
+        			region:'center',
+        			viewConfig:{forceFit:true},
+	     			buttons:[],
+	     			items:[gd_1,panel]
+					});
+				var ly_2_e = new Ext.FormPanel({
+    				 title:'������������չָ�����ֵ',
+     				split:false,collapsible:true,titleCollapse:true,
+     				viewConfig:{forceFit:true},
+     				height:672,width:810,
+        			region:'east',
+	     			buttons:[],
+	     			items:[gd_2]
+					});
+				
+			   var ly_1 = new Ext.Viewport({
+			     layout:'border',
+			     items:[ly_1_e,ly_2_e]
+		        });
+			   $('picturedivid').innerHTML="sdasd";
+			   //renderGraph('picturedivid');
+			   $('picturedivid').innerHTML="<iframe id='ifim' height='100%' width='100%' src='renderGraph.html?showDate="+showDate+"'></iframe>";
+			});
+
+		</script>
+		<style>
+.dim_cell_title_wide {
+	font-family: "����";
+	font-size: 12px;
+	line-height: 20px;
+	font-weight: normal;
+	font-variant: normal;
+	color: #000000;
+	width: 20%;
+	background-color: #D9ECF6;
+}
+</style>
+	</head>
+	<body>
+		<div id='sds'></div>
+	</body>
+</html>

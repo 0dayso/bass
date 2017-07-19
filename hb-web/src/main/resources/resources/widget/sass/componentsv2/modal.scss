@@ -1,0 +1,29 @@
+@charset "utf-8";
+.Modal-head{
+	@include setPadding(null,6px);
+}
+.Modal-bdy{
+	@include setPadding(null,6px);
+	font-size:$font-m1;
+    overflow-y: auto;
+    .Modal-bdy-ul{
+    	list-style-type: none;
+    	@include setPadding(left,0px);
+    	@include setPadding(top,3px);
+    	.Modal-bdy-ul-item{
+    		@include setPadding(bottom,3px);
+    		@include setPadding(top,6px);
+    		.Modal-bdy-ul-item-title{
+    			font-weight:bold;
+    		}
+    		.Modal-bdy-ul-item-context{
+    			background-color:$bgColor-blue1;
+    			@include setPadding(null,6px);
+    			@include setMargin(column,6px);
+    		}
+    	}
+    }
+}
+.Modal-foot{
+	@include setPadding(null,6px);
+}

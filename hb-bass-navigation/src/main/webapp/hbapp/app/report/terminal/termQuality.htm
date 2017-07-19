@@ -1,0 +1,150 @@
+<html xmlns:ai>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<title>终端质量监控</title>
+	<script type="text/javascript" src="../../../../hbapp/resources/js/default/default.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../../../../hbapp/resources/js/default/calendar.js"></script>
+	<link rel="stylesheet" type="text/css" href="../../../../hbapp/resources/css/default/default.css" />
+	<script type="text/javascript">
+
+var _header=[
+	{"name":"地市","dataIndex":"city_name"}
+	,{"name":"县市","dataIndex":"county_name","cellStyle":"grid_row_cell_text"}
+	,{"name":"渠道","dataIndex":"channel_name","cellStyle":"grid_row_cell_text"}
+	,{"name":"渠道类型","dataIndex":"channel_type_name","cellStyle":"grid_row_cell_text"}
+	,{"name":"用户标识","dataIndex":"new_flag","cellStyle":"grid_row_cell_text"}
+	,{"name":"无通话行为数量","dataIndex":"c1","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":"有通话行为销售量","dataIndex":"c2","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":"有效话务量（分钟）","dataIndex":"c3","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":"吸纳预存款（元）","dataIndex":"c4","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":"手机上网流量（K）","dataIndex":"c5","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+];
+
+var rptKind=[];
+rptKind["1"]="FIX_WIRE";
+rptKind["2,3"]="SCP_LOW";
+rptKind["4"]="SCP_MID";
+rptKind["5"]="G3_PHONE";
+var params=aihb.Util.paramsObj();
+function genSQL(){
+	var groupPiece="city_name";
+	with(document.forms[0]){
+		if(city.value!="0"||county.value.length>0||detailCounty.checked){
+			groupPiece+=",county_name";
+		}
+		
+		if(county.value.length>0||office.value.length>0||detailChannel.checked){
+			groupPiece+=",channel_name";
+		}
+		
+		if(detailChannelType.checked){
+			groupPiece+=",channel_type_name";
+		}
+		
+		if(detailUserType.checked){
+			groupPiece+=",new_flag";
+		}
+	}
+	
+	var sql="select "+groupPiece.replace(/new_flag/gi,"case when new_flag=1 then '新用户' else '老用户' end new_flag")
+		+" ,value(sum(SALE_NUM_NODURA),0) as c1"
+		+" ,value(sum(SALE_NUM_DURA),0) as c2"
+		+" ,value(sum(dura1)/60,0) as c3"
+		+" ,value(sum(pre_charge),0)/100 as c4"
+		+(params.type=="5"?" ,value(sum(gprs_flow),0)/1024 as c5":"")
+		+" from nmk.gmi_terminal_sale "
+		+" where type_id in ("+params.type + ")"
+		+ aihb.AjaxHelper.parseCondition()
+		+" group by "+groupPiece
+		+" with ur";
+	
+	return sql;
+}
+function query(){
+	
+	var grid = new aihb.AjaxGrid({
+		header:_header
+		,sql: genSQL()
+	});
+	grid.run();
+	/*aihb.AjaxHelper.request({
+		header:_header
+		,url:"/hb-bass-navigation/hbirs/action/jsondata?sql="+sql
+	});*/
+}
+
+function down(){
+	var _fileName=rptKind[params.type];
+	document.forms[0].sql.value=genSQL();
+	aihb.AjaxHelper.down({url: "/hbirs/action/jsondata?method=down&fileName="+_fileName});
+}
+aihb.Util.loadmask();
+var _params = aihb.Util.paramsObj();
+window.onload=function(){
+	var _d=new Date();
+	_d.setDate(_d.getDate()-1);
+	$("date").value=_d.format("yyyymmdd");
+	aihb.FormHelper.fillSelectWrapper({sql:"channeltype", element: document.forms[0].channel_type_id});
+	
+	var _headerStr="";
+	
+	for(var i=0;i<_header.length;i++){
+		var header=_header[i];
+		if(_headerStr.length>0){
+			_headerStr+=",";
+		}
+		//_headerStr+="\""+header.dataIndex.toLowerCase()+"\":\""+encodeURIComponent(encodeURIComponent(header.name))+"\"";
+		_headerStr+="\""+header.dataIndex.toLowerCase()+"\":\""+header.name+"\"";
+	}
+	_headerStr="{"+_headerStr+"}";
+	//alert(_headerStr)
+	document.forms[0].header.value=_headerStr;
+	$("dim_city").innerHTML=aihb.BassDimHelper.areaCodeHtml("city",_params.cityId,"areacombo(1)");
+}
+	</script>
+</head>
+<body>
+<form method="post" action="">
+<input type="hidden" name="header">
+<input type="hidden" name="sql">
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'dim_div')" title="点击隐藏"><img flag='1' src="../../../../hbapp/resources/image/default/ns-expand.gif"></img>&nbsp;查询条件区域：</td>
+	</tr></table></legend>
+	<div id="dim_div">
+	<table align='center' width='99%' class='grid-tab-blue' cellspacing='1' cellpadding='0' border='0'>
+	<tr class='dim_row'>
+		<td class='dim_cell_title'>统计周期</td><td class='dim_cell_content'><ai:dim name='date' dbName="etl_cycle_id" operType="int"><script type='text/javascript'>var calendar_date=new Calendar('calendar_date');document.write(calendar_date);</script><table cellspacing='0' cellpadding='0' style='width: 120px;height: 22px;border:1px solid #999999;background-color:#FFFFFF;'><tr><td><input type='text' name='date' id='date' value='' onchange="if(calendar_date.callback)calendar_date.callback(this.value)" style='border:0 none;padding:1px 0 0 3px;width:76px'/><td align='right' style='padding-right : 2 px;'><span class='calendarimage' onclick="calendar_date.showMoreDay = true;calendar_date.show($('date'),this)" ></span></td></tr></table></ai:dim></td>
+		<td class='dim_cell_title'>地市</td><td class='dim_cell_content'><ai:dim name='city' dbName="city_id" id="dim_city"></ai:dim></td>
+		<td class='dim_cell_title'>县市<input type=checkbox name=detailCounty value=1>细分</td><td class='dim_cell_content'><ai:dim name='county' dbName="county_id"><select name='county' class='form_select' onchange="areacombo('2')"><option value=''>全部</option></select></ai:dim></td>
+	</tr>
+	<tr class='dim_row'>
+		<td class='dim_cell_title'>渠道名称<input type=checkbox name=detailChannel value=1>细分</td><td class='dim_cell_content'><ai:dim name='office' dbName="channel_code"><select name='office' class='form_select'><option value=''>全部</option></select></ai:dim></td>
+		<td class='dim_cell_title'>渠道类型<input type=checkbox name=detailChannelType value=1>细分</td><td class='dim_cell_content'><ai:dim name='channel_type_id'><select name='channel_type_id' class='form_select'><option value=''>全部</option></select></ai:dim></td>
+		<td class='dim_cell_title'>新老用户标识<input type=checkbox name=detailUserType value=1>细分</td><td class='dim_cell_content'><ai:dim name='new_flag' operType="int"><select name='new_flag' class='form_select'><option value=''>全部</option><option value='1'>新用户</option><option value='0'>老用户</option></select></ai:dim></td>
+	</tr>
+	</table>
+	<table align="center" width="99%">
+		<tr class="dim_row_submit">
+			<td align="right">
+				<input type="button" class="form_button" value="查询" onClick="query()">&nbsp;
+				<input type="button" class="form_button" value="下载" onclick="down()">&nbsp;
+			</td>
+		</tr>
+	</table>
+	</div>
+</fieldset>
+</div><br>
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'show_div')" title="点击隐藏"><img flag='1' src="../../../../hbapp/resources/image/default/ns-expand.gif"></img>&nbsp;数据展现区域：</td>
+		<td></td>
+	</tr></table></legend>
+	<div id="grid" style="display:none;"></div>
+</fieldset>
+</div><br>
+</form>
+</body>
+</html>

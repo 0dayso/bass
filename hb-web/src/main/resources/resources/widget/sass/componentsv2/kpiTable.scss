@@ -1,0 +1,25 @@
+.kpitable{
+	width:100%;
+	color:$color-normal;
+	.tableThead{
+		background-color : #f2f2f2;
+	}
+	.tableTr{
+		cursor:pointer;
+		th{
+			text-align:center;
+		}
+	}
+	.kpitable-td{
+		text-align:right;
+	}
+	.kpitable-td-dell{
+		text-align:center;
+	}
+	.tableAnalysis{
+		color:$bgColor-green;
+	}
+	.tableCollect{
+		color:$color-notice1;
+	}	
+}

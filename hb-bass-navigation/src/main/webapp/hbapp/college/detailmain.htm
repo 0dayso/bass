@@ -1,0 +1,103 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>集团客户</title>
+<style>
+.tab{
+	font:12px;border-bottom:0px;border-top:0px;height:20;cursor:hand;border-color:#9AADBE;text-align:center;PADDING-TOP:6px;padding-left:6px;padding-right:6px;
+}
+</style>
+</head>
+<body style="margin:1px;">
+<br>
+<table style="border-collapse:collapse;border-color:#9AADBE;BACKGROUND-COLOR:#ffffff;border-top:0px;border-bottom:0px;" border=1>
+<tr height="21px" valign="top" style="padding-bottom:0px;padding-top:3px;WIDTH: 100%; border-collapse:collapse;border-color:#9AADBE;BACKGROUND-COLOR:81A3F5">
+	<td nowrap class="tab" background=tab1.png onclick='changetab("f1");'>高校基本信息</TD>
+	<td nowrap class="tab" background=tab2.png onclick='changetab("f2");'>高校指标</TD>
+	<td nowrap class="tab" background=tab2.png onclick='changetab("f3");'>高校用户明细</TD>
+	<td nowrap class="tab" background=tab2.png onclick='changetab("f4");'>高校关键人信息</TD>
+	<td nowrap class="tab" background=tab2.png onclick='changetab("f5");'>高校开学日期信息</TD>
+	<td nowrap class="tab" background=tab2.png onclick='changetab("f6");'>高校直销队信息</TD>
+</tr>
+</table>
+<table height=100% width=100% border=1 bordercolor=91aed0 style="border-collapse:collapse;color:000206;font-size:12px" cellspacing=0 cellpadding=4>
+<tr>
+	<td>
+		<iframe frameborder=0 scrolling="auto" width=100% height=100% id=f1 name=f1 isload="1"></iframe>
+		<iframe frameborder=0 scrolling="auto" width=100% height=100% id=f2 name=f2 isload="0" style="display:none"></iframe>
+		<iframe frameborder=0 scrolling="auto" width=100% height=100% id=f3 name=f3 isload="0" style="display:none"></iframe>
+		<iframe frameborder=0 scrolling="auto" width=100% height=100% id=f4 name=f4 isload="0" style="display:none"></iframe>
+		<iframe frameborder=0 scrolling="auto" width=100% height=100% id=f5 name=f5 isload="0" style="display:none"></iframe>
+		<iframe frameborder=0 scrolling="auto" width=100% height=100% id=f6 name=f6 isload="0" style="display:none"></iframe>
+	
+	</td>
+</tr>
+</table>
+</body>
+ <script type="text/javascript">
+
+/*
+a = a.substring(a.indexOf("?")+1,a.length);
+var param = a.split("&");
+var groupcode=param[0].split("=")[1];
+var date=param[1].split("=")[1];
+var city=param[2].split("=")[1];
+var county=param[3].split("=")[1];
+var VALUE_GRADE=param[4].split("=")[1];
+var ENGAGE_TRADE_NAME=param[5].split("=")[1];
+
+*/
+ //解析参数
+var a = window.location+"";
+//alert("a : " + a);
+a = a.substring(a.indexOf("?")+1,a.length);
+//alert("a :(after substr) " + a);
+//document.all.f1.src="basicdetail.jsp?groupcode="+groupcode+"&date="+date+"&city="+city+"&county="+county+"&VALUE_GRADE="+VALUE_GRADE+"&ENGAGE_TRADE_NAME="+ENGAGE_TRADE_NAME;
+
+document.all.f1.src="basicdetail.jsp?" + a;
+
+
+/*document.all.f2.src="gcvpmn.jsp?groupcode="+groupcode+"&date="+date;
+document.all.f3.src="gcprod.jsp?groupcode="+groupcode+"&date="+date;
+document.all.f4.src="gcvip.jsp?groupcode="+groupcode+"&date="+date;
+document.all.f5.src="gckeyperson.jsp?groupcode="+groupcode+"&date="+date;*/
+
+var arrSrc = [];
+//arrSrc["f2"]="gcvpmn.jsp?groupcode="+groupcode+"&date="+date;
+//arrSrc["f3"]="gcprod.jsp?groupcode="+groupcode+"&date="+date;
+arrSrc["f2"]="../../hbapp/kpiportal/kpiview/kpiviewCollege.jsp?" + a;//待meikf定
+arrSrc["f3"]="userdetail.jsp?" + a;
+arrSrc["f4"]="newReport.jsp?" + a + "&reportType=1";
+arrSrc["f5"]="newReport.jsp?" + a + "&reportType=2";
+arrSrc["f6"]="newReport.jsp?" + a + "&reportType=3";
+/*
+arrSrc["f4"]="gcvip.jsp?groupcode="+groupcode+"&date="+date;
+arrSrc["f5"]="gckeyperson.jsp?groupcode="+groupcode+"&date="+date;
+*/
+function changetab(id)
+{
+  var obj=event.srcElement;
+	while(obj.tagName!="TD") obj=obj.parentElement;
+	var cellindex=obj.cellIndex;
+	while(obj.tagName!="TABLE") obj=obj.parentElement;
+	if(obj.lastcell) {obj.rows[0].cells[obj.lastcell].style.backgroundImage="url(./tab2.png)";}
+	else{obj.rows[0].cells[0].style.backgroundImage="url(./tab2.png)";}
+	obj.lastcell=cellindex;
+	obj.rows[0].cells[cellindex].style.backgroundImage="url(./tab1.png)";
+	
+	var ifrs = document.getElementsByTagName("iframe");
+	for(var j=0;j<ifrs.length;j++)
+	{
+		var curIfr = ifrs[j];
+		if(curIfr.name==id)
+		{
+			curIfr.style.display="";
+			if(curIfr.attributes["isload"].nodeValue=="0"){curIfr.src=arrSrc[id];curIfr.setAttribute("isload","1");}
+		}
+		else curIfr.style.display="none";
+	}
+}
+</script>
+</html>
+
+

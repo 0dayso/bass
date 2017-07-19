@@ -1,0 +1,123 @@
+<html>
+<head>
+	<title>һ������</title>
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">
+	<script language="javascript" src="../../resources/js/extree/xtree.js"></script>
+	<script type="text/javascript" src="../../resources/js/default/default.js" charset="utf-8"></script>
+	<link type="text/css" rel="stylesheet"
+		href="../../resources/js/extree/xtree.css" />
+	<link rel="stylesheet" type="text/css"
+		href="../../resources/css/default/default.css" />
+	<script language="javascript">
+	function render(){
+		if(tree.getSelected())
+		invoke(tree.getSelected().key,tree.getSelected().text);
+		else invoke('income_m','���³�������');
+	}
+	
+	function invoke(columns,title){
+		var unit = "(��Ԫ)";
+		var arrCol = columns.split("_");
+		if(arrCol[0]=="user"){
+			unit = "(��)";
+		}else if(arrCol[0]=="traffic"){
+			if(arrCol[1]=="mou")unit = "(����/��)";
+			else if(arrCol[1]=="arpu")unit = "(Ԫ/��)";
+			else unit = "(�����)";
+		}
+		
+		try{
+			parent.exMainFrame.kpiCompare(columns,document.forms[0].date.value+title+unit,document.forms[0].date.value);
+		}catch(e){
+			setTimeout(function(){parent.exMainFrame.kpiCompare(columns,document.forms[0].date.value+title+unit,document.forms[0].date.value)},1000);
+		}
+	}
+	
+window.onload=function(){
+	
+	aihb.FormHelper.fillSelectWrapper({
+		sql: "select time_id key,time_id value from kpi_countrywide group by time_id having count(*)=32 order by time_id desc with ur"
+		,ds : "web"
+		,isCached : false
+		,element : document.forms[0].date
+		,callback : function(){
+			render();
+		}
+	});
+}
+	</script>
+</head>
+<body>
+<form action="">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		<tr>
+			<td valign="top">
+				<div class="portlet">
+					<div class="title">
+						����
+					</div>
+					<div class="content">
+
+						<select name='date' onchange='render()' class='form_select'>
+						</select>
+					</div>
+				</div>
+			</td>
+		</tr>
+
+		<tr>
+			<td valign="top">
+				<div class="portlet">
+					<div class="title">ָ��</div>
+					<div class="content">
+					<script>
+					webFXTreeConfig.setImagePath("../../resources/js/extree/images/");
+	var tree = new WebFXTree("ָ������", "");
+	var el_income = new WebFXTreeItem('income','������','',tree);
+	var el_income01 = new WebFXTreeItem('income_m','���³�������','render()',el_income);
+	var el_income02 = new WebFXTreeItem('income_accumulate','���ۼ�����','render()',el_income);
+	var el_income03 = new WebFXTreeItem('income_newbiz','��ҵ������','',el_income);
+	var el_income04 = new WebFXTreeItem('income_newbiz_call','������ֵҵ��ͨ�ŷ�','render()',el_income03);
+	var el_income05 = new WebFXTreeItem('income_newbiz_data','�ƶ����ҵ��ͨ�ŷ�','render()',el_income03);
+	var el_income06 = new WebFXTreeItem('income_databiz','���ҵ���Ʒ����','',el_income);
+	var el_income07=new WebFXTreeItem('income_databiz_sms','��Ե����Ϣ','render()',el_income06);
+	var el_income08=new WebFXTreeItem('income_databiz_mosms','�������','render()',el_income06);
+	var el_income09=new WebFXTreeItem('income_databiz_mms','��Ե����','render()',el_income06);
+	var el_income11=new WebFXTreeItem('income_databiz_momms','�������','render()',el_income06);
+	var el_income12=new WebFXTreeItem('income_databiz_wap','WAPҵ��(�ֻ�����)','render()',el_income06);
+	var el_income13=new WebFXTreeItem('income_databiz_syx','��e��','render()',el_income06);
+	var el_income14=new WebFXTreeItem('income_databiz_mail','������ҵ��','render()',el_income06);
+	var el_income15=new WebFXTreeItem('income_databiz_hmgj','�Ų��ܼ�ҵ��','render()',el_income06);
+	var el_income16=new WebFXTreeItem('income_databiz_ydsw','�ƶ�����','render()',el_income06);
+	
+	var el_user = new WebFXTreeItem('user','�û���','',tree);
+	var el_user01 = new WebFXTreeItem('user_new_add_m','�������û���','render()',el_user);
+	var el_user02 = new WebFXTreeItem('user_new_add_y','�������û���','render()',el_user);
+	var el_user03 = new WebFXTreeItem('user_new_gain_m','�¾����ͻ�','render()',el_user);
+	var el_user04 = new WebFXTreeItem('user_new_gain_y','�꾻���ͻ�','render()',el_user);
+	var el_user05 = new WebFXTreeItem('user_call','ͨ���û���','render()',el_user);
+	var el_user06 = new WebFXTreeItem('user_zero_call','���ͨ���û���','render()',el_user);
+	var el_user07 = new WebFXTreeItem('user_databiz','���ҵ�񸶷ѿͻ���','render()',el_user);
+	
+	var el_traffic = new WebFXTreeItem('traffic','������','',tree);
+	var el_traffic01 = new WebFXTreeItem('traffic_dura_m','���¼Ʒ�ʱ��','render()',el_traffic);
+	var el_traffic02 = new WebFXTreeItem('traffic_dura_accumulate','���ۼƼƷ�ʱ��','render()',el_traffic);
+	var el_traffic03 = new WebFXTreeItem('traffic_mou_m','����MOU','render()',el_traffic);
+	var el_traffic04 = new WebFXTreeItem('traffic_mou_accumulate','�ۼ�MOU','render()',el_traffic);
+	var el_traffic05 = new WebFXTreeItem('traffic_arpu_m','����ARPU','render()',el_traffic);
+	var el_traffic06 = new WebFXTreeItem('traffic_arpu_accumulate','�ۼ�ARPU','render()',el_traffic);
+
+	document.write(tree);
+	tree.expandAll();
+					</script>
+					</div>
+				</div>
+			</td>
+		</tr>
+	</table>
+</form>
+</body>
+</html>
+

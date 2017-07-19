@@ -1,0 +1,136 @@
+
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=GBK">
+		<title>Highcharts Example</title>
+
+		<script type="text/javascript" src="/hbapp/flowInfo/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/hbapp/flowInfo/js/underscore-min.js"></script>
+		<script type="text/javascript">
+	var paramMap = {};
+	temp = window.location.search;
+	if (temp.length != 0) {
+		temp = temp.substr(1).split('&');
+		for (i = 0; i < temp.length; ++i) {
+			f = temp[i].split('=');
+			paramMap[f[0]] = f[1];
+		}
+	}
+$(function () {
+
+	var showDate = paramMap.showDate||'201307';
+	var showArea =  paramMap.showArea||'HB.WH,HB.YC';
+	//alert(showArea);
+	function getGraphSql(){
+		/*var sql = "select zb_code,zb_name,zb_name,channel_code,DECIMAL(result,10,2) result,area_name 	from nmk.gprs_assess_monthly a,mk.bt_area b where a.channel_code=b.area_code and time_id='?' and length(channel_code)=5 order by zb_code";*/
+		var sql = "select area_name,channel_code, DECIMAL(ind1,10,2) ind1, DECIMAL(ind2,10,2) ind2, DECIMAL(ind3,10,2) ind3, DECIMAL(ind4,10,2) ind4, DECIMAL(ind5,10,2) ind5,DECIMAL(ind6,10,2) ind6 from "
+					+"(select channel_code, ind1, ind2, ind3, ind4, ind5,"
+					+"row_number() over(order by ind5 desc nulls last) ind6 "
+					+"from (select channel_code, "
+					+"sum(case when zb_code in ('D00001', 'D00002', 'D00003', 'D00004', 'D00005', 'D00006', 'D00007', 'D00008', 'D00009') then result else 0 end) as ind1,"
+					+"sum(case when zb_code in ('D00010', 'D00011', 'D00012', 'D00013', 'D00014', 'D00015', 'D00016') then result else 0 end) as ind2,"
+					+"sum(case when zb_code in ('D00017', 'D00018', 'D00019', 'D00020', 'D00021') then result else 0 end) as ind3, "
+					+"sum(case when zb_code in ('D00022', 'D00023') then result else 0 end) as ind4, sum(result) as ind5 "
+					+"from nmk.gprs_assess_monthly where time_id = '?' and length(channel_code) = 5 group by channel_code ) a ) b,(select area_name,area_code from mk.bt_area) c "
+					+"where b.channel_code=c.area_code with ur ";
+		return sql.replace("?",showDate);
+	};
+	function isInAreas(areaName){
+		if (areaName != null && showArea.indexOf(areaName)>=0){
+			return true ;
+		}else{
+			return false ;
+		}
+	};
+
+	function getSimpleStore() {
+		var contextUrl = window.location['pathname'].split('/')[1];
+		var url = 'http://127.0.0.1:8080/hbirs/action/jsondata?method=query&sql='+encodeURIComponent(getGraphSql())+'&isCached=false&qType=limit&start=1&limit=10000';
+		  var response = $.ajax({ type: "GET",
+    		 url:url,
+    		 dataType: "json",
+    		 success: function(data) {
+    		 	var alldate = eval(data);
+    		 	 var selectedArea = _.filter(alldate.data,function (value){
+    		 	 	return isInAreas(value.channel_code);
+    		 	 },this);
+    		 	 var showAreas = showArea.split(",");
+    		 	 var datasArea = _.groupBy(selectedArea,function (value){
+    		 	 	return value.channel_code ;
+    		 	 },this);
+    		 	 //alert(datasArea);_.pluck(datasArea.�人, 'result')
+    		 	 var seriesCfg = [];
+    		 	 _.each(showAreas,function (value){
+    		 	 	var options = {
+						/*name: value,
+						data: _.pluck(datasArea[value], 'result'),*/
+						name : datasArea[value][0].area_name,
+						data:[datasArea[value][0].ind1, datasArea[value][0].ind2, datasArea[value][0].ind3, datasArea[value][0].ind4],
+						pointPlacement: 'on'
+					};
+					seriesCfg.push(options);
+    		 	 },this);
+				$('#container').highcharts({
+					chart: {
+						polar: true,
+						type: 'line'
+					},
+					title: {
+						text: '',
+						x: 0
+					},
+					pane: {
+						size: '90%'
+					},
+					xAxis: {
+						categories: ['��ģЧ��','�û�����','Эͬ��չ','�������'],//_.pluck(datasArea[showAreas[0]], 'zb_name'),
+						tickmarkPlacement: 'on',
+						lineWidth: 0
+					},
+					yAxis: {
+						gridLineInterpolation: 'polygon',
+						lineWidth: 0,
+						min: 0
+					},
+					tooltip: {
+						shared: true,
+						pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:,.2f}</b><br/>'
+					},
+					legend: {
+						align: 'right',
+						verticalAlign: 'top',
+						y: 50,
+						layout: 'vertical'
+					},
+					credits: {
+					text: '',
+					href: '#'
+					},
+					series: seriesCfg/*[{
+						name: showAreas[0],
+						data: _.pluck(datasArea.�人, 'result'),
+						pointPlacement: 'on'
+					}, {
+						name: showAreas[1],
+						data: _.pluck(datasArea.�˲�, 'result'),
+						pointPlacement: 'on'
+					}]*/
+				});
+    		 }
+    	}); 
+	};
+	getSimpleStore();
+
+});
+		</script>
+	</head>
+	<body>
+<script src="/hbapp/flowInfo/js/highcharts.js"></script>
+<script src="/hbapp/flowInfo/js/highcharts-more.js"></script>
+<script src="/hbapp/flowInfo/js/modules/exporting.js"></script>
+
+<div id="container" style="min-width: 430px; height: 210px; margin: 0 auto; margin-top:0px;"></div>
+
+	</body>
+</html>

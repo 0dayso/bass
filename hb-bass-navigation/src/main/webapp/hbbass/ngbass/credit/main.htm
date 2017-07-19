@@ -1,0 +1,382 @@
+<html xmlns:ai>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<title>信用评级权重配置</title>
+	<script type="text/javascript" src="../../../hbapp/resources/js/default/default.js" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="../../../hbapp/resources/css/default/default.css" />
+<style>
+td{
+	font-size:12px;
+	padding-left:5px;
+}
+.input{
+    FONT-FAMILY: Tahoma;
+    font-size:8pt;
+    height: 17px;
+    padding-right:2px;
+    text-align:right;
+}
+</style>
+<script>
+	//function EntityArray(){};
+	
+	//EntityArray.prototype=[];
+	Array.prototype.calWeight=function(){
+		
+		var obj=this;
+		var _wei=0;
+		for(var a=0;a<obj.length;a++){
+			_wei+=obj[a].weight;
+		}
+		return _wei;
+	}
+	
+	function Entity(options){
+		this.id=options.id;
+		this.label=options.label;
+		this.parent=options.parent;
+		this.children=undefined;
+		this.weight=options.weight||0;
+	}
+	
+	Entity.prototype={
+		render : function(){
+			if($(this.id)){
+				var _entity = this;
+				var _ta=$C("textarea");
+				_ta.cols=4;
+				_ta.rows=1;
+				_ta.className="input";
+				_ta.onscroll=function(){
+					//debugger;
+					var obj=this;
+					var offset=0;				
+					if (obj.scrollTop==0){
+						if(_entity.parent && _entity.parent.children.calWeight()<100){
+							offset=1;
+						}else{
+							alert("权重已达100%，请调低其他权重");
+						}
+			    }else if (obj.scrollTop==2 && _entity.weight>0){
+			    	offset=-1;
+			    }
+			    _entity.weight +=offset;
+			    obj.value=_entity.weight;
+			    obj.scrollTop = 1;
+				};
+				_ta.onselectstart="return false";
+				_ta.innerText=this.weight;
+				
+				$(this.id).appendChild($CT(_entity.label))
+				$(this.id).appendChild(_ta)
+				$(this.id).appendChild($CT("%"));
+			}
+		},
+		
+		iterator : function(){
+			var _res=[];
+			var _entity = this;
+			
+			function recursive(obj){
+				for(var i=0;obj.children && i<obj.children.length;i++){
+					_res.push(obj.children[i]);
+					if(obj.children[i].children && obj.children[i].children.length>0)
+						recursive(obj.children[i]);
+				}
+			}
+			recursive(_entity);
+			return _res;
+		},
+		
+		level : function(){
+			var _entity = this;
+			var _level=0;
+			var obj=_entity;
+			while(obj.parent){
+				_level++;
+				obj=obj.parent;
+			}
+			return _level;
+		},
+		
+		absWeight : function(){
+			var _entity = this;
+			var _absWeight=1;
+			var obj=_entity;
+			while(obj.parent){
+				_absWeight *= parseFloat(obj.weight/100) || 1;
+				obj=obj.parent;
+			}
+			return _absWeight;
+		}
+	}
+	aihb.Util.loadmask();
+	window.onload=function(){
+		
+		var a1=new Entity({id:"a1",label:"客户基本信息",parent:root,weight:32});
+		var a2=new Entity({id:"a2",label:"客户消费信息",parent:root,weight:20});
+		var a3=new Entity({id:"a3",label:"客户投诉行为分析",parent:root,weight:38});
+		var a4=new Entity({id:"a4",label:"投诉工单处理分析",parent:root,weight:10});
+		root.children=[a1,a2,a3,a4];
+		
+		var a11=new Entity({id:"a11",label:"客户类别",parent:a1,weight:15});
+		var a12=new Entity({id:"a12",label:"品牌分类",parent:a1,weight:25});
+		var a13=new Entity({id:"a13",label:"缴费方式",parent:a1,weight:10});
+		var a14=new Entity({id:"a14",label:"在网时长",parent:a1,weight:20});
+		var a15=new Entity({id:"a15",label:"号码级别",parent:a1,weight:10});
+		var a16=new Entity({id:"a16",label:"影响力",parent:a1,weight:10});
+		var a17=new Entity({id:"a17",label:"业务依赖度",parent:a1,weight:10});
+		
+		var a171=new Entity({id:"a171",label:"通话时长",parent:a17,weight:35});
+		var a172=new Entity({id:"a172",label:"短信条数",parent:a17,weight:30});
+		var a173=new Entity({id:"a173",label:"GPRS流量",parent:a17,weight:25});
+		var a174=new Entity({id:"a174",label:"新业务费",parent:a17,weight:10});
+		a17.children=[a171,a172,a173,a174];
+		
+		a1.children=[a11,a12,a13,a14,a15,a16,a17];
+		
+		var a21=new Entity({id:"a21",label:"消费金额",parent:a2,weight:56});
+		
+		var a211=new Entity({id:"a211",label:"最近半年月均消费金额",parent:a21,weight:65});
+		var a212=new Entity({id:"a212",label:"上月消费金额",parent:a21,weight:35});
+		a21.children=[a211,a212];
+		
+		var a22=new Entity({id:"a22",label:"欠费记录",parent:a2,weight:44});
+		
+		var a221=new Entity({id:"a221",label:"最近一年欠费停机次数",parent:a22,weight:50});
+		var a222=new Entity({id:"a222",label:"最近一年欠费金额",parent:a22,weight:30});
+		var a223=new Entity({id:"a223",label:"最近一年高额停机次数",parent:a22,weight:20});
+		a22.children=[a221,a222,a223];
+		
+		a2.children=[a21,a22];
+		
+		var a31=new Entity({id:"a31",label:"投诉记录",parent:a3,weight:45});
+		
+		var a311=new Entity({id:"a311",label:"上月投诉次数",parent:a31,weight:35});
+		
+		var a3111=new Entity({id:"a3111",label:"所有普通投诉",parent:a311,weight:70});
+		var a3112=new Entity({id:"a3112",label:"升级投诉",parent:a311,weight:30});
+		a311.children=[a3111,a3112];
+		
+		var a312=new Entity({id:"a312",label:"最近三月投诉次数",parent:a31,weight:65});
+		
+		var a3121=new Entity({id:"a3121",label:"所有普通投诉",parent:a312,weight:70});
+		var a3122=new Entity({id:"a3122",label:"升级投诉",parent:a312,weight:30});
+		a312.children=[a3121,a3122];
+		
+		a31.children=[a311,a312];
+		
+		var a32=new Entity({id:"a32",label:"退费统计",parent:a3,weight:55});
+		
+		var a321=new Entity({id:"a321",label:"上月退费",parent:a32,weight:35});
+		
+		var a3211=new Entity({id:"a3211",label:"退费金额",parent:a321,weight:20});
+		var a3212=new Entity({id:"a3212",label:"退费次数",parent:a321,weight:50});
+		var a3213=new Entity({id:"a3213",label:"梦网端口个数",parent:a321,weight:10});
+		var a3214=new Entity({id:"a3214",label:"退一奖一（双倍返还）次数",parent:a321,weight:20});
+		a321.children=[a3211,a3212,a3213,a3214];
+		
+		var a322=new Entity({id:"a322",label:"最近三月退费累计",parent:a32,weight:65});
+			
+		var a3221=new Entity({id:"a3221",label:"退费金额",parent:a322,weight:20});
+		var a3222=new Entity({id:"a3222",label:"退费次数",parent:a322,weight:50});
+		var a3223=new Entity({id:"a3223",label:"梦网端口个数",parent:a322,weight:10});
+		var a3224=new Entity({id:"a3224",label:"退一奖一（双倍返还）次数",parent:a322,weight:20});
+		a322.children=[a3221,a3222,a3223,a3224];
+		
+		a32.children=[a321,a322];
+		
+		a3.children=[a31,a32];
+		init();
+	}
+	
+	function init(){
+		var ajax = new aihb.Ajax({
+			url : "/hbirs/action/credit?method=getWeight"
+			,loadmask : false
+			,callback : function(xmlrequest){
+				var res = {}
+				try{ 
+					eval("res="+xmlrequest.responseText);
+				}catch(e){}
+				var ents=root.iterator();
+				for(var i=0;i<ents.length;i++){
+					for(var j=0;j<res.length;j++){
+						if(ents[i].id==res[j].id){
+							ents[i].weight=parseFloat(res[j].weight);
+						}
+					}
+					ents[i].render();
+				}
+			}
+		});
+		ajax.request();
+	}
+	
+	var root=new Entity({id:"",weight:100});
+	
+	function save(){
+		var ents=root.iterator();
+		var str="";
+		for(var i=0;i<ents.length;i++){
+			if(str.length>0){
+				str += ","
+			}else{
+				str ="["
+			}
+			str += "\"('"+ ents[i].id+"'"
+			str += ",'"+ ents[i].label+"'"
+			str += ","+ents[i].weight/100 
+			str += ","+ ents[i].absWeight()
+			str += ","+ ents[i].level()
+			str += ","+(ents[i].children&&ents[i].children.length>0?"0":"1")
+			str += ",'"+ ents[i].parent.id+"'"
+			str +=  ")\"";
+		}
+		str += "]";
+		//alert(str);
+		
+		var ajax = new aihb.Ajax({
+			url : "/hbirs/action/credit?method=save"
+			,parameters : "weights="+encodeURIComponent(str)
+			,loadmask : true
+			,callback : function(xmlrequest){
+				//init();
+			}
+		});
+		ajax.request();
+	}
+</script>
+</head>
+<body>
+<input type="button" value="保存" onclick="save()">
+<table width="800" height="452" border="1" cellpadding="0" cellspacing="0">
+  <tr>
+    <td width="145">第一层</td>
+    <td width="203">第二层</td>
+    <td width="206">第三层</td>
+    <td width="236">第四层</td>
+  </tr>
+  <tr>
+    <td width="145" rowspan="10" id="a1"></td>
+    <td width="203" id="a11"></td>
+    <td width="206">&nbsp;</td>
+    <td width="236">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="203" id="a12"></td>
+    <td width="206">&nbsp;</td>
+    <td width="236">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="203" id="a13"></td>
+    <td width="206">&nbsp;</td>
+    <td width="236">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="203" id="a14"></td>
+    <td width="206">&nbsp;</td>
+    <td width="236">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="203" id="a15"></td>
+    <td width="206">&nbsp;</td>
+    <td width="236">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="203" id="a16"></td>
+    <td width="206">交往圈</td>
+    <td width="236">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="203" rowspan="4" id="a17"></td>
+    <td width="206" id="a171"></td>
+    <td width="236">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="206" id="a172"></td>
+    <td width="236">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="206" id="a173"></td>
+    <td width="236">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="206" id="a174"></td>
+    <td width="236">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="145" rowspan="5" id="a2"></td>
+    <td width="203" rowspan="2" id="a21"></td>
+    <td width="206" id="a211"></td>
+    <td width="236">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="206" id="a212"></td>
+    <td width="236">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="203" rowspan="3" id="a22"></td>
+    <td width="206" id="a221"></td>
+    <td width="236">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="206" id="a222"></td>
+    <td width="236">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="206" id="a223"></td>
+    <td width="236">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="145" rowspan="12" id="a3"></td>
+    <td width="203" rowspan="4" id="a31"></td>
+    <td width="206" rowspan="2" id="a311"></td>
+    <td width="236" id="a3111"></td>
+  </tr>
+  <tr>
+    <td width="236" id="a3112"></td>
+  </tr>
+  <tr>
+    <td width="206" rowspan="2" id="a312"></td>
+    <td width="236" id="a3121"></td>
+  </tr>
+  <tr>
+    <td width="236" id="a3122"></td>
+  </tr>
+  <tr>
+    <td width="203" rowspan="8" id="a32"></td>
+    <td width="206" rowspan="4" id="a321"></td>
+    <td width="236" id="a3211"></td>
+  </tr>
+  <tr>
+    <td width="236" id="a3212"></td>
+  </tr>
+  <tr>
+    <td width="236" id="a3213"></td>
+  </tr>
+  <tr>
+    <td width="236" id="a3214"></td>
+  </tr>
+  <tr>
+    <td width="206" rowspan="4"  id="a322"></td>
+    <td width="236" id="a3221"></td>
+  </tr>
+  <tr>
+    <td width="236" id="a3222"></td>
+  </tr>
+  <tr>
+    <td width="236" id="a3223"></td>
+  </tr>
+  <tr>
+    <td width="236" id="a3224"></td>
+  </tr>
+  <tr>
+    <td width="145" id="a4"></td>
+    <td width="203">工单处理</td>
+    <td width="206">&nbsp;</td>
+    <td width="236">&nbsp;</td>
+  </tr>
+</table>
+</body>
+</html>

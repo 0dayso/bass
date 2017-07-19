@@ -1,0 +1,263 @@
+<html xmlns:ai>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<title>集团客户地理集中度分析</title>
+	<script type="text/javascript" src="../../../resources/js/default/default.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../../../resources/js/datepicker/WdatePicker.js"></script>
+	<script type="text/javascript" src="../../../resources/js/default/autocomplete.js"></script>
+	<script type="text/javascript" src="../../../kpiportal/report/move.js"></script>
+	<link rel="stylesheet" type="text/css" href="../../../resources/css/default/default.css" />
+	<script type="text/javascript">
+var _header=[
+	{"name":["时间"],"dataIndex":"time_id"}
+	,{"name":["收入类型"],"dataIndex":"charge_type","cellStyle":"grid_row_cell_text"}
+	,{"name":["账目项"],"dataIndex":"acct_item_tid","cellStyle":"grid_row_cell_text"}
+	,{"name":["账目项名称"],"dataIndex":"acct_item_tname","cellStyle":"grid_row_cell_text"}
+	,{"name":["地市"],"dataIndex":"city"}
+	,{"name":["县市"],"dataIndex":"county","cellStyle":"grid_row_cell_text"}
+	
+	,{"name":["集团成员到达数"],"dataIndex":"charge_d","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":["集团通话次数"],"dataIndex":"charge_d_pre","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":["集团内通话次数"],"dataIndex":"charge_d_bef","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":["集团计费时长"],"dataIndex":"charge_ds","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":["集团内通话计费时长"],"dataIndex":"charge_ds_pre","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":["到访小区数"],"dataIndex":"charge_ds_bef","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number","title":"集团成员到访区域营销中心的个数"}
+];
+
+function genSQL(){
+	var colPiece="";
+	var groupPiece="";
+	var orderPiece=" order by 1";
+	var condi="";
+	
+	if(!$("chargeCk").checked&& !$("cityCk").checked&&!$("countyCk").checked){
+		$("chargeCk").checked=true;
+	}
+	
+	if($("chargeCk").checked){
+		colPiece="(select cname from (values ('MONTH','月租费'),('LOCAL','本地费'),('ROAM','漫游费'),('TOLL','长途费'),('IP','IP费'),('ZZ','增值业务费'),('DATA','数据业务费'),('DS-XXT','信息台代收费'),('DS-MW','梦网代收费'),('OTHER','其它费') )as t(cid,cname) where cid=charge_type) charge_type";
+		groupPiece="charge_type";
+	}
+	
+	if($("cityCk").checked || $("countyCk").checked){
+		if(colPiece.length>0)colPiece+=",";
+		if(groupPiece.length>0)groupPiece+=","
+		
+		colPiece+="(select t.area_name from mk.bt_area t where t.area_code=substr(a.area_id,1,5)) city";
+		groupPiece+="substr(area_id,1,5)";
+	}
+	
+	if($("countyCk").checked){
+		if(colPiece.length>0)colPiece+=",";
+		if(groupPiece.length>0)groupPiece+=","
+		
+		colPiece+="(select t.county_name from mk.bt_area_all t where t.county_code=a.area_id) county";
+		groupPiece+="area_id";
+	}
+	//帐目项的处理
+	var itemid=$("acctitemtid").value;
+	
+	if(itemid!=""){
+		var arrItems=itemid.split(";");
+		condi +=" and acct_item_tid in ( ";
+		var ids="";
+		for(var i=0;i<arrItems.length;i++){
+			if(ids.length>0)ids+=",";
+			ids += "'"+arrItems[i].split(" ")[0]+"'"
+		}
+		condi +=ids+" )";
+		$("itemCk").checked=true;
+	}
+	
+	if($("itemCk").checked){
+		if(colPiece.length>0)colPiece+=",";
+		if(groupPiece.length>0)groupPiece+=","
+		colPiece+="acct_item_tid,acct_item_tname";
+		groupPiece+="acct_item_tid,acct_item_tname";
+	}
+	
+	var date1=$("date").value;
+	var date2=aihb.Util.calDate($("date").value)[1];
+	
+	var sql=" select "
+		+colPiece
+		+" ,sum(case when time_id=@date1 then bill_charge_d else null end) charge_d"
+		+" ,case when sum(case when time_id=@date1 then bill_charge_ld else null end)=0 then 0 else decimal(sum(case when time_id=@date1 then bill_charge_d else null end),16,2)/sum(case when time_id=@date1 then bill_charge_ld else null end) -1 end charge_d_pre"
+		+" ,case when sum(case when time_id=@date2 then bill_charge_d else null end)=0 then 0 else decimal(sum(case when time_id=@date1 then bill_charge_d else null end),16,2)/sum(case when time_id=@date2 then bill_charge_d else null end) -1 end charge_d_bef"
+		
+		+" ,sum(case when time_id=@date1 then bill_charge_dlj else null end) charge_ds"
+		+" ,case when sum(case when time_id=@date1 then bill_charge_ldlj else null end)=0 then 0 else decimal(sum(case when time_id=@date1 then bill_charge_dlj else null end),16,2)/sum(case when time_id=@date1 then bill_charge_ldlj else null end) -1 end charge_ds_pre"
+		+" ,case when sum(case when time_id=@date2 then bill_charge_dlj else null end)=0 then 0 else decimal(sum(case when time_id=@date1 then bill_charge_dlj else null end),16,2)/sum(case when time_id=@date2 then bill_charge_dlj else null end) -1 end charge_ds_bef"
+		
+		+" from nmk.gds_wave_acct_item a"
+		+" where time_id in (@date1,@date2)"
+		+ aihb.AjaxHelper.parseCondition()
+		+ condi
+		+" group by "+groupPiece
+		+ orderPiece
+		+" with ur";
+	sql=sql.replace(/@date1/gi,date1).replace(/@date2/gi,date2);
+	
+	return sql;
+}
+var grid = {};
+function query(){
+	
+	grid = new aihb.SimpleGrid({
+		header:_header
+		,sql: genSQL()
+		,pageSize : 31
+		/**/,callback:function(){
+			aihb.Util.watermark();
+		}
+	});
+	grid.run();
+}
+
+function down(){
+	aihb.AjaxHelper.down({
+		sql : genSQL()
+		,header : _header
+	});
+}
+
+window.onload=function(){
+	var _d=new Date();
+	_d.setDate(_d.getDate()-1);
+	$("date").value=_d.format("yyyymmdd");
+	aihb.Util.loadmask();
+	aihb.Util.watermark();
+	aihb.Util.windowMask({content:$("multi")});
+	
+	var ajax = new aihb.Ajax({
+		url : "/hbirs/action/jsondata"
+		,parameters : "sql="+encodeURIComponent("select distinct trim(acct_item_tid)||' '||value(trim(acct_item_tname),'') name from NMK.DIM_ACCT_ITEM_TYPE order by 1 with ur")
+		,callback : function(xmlrequest){
+			var _suggest = [];
+			try{
+				eval("_suggest="+xmlrequest.responseText)
+			}catch(e){}
+			
+			var _container =$("list1");
+			_container.length=0;
+			$("list2").length=0;
+			
+			var _suggest1=[];
+			for(var i=0;i<_suggest.length;i++){
+				_suggest1[i]=_suggest[i].name;
+				_container[i]=new Option(_suggest[i].name,_suggest[i].name);//多选框设置
+			}
+			
+			var obj = actb($('acctitemtid'),_suggest1);
+		}
+	});
+	ajax.request();
+}
+
+function _confirm(){
+	var elems = $("list2");
+	if(elems.length<=10){
+		var ids = "";
+		for(var i=0; i< elems.length;i++){
+			if(ids.length>0)ids +=";";
+			ids += elems[i].value
+		}
+		$("acctitemtid").value=ids;
+		$("multi").parentMask.style.display="none";
+	}else{
+		alert("请选择小于10个帐目项ID");
+	}
+}
+	</script>
+</head>
+<body>
+<form method="post" action="">
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'dim_div')" title="点击隐藏"><img flag='1' src="../../../resources/image/default/ns-expand.gif"></img>&nbsp;查询条件区域：</td>
+	</tr></table></legend>
+	<div id="dim_div">
+	<table align='center' width='99%' class='grid-tab-blue' cellspacing='1' cellpadding='0' border='0'>
+	<tr class='dim_row'>
+		<td class='dim_cell_title'>统计周期</td>
+		<td class='dim_cell_content'>
+			<span id="point">
+			<input type="text" style="width:160px;" class="Wdate" id="date" name="date" onfocus="WdatePicker()"/>
+			</span>
+		</td>
+		<td class='dim_cell_title'>地市 <input type="checkbox" id="cityCk">细分</td><td class='dim_cell_content'><ai:dim name='city' dbName="substr(area_id,1,5)"><select name='city' class='form_select' onchange="areacombo('1')"><option value='0' selected='selected'>全省</option><option value='HB.WH'>武汉</option><option value='HB.HS'>黄石</option><option value='HB.EZ'>鄂州</option><option value='HB.YC'>宜昌</option><option value='HB.ES'>恩施</option><option value='HB.SY'>十堰</option><option value='HB.XF'>襄樊</option><option value='HB.JH'>江汉</option><option value='HB.XN'>咸宁</option><option value='HB.JZ'>荆州</option><option value='HB.JM'>荆门</option><option value='HB.SZ'>随州</option><option value='HB.HG'>黄冈</option><option value='HB.XG'>孝感</option><option value='HB.TM'>天门</option><option value='HB.QJ'>潜江</option></select></ai:dim></td>
+		<td class='dim_cell_title'>县市 <input type="checkbox" id="countyCk">细分</td><td class='dim_cell_content'><ai:dim name='county' dbName="area_id"><select name='county' class='form_select' onchange=""><option value=''>全部</option></select></ai:dim></td>
+	</tr>
+	<tr class='dim_row'>
+		<td class='dim_cell_title'>收入类型<input type="checkbox" id="chargeCk" checked="checked">细分</td><td class='dim_cell_content'>
+		<ai:dim name='chargeType' dbName="charge_type">
+			<select name="chargeType" class='form_select'>
+				<option value="">全部</option>
+				<option value="MONTH">月租费</option>
+				<option value="LOCAL">本地费</option>
+				<option value="ROAM">漫游费</option>
+				<option value="TOLL">长途费</option>
+				<option value="IP">IP费</option>
+				<option value="ZZ">增值业务费</option>
+				<option value="DATA">数据业务费</option>
+				<option value="DS-XXT">信息台代收费</option>
+				<option value="DS-MW">梦网代收费</option>
+				<option value="OTHER">其它费</option>
+			</select>
+		</ai:dim>
+		
+		</td>
+		<td class='dim_cell_title'>账目项名称</td>
+		<td class='dim_cell_content' colspan="3">
+			<input id='acctitemtid' style='width:400'>
+			
+			<input type="button" class="form_button_short" value="多选" onClick="{$('multi').parentMask.style.display='';}">
+			<input type="checkbox" id="itemCk">细分
+		</td>
+		
+	</tr>
+	</table>
+	<table align="center" width="99%">
+		<tr class="dim_row_submit">
+			<td align="right" bgcolor="">
+				<input type="button" class="form_button" value="查询" onClick="query()">&nbsp;
+				<input type="button" class="form_button" value="下载" onclick="down()">&nbsp;
+			</td>
+		</tr>
+	</table>
+	</div>
+</fieldset>
+</div><br>
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'show_div')" title="点击隐藏"><img flag='1' src="../../../resources/image/default/ns-expand.gif"></img>&nbsp;数据展现区域：</td>
+		<td></td>
+	</tr></table></legend>
+	<div id="grid" style="display:none;"></div>
+</fieldset>
+</div><br>
+</form>
+
+<div id="multi">
+<table align="left" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td align="center"><select name="list1" id="list1" multiple size="15" style="width:280" ondblclick="moveOption($('list1'), $('list2'))"></select>	
+		</td>
+		<td align="center" width="60px;">
+			<input type="button" class="form_button_short" value="添加" onclick="moveOption($('list1'), $('list2'))"><p>
+			<input type="button" class="form_button_short" value="删除" onclick="moveOption2($('list2'), $('list1'))"><p>
+			<input type="button" class="form_button_short" value="确定" onclick="_confirm()">
+		</td>
+		<td align="center" >
+			<div id="objselectdiv2" style="text-align:left">
+		   	<select name="list2" id="list2" multiple size="15" style="width:280"	ondblclick="moveOption2($('list2'), $('list1'))"></select>	
+			</div> 	
+		</td>
+	</tr>
+</table>
+</div>
+
+</body>
+</html>

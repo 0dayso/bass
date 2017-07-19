@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<title>IMEI和MSISDN对应关系双向查询</title>
+	<script type="text/javascript" src="/mvc/resources/js/default/des.js" charset="utf-8"></script>
+	<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/default/default.js" charset="utf-8"></script>
+	<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/default/util.js"></script>
+	<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/datepicker/WdatePicker.js"></script>
+	<link rel="stylesheet" type="text/css" href="/hb-bass-navigation/hbapp/resources/css/default/default.css" />
+	<script type="text/javascript">
+		(function(window,document,undefined){
+			var header = [
+				{"cellStyle":"grid_row_cell","dataIndex":"area_id","name":["地市"]}
+				,{"cellStyle":"grid_row_cell","dataIndex":"mbuser_id","name":["用户编码"]}
+				,{"cellStyle":"grid_row_cell","dataIndex":"msisdn","name":["MSISDN码"]}
+				,{"cellStyle":"grid_row_cell","dataIndex":"imei","name":["IMEI"]}
+				,{"cellStyle":"grid_row_cell_text","dataIndex":"cust_name","name":["客户姓名"]}
+				,{"cellStyle":"grid_row_cell_text","dataIndex":"sex_id","name":["性别"]}
+				,{"cellStyle":"grid_row_cell_text","dataIndex":"tac_model_name","name":["型号"]}
+				,{"cellStyle":"grid_row_cell_text","dataIndex":"tac_pro","name":["品牌"]}
+			],
+			_params = aihb.Util.paramsObj(),
+			console;
+			
+			function init() {
+				
+				/* init query options */
+				var queryOptions = 	{
+					data : [
+						{	label : "时间"
+							,elements : "<input align='right' type='text' id='date1' name='date1' onfocus='WdatePicker({readOnly:true,dateFmt:\"yyyyMM\"})' class='Wdate'/>"
+						},
+						{	label : "地市"
+							,elements : biutil.genArea("city",_params.cityId,undefined,"condi=\" and @pt.area_id='@val' \"")						
+						},
+						{	label : "MSISDN"
+							,elements : { type : "text", condi : " and @pt.acc_nbr like '%@val%'"}
+						},
+						{	label : "IMEI"
+							,elements : { type : "text", condi : " and @pt.imei like '%@val%'"}
+						}
+					]
+				};
+				var _table = createTblOptions(queryOptions);
+				$("dim_div").insertBefore(_table,$("dim_div").lastChild);
+				
+				/* init event handlers */
+				$("queryBtn").onclick = query;
+				$("downBtn").onclick = down;
+				
+				/* init params */
+				console = $("console");
+				
+				/* init page */
+				aihb.Util.loadmask();
+				aihb.Util.watermark();
+				
+				var _d=new Date();
+				_d.setDate(_d.getDate()-3);
+				_d.setMonth(_d.getMonth()-1);
+				$("date1").value=_d.format("yyyymm");
+			}
+			function getSql(){
+				var sql = "select ( select dim.area_name from mk.bt_area dim where dim.area_code = a.area_id )area_id,serv_id mbuser_id, acc_nbr msisdn,imei,cust_name," + 
+				" (case when sex_id = 0 then '女' when sex_id=1 then '男' else '未知' end) sex_id," + 
+				" tac_model_name,tac_pro from NWH.IMEI_SERVFUN_" + $("date1").value + " a where 1=1 " + bi.genSQLConditions();
+				log(sql);
+				return sql;
+			}
+			function log(str) {
+				if(_params.enableLog) {
+					var time = new Date().toLocaleString();
+					console.innerHTML += time + " "  + str + "<br>";
+				}
+			}
+			function query(){
+				var grid = new aihb.AjaxGrid({
+					header:header
+					,sql: getSql()
+					,callback:function(){
+						aihb.Util.watermark();
+					}
+				});
+				grid.run();
+			}
+
+			function down(){
+				aihb.AjaxHelper.down({
+					sql : getSql()
+					,header : header
+				});
+			}
+			window.onload = init;
+			
+		}(window, window.document))
+</script>
+</head>
+<body>
+<form method="post" action="">
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'dim_div')" title="点击隐藏"><img flag='1' src="../../../hbapp/resources/image/default/ns-expand.gif"></img>&nbsp;查询条件区域：</td>
+	</tr></table></legend>
+	<div id="dim_div">
+		
+	<table align="center" width="99%">
+		<tr class="dim_row_submit">
+			<td><span id="tipDiv"></span></td>
+			<td align="right">
+				<div id="Btn">
+					<input type="button" class="form_button" id="queryBtn" value="查询">&nbsp;
+					<input type="button" class="form_button" id="downBtn" value="下载">&nbsp;
+				</div>
+			</td>
+		</tr>
+	</table>
+	</div>
+</fieldset>
+</div>
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'show_div')" title="点击隐藏"><img flag='1' src="../../../hbapp/resources/image/default/ns-expand.gif"></img>&nbsp;数据展现区域：</td>
+		<td></td>
+	</tr></table></legend>
+	<div id="gridBtn" style="display:none;"></div>
+	<div id="grid" style="display:none;"></div>
+</fieldset>
+</div><br>
+</form>
+	<div id="console"></div>
+</body>
+</html>

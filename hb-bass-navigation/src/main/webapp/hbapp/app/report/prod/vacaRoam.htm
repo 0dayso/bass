@@ -1,0 +1,128 @@
+<html xmlns:ai>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<title>动感地带假期漫游包</title>
+	<script type="text/javascript" src="../../../../hbapp/resources/js/default/default.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../../../../hbapp/resources/js/default/calendar.js"></script>
+	<link rel="stylesheet" type="text/css" href="../../../../hbapp/resources/css/default/default.css" />
+	<script type="text/javascript">
+
+var _header=[
+	{"name":"地市","dataIndex":"col1"}
+	,{"name":"县市","dataIndex":"col3","cellStyle":"grid_row_cell_text"}
+	,{"name":"当日受理用户数（户）","dataIndex":"c1","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":"月受理用户数（户）","dataIndex":"c2","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":"累计受理用户数（户）","dataIndex":"c3","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":"省内漫游计费时长（分钟）","dataIndex":"c4","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":"省内漫游费用（元）","dataIndex":"c5","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":"省外漫游计费时长（分钟）","dataIndex":"c6","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":"省外漫游费用（元）","dataIndex":"c7","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+];
+
+function genSQL(){
+	
+	var colPiece="value((select area_name from mk.bt_area where area_code=col1),'总计') col1";
+	var groupPiece="rollup(col1)";
+	var orderPiece=" order by 1";
+	
+	var sql="select "+colPiece
+		+" ,sum(int(col3)) c1"
+		+" ,sum(int(col4)) c2"
+		+" ,sum(int(col5)) c3"
+		+" ,sum(int(col6)) c4"
+		+" ,sum(decimal(col7,12,2)) c5"
+		+" ,sum(int(col8)) c6"
+		+" ,sum(decimal(col9,12,2)) c7"
+		+" from report_fact "
+		+" where reportcode='HOT-SCYX-JQMYB' "
+		+ aihb.AjaxHelper.parseCondition()
+		+" group by "+groupPiece
+		+ orderPiece
+		+" with ur";
+	$("sqlview").innerHTML = sql;
+	return sql;
+}
+function query(){
+	
+	var grid = new aihb.SimpleGrid({
+		header:_header
+		,sql: genSQL()
+		,pageSize : 31
+	});
+	grid.run();
+	/*aihb.AjaxHelper.request({
+		header:_header
+		,url:"/hb-bass-navigation/hbirs/action/jsondata?sql="+sql
+	});*/
+}
+
+function down(){
+	var _fileName=document.title;
+	
+	aihb.AjaxHelper.down({url: "/hbirs/action/jsondata?method=down&sql="+genSQL()+"&fileName="+_fileName});
+}
+aihb.Util.loadmask();
+var _params = aihb.Util.paramsObj();
+window.onload=function(){
+	var _d=new Date();
+	_d.setDate(_d.getDate()-1);
+	$("date").value=_d.format("yyyymmdd");
+	
+	var _headerStr="";
+	
+	for(var i=0;i<_header.length;i++){
+		var header=_header[i];
+		if(_headerStr.length>0){
+			_headerStr+=",";
+		}
+		//_headerStr+="\""+header.dataIndex.toLowerCase()+"\":\""+encodeURIComponent(encodeURIComponent(header.name))+"\"";
+		_headerStr+="\""+header.dataIndex.toLowerCase()+"\":\""+header.name+"\"";
+	}
+	_headerStr="{"+_headerStr+"}";
+	
+	document.forms[0].header.value=_headerStr;
+	
+	$("dim_city").innerHTML=aihb.BassDimHelper.areaCodeHtml("city",_params.cityId,"areacombo(1)");
+}
+	</script>
+</head>
+<body>
+<form method="post" action="">
+<input type="hidden" name="header">
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'dim_div')" title="点击隐藏"><img flag='1' src="../../../../hbapp/resources/image/default/ns-expand.gif"></img>&nbsp;查询条件区域：</td>
+	</tr></table></legend>
+	<div id="dim_div">
+	<table align='center' width='99%' class='grid-tab-blue' cellspacing='1' cellpadding='0' border='0'>
+	<tr class='dim_row'>
+		<td class='dim_cell_title'>统计周期</td><td class='dim_cell_content'><ai:dim name='date' dbName="time_id" operType="int"><script type='text/javascript'>var calendar_date=new Calendar('calendar_date');document.write(calendar_date);</script><table cellspacing='0' cellpadding='0' style='width: 120px;height: 22px;border:1px solid #999999;background-color:#FFFFFF;'><tr><td><input type='text' name='date' id='date' value='' onchange="if(calendar_date.callback)calendar_date.callback(this.value)" style='border:0 none;padding:1px 0 0 3px;width:76px'/><td align='right' style='padding-right : 2 px;'><span class='calendarimage' onclick="calendar_date.showMoreDay = true;calendar_date.show($('date'),this)" ></span></td></tr></table></ai:dim></td>
+		<td class='dim_cell_title'>地市</td><td class='dim_cell_content'><ai:dim name='city' dbName="substr(col1,1,5)" id="dim_city"></ai:dim></td>
+		<td class='dim_cell_title'></td><td class='dim_cell_content'></td>
+	</tr>
+	</table>
+	<table align="center" width="99%">
+		<tr class="dim_row_submit">
+			<td align="right">
+				<input type="button" class="form_button" value="查询" onClick="query()">&nbsp;
+				<input type="button" class="form_button" value="下载" onclick="down()">&nbsp;
+			</td>
+		</tr>
+	</table>
+	</div>
+</fieldset>
+</div><br>
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'show_div')" title="点击隐藏"><img flag='1' src="../../../../hbapp/resources/image/default/ns-expand.gif"></img>&nbsp;数据展现区域：</td>
+		<td></td>
+	</tr></table></legend>
+	<div id="grid" style="display:none;"></div>
+</fieldset>
+</div><br>
+</form>
+<div id="sqlview" style = "display : none"></div>
+</body>
+</html>

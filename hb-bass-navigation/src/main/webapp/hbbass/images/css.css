@@ -1,0 +1,33 @@
+TD {
+	FONT-SIZE: 9pt; LINE-HEIGHT: 15px; FONT-FAMILY: "宋体"
+}
+BODY {
+	FONT-SIZE: 9pt; LINE-HEIGHT: 15px; FONT-FAMILY: "宋体"
+}
+SELECT {
+	FONT-SIZE: 9pt; LINE-HEIGHT: 15px; FONT-FAMILY: "宋体"
+}
+A:link {
+	COLOR: #000000; LINE-HEIGHT: 15px; TEXT-DECORATION: none
+}
+A:visited {
+	COLOR: #000000; LINE-HEIGHT: 15px; TEXT-DECORATION: none
+}
+A:active {
+	COLOR: red; TEXT-DECORATION: none
+}
+A:hover {
+	COLOR: red; TEXT-DECORATION: underline
+}
+.p19 {
+	FONT-SIZE: 19pt; LINE-HEIGHT: 21pt; FONT-FAMILY: 宋体
+}
+.p16 {
+	FONT-SIZE: 16pt; LINE-HEIGHT: 16pt; FONT-FAMILY: 宋体
+}
+.p12 {
+	FONT-SIZE: 12pt; LINE-HEIGHT: 18pt; FONT-FAMILY: 宋体
+}
+.p9 {
+	FONT-SIZE: 9pt; LINE-HEIGHT: 14pt; FONT-FAMILY: 宋体
+}

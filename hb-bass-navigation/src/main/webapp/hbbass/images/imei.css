@@ -1,0 +1,38 @@
+BODY {
+}
+
+TABLE {
+	COLOR: #000033; FONT-FAMILY: "Verdana", "Arial", "Helvetica", "sans-serif"; FONT-SIZE: 11px
+}
+
+
+
+.tabletitle {
+	color: #ffffff;
+	background-color:#669999;
+	font-family: "ËÎÌו";
+	font-size: 13px;
+	line-height: 20px;
+	font-weight: normal;
+	font-variant: normal;
+	text-align: center;
+
+}
+.table-row-1 {
+	font-family: "ËÎÌו";
+	font-size: 12px;
+	line-height: 20px;
+	font-weight: normal;
+	font-variant: normal;
+	color: #000000;
+	background-color: #B3D5FF;
+}
+.table-row-11 {
+	font-family: "ËÎÌו";
+	font-size: 12px;
+	line-height: 20px;
+	font-weight: normal;
+	font-variant: normal;
+	color: #000000;
+	background-color: #D7E8FF;
+}

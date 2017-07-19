@@ -1,0 +1,26 @@
+<html>
+	<head>
+    <title>NG手册下载</title>
+    <script type="text/javascript" src="/hb-bass-navigation/hbbass/common2/basscommon.js" charset="utf-8"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">
+	<script>
+	var _remoPath="ngbass/instructions/"
+	function listFiles(datas){
+		var str="";
+		for(var i=0;i<datas.length;i++){
+			str+="<div><a href='/hb-bass-navigation/hbirs/action/filemanage?method=downFromFtp&remotePath="+_remoPath+"&fileName="+datas[i]+"' target='_blank'>"+datas[i]+"</a></div>";
+		}
+		document.getElementById("listFiles").innerHTML=str;
+	}
+	window.onload=function(){
+		ajaxGetJson("/hbirs/action/filemanage?method=listRemoteFiles","remotePath="+_remoPath,listFiles);
+	}
+ </script>	
+	</head>
+	<body>
+	<div id="listFiles"></div>
+	</body>
+</html>

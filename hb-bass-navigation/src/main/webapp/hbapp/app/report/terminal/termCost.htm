@@ -1,0 +1,106 @@
+<html xmlns:ai>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<title>终端成本录入</title>
+	<script type="text/javascript" src="../../../resources/js/default/default.js" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="../../../resources/css/default/default.css" />
+	<link rel="stylesheet" type="text/css" href="../../../resources/js/codebase/dhtmlxvault.css" />
+	<script language="JavaScript" type="text/javascript" src="../../../resources/js/codebase/dhtmlxvault.js"></script>
+	<script type="text/javascript">
+var params=aihb.Util.paramsObj();
+
+var _d=new Date();
+_d.setMonth(_d.getMonth()-1);
+var _month=_d.format().substring(0,6);
+var _header=[
+	{"name":"月份","dataIndex":"time_id"}
+	,{"name":"终端编码","dataIndex":"rec_tid","cellStyle":"grid_row_cell_text"}
+	,{"name":"终端名称","dataIndex":"rec_name","cellStyle":"grid_row_cell_text"}
+	,{"name":"终端成本","dataIndex":"price","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+];
+function genSQL(){
+	var sql="select value(b.time_id,'@month') time_id,value(a.rec_tid,b.rec_tid) rec_tid,value(a.rec_name,b.rec_name) rec_name,value(b.price,0) price from "
+		+" (select distinct rec_tid,rec_name from nmk.bindimei_sale_@month) a"
+		+" full join (select value(time_id,'@month') time_id,rec_tid,rec_name,price from NWH.RES_TERM_COST where time_id=(select value(max(time_id),'@month') from NWH.RES_TERM_COST)) b on a.rec_tid=b.rec_tid"
+		+" order by 2 with ur";
+	sql=sql.replace(/@month/gi,_month)
+	return sql;
+}
+function query(){
+	
+	var grid = new aihb.AjaxGrid({
+		header: _header
+		,sql: genSQL()
+		,isCached : false
+	});
+	grid.run();
+	/*aihb.AjaxHelper.request({
+		header:_header
+		,url:"/hb-bass-navigation/hbirs/action/jsondata?sql="+sql
+	});*/
+}
+
+function down(){
+	aihb.AjaxHelper.down({
+		sql : genSQL().replace("value(b.time_id,'"+_month+"') time_id,","")
+		,header : _header
+		,url : "/hbirs/action/jsondata?method=down&fileKind=excel"
+	});
+}
+	var _maskCont=$C("div");
+	var _mask = aihb.Util.windowMask({content:_maskCont});
+window.onload=function() {
+	aihb.Util.loadmask();
+	aihb.Util.watermark();
+	var vault = new dhtmlXVaultObject();
+    vault.setImagePath("../../../resources/js/codebase/imgs/");
+    vault.setServerHandlers("/hbirs/action/filemanage?method=importExcel", "/hbirs/action/filemanage?method=getInfoHandler", "/hbirs/action/filemanage?method=getIdHandler");
+    vault.setFilesLimit(1);
+   	vault.create(_maskCont);
+    
+    vault.onFileUpload=function(){
+    	//vault.setFormField("ds", "web");
+    	vault.setFormField("tableName", "NWH.RES_TERM_COST");
+    	vault.setFormField("columns", "TIME_ID,rec_tid,rec_name,price");
+    	
+    	vault.setFormField("date", (new Date()).format().substring(0,6));
+    	
+    	return true;
+    }
+    
+    vault.onUploadComplete=function(){
+    	alert("成功");
+		location.reload();
+    }
+    query();
+}
+
+	</script>
+</head>
+<body>
+<form method="post" action="">
+<input type="hidden" name="header">
+<input type="hidden" name="sql">
+<div class="divinnerfieldset">
+<table align="center" width="99%">
+		<tr class="dim_row_submit">
+			<td align="right">
+				<input type="button" class="form_button_short" value="查询" onClick="query()">&nbsp;
+				<input type="button" class="form_button_short" value="下载" onclick="down()">&nbsp;
+				<input type="button" class="form_button_short" value="上传" onclick="{_mask.style.display='';}">&nbsp;
+			</td>
+		</tr>
+	</table>
+</div>
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'show_div')" title="点击隐藏"><img flag='1' src="../../../../hbapp/resources/image/default/ns-expand.gif"></img>&nbsp;数据展现区域：</td>
+		<td></td>
+	</tr></table></legend>
+	<div id="grid" style="display:none;"></div>
+</fieldset>
+</div><br>
+</form>
+</body>
+</html>

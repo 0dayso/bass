@@ -1,0 +1,132 @@
+@charset "utf-8";
+/*背景色*/
+$bgColor-blue1:#B9DEF1;
+$bgColor-blue2:#F9FDFF;
+$bgColor-green:#4AD486;
+$bgColor-yellow:#FFBD66;
+$bgColor-red:#F37276;
+$bgColor-gray:#F4F6FA;
+$bgColor-white:#FDFFFF;
+/*文字颜色*/
+$color-notice :#9A9C9E;
+$color-notice1 :#3CA2DB;
+$color-normal :#626E7B;
+$color-white :#FFFFFF;
+$color-bulletin :#9EA3A7;
+$color-bulletin-text :#7F8790;
+$color-bulletin-num:#828d98;
+$color-reporttable: #456789;
+$color-gray:#666;
+$color-gray-light:#D6D692;
+/*字体*/
+$font-s0:10px;
+$font-s:12px;
+$font-m1:14px;
+$font-m2:16px;
+$font-l:18px;
+/*边框*/
+$borderColor1:#D3DBE7;
+$borderColor2:#E8EAEB;
+$borderRadius:5px;
+
+body{
+	font-family : 微软雅黑;
+	font-size : $font-s;
+	background-color : $color-white;
+}
+.table{
+	margin: 0px;
+}
+
+.float-left{
+	float:left;
+}
+
+.float-right{
+	float:right;
+}
+
+.clear-float{
+	clear:both;
+}
+.panel{
+	padding:0;
+	margin:0;
+}
+
+@mixin textLimit($TWidth : 10%){
+	white-space : nowrap; 
+	overflow : hidden; 
+	text-overflow : ellipsis;
+	display : block;
+	width : $TWidth;
+}
+
+@mixin setBorder($border:null){
+	@if $border==null { border: 1px solid $borderColor1; }
+	@if $border==notop { border-right: 1px solid $borderColor1;
+						border-bottom: 1px solid $borderColor1;
+						border-left: 1px solid $borderColor1; }
+	@if $border==nobottom { border-right: 1px solid $borderColor1;
+						border-top: 1px solid $borderColor1;
+						border-left: 1px solid $borderColor1; }
+	@if $border==bottom { border-bottom: 1px solid $borderColor1;}
+}
+
+@mixin setRadius($radius:null){
+	@if $radius==null { border-radius: 0px; }
+	@if $radius==all { border-radius: $borderRadius; }
+	@if $radius==top { border-top-left-radius: $borderRadius; 
+						border-top-right-radius: $borderRadius;}
+	@if $radius==bottom { border-bottom-left-radius: $borderRadius; 
+						  border-bottom-right-radius: $borderRadius;}
+}
+
+@mixin setMargin($direction:null,$number:5px){
+	@if $direction==null {margin:$number;}
+	@if $direction==top {margin-top:$number;}
+	@if $direction==right {margin-right:$number;}
+	@if $direction==bottom {margin-bottom:$number;}
+	@if $direction==left {margin-left:$number;}
+	@if $direction==row {margin-right:$number;margin-left:$number;}
+	@if $direction==column {margin-top:$number;margin-bottom:$number;}
+}
+
+@mixin setPadding($direction:null,$number:5px){
+	@if $direction==null {padding:$number;}
+	@if $direction==top {padding-top:$number;}
+	@if $direction==right {padding-right:$number;}
+	@if $direction==bottom {padding-bottom:$number;}
+	@if $direction==left {padding-left:$number;}
+	@if $direction==row {padding-right:$number;padding-left:$number;}
+	@if $direction==column {padding-top:$number;padding-bottom:$number;}
+}
+
+/*清除*/
+@mixin block($float,$border:null,$width:null,$height:null) {
+	border : $border;
+	width : $width;
+	height : $height;
+	@if($float){float : $float};
+}
+
+@mixin theme($bgColor){
+	background-color : $bgColor;
+}
+@mixin edgeDistance($margin:null,$padding:null) {
+	margin : $margin;
+	padding : $padding;
+}
+@mixin text($font-size:12px,$color:#000000,$text-decoration:null,$text-indent:null){
+	font-family : 微软雅黑;
+	font-size : $font-size;
+	color : $color;
+	text-decoration : $text-decoration;
+	text-indent : $text-indent;
+}				
+
+@mixin image($border-radius,$width:null,$height:null){
+	@if($border-radius){border-radius:$border-radius};
+	width : $width;
+	height : $height;
+}

@@ -1,0 +1,57 @@
+@charset "utf-8";
+.BulletinTopImage{
+    @include setPadding(left,10px);
+    .BulletinTopImage-item{
+        float: left;
+        width: 20%;
+        @include setPadding(right,10px);
+        @include setPadding(top,10px);
+        .imgTitle{
+            @include setBorder(null);
+            .imgTitle-mark{
+                position: absolute
+            }
+            .imgTitle-context{
+                position: static;
+                width: 100%;
+                @include setPadding(null,6px);
+            }
+        }
+        .BulletinName{
+            @include textLimit(99%);
+            font-size : $font-m1;
+            color : $color-normal;
+            @include setMargin(column,6px);
+            cursor:pointer;
+            text-align: center;
+            font-weight: bold;
+        }
+        .BulletinName:hover{
+            text-decoration:underline
+        }
+        .Bulletin_name{
+            @include textLimit(99%);
+            @include setMargin(column,6px);
+            font-size : $font-s;
+            color : $color-notice; 
+            text-align: center;
+            cursor:pointer;       
+        }
+        .Bulletin_collect{
+            @include setMargin(column,6px);
+            font-size : $font-s;
+            text-align: center;
+        }
+        .bulletinTopImage_noCollect{
+            @include setPadding(null,2px 4px);
+            font-size:$font-s;
+            width: 35%;
+        }
+        .bulletinTopImage_collect{
+            @include setPadding(null,2px 4px);
+            font-size:$font-s;
+            color : $color-bulletin;
+            width: 35%;
+        }
+}
+}

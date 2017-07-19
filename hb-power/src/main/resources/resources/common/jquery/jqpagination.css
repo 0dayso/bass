@@ -1,0 +1,27 @@
+.jpagination{display: inline-block; width:300px; height:29px; vertical-align:middle; line-height:29px;}
+.jpagination .pagenum{ width:35px; height:21px; border:1px solid #bababa; line-height:21px; text-align:center;}
+.jpagination .textinput{ width:145px; height:29px; float:left;}
+
+.jpagination a.first{ width:29px; height:29px;  background:url(../img/jpagination/larow_07.jpg) no-repeat; float:left;}
+.jpagination a:hover.first{ width:29px; height:29px;  background:url(../img/jpagination/larowh_07.jpg) no-repeat; float:left;}
+.jpagination a.previous{ width:29px; height:29px;  background:url(../img/jpagination/larow2_07.jpg) no-repeat; float:left;}
+.jpagination a:hover.previous{ width:29px; height:29px;  background:url(../img/jpagination/larow2h_07.jpg) no-repeat; float:left;}
+.jpagination a.next{ width:29px; height:29px;  background:url(../img/jpagination/rarow_07.jpg) no-repeat; float:left;}
+.jpagination a:hover.next{ width:29px; height:29px;  background:url(../img/jpagination/raarowh_09.jpg) no-repeat; float:left;}
+.jpagination a.last{ width:29px; height:29px;  background:url(../img/jpagination/rarow2_07.jpg) no-repeat; float:left;}
+.jpagination a:hover.last{ width:29px; height:29px;  background:url(../img/jpagination/raow2h_09.jpg) no-repeat; float:left;}
+
+.jpagination a.disabled.first{ width:29px; height:29px;  background:url(../img/jpagination/larow_08.jpg) no-repeat; float:left;}
+.jpagination a.disabled:hover.first{ width:29px; height:29px;  background:url(../img/jpagination/larowh_08.jpg) no-repeat; float:left;}
+.jpagination a.disabled.previous{ width:29px; height:29px;  background:url(../img/jpagination/larow2_08.jpg) no-repeat; float:left;}
+.jpagination a.disabled:hover.previous{ width:29px; height:29px;  background:url(../img/jpagination/larow2h_08.jpg) no-repeat; float:left;}
+.jpagination a.disabled.next{ width:29px; height:29px;  background:url(../img/jpagination/rarow_08.jpg) no-repeat; float:left;}
+.jpagination a.disabled:hover.next{ width:29px; height:29px;  background:url(../img/jpagination/raarowh_08.jpg) no-repeat; float:left;}
+.jpagination a.disabled.last{ width:29px; height:29px;  background:url(../img/jpagination/rarow2_08.jpg) no-repeat; float:left;}
+.jpagination a.disabled:hover.last{ width:29px; height:29px;  background:url(../img/jpagination/raow2h_08.jpg) no-repeat; float:left;}
+
+.mar_r7{ margin-right:7px;}
+.mar_r10{ margin-right:10px;}
+.pd_r14{ padding-right:14px;}
+.pd_r7{ padding-right:7px;}
+.sertext{ width:100px; height:20px; line-height:20px; float:right; color:#323232;}

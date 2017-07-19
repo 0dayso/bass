@@ -1,0 +1,476 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">
+<script type="text/javascript" src="../../resources/js/default/default.js"></script>
+<script type="text/javascript" src="../../resources/chart/FusionCharts.js"></script>
+<script type="text/javascript" src="../../resources/js/default/tabext.js"></script>
+<script type="text/javascript" src="../../resources/js/default/calendar.js"></script>
+<link rel="stylesheet" type="text/css" href="../../resources/css/default/default.css"/>
+<script>
+var constURL=[];
+constURL["charge"]="/hbapp/kpiportal/action.jsp?appName=ChannelD&date=20100228&method=chartkpiview&area=HB&zbcode=KCT001&valuetype=yeartongbi&detailoffice=false"
+constURL["traffic"]="/hbapp/kpiportal/action.jsp?appName=ChannelD&date=20100228&method=chartkpiview&area=HB&zbcode=K10007&valuetype=yeartongbi&detailoffice=false"
+constURL["increase"]="/hbapp/kpiportal/action.jsp?appName=ChannelD&date=20100228&method=chartkpiview&area=HB&zbcode=KCT006&valuetype=progress&detailoffice=false"
+constURL["alive"]="/hbapp/kpiportal/action.jsp?appName=ChannelD&date=20100228&method=chartkpiview&area=HB&zbcode=KCT007&valuetype=progress&detailoffice=false"
+
+window.onload=function(){
+	
+	renderChart(constURL["charge"]);
+	
+	var icons=[
+		{container:$("piece1"),text:"本地客户新入网"
+		 	,nodes:[
+		 		{text:"三家日新增用户分析",url:"/hbirs/action/dynamicrpt?method=render&sid=1342",title:""}
+		 		,{text:"新增用户存活率分析",url:"/hbbass/prod/prod_rival_cunhuolv.jsp",title:""}
+		 		,{text:"户均预存款分析",url:"/hbbass/report/operationMonitor/yingzainongcun.jsp",title:""}
+		]}
+		,{container:$("piece1"),text:"返乡客户新入网"
+		 	,nodes:[
+		]}
+		
+		,{container:$("piece1"),text:"市场竞争"
+		 	,nodes:[
+		 		{text:"通话用户市场占有率",url:"/hbirs/action/dynamicrpt?method=render&sid=1370",title:""}
+		 		,{text:"净增市场占有率",url:"/hbirs/action/dynamicrpt?method=render&sid=1372",title:""}
+		 		//added 2010.01.19
+		 		,{text:"时长分布及环比增幅",url:"/hbbass/report/operationMonitor/kmh_shichang.jsp",title:""}
+		 		,{text:"时长流向及环比增幅",url:"/hbirs/action/dynamicrpt?method=render&sid=1423",title:""}
+		]}
+		
+		,{container:$("piece2"),text:"精彩假日完全攻略"
+		 	,nodes:[
+		 		{text:"新入网用户业务办理情况",url:"/hbbass/report/market/reportmain_nocheck_day_county.jsp?report_type=HOTFENXI&reportcode=HOT_NEWUER_NEWCARE&reportName=新入网用户业务办理情况",title:""}
+		 		,{text:"老用户办理新业务情况",url:"/hbbass/report/market/reportmain_nocheck_day_county.jsp?report_type=HOTFENXI&reportcode=HOT_OLDUER_NEWCARE&reportName=老用户办理新业务情况",title:""}
+		]}
+		,{container:$("piece2"),text:"商务类业务推广"
+		 	,nodes:[
+		]}
+		
+		,{container:$("piece2"),text:"数据流量新版套餐推广"
+		 	,nodes:[
+		]}
+		
+		,{container:$("piece2"),text:"新年传祝福"
+		 	,nodes:[
+		]}
+		
+		,{container:$("piece3"),text:"长途话务为主"
+		 	,nodes:[
+		 		{text:"亲情连线(定向长途)",url:"/hbapp/app/report/prod/dircToll.htm",title:""}
+		 		,{text:"12593和1元IP包",url:"/hbbass/report/market/reportmain_nocheck_day.jsp?report_type=HOTFENXI&reportcode=HOT-SCYX-12593&reportName=12593和1元IP包",title:""}
+		 		,{text:"动感双城号",url:"/hbbass/report/market/reportmain_nocheck_day.jsp?report_type=HOTFENXI&reportcode=HOT_DG_DOUBLECITY&reportName=动感双城号",title:""}
+		 		,{text:"长途亲情号",url:"/hbbass/report/market/reportmain_nocheck_day.jsp?report_type=HOTFENXI&reportcode=TOLL_QQH_REPORT&reportName=长途亲情号统计报表",title:""}
+		]}   
+		,{container:$("piece3"),text:"长途漫游话务兼顾"
+		 	,nodes:[
+		 		{text:"两城一家",url:"/hbbass/prod/roam.htm",title:""}
+		 		/*,{text:"1+8城市圈",url:"aa",title:""}*/
+		]}
+		,{container:$("piece3"),text:"漫游产品"
+		 	,nodes:[
+		 		{text:"漫游用户数及通话行为分布月跟踪报表",url:"/hbbass/report/market/reportmain_nocheck.jsp?report_type=GSM&reportName=漫游用户数及通话行为分布月跟踪报表",title:""}
+		 		/*,{text:"两城一家的业务包办理量",url:"aa",title:""}*/
+		 		,{text:"漫游来访客户数、出访客户数",url:"/hbbass/report/market/reportmain_nocheck_day.jsp?report_type=GSM_D&reportcode=ROAM_IN_OUT_NBR",title:""}
+		 		,{text:"动感地带假期漫游包",url:"/hbapp/app/report/prod/vacaRoam.htm",title:""}
+		]}
+		
+		,{container:$("piece4"),text:"本地老客户稳定"
+		 	,nodes:[
+		 		{text:"移动公司新春营销用户报表",url:"/hbbass/report/operationMonitor/springMarketing.htm",title:""}
+		 		,{text:"V网集团发展情况",url:"/hbbass/groupcust/20/vnet/groupDevelop.jsp?funccode=5&themecode=集团客户&menuitemid=1317&catacode=V网集团发展情况",title:""}
+		 		,{text:"高校用户捆绑日分析(按高校)",url:"/hbbass/report/market/reportmain_nocheck_day.jsp?report_type=gaoxiao&reportcode=COLLEGE_BIND_DAY",title:""}
+		 		,{text:"高校用户捆绑到期日分析",url:"/hbbass/salesmanager/areasale/collegeBindReport.jsp",title:""}
+		]}
+		,{container:$("piece4"),text:"动感地带预存回馈"
+		 	,nodes:[
+		]}
+		,{container:$("piece4"),text:"全球通88套餐"
+		 	,nodes:[
+		 		/*{url:"aa",title:""}*/
+		]}
+		,{container:$("piece4"),text:"贺岁长话包"
+		 	,nodes:[
+		 		/*{text:"IP一元包",url:"aa",title:""}
+		 		,{text:"亲情连线",url:"aa",title:""}
+		 		,{text:"夜话畅聊",url:"aa",title:""}
+		 		,{text:"长途亲情号",url:"aa",title:""}*/
+		]}
+		,{container:$("piece4"),text:"返乡客户稳定"
+		 	,nodes:[
+		]}
+		
+		
+		,{container:$("piece5"),text:"G3手机节日促销"
+		 	,nodes:[
+		 		{text:"G3手机",url:"/hbapp/app/report/terminal/termQuality.htm?type=5",title:""}
+		]}
+		,{container:$("piece5"),text:"神州行低端心机活动"
+		 	,nodes:[
+		 		{text:"神州行低端",url:"/hbapp/app/report/terminal/termQuality.htm?type=2,3",title:""}
+		 		,{text:"神州行中端",url:"/hbapp/app/report/terminal/termQuality.htm?type=4",title:""}
+		]}
+		,{container:$("piece5"),text:"G3无线座机"
+		 	,nodes:[
+		 		{text:"无线座机",url:"/hbapp/app/report/terminal/termQuality.htm?type=1",title:""}
+		]}
+		
+	];
+	
+	for(var i=0;i<icons.length;i++){
+		createIcon({data:icons,seq:i})
+	}
+	
+	$("date1").innerText="20100228";
+}
+
+function renderChart(url){
+	var ajax = new aihb.Ajax({
+		url : url
+		,callback : function(xmlrequest){
+			var chart = new FusionCharts("../../resources/chart/Charts/FCF_Column3D.swf", "ChartId", "520", "265");
+			chart.setDataXML(encodeURIComponent(xmlrequest.responseText.replace("%25","%")));
+			chart.addParam("wmode","transparent");
+			chart.render("chartdiv");
+		}
+	});
+	ajax.request();
+}
+
+function swichIndicator(obj){
+	
+	renderChart(constURL[obj]);
+	var _objs = document.getElementsByName("vtab");
+	for(var i=0;i<_objs.length;i++){
+		_objs[i].className="verticalTab";
+	}
+	event.srcElement.className="verticalTab1";	
+}
+function createIcon(options){
+	var icon = options.data[options.seq];
+	var _obj=$C("span");
+	_obj.innerText=icon.text;
+	_obj.className="iconText1";
+	_obj.id=options.seq;
+	
+	if(icon.title && icon.title.length>0)
+		_obj.title=icon.title;
+	
+	icon.container.appendChild(_obj);
+	
+	var nodes=icon.nodes;
+	
+	if(nodes.length>=1){
+		_obj.className="iconText";
+		_obj.onmouseover=function(){
+			$("instructionText").innerHTML="";
+			for(var i=0;i<nodes.length;i++){
+				var _div=$C("a");
+				_div.url=nodes[i].url;
+				_div.innerText=(i+1)+"."+nodes[i].text
+				if(nodes[i].title&&nodes[i].title.length>0)
+					_div.title=nodes[i].url;
+				
+				_div.href="javascript:void(0)";
+				
+				_div.style.cursor="hand";
+				
+				_div.onclick=function(){
+					tabAdd({url:this.url,title:this.innerText});
+				}
+				$("instructionText").appendChild(_div);
+				$("instructionText").appendChild($C("br"));
+			}
+			var _hiddenDiv=$("help_div");
+			_hiddenDiv.style.left=event.clientX+document.body.scrollLeft- document.body.clientLeft - 50;
+			_hiddenDiv.style.top =event.clientY+document.body.scrollTop- document.body.clientTop ;
+			_hiddenDiv.style.display="";
+		}
+		
+		/*_obj.onmouseout=function(){
+			var _hiddenDiv=$(this.id.replace("t","h"));
+			_hiddenDiv.style.display="none";
+		}*/
+	}
+}
+</script>
+<style>
+td{
+  FONT-FAMILY: "宋体";
+	FONT-SIZE: 12px;
+}
+.selectarea {
+	position:absolute;
+	width:auto;
+	padding: 10px 16px 10px 10px;
+	font-size:14px;
+	z-index:30;background-color: #FFFFB5;
+	border:1px solid #B3A894;
+}
+.selectarea .close{
+	position:absolute ;
+	top:1px;right : 1px;
+	cursor : hand;
+	font:bold 14px tahoma,arial,helvetica;
+}
+.verticalTab{
+	cursor:hand;
+	/*background-color: #EAF0F4;*/
+	background-color: #FFFFFF;
+	padding: 3px 0px;
+	color:#E20A16;
+}
+.verticalTab1{
+	cursor:hand;
+	/*background-color: #F5F9FC;*/
+	background-color: #E20A16;
+	color:#ffffff;
+	padding:3px 5px;
+}
+.cataText{
+	FONT-SIZE: 14px;
+	font-weight:bold;
+	color: #990000;
+	text-align:left;
+	padding-left:12px;
+}
+body{
+	background:url("bgImg.jpg");
+	margin:8px 10px;
+}
+.iconText{
+	FONT-SIZE: 14px;
+	font-weight:bold;
+	color:#555555;
+	padding:0px 5px;
+}
+.iconText1{
+	FONT-SIZE: 14px;
+	font-weight:bold;
+	color:#BBBBBB;
+	padding:0px 5px;
+}
+.onbanner {
+	position:absolute;z-index:1001;top:1px;
+	height: 76;
+	width: 184;
+	vertical-align:middle;
+	text-align:center;
+	FONT-FAMILY:华文细黑,黑体;
+	FONT-SIZE: 20px;
+	padding-top:12px;
+	color:#ffffff;
+	background:url("1.png")!important;  
+	background:none;  
+	filter:none!important;  
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader (src="1.png");  
+}
+.titlebanner {
+	height: 44;
+	width: 53;
+	text-align:center;
+	vertical-align:middle;
+	padding-top:10px;
+	FONT-SIZE: 14px;
+	font-weight:bold;
+	color:#990000;
+}
+.offbanner {
+	position:absolute;z-index:1001;top:11px;
+	height: 45;
+	width: 122;
+	text-align:center;
+	vertical-align:middle;
+	padding-top:10px;
+	FONT-SIZE: 14px;
+	color:#ffffff;
+	background:url("2.png")!important;  
+	background:none;  
+	filter:none!important;  
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader (src="2.png");  
+}
+.subjectTitle{
+	width:100%;
+	height:28px;
+	FONT-SIZE: 14px;
+	font-weight:bold;
+	color:#990000;
+	padding:5px 0px 0px 10px;
+	background-color: #F9F0F1;
+	border-bottom:1px solid #dddddd;
+	border-top:1px solid #dddddd;
+}
+.protlet{
+	margin:3px;
+	width:100%;
+	background-color:#ffffff;
+	border-left:1px solid #dddddd;
+	border-right:1px solid #dddddd;
+	border-bottom:1px solid #dddddd;
+}
+.yearIcon {
+	position:absolute;z-index:1000;
+	top:12px;right:25px;
+	height: 41;
+	width: 184;
+	background:url("yearIcon.png")!important;  
+	background:none;  
+	filter:none!important;  
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader (src="yearIcon.png");  
+}
+.animalSign {
+	position:absolute;z-index:1000;
+	bottom:0px;right:0px;
+	height: 145;
+	width: 123;
+	background:url("tiger.png")!important;  
+	background:none;  
+	filter:none!important;  
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader (src="tiger.png");  
+}
+</style>
+</head>
+<body>
+<div style="font-size:12px;width:99%;background-color:#ffffff;border:1px solid #B02B2C;">
+	
+	<div style="width:100%;height:45px;">
+		<span class="titlebanner">营销<br>阶段</span>
+		<span class="offbanner" style="left:65px;">前置营销<br>12.1-12.20</span>
+		<span class="offbanner"  style="left:207px;">双节营销<br>12.21-1.10</span>
+		<span class="offbanner" style="left:349px;">本地营销<br>1.11-1.25</span>
+		<span class="offbanner" style="left:491px;">春节旺季营销<br>1.25-2.14</span>
+		<span class="onbanner" style="left:633px;">后期维稳<br>2.14-2.28</span>
+		<!-- 减去62-->
+		<span class="yearIcon"></span>
+	</div>
+
+	
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr valign="top">
+		<td width="530">
+					
+			<div class="protlet">
+				<div class="subjectTitle">营销活动考核</div>
+				<div id="chartdiv" style="margin:0px;padding:0px;"></div>
+				
+				<div style="font-size:14px;padding-left:5px;margin-bottom:3px;">
+					<span id="vtab" name="vtab" class="verticalTab1" onclick="swichIndicator('charge')">收入</span>
+					<span id="vtab" name="vtab" class="verticalTab" onclick="swichIndicator('traffic')">时长</span>
+					<span id="vtab" name="vtab" class="verticalTab" onclick="swichIndicator('increase')">净增</span>
+					<span id="vtab" name="vtab" class="verticalTab" onclick="swichIndicator('alive')">存活</span>
+					<span id="vtab" name="vtab" class="verticalTab" onclick="tabAdd({title:'<b>开门红考核指标</b>',url:'/hbapp/app/sfMarketing/exam.htm'})">详细</span>
+					<span style="font-size:12px;">数据截至日期:<span id="date1"></span></span>
+				</div>
+			</div>
+					
+		</td>
+		
+		<td>
+					
+			<div class="protlet">
+				<div class="subjectTitle">焦点信息</div>
+				<div id="dim_div" style="font-size:14px;padding:5px 8px;height:269px;">
+					<marquee onMouseOut="this.start()" onMouseOver="this.stop()" Direction="up" scrollamount="2" height="259">
+						
+						(2010-1-11)新增户均预存款分析专题(新入网-本地客户新入网-户均预存款分析)敬请关注。
+						<br><br>
+						
+						(2010-1-8)新增亲情连线（包含省际与省内）与动感地带假期漫游包专题敬请关注。
+						<br><br>
+					
+						(2009-12-31)G3终端相关专题已开通敬请关注.。
+						<br><br>
+						
+							(2009-12-29)“开门红”支撑联系人  颜海涛  027-50751093 
+						<br><br>
+						
+
+(2009-12-29)“开门红”营销活动考核指标说明
+<br>(1)、开门红运营收入完成进度
+<br>  考核口径： 以2010年各地市的运营收入的25％(即第一季度应完成量)为基数，，
+    若 2009年12月1日至活动当日产生的累计收入达到以上基数，则完成目标为100%；由于目前各地市2010年经营目   标暂未下达，现以2009年第一季度的实际完成值为基数，后期将修正 ；
+  <br>考核标准： 该考核项占50分；收入进度每超过0.1pp，在40分基础分上加0.5分；每低0.1pp，在基础分上减0.5分。 
+<br>(2)、累计计费时长同比增幅
+  <br>考核口径：以“开门红”活动结束时，即2010年2月份全月的计费时长较2009年2月的同比增幅
+  <br>考核标准： 该考核项占20分；全省以25%为基数；增幅每增长0.1pp，在16分基础分上加0.1分；每减少0.1pp，在基础分上减0.1分。
+<br>(3)、开门红净增通话市场占有率
+  <br>考核口径：以2009年11月31日三家的通话用户数为拍照基数，截至当日，比较三家的净增情况；以2月28日移动用户的占有率为考核取数；
+  <br>考核标准：该考核项为15分；基本目标65%，挑战目标75% ；全省以75%为基数，各地市2010年2月累计净增市场占有率每高于全省平均0.1pp，在12分基础分上加0.1分；每低于全省平均0.1pp，在基础分上减0.1分
+<br>(4)、开门红存活率
+  <br>考核口径：2009年12月－2010年2月期间放号的整体存活率，即(2010年2月底的到达用户数－2009年11月底的到达用户数)/(2009年12月－2010年2月期间，三个月的累计新发展用户数)
+  <br>考核标准：该考核项15分；以2010年2月全省存活率为基数，各地市2010年2月存活率每高于全省平均0.1pp，在12分基础分上加0.1分；每低于全省平均0.1pp，在基础分上减0.1分。
+	<br><br>
+						(2009-12-28)经分系统“开门红专区”正式上线，主要将围绕“运营收入、计费时长同比增幅、净增通话用户市场占有率、放号存活率”四个核心指标展开比较分析，同时对还将从双节营销、黏性业务发展、终端销售、竞争对手动态等方面对开门红市场开展阶段性营销支撑，敬请关注！
+						<br><br>	
+						</marquee>
+				</div>
+				<div style="text-align:right;padding-right:8px;padding-bottom:3px;"><img src="/hb-bass-navigation/hbapp/resources/image/default/notice.gif"></div>
+			</div>
+					
+		</td>
+	</tr>
+			
+	</table>
+	
+	<div class="protlet">
+	<div class="subjectTitle">
+		营销活动跟踪
+		<span style="padding-left:50px;FONT-SIZE: 12px;font-weight:normal;">营销重点：返乡新入网客户，新业务，本地+漫游产品推广</span>
+	</div>
+	
+
+	
+			
+		<table width="100%" cellspacing="0" cellpadding="0">
+			<tr bgcolor="#F6BD0E" height="50px;">
+				<td width="100px" class="cataText"><img src="plus.gif">新入网</td>
+				<td width="1px" rowspan="9" style="background-color: #B02B2C;"></td>
+				<td id="piece1">
+				</td>
+			</tr>
+			<tr valign="top">
+				<td colspan="3" width="1px" style="background-color: #BBBBBB;"></td>
+			</tr>
+			
+			<tr bgcolor="#F5FFD4" height="50px;">
+				<td class="cataText"><img src="plus.gif">新业务</td>
+				<td id="piece2"></td>
+			</tr>
+			
+			<tr valign="top">
+				<td colspan="3" width="1px" style="background-color: #BBBBBB;"></td>
+			</tr>
+			<tr bgcolor="#EBF8E8" height="50px;">
+				<td class="cataText"><img src="plus.gif">新话务</td>
+				<td id="piece3"></td>
+			</tr>
+			<tr valign="top">
+				<td colspan="3" width="1px" style="background-color: #BBBBBB;"></td>
+			</tr>
+			
+			<tr bgcolor="#AFD8F8" height="50px;">
+				<td class="cataText"><img src="plus.gif">老客户稳定</td>
+				<td id="piece4"></td>
+			</tr>
+			<tr valign="top">
+				<td colspan="3" width="1px" style="background-color: #BBBBBB;"></td>
+			</tr>
+			<tr bgcolor="#F5E1F2" height="50px;">
+				<td class="cataText"><img src="plus.gif">终端</td>
+				<td id="piece5"></td>
+			</tr>
+			
+		</table>
+	</div>
+	
+	<div class="animalSign"></div>
+	
+	<div id="help_div" class="selectarea" style="display: none;">
+	<div class="close"><div src='../../resources/image/default/tab-close.gif' onclick="{this.parentNode.parentNode.style.display='none';}">×</div></div>
+	<div id="instructionText">帮助口径</div>
+	</div>
+</div>
+</body>
+</html>

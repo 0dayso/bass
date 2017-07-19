@@ -1,0 +1,129 @@
+<html xmlns:ai>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<title>详表1 - 增量拓展 </title>
+	<script type="text/javascript" src="../../../resources/js/default/default.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../../../resources/js/datepicker/WdatePicker.js"></script>
+	<link rel="stylesheet" type="text/css" href="../../../resources/css/default/default.css" />
+	<script type="text/javascript">
+/**/var _header=[
+	{"name":["统计周期","#rspan","#rspan"],"dataIndex":"month"}
+	,{"name":["1、中小集团客户深度拓展情况","1.1 中小集团客户到达情况","中小集团客户到达数（家）"],"dataIndex":"zbcode1","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+	,{"name":["#cspan","#cspan","环比增长率（%)"],"dataIndex":"zbcode2","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number"}
+	,{"name":["#cspan","#cspan","同比增长率（%）"],"dataIndex":"zbcode3","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number"}
+	//,{"name":["#cspan","#cspan","排名"],"dataIndex":"zbcode4","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+	,{"name":["#cspan","#cspan","整体集团客户到达数（家）"],"dataIndex":"zbcode5","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+	,{"name":["#cspan","#cspan","中小集团客户占整体集团客户比重（%）"],"dataIndex":"zbcode6","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number"}
+	//,{"name":["#cspan","#cspan","排名"],"dataIndex":"zbcode7","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+	
+	,{"name":["#cspan","1.2 中小集团客户新增情况","当月新增中小集团客户数（家）"],"dataIndex":"zbcode8","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+	,{"name":["#cspan","#cspan","环比增长率（%)"],"dataIndex":"zbcode9","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number"}
+	,{"name":["#cspan","#cspan","同比增长率（%）"],"dataIndex":"zbcode10","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number"}
+	,{"name":["#cspan","#cspan","占当月整体集团新增客户比重（%）"],"dataIndex":"zbcode11","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number"}
+	//,{"name":["#cspan","#cspan","排名"],"dataIndex":"zbcode12","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+	,{"name":["#cspan","#cspan","本年累计新增中小集团客户数（家）"],"dataIndex":"zbcode13","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+	,{"name":["#cspan","#cspan","累计同比增长率（%）"],"dataIndex":"zbcode14","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number"}
+	//,{"name":["#cspan","#cspan","排名"],"dataIndex":"zbcode15","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+	,{"name":["#cspan","#cspan","占本年累计整体集团新增客户比重（%）"],"dataIndex":"zbcode16","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number"}
+	//,{"name":["#cspan","#cspan","排名"],"dataIndex":"zbcode17","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+	
+	,{"name":["2、中小集团成员深度拓展情况","2.1 中小集团成员到达情况","中小集团成员到达数（人）"],"dataIndex":"zbcode18","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+	,{"name":["#cspan","#cspan","环比增长率（%)"],"dataIndex":"zbcode19","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number"}
+	
+	,{"name":["#cspan","#cspan","较去年底增长率（%）"],"dataIndex":"zbcode20","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number"}
+	//,{"name":["#cspan","#cspan","排名"],"dataIndex":"zbcode21","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+	,{"name":["#cspan","#cspan","整体集团成员到达数（人）"],"dataIndex":"zbcode22","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+	,{"name":["#cspan","#cspan","中小集团成员占整体集团成员比重（%）"],"dataIndex":"zbcode23","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number"}
+	//,{"name":["#cspan","#cspan","排名"],"dataIndex":"zbcode24","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+	,{"name":["#cspan","#cspan","中小集团平均成员数（人）"],"dataIndex":"zbcode25","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+	
+	//,{"name":["#cspan","#cspan","排名"],"dataIndex":"zbcode26","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+	,{"name":["#cspan","#cspan","整体集团平均成员数（人）"],"dataIndex":"zbcode27","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+	,{"name":["#cspan","#cspan","中小集团与整体集团平均成员数比较（+/-）"],"dataIndex":"zbcode28","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number"}
+	
+	,{"name":["#cspan","2.2 中小集团成员新增情况","当月新增中小集团成员数（人）"],"dataIndex":"zbcode29","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+	,{"name":["#cspan","#cspan","环比增长率（%)"],"dataIndex":"zbcode30","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number"}
+	,{"name":["#cspan","#cspan","占当月整体集团新增成员比重（%）"],"dataIndex":"zbcode31","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number"}
+	//,{"name":["#cspan","#cspan","排名"],"dataIndex":"zbcode32","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+	,{"name":["#cspan","#cspan","本年累计新增中小集团成员数（人）"],"dataIndex":"zbcode33","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+	,{"name":["#cspan","#cspan","占本年累计整体集团新增成员比重（%）"],"dataIndex":"zbcode34","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number"}
+	//,{"name":["#cspan","#cspan","排名"],"dataIndex":"zbcode35","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+	
+	,{"name":["3、中小集团整体创收情况","3.1 中小集团当月整体收入情况","当月中小集团整体收入（元）"],"dataIndex":"zbcode36","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+	,{"name":["#cspan","#cspan","环比增长率（%)"],"dataIndex":"zbcode37","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number"}
+	,{"name":["#cspan","#cspan","整体集团整体收入（元）"],"dataIndex":"zbcode38","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+	,{"name":["#cspan","#cspan","环比增长率（%)"],"dataIndex":"zbcode39","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number"}
+	,{"name":["#cspan","#cspan","所有业务收入（元）"],"dataIndex":"zbcode40","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+	,{"name":["#cspan","#cspan","环比增长率（%)"],"dataIndex":"zbcode41","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number"}
+	,{"name":["#cspan","#cspan","中小集团整体收入占整体集团整体收入的比重（%）"],"dataIndex":"zbcode42","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number"}
+	//,{"name":["#cspan","#cspan","排名"],"dataIndex":"zbcode43","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+	,{"name":["#cspan","#cspan","中小集团整体收入占所有收入的比重（%）"],"dataIndex":"zbcode44","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number"}
+	//,{"name":["#cspan","#cspan","排名"],"dataIndex":"zbcode45","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+	
+];
+
+function genSQL(){
+	var orderPiece = " order by MONTH desc";
+	var sql="select MONTH ,"
+		+" ZBCODE1, ZBCODE2, ZBCODE3, ZBCODE4, ZBCODE5, ZBCODE6, ZBCODE7, "
+		+" ZBCODE8, ZBCODE9, ZBCODE10, ZBCODE11, ZBCODE12, ZBCODE13, ZBCODE14, "
+		+" ZBCODE15, ZBCODE16, ZBCODE17, ZBCODE18, ZBCODE19, ZBCODE20, ZBCODE21," 
+		+" ZBCODE22, ZBCODE23, ZBCODE24, ZBCODE25, ZBCODE26, ZBCODE27, ZBCODE28, "
+		+" ZBCODE29, ZBCODE30, ZBCODE31, ZBCODE32, ZBCODE33, ZBCODE34, ZBCODE35, "
+		+" ZBCODE36, ZBCODE37, ZBCODE38, ZBCODE39, ZBCODE40, ZBCODE41, ZBCODE42, "
+		+" ZBCODE43, ZBCODE44, ZBCODE45"
+		+" from NMK.sg_report_tz"
+		//+" where MONTH= "+$("date").value
+		+ orderPiece
+		+" with ur";
+	
+	return sql;
+}
+function query(){
+	
+	var grid = new aihb.SimpleGrid({
+		header:_header
+		,sql: genSQL()
+		,pageSize : 31
+		,callback:function(){
+			aihb.Util.watermark();
+		}
+	});
+	grid.run();
+}
+
+function down(){
+	aihb.AjaxHelper.down({
+		sql : genSQL()
+		,header : _header
+	});
+}
+
+window.onload=function(){
+	aihb.Util.loadmask();
+	aihb.Util.watermark();
+}
+	</script>
+</head>
+<body>
+<form method="post" action="">
+<table align="center" width="99%">
+		<tr class="dim_row_submit">
+			<td align="right" bgcolor="">
+				<input type="button" class="form_button" value="查询" onClick="query()">&nbsp;
+				<input type="button" class="form_button" value="下载" onclick="down()">&nbsp;
+			</td>
+		</tr>
+	</table>
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'show_div')" title="点击隐藏"><img flag='1' src="../../../resources/image/default/ns-expand.gif"></img>&nbsp;数据展现区域：</td>
+		<td></td>
+	</tr></table></legend>
+	<div id="grid" style="display:none;"></div>
+</fieldset>
+</div><br>
+</form>
+</body>
+</html>

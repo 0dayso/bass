@@ -1,0 +1,87 @@
+<html>
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" type="text/css"
+			href="../resources/css/ext-all.css" />
+
+		<!-- GC -->
+		<!-- LIBS -->
+		<script type="text/javascript" src="../ext-base.js"></script>
+		<!-- ENDLIBS -->
+
+		<script type="text/javascript" src="../ext-all.js"></script>
+		
+	<script type="text/javascript">
+ 		Ext.onReady(function(){
+ 			Ext.Ajax.request({
+ 				url: 'memdb1.jsp',
+		   	callback: function(options, success, response ){render(response.responseText)}
+ 			});
+		function render(data)
+ 		{
+ 			var list = new Array();
+			lines = data.split("@|");
+			for (i =0;i < lines.length; i++)
+			{
+				line = lines[i].split("@,");
+				var inner = new Array();
+				for (j =0;j < line.length; j++)
+				{
+					inner.push(line[j]);
+				}
+				list.push(inner);
+			}
+ 			
+ 			var header = document.getElementById("header");
+ 			header.innerHTML = '<div id="header" class="x-grid3-header"><table border="0" cellpadding="0" cellspacing="0"><tr class="x-grid3-hd-row">';
+ 			for(i = 0; i < list[0].length ; i++)
+ 			{
+ 				header.innerHTML +='<td class="x-grid3-hd-inner x-grid3-hd-company">'+list[0][i]+'</td>';
+ 			}
+ 			header.innerHTML +='</tr></table></div>';
+ 			alert(header.innerHTML);
+ 			for(i = 1; i < list.length ; i++)
+ 			{
+ 				
+ 			}
+ 		}
+ 		
+ 		
+ 		
+ 		
+ 		
+	});
+ 		
+	</script>
+	
+	</head>
+	<body>
+	<div id="header" class="x-grid3-header">
+		 <!--  <table style="width: 579px;" border="0" cellpadding="0" cellspacing="0">
+			<tr class="x-grid3-hd-row">
+				<td class="x-grid3-hd-inner x-grid3-hd-company">Company</td>
+				<td class="x-grid3-hd-inner x-grid3-hd-company">Company</td>
+				<td class="x-grid3-hd-inner x-grid3-hd-company">Company</td>	
+			</tr>
+		</table>-->
+	</div>
+	
+	
+	<div id="ext-gen26" class="x-grid3-scroller" >
+		<div id="ext-gen27" class="x-grid3-body">
+			<div class="x-grid3-row" style="width: 579px;" ><table cellspacing="0" cellpadding="0" border="0" class="x-grid3-row-table"><tr><td tabindex="0" style="width: 267px;" class="x-grid3-cell-inner">3m Co</td><td tabindex="0" style="width: 73px;" class="x-grid3-cell-inner">$71.72</td><td tabindex="0" style="width: 73px;" class="x-grid3-cell-inner">0.02</td><td tabindex="0" style="width: 73px;" class="x-grid3-cell-inner">0.03%</td><td  style="width: 83px;" class="x-grid3-cell-inner">09/01/2008</td></tr></table></div>
+			<div class="x-grid3-row x-grid3-row-alt" style="width: 579px;" ><table cellspacing="0" cellpadding="0" border="0"  class="x-grid3-row-table"><tr><td  style="width: 267px;" class="x-grid3-cell-inner">3m Co</td><td  style="width: 73px;" class="x-grid3-cell-inner">$71.72</td><td  style="width: 73px;" class="x-grid3-cell-inner">0.02</td><td  style="width: 73px;" class="x-grid3-cell-inner">0.03%</td><td  style="width: 83px;" class="x-grid3-cell-inner">09/01/2008</td></tr></table></div>
+		</div>
+	</div>
+	
+	<input type="text" id="time1" readonly/>
+	
+	<div id="time"></div>
+	
+<!-- 	<div id="ext-gen82" class="x-form-field-wrap" style="width: 140px;">
+<input id="ext-comp-1008" class="x-form-text x-form-field" type="text" name="lastChange" autocomplete="off" size="10" style="width: 115px;"/>
+<img id="ext-gen83" class="x-form-trigger x-form-date-trigger" src="../resources/images/default/s.gif"/>
+</div>-->
+	
+	</body>
+</html>

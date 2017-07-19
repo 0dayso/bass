@@ -1,0 +1,19 @@
+@charset "utf-8"; 
+.RadioContent{
+	@include setPadding(row);
+	@include setPadding(top,10px);
+	text-align: center;
+	.radioBoxOption{
+		cursor:pointer;
+		.radio-text{
+			font-size: $font-s;
+			text-decoration: none;
+		}
+		.icon-circle-blank{
+			color: $bgColor-green;
+		}
+		.icon-circle{
+			color: $bgColor-green;
+		}
+	}
+}

@@ -1,0 +1,60 @@
+BODY {
+	FONT-SIZE: 9pt; MARGIN: 0px; LINE-HEIGHT: 16pt; FONT-FAMILY: "宋体"
+}
+TD {
+	FONT-SIZE: 9pt
+}
+A {
+	FONT-SIZE: 9pt; COLOR: #000000; TEXT-DECORATION: none
+}
+A:hover {
+	FONT-SIZE: 9pt; COLOR: #cc0000; TEXT-DECORATION: none
+}
+A:visited {
+	FONT-SIZE: 9pt; COLOR: #003366; TEXT-DECORATION: none
+}
+A.top {
+	FONT-SIZE: 9pt; COLOR: #006699; TEXT-DECORATION: none
+}
+A.top:hover {
+	FONT-SIZE: 9pt; COLOR: #006699; TEXT-DECORATION: underline
+}
+.text {
+	FONT-SIZE: 9pt; COLOR: #000000; TEXT-INDENT: 18pt; LINE-HEIGHT: 16pt; FONT-FAMILY: "宋体"
+}
+.list {
+	FONT-SIZE: 9pt; COLOR: #000000; LINE-HEIGHT: 16pt; FONT-FAMILY: "宋体"
+}
+.sz {
+	FONT-SIZE: 6pt; FONT-FAMILY: "Arial", "Helvetica", "sans-serif"
+}
+.bt {
+	FONT-WEIGHT: normal; FONT-SIZE: 12pt; FONT-FAMILY: "宋体"
+}
+.wlist {
+	FONT-SIZE: 9pt; COLOR: #ffffff; LINE-HEIGHT: 16pt; FONT-FAMILY: "宋体"
+}
+A.wlist:hover {
+	FONT-SIZE: 9pt; COLOR: #ffff00; TEXT-DECORATION: none
+}
+A.wlist:visited {
+	FONT-SIZE: 9pt; COLOR: #ffcc00; TEXT-DECORATION: none
+}
+.en-h {
+	FONT-SIZE: 9pt; COLOR: #c8c4c8; LINE-HEIGHT: 16pt; FONT-FAMILY: "Arial", "Helvetica", "sans-serif"
+}
+.en-9-b {
+	FONT-WEIGHT: bold; FONT-SIZE: 9pt; LINE-HEIGHT: 16pt; FONT-FAMILY: "Arial", "Helvetica", "sans-serif"
+}
+.en-9 {
+	FONT-SIZE: 9pt; LINE-HEIGHT: 16pt; FONT-FAMILY: "Arial", "Helvetica", "sans-serif"
+}
+.blist {
+	FONT-SIZE: 9pt; COLOR: #0130a4; LINE-HEIGHT: 16pt; FONT-FAMILY: "宋体"
+}
+A.blist:hover {
+	FONT-SIZE: 9pt; COLOR: #ff9933; TEXT-DECORATION: none
+}
+A.blist:visited {
+	FONT-SIZE: 9pt; COLOR: #ff9933; TEXT-DECORATION: none
+}

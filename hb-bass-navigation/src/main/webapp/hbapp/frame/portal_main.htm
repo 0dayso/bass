@@ -1,0 +1,270 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html xmlns:ai>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>湖北移动NGBASS门户</title>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Cache-Control" content="no-cache"/>
+
+<script type="text/javascript" src="/hb-bass-navigation/hbapp/kpiportal/localres/kpi.js"></script>
+
+<script type="text/javascript" src="../resources/chart/FusionCharts.js"></script>
+<script type="text/javascript" src="../resources/js/default/default.js"></script>
+<script type="text/javascript" src="../resources/js/default/tabext.js"></script>
+<script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+<script type="text/javascript" src="../resources/js/jquery/ui/jquery.ui.js"></script>
+<script type="text/javascript" src="portlet.js"></script>
+<link type="text/css" href="../resources/js/jquery/themes/cupertino/jquery.ui.css" rel="stylesheet" />
+<link type="text/css" href="../resources/css/default/default.css" rel="stylesheet" />
+<style type="text/css">
+.column { float: left; padding-bottom: 0.5em; width:100%; height:100%}
+.portlet-main { margin: 0em 0.3em 0 0;}
+.portlet-header {border:0px !important; margin: 0; padding-bottom: 4px; padding-left: 0.2em;cursor: move; }
+.portlet-header .ui-icon { float: right; }
+.portlet-content { padding: 0.1em 0.2em; height:95%;}
+.ui-sortable-placeholder { border: 2px dotted #cccccc; visibility: visible !important; height: 150px !important; }
+.ui-sortable-placeholder * { visibility: hidden; }
+.portal-max { z-index:30000; position:absolute; top:0; left:0; margin: 0 1em 0 0; width:99%; height:99%;}
+.portlet-content-max{height:99%!important;}
+
+
+.headerImg{vertical-align:bottom; padding-right: 5px; width: 22px;height: 22px;background:url('../resources/image/frame/rounds.png') no-repeat;}
+.headerText{padding-left:8px;position:relative;top:2px;font-family:华文细黑;font-size: 16px;color:#366388/*#810A87*/;}
+
+.ui-tabs  { border:0px!important;}
+.tabPiece{margin: 0px !important;padding: 1px 0 0 0 !important;background-color: #fff!important;}
+/**/
+li a, li a:link, li a:visited {color:#366388;/*color: #2779aa;color: #000!important;font-weight: normal !important;font-family: 宋体!important;*/ text-decoration: none;}
+.ui-accordion .ui-state-default {border:0px;background-image:none;background-color:#fff;}
+/*.ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited { color: #000!important;font-weight: normal !important; font-family: 宋体!important;}*/
+
+td{line-height: 24px !important;}
+
+#play img {border:0px;}
+#play {width:450px;height:170px;overflow:hidden;}
+/*#play_bg {position:absolute;background-color:#999;margin-top:145px;height:20px;width:450px;filter: Alpha(Opacity=30);opacity:0.3;z-index:1000}*/
+#play_text {position:absolute;height:20px;width:60px;z-index:1002}
+#play_text ul {position:absolute;list-style-type:none;top:153px;left:-40px;height:12px;width:200px;filter: Alpha(Opacity=80);opacity:0.8;}
+#play_text ul li {width:14px;line-height:14px;float:left;background-color:#999;display:block;color:#FFF;text-align:center;margin:1px;cursor:pointer;font-family:"Calabri";font-size: 11px;}
+#play_list a{display:block;width:450px;height:191px;position:absolute;overflow:hidden}
+
+</style>
+<script type="text/javascript">
+jQuery.noConflict();
+
+window.onload=function() {
+	jQuery(".column").sortable({
+		connectWith: '.column'
+	});
+
+	jQuery(".portlet-main").addClass("ui-widget ui-widget-content ui-helper-clearfix ui-corner-all")
+		.find(".portlet-header")
+			.addClass("ui-widget-header ui-corner-all")
+			.prepend('<span class="ui-icon ui-icon-plusthick"></span>')
+			.prepend('<span class="ui-icon ui-icon-minusthick"></span>')
+			.end()
+		.find(".portlet-content");
+
+	/*$(".portlet-header .ui-icon").click(function() {
+		$(this).toggleClass("ui-icon-minusthick").toggleClass("ui-icon-plusthick");
+		$(this).parents(".portlet:first").find(".portlet-content").toggle();
+	});
+	*/
+	
+	jQuery(".portlet-header .ui-icon-minusthick").click(function() {
+		jQuery(this).parents(".portlet-main:first").find(".portlet-content").toggle("blind", {}, 500);
+	});
+	
+	function max(){
+		jQuery(".portlet-main").toggle();
+		jQuery(this).parents(".portlet-main:first").toggleClass("portal-max ui-widget ui-widget-content ui-helper-clearfix ui-corner-all")
+			.toggle("fold", {}, 500);
+			//.fadeIn();
+		jQuery(this).parents(".portlet-main:first").find(".portlet-content > div").toggleClass("portlet-content-max");
+	}
+	
+	jQuery(".portlet-header").dblclick(max);
+	
+	jQuery(".portlet-header .ui-icon-plusthick").click(max);
+	
+	jQuery(".column").disableSelection();
+	
+	blackboard();
+	
+	newonline();
+	
+	mycustome();
+	
+	pv();
+	
+	navigation();
+	
+	weekVisit();
+	
+	
+	/*$("addTab").onclick=function(){
+		parent.addTab();
+	}*/
+};
+function _s(){
+	tabAdd({url:"/hbapp/bir/search.htm?kw="+document.forms[0].kw.value,title:'经分搜索'});
+}
+</script>
+</head>
+<body>
+<div style="padding-left: 5px;">
+<table width="99%">
+<tr valign="top" >
+<td width="50%" >
+
+<div class="column" >
+	<div class="portlet-main">
+		<div class="portlet-header"><span style="background-position: 0 0;" class="headerImg"></span><span class="headerText">经分动态</span></div>
+		<div class="portlet-content" style="position:relative;height:170px;overflow:auto;">
+		<!-- <a href="#" id="addTab">测试</a>  -->
+		<div id="blackboard" ></div></div>
+	</div>
+</div>
+
+</td>
+<td>
+<div class="column" >
+	<div class="portlet-main">
+		<div class="portlet-header"><span style="background-position: 0 -208px;" class="headerImg"></span><span class="headerText">经分导航</span></div>
+		<div class="portlet-content" style="position:relative;height:170px;overflow:hidden;background-color: #fff;"><div id="hot" >
+		
+	
+<div id="play">	
+	<div id="play_bg"></div>
+	<div id="play_text">
+		<ul>
+			<li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li><li>7</li><li>8</li>
+		</ul>
+	</div>
+
+	<div id="play_list">
+	<a href="#" onclick="parent.swichTab(parent.$('item_966'))">
+		<img width="450px" height="160px" src="../resources/image/frame/1.gif" title="" alt="&lt;b&gt;运营监控管理&lt;/b&gt;运营监控管理" />
+	</a>
+	<a href="#" onclick="parent.swichTab(parent.$('item_6'))">
+		<img width="450px" height="160px" src="../resources/image/frame/2.gif" title="" alt="&lt;b&gt;运营监控管理&lt;/b&gt;运营监控管理" />
+	</a>
+
+	<a href="#" onclick="parent.swichTab(parent.$('item_3'))">
+		<img width="450px" height="160px" src="../resources/image/frame/3.gif" title="" alt="&lt;b&gt;运营监控管理&lt;/b&gt;运营监控管理" />
+	</a>
+
+	<a href="#" onclick="parent.swichTab(parent.$('item_4'))">
+		<img width="450px" height="160px" src="../resources/image/frame/4.gif" title="" alt="&lt;b&gt;运营监控管理&lt;/b&gt;运营监控管理" />
+	</a>
+
+	<a href="#" onclick="parent.swichTab(parent.$('item_5'))">
+		<img width="450px" height="160px" src="../resources/image/frame/5.gif" title="" alt="&lt;b&gt;运营监控管理&lt;/b&gt;运营监控管理" />
+	</a>
+
+	<a href="#" onclick="parent.swichTab(parent.$('item_749'))">
+		<img width="450px" height="160px" src="../resources/image/frame/6.gif" title="" alt="&lt;b&gt;运营监控管理&lt;/b&gt;运营监控管理" />
+	</a>
+
+	<a href="#" onclick="parent.swichTab(parent.$('item_7'))">
+		<img width="450px" height="160px" src="../resources/image/frame/7.gif" title="" alt="&lt;b&gt;运营监控管理&lt;/b&gt;运营监控管理" />
+	</a>
+
+	<a href="#" onclick="parent.swichTab(parent.$('item_2'))">
+		<img width="450px" height="160px" src="../resources/image/frame/8.gif" title="" alt="&lt;b&gt;运营监控管理&lt;/b&gt;运营监控管理" />
+	</a>
+	</div>
+</div>
+		
+		
+	
+		</div></div>
+	</div>
+</div>
+
+</td>
+</tr>
+</table>
+<table width="99%">
+<tr valign="top">
+<td width="33%">
+<div class="column" >
+	<div class="portlet-main">
+		<div class="portlet-header"><span style="background-position: 0 -52px;" class="headerImg"></span><span class="headerText">我的定制</span></div>
+		<div class="portlet-content" style="position:relative;height:378px;overflow-y:auto;">
+		<div id="mycustome">
+			<ul style="border: 0px !important; background: url(1.jpg) !important;">
+				<li><a href="#mykpi" style="padding-top:4px;padding-bottom:4px;cursor: hand;" onclick="parent.swichTab(parent.$('item_967'))">定制KPI</a></li>
+				<li><a href="#myrpt" style="padding-top:4px;padding-bottom:4px;cursor: hand;" onclick="parent.swichTab(parent.$('item_1125'))">自定义报表</a></li>
+				<!-- <li style="height: 22px;"><a href="#mycross">信息穿越</a></li>  -->
+			</ul>
+			<div id="mykpi" class="tabPiece" style="border:1px solid #fff;"></div>
+			<div id="myrpt" class="tabPiece"></div>
+			<!-- <div id="mycross" class="tabPiece" style="position:relative;height:290px;overflow-y:auto;"></div>  -->
+		</div>
+		</div>
+	</div>
+</div>
+
+</td>
+<td width="33%">
+
+<div class="column">
+	<div class="portlet-main">
+		<div class="portlet-header"><span style="background-position: 0 -260px;" class="headerImg"></span><span class="headerText">经分搜索</span></div>
+		<div class="portlet-content" style="position:relative;height:38px;overflow:hidden;">
+		<DIV>
+			<FORM name="f" action="">				
+				<div style="padding-top:10px;">
+					<INPUT type="text" name="kw" id="kw" style="width:250px;line-height:16px;padding:3px;margin:0px;font:16px arial" maxlength="100">
+					<span style="padding-right:20px;"><INPUT type="button" value="经分搜索" class="btn" onclick="_s()"></span>
+				</div>
+			</FORM>
+		</DIV>
+		</div>
+	</div>
+</div>
+
+<div class="column">
+	<div class="portlet-main">
+		<div class="portlet-header" ><span style="background-position: 0 -156px;" class="headerImg"></span><span class="headerText">最新上线</span></div>
+		<div class="portlet-content" style="position:relative;height:120px;overflow:hidden;"><div id="newonline" class="tabPiece" ></div></div>
+	</div>
+</div>
+
+<div class="column">
+	<div class="portlet-main" >
+		<div class="portlet-header"><span style="background-position: 0 -260px;" class="headerImg"></span><span class="headerText">本周热点关注</span></div>
+		<div class="portlet-content" style="position:relative;height:152px;overflow:hidden;"><div id="week"></div></div>
+	</div>
+</div>
+</td>
+<td width="34%">
+
+<div class="column" >
+	<div class="portlet-main">
+		<div class="portlet-header"><span style="background-position: 0 -104px;" class="headerImg"></span><span class="headerText">点击排行情况</span></div>
+		<div class="portlet-content" style="position:relative;height:378px;overflow-y:auto;">
+		
+		<div id="pv">
+			<ul style="border: 0px !important; background: url(1.jpg) !important;" >
+				<li><a href="#pv_city" style="padding: 4px 5px;cursor: hand;" onclick="tabAdd({url:'/mvc/report/3009',title:'访问日志'})">地市排行</a></li>
+				<li><a href="#pv_county" style="padding: 4px 5px;cursor: hand;" onclick="tabAdd({url:'/mvc/report/3009',title:'访问日志'})">县域排行</a></li>
+				<li><a href="#pv_user" style="padding: 4px 5px;cursor: hand;" onclick="tabAdd({url:'/mvc/report/3009',title:'访问日志'})">个人排行</a></li>
+				<li><a href="#pv_cata" style="padding: 4px 5px;cursor: hand;" onclick="tabAdd({url:'/mvc/report/3009',title:'访问日志'})">应用排行</a></li>
+			</ul>
+			<div id="pv_city" class="tabPiece"></div>
+			<div id="pv_county" class="tabPiece" ></div>
+			<div id="pv_user" class="tabPiece"></div>
+			<div id="pv_cata" class="tabPiece"></div>
+		</div>
+		
+		</div>
+	</div>
+</div>	
+</td>
+</tr>
+</table>
+
+</body>
+</html>

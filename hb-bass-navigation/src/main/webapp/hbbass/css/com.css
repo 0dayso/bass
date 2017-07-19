@@ -1,0 +1,232 @@
+BODY {
+	FONT-FAMILY: "宋体"; 
+	FONT-SIZE: 12px; 
+	background-image:url(/hb-bass-navigation/hbbass/images/bg.gif);
+}
+
+/* 连接样式表 */
+A:link {
+	COLOR: #000066; TEXT-DECORATION: none
+}
+A:visited {
+	COLOR: #333333; TEXT-DECORATION: none
+}
+A:active {
+	COLOR: #666666; TEXT-DECORATION: none
+}
+A:hover {
+	COLOR: #ff6600; TEXT-DECORATION: underline
+}
+A.line {
+	COLOR: #000066; FONT: bold 12px "宋体"; TEXT-DECORATION: underline
+}
+A.line:link {
+	COLOR: #666; FONT: bold 12px 宋体; TEXT-DECORATION: underline
+}
+A.line:visited {
+	COLOR: #333333; FONT: bold 12px "宋体"; TEXT-DECORATION: underline
+}
+A.line:hover {
+	COLOR: #f60; FONT: bold 12px 宋体; TEXT-DECORATION: none
+}
+
+/* 要求有下划线的链接样式 */
+a.a2            { color: #0000FF; text-decoration: none }
+
+a:link.a2       { text-decoration: underline; color: #0000FF; font-family: 宋体 }
+
+a:visited.a2    { text-decoration: underline; color: #0000FF; font-family: 宋体 }
+
+a:hover.a2      { text-decoration: underline; color: #FF0000 }
+
+a:active.a2     { text-decoration: underline; color: #FF0000 }
+
+/* 分页文件的样式表 如 common_page.jsp*/
+.page {
+	FONT-FAMILY: "宋体"; 
+	FONT-SIZE: 12px; 
+	LINE-HEIGHT: 20px; 
+	TABLE-LAYOUT: fixed; 
+	WORD-BREAK: break-all
+}
+
+td
+{
+  FONT-FAMILY: "宋体"; 
+	FONT-SIZE: 12px; 
+	LINE-HEIGHT: 20px; 
+	TABLE-LAYOUT: fixed; 
+	WORD-BREAK: break-all
+}
+/* 查询条件  */
+.query_t {
+	font-family: "宋体";
+	font-size: 12px;
+	line-height: 20px;
+	font-weight: normal;
+	font-variant: normal;
+	color: #000000;
+	background-color: #B6CEE7;
+}
+
+/* 查询条件值  */
+.query_v {
+	font-family: "宋体";
+	font-size: 12px;
+	line-height: 20px;
+	color: #000000;
+	background-color: #CCDDEE;
+}
+
+/* 查询结果的表头 */
+.result_t {
+	color: #000000;
+	background-color:#B6CEEF;
+	font-family: "宋体";
+	font-size: 13px;
+	line-height: 20px;
+	font-weight: normal;
+	font-variant: normal;
+	text-align: center;
+}
+
+/* 查询结果输出行样式1  用于隔行效果*/
+.result_v_1 {
+	font-family: "宋体";
+	font-size: 12px;
+	line-height: 20px;
+	font-weight: normal;
+	font-variant: normal;
+	color: #000000;
+	background-color: #DDFFFF;
+}
+
+/* 查询结果输出行样式2 用于隔行效果*/
+.result_v_2 {
+	font-family: "宋体";
+	font-size: 12px;
+	line-height: 20px;
+	font-weight: normal;
+	font-variant: normal;
+	color: #000000;
+	background-color: #EAFEFF;
+}
+
+/* 查询结果输出行样式3  选中该行时 高亮显示 */
+.result_v_3 {
+	font-family: "宋体";
+	font-size: 12px;
+	line-height: 20px;
+	font-weight: normal;
+	font-variant: normal;
+	color: #000000;
+	background-color: #ACFFFF;
+}
+
+/* 查询结果输出行样式4  无效行 不做数据输出的 */
+.result_v_4 {
+	font-family: "宋体";
+	font-size: 12px;
+	line-height: 20px;
+	font-weight: normal;
+	font-variant: normal;
+	color: #000000;
+	background-color: #cccccc;
+}
+
+/* 查询时显示的进度条 在文件中必须都定义为queryload*/
+#queryload {
+	position:absolute;
+	width:200px;
+	height:41px;
+	z-index:2;
+	left: 318px;
+	top: 97px;
+	background-color: #00FFCC;
+}
+
+/* 旧系统中报表有图片在前台显示，为了保持图片背景和表格背景一致 保留此样式*/
+.tabletitle {
+	color: #FFFFFF;
+	background-color:#669999;
+	font-family: "宋体";
+	font-size: 12px;
+	line-height: 20px;
+	font-weight: normal;
+	font-variant: normal;
+	text-align: center;
+}
+
+/* 信息反馈的样式表 */
+.info_1
+{
+	font-family: "宋体";
+	font-size: 12px;
+	line-height: 20px;
+	font-weight: normal;
+	font-variant: normal;
+	color: #000000;
+	background-color:#BBEAFF; 
+}
+.info_2
+{
+	font-family: "宋体";
+	font-size: 12px;
+	line-height: 20px;
+	font-weight: normal;
+	font-variant: normal;
+	color: #000000;
+	background-color:#EAFEFF; 
+}
+.info_content
+{
+	font-family: "宋体";
+	font-size: 12px;
+	line-height: 20px;
+	font-weight: normal;
+	font-variant: normal;
+	color: #000000;
+	background-color: #F4F4F4;
+}
+
+/* 客户端分页时当前页input的样式 */
+.textpage
+{
+font-size:9pt;color:#FF0000;
+border-top:0px solid #000000;
+border-bottom:0px solid #000000;
+border-left:0px solid #000000;
+border-right:0px solid #000000;
+}
+
+/* 模仿营销管理系统的样式 */
+.dBoxHeaderLayout {
+height: 21px;
+padding-left: 3px;
+background: transparent url('/hbbass/images/dBox-header-left.gif') no-repeat top left;
+cursor: pointer;
+}
+.dBoxHeaderArea {
+height: 21px;
+overflow: hidden;
+background: transparent url('/hbbass/images/dBox-header-right.gif') no-repeat top right;
+}
+.dBoxFooterArea td,
+.dBoxHeaderArea td {
+padding: 0 5px;
+white-space: nowrap;
+}
+.dBoxHeaderArea .main {
+font-family: Tahoma, Arial, Helvetica, sans-serif;
+font-size: 11px;
+color: #fff;
+font-weight: bold;
+}
+.dBoxHeaderArea .misc {
+}
+
+.bule {
+	font-family: "verdana","宋体";
+	font-size: 10pt;	
+	color: #2650A6;
+}

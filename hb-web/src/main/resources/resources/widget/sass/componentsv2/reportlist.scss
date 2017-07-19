@@ -1,0 +1,55 @@
+.ReportList{
+	font-size:$font-s0;
+	@include setPadding(row,3px);
+	&:hover{
+		cursor:pointer;
+	}
+	.ReportList-img{
+		width:15%;
+		.ReportList-image{
+			background: url("image/reportlist/excel.jpg") no-repeat;
+    		line-height: 90px;
+    		height: 90px;
+		}
+	}
+	.ReportList-context{
+		width: 65%;
+		.ReportList-text{
+			div{
+				@include setPadding(null,3px);
+			}
+			.ReportList-text-head{
+				.ReportList-text-title{
+					font-size:$font-s;    
+					font-weight: bold;
+					color:$color-reporttable;
+				}
+				.ReportList-text-views{
+					color:$color-gray;
+				}
+				.ReportList-text-createdate{
+					color:$color-gray;
+				}
+			}
+			.ReportList-text-desc{
+			}
+			.ReportList-text-keywords{
+				color:$color-gray;
+			}
+		}
+	}
+	.ReportList-favorite{
+		vertical-align: middle;
+		text-align:center;
+		.icon-star{
+			color:$color-gray-light;
+		}
+		.ReportList-favorite-add{
+			&:hover{
+				.icon-star{
+					color:yellow;
+				}
+			}
+		}
+	}
+}

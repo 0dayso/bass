@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html xmlns:ai>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=8" /> <!-- 如果非IE8也支持，这里加上会建议IE8用IE8渲染 -->
+	<title>客户统一视图</title>
+	<!-- 
+	目前问题： 
+		1. type2的地市县市问题,打算重新写一套来完成，这样的不好是代码没有复用
+		2. 只要查中文，count就有问题
+		3. in 的业务逻辑问题，在本应用中表现为多个checkbox并存时，sql不是查全部符合条件的，而是查符合任何一个条件的,这是问题也不是问题
+		要深入分析的话，checbox一共有两种类型，一种是每个都是不同字段，这样选中多个代表查符合选中所有条件的,
+				另一种是同一个字段不同值，这样选中多个 代表查符合其中任意一个条件的,即in
+		4. 地市县市不能级联
+	 -->
+
+	<script type="text/javascript" src="../../resources/js/default/default.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../../resources/js/default/util.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../../resources/js/default/tabext.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../../resources/js/datepicker/WdatePicker.js"></script>
+	<link rel="stylesheet" type="text/css" href="../../resources/css/default/default.css" />
+	<!-- dev
+	<link type="text/css" href="../../resources/js/jqueryui1.8.2/css/redmond/jquery-ui.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../resources/js/jqueryui1.8.2/js/jquery-1.4.2.min.js"></script>
+	<script type="text/javascript" src="../../resources/js/jqueryui1.8.2/js/jquery-ui-1.8.2.custom.min.js"></script>
+	-->
+	<!-- product -->
+	<link type="text/css" href="../../resources/js/jquery/themes/redmond/jquery.ui.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../resources/js/jquery/jquery.js"></script>
+	<script type="text/javascript" src="../../resources/js/jquery/ui/jquery.ui.js"></script>
+	
+	<link rel="stylesheet" type="text/css" href="../../resources/js/tooltip/style.css" />
+	<style type="text/css">
+	/* 顺序很重要，这样才能覆盖 */
+	body {
+		font-size: 66.5%;
+	}
+	</style>
+	<script type="text/javascript" src="../../resources/js/tooltip/script.js"></script>
+	<script type="text/javascript">
+	/* tool functions */
+	function fuzz(value) {
+		var _res=String(value);
+		if(/[0-9]{11}/.test(value)){//手机号码
+			_res= value.substring(0,3)+"****"+value.substring(7,11);
+		}else if(/\W{2,4}/.test(value)){
+			_res= value.substring(0,1)+"**";
+		}
+		return _res;
+	}
+	$.noConflict();
+	//一个全局的，写死的，包含一切的对象 , 三大块内容: 表头，查询条件,查询sql
+	var aibiRpt;
+	var _params = aihb.Util.paramsObj();
+	var _type = _params.type ;//统一视图类型, 1. 核心客户; 2. 全网客户; 3. 集团成员   //本来可以不是全区变量的
+	~function(){
+		
+		var commonHeader = [
+					{"name":"地区","dataIndex":"area_id","cellStyle":"grid_row_cell_text"}
+					,{"name":"用户姓名","dataIndex":"cust_name","cellStyle":"grid_row_cell","cellFunc":aihb.Util.fuzzFormat} //认为有必要，自己加的
+					,{
+						"name":"手机号码","dataIndex":"acc_nbr","cellStyle":"grid_row_cell","cellFunc": function(value,options) {
+							
+							var _link = $C("a");
+							var mbuserId = options.record.mbuser_id;
+							var queryMonth = $("date1").value;
+							value = aihb.Util.fuzzFormat(value);
+							_link.appendChild($CT(value));
+							//_link.href="javascript:tabAdd({id : '" + mbuserId + "', url : '/hbapp/app/customer/custIndex.html?mbuser_id=" + mbuserId + "&queryMonth=" + queryMonth + "', title : '详细信息:" + options.record.cust_name + "'})"
+							//_link.href="javascript:tabAdd({id : '" + mbuserId + "', url : 'custbase.html?type=" + _type + "&mbuser_id=" + mbuserId + "&queryMonth=" + queryMonth + "', title : '详细信息:" + options.record.cust_name + "'})"
+							_link.href="javascript:tabAdd({id : '" + mbuserId + "', url : '/hbapp/app/customer/custIndex.html?mbuser_id=" + mbuserId + "&queryMonth=" + queryMonth + "', title : '详细信息:" + fuzz(options.record.cust_name) + "'})"
+							return _link;
+						}
+						
+					}
+					//,{"name":"客户经理分配","dataIndex":"staff_tid","cellStyle":"grid_row_cell_text"} // 罗讯说重要，所以加上
+					,{"name":"用户类型","dataIndex":"c_user_type","cellStyle":"grid_row_cell_text", "cellFunc" : "trimShow(8)"}//虽然重要，但是核心客户中应该用下面两个代替,//database中没有c_user_type这个字段   c_代表聚合生成  
+					//柯夫说不加,{"name":"省内拍照中高端标识","dataIndex":"sn_snap_id","cellStyle":"grid_row_cell_text"} //按原来的来
+					//柯夫说不加,{"name":"集团中高端客户标识","dataIndex":"ass_snap_id","cellStyle":"grid_row_cell_text"} //按原来的来
+					,{"name":"稳定标签","dataIndex":"c_stb_label","cellStyle":"grid_row_cell_text"}
+					,{"name":"本月消费(元)","dataIndex":"bill_charge","cellStyle":"grid_row_cell_number"} //就是bill_charge 本月账单
+					,{"name":"客户经理姓名","dataIndex":"staff_name","cellStyle":"grid_row_cell"}
+					,{"name":"品牌","dataIndex":"brand_id","cellStyle":"grid_row_cell"}
+					,{"name":"状态","dataIndex":"state_tid","cellStyle":"grid_row_cell"} //没加停机
+					,{"name":"集团名称","dataIndex":"groupname","cellStyle":"grid_row_cell_text", "cellFunc" : "trimShow(10)"}
+		];
+		
+		if("1" === _type) {
+			aibiRpt = {
+				header : commonHeader,
+				sqlGenerater : function() {
+					var sqls = {};
+					var pt = "a",st="b";
+					var sql= " select b.name as area_id" + 
+					",MBUSER_ID" + //只查询，但是不显示，因为header中没有
+					",ACC_NBR,CUST_NAME, " + 
+					//" case when substr(SEX,1,1)='1' then '男' when substr(SEX,1,1)='0' then '女' else '不详' end as SEX," +
+					"case when STAFF_TID = -1 then '系统自动分配' when STAFF_TID=0 then '之前已分配' when STAFF_TID=1 then '本月新分配' else '未知' end as STAFF_TID" + 
+						",(case when ass_snap_id=1 then '集团中高端 ' else ''  end) || (case when mcust_lid = '1' then '金卡 'when mcust_lid = '2' then '银卡 ' when mcust_lid = '8' then '钻卡 ' else '' end) || (case when sn_snap_id=2 then '省内中高端 ' when sn_snap_id=1 then '有价值 ' else '' end ) || (case when a.groupcode is not null  then '集团成员 ' else '' end) as c_user_type" + 
+					", case when bill_charge is null then 0 else bill_charge/1000 end as bill_charge"	 +
+					",STAFF_NAME as STAFF_NAME " + 
+					", case when a.BRAND_ID in (1,2,3) then '全球通' when a.BRAND_ID in (4,5,6,7) then '神州行' when a.BRAND_ID=8 then '动感地带' else '不详' end as BRAND_ID " + 
+					",(case when term_stb_label=1 then '终端稳定 ' else '' end) || (case when charge_stb_label=1 then '话费稳定 ' else '' end)||(case when VPMN_stb_label=1 then 'V网稳定 ' else '' end) || (case when busi_stb_label=1 then '业务稳定 ' else '' end) || (case when prepay_stb_label=1 then '付费方式稳定 ' else '' end) as c_stb_label" + 
+					",case when substr(a.STATE_TID,1,3)='US1' then '在用' when substr(a.STATE_TID,1,3)='US2' then '离网' when substr(a.STATE_TID,1,3)='US3' then '停机' else '未知' end as state_tid " +
+					",groupname" + 
+					//" from NMK.CTT_USER_BUREAU_" + $("date1").value + " a left join nwh.ENT_SUBMEMBER_" + $("date1").value + " b on a.mbuser_id=b.serv_id where 1=1 ";
+					" from NMK.CTT_USER_BUREAU_" + $("date1").value + " a left join (select id,name,area_code from NWH.BUREAU_TREE where level=1 ) b on substr(a.area_id,1,3) = b.id where 1=1 ";
+					
+					var countSql = " select count(*) as count from NMK.CTT_USER_BUREAU_" + $("date1").value + " a left join (select id,name,area_code from NWH.BUREAU_TREE where level=1 ) b on substr(a.area_id,1,3) = b.id where 1=1 ";
+					
+					var condition = bi.genSQLConditions();
+					//alert(condition);
+					sqls.querySql = sql + condition;
+					sqls.countSql = countSql + condition; //只有当SimpleGrid时才使用
+					return sqls;
+				},
+				queryOptions : {
+					renderTo : "dim_div"
+					,catalogs : [{
+						cataInfo : {catalogName : "基本属性"}
+						,cataData :  {
+							data : [
+								{	label : "时间"
+									,elements : "<input align='right' type='text' id='date1' name='date1' onfocus='WdatePicker({readOnly:true,dateFmt:\"yyyyMM\"})' class='Wdate'/>"
+								},
+								{	label : "地市"
+									,elements : biutil.genArea("city",_params.cityId,"areacombo(1)","condi=\" and @st.area_code='@val'\"")						
+								},
+								{	label : "县市"
+									,elements : "<select name='county_bureau' onchange='areacombo(2)' condi=\" and @pt.AREA_ID='@val'\"  class='form_select'><option value=''>全部</option></select>"
+								},
+								{	label : "营销中心"
+									,elements : "<select name='marketing_center' onchange='areacombo(3)' condi=\" and @pt.zone_code='@val'\"  class='form_select'><option value=''>全部</option></select>"
+								},
+								{	label : "用户类型"
+									,elements : [
+										"<input type='hidden' condi=\" and @pt.MCUST_LID in ('@val')@erange=samelevel@etype=checkbox@erule=checked&name=='MCUST_LID'\" value='#'/>"
+										,"VIP(钻卡)"
+										,"<input type='checkbox' name='MCUST_LID' value='8' />"
+										//,{type : "checkbox", name:"MCUST_LID",value : "8"} // 这个name完全是给上面的表达式做筛选用
+										,"VIP(金卡)"
+										,"<input type='checkbox' name='MCUST_LID' value='1' />"
+										//,{type : "checkbox", name:"MCUST_LID",value : "1"}
+										,"VIP(银卡)"
+										,"<input type='checkbox' name='MCUST_LID' value='2' />"
+										//,{type : "checkbox", name:"MCUST_LID",value : "2"}
+										,"集团中高端"
+										,{type : "checkbox", condi : " and @pt.ASS_SNAP_ID=1",value : "@"}
+										,"<input type='hidden' condi=\" and @pt.SN_SNAP_ID in (@val)@erange=samelevel@etype=checkbox@erule=checked&name=='SN_SNAP_ID'\" value='#' />"
+										,"省内中高端"
+										,"<input type='checkbox' name='SN_SNAP_ID' value='2' />"
+										//,{type : "checkbox", name : "SN_SNAP_ID", value : "2"}
+										,"有价值"
+										,"<input type='checkbox' name='SN_SNAP_ID' value='1' />"
+										//,{type : "checkbox", name : "SN_SNAP_ID", value : "1"}
+										//暂不支持,"关键人"
+										//,{type : "checkbox", value : "4"}
+										,"集团成员"
+										,{type : "checkbox", condi : " and @pt.groupcode is not null", value : "#"}
+									]
+								},
+								{	label : "稳定标签"
+									,elements : [
+										"终端稳定"
+										,{type : "checkbox",condi :  " and @pt.term_stb_label=1 ", value : "#"}
+										,"话费稳定"
+										,{type : "checkbox",condi : " and @pt.charge_stb_label=1 ", value : "#"}
+										,"V网稳定"
+										,{type : "checkbox",condi :  " and @pt.VPMN_stb_label=1 ", value : "#"}
+										,"业务稳定"
+										,{type : "checkbox",condi :  " and @pt.busi_stb_label=1 ", value : "#"}
+										,"付费方式"
+										,{type : "checkbox",condi :  " and @pt.prepay_stb_label=1 ", value : "#"}
+									]
+								},
+								{
+									label : "网龄(年)"
+									,elements : [
+										"在&nbsp;"
+										,function(){ var ipt = $C("input");ipt.elType = "form"; ipt.style.width="30px";ipt.condi=" and @pt.net_age=@val" ;return ipt}()
+										,"&nbsp;到&nbsp;"
+										,"<input type='text' style='width : 30px' condi=' and @pt.net_age<=@val'/>" 
+										,"&nbsp;之间"
+									]
+								},
+								{	label : "本月消费(元)"
+									,elements : [
+										"在&nbsp;"
+										,function(){ var ipt = $C("input");ipt.elType = "form"; ipt.style.width="30px";ipt.condi=" and @pt.bill_charge/1000>=@val" ;return ipt}() // 匿名函数太他妈的强了!
+										,"&nbsp;到&nbsp;"
+										,"<input type='text' style='width : 30px' condi=' and @pt.bill_charge/1000<=@val'/>" //前面已经验证,这种方式也没问题
+										,"&nbsp;之间"
+									]
+								},
+								{	label : "时长(分)"
+									,elements : [
+											"在&nbsp;"
+											,"<input type='text' style='width : 30px' condi=' and @pt.call_dura/60 >=@val'/>" 
+											,"&nbsp;到&nbsp;"
+											,"<input type='text' style='width : 30px' condi=' and @pt.call_dura/60 <=@val'/>" 
+											,"&nbsp;之间"
+									]
+								},
+								{	label : "客户经理"
+									,elements : {type : "text", condi : " and @pt.STAFF_NAME like'%@val%'"}
+								},
+								{	label : "品牌"
+									,elements : function(){var slct = $C("select");slct.elType="form";slct.condi=" and @pt.brand_id in (@val)"; slct.add(new Option("全部",""),undefined); slct.add(new Option("全球通","1,2,3"),undefined);slct.add(new Option("神州行","4,5,6,7"),undefined); slct.add(new Option("动感地带","8"),undefined);return slct  }()
+								},
+								{	label : "状态"
+									,elements : function(){var slct = $C("select");slct.elType="form";slct.condi=" and substr(@pt.STATE_TID,1,3)='@val'"; slct.add(new Option("全部",""),undefined); slct.add(new Option("在用","US1"),undefined);slct.add(new Option("离网","US2"),undefined);slct.add(new Option("停机","US3"),undefined);return slct  }()
+								},
+								{	label : "用户姓名"
+									,elements : {type: "text", condi : " and @pt.cust_name like '%@val%'"}
+								},
+								{	label : "手机号码"
+									,elements : {type: "text", condi : " and @pt.ACC_NBR like '%@val%'"}
+								}
+							]
+							/*
+							,tableProps : {
+								align : 'center'
+								,width : '99%'
+								,className : 'grid-tab-blue'
+								,cellspacing : '1'
+								,cellpadding : '0'
+								,border : '0'
+							}
+							*/
+						}
+						},
+						{
+						cataInfo : {catalogName : "集团属性"}
+						,cataData :  {
+							data : [
+								{	label : "集团编码"
+									,elements : {type:"text", condi : " and @pt.groupcode like '%@val%'"}
+								},
+								/* 关键人先屏蔽
+								{	label : "关键人类型"
+									,elements : [
+										"类型1"
+										,{type : "checkbox"}
+										,"类型2"
+										,{type : "checkbox"}
+										,"类型3"
+										,{type : "checkbox"}
+									]
+												
+								},
+								*/
+								{	label : "集团名称"
+									,elements : {type:"text",condi : " and @pt.groupname like '%@val%'"}
+								}
+								
+							]
+						}
+						}
+					]
+				}
+			}
+		} else if("2" === _type) {
+			aibiRpt = {
+				header : commonHeader,
+				sqlGenerater : function() {
+					var sqls = {};
+					var pt = "a",st="b";
+					var sql= " select (select area_name from mk.bt_area where new_code=a.AREA_ID) as area_id" +  // 貌似只分到了地市
+					",a.MBUSER_ID" + //只查询，但是不显示，因为header中没有
+					",a.ACC_NBR,a.CUST_NAME " + 
+						",(case when a.mcust_lid = '1' then '金卡 'when a.mcust_lid = '2' then '银卡 ' when a.mcust_lid = '8' then '钻卡 ' else '' end) || (case when b.sn_snap_id=2 then '省内中高端 ' when b.sn_snap_id=1 then '有价值 ' else '' end ) || (case when b.ass_snap_id=1 then '集团中高端 ' else ''  end) || (case when a.group_flag='1'  then '集团成员 ' else '' end) as c_user_type" + 
+					", case when a.bill_charge is null then 0 else a.bill_charge/1000 end as bill_charge"	 +
+					",case when b.STAFF_NAME is null then '未知' else b.STAFF_NAME end as STAFF_NAME " + //主表貌似没有
+					", case when a.BRAND_ID in (1,2,3) then '全球通' when a.BRAND_ID in (4,5,6,7) then '神州行' when a.BRAND_ID=8 then '动感地带' else '不详' end as BRAND_ID " + 
+					",(case when b.charge_stb_label=1 then '话费稳定 ' else '' end)||(case when b.term_stb_label=1 then '终端稳定 ' else '' end) || (case when b.VPMN_stb_label=1 then 'V网稳定 ' else '' end) || (case when b.busi_stb_label=1 then '业务稳定 ' else '' end) || (case when b.prepay_stb_label=1 then '付费方式稳定 ' else '' end) as c_stb_label" + 
+					",case when substr(a.STATE_TID,1,3)='US1' then '在用' when substr(a.STATE_TID,1,3)='US2' then '离网' when substr(a.STATE_TID,1,3)='US3' then '停机' else '未知' end as state_tid " +
+					",b.groupname" + 
+					" from NMK.MBUSER_UNIFY_VIEW_" + $("date1").value + " a left join nmk.CTT_USER_BUREAU_" + $("date1").value + " b on a.mbuser_id=b.mbuser_id where 1=1 ";
+					
+					var countSql = " select count(*) as count from NMK.MBUSER_UNIFY_VIEW_" + $("date1").value + " a where 1=1 ";
+					
+					var condition = bi.genSQLConditions();
+					//alert(condition);
+					sqls.querySql = sql + condition;
+					sqls.countSql = countSql + condition; //只有当SimpleGrid时才使用
+					return sqls;
+				},
+				queryOptions : {
+					renderTo : "dim_div"
+					,catalogs : [{
+						cataInfo : {catalogName : "基本属性"}
+						,cataData :  {
+							data : [
+								{	label : "时间"
+									,elements : "<input align='right' type='text' id='date1' name='date1' onfocus='WdatePicker({readOnly:true,dateFmt:\"yyyyMM\"})' class='Wdate'/>"
+								},
+								
+								{	label : "地市"
+									,elements : biutil.genArea("city",_params.cityId,"areacombo(1)","condi=\" and substr(@pt.channel_code,1,5)='@val'\"")		
+								},
+								{	label : "县市"
+									,elements : "<select name='county' condi=\" and substr(@pt.channel_code,1,8)='@val'\" class='form_select'><option value=''>全部</option></select>"
+								},
+								
+								/*  old one
+								{	label : "地市"
+									,elements : "<select name='city' condi=\" and @pt.AREA_ID=@val\" class='form_select' onchange='areacombo(1)'>" + 
+												"<option value='' selected='selected'>全省</option><option value='270'>武汉</option><option value='714'>黄石</option><option value='711'>鄂州</option><option value='717'>宜昌</option><option value='718'>恩施</option><option value='719'>十堰</option><option value='710'>襄樊</option><option value='728'>江汉</option><option value='715'>咸宁</option><option value='716'>荆州</option><option value='724'>荆门</option><option value='722'>随州</option><option value='713'>黄冈</option><option value='712'>孝感</option>"
+												
+								},
+								{	label : "县市"
+									,elements : "<select name='county' class='form_select'><option value=''>全部</option></select>" // 删除 condi=\" and @pt.AREA_ID='@val'\"  ,选了不起作用
+								},
+								*/
+								{	label : "用户类型"
+									,elements : [
+										"<input type='hidden' condi=\" and @pt.MCUST_LID in ('@val')@erange=samelevel@etype=checkbox@erule=checked&name=='MCUST_LID'\" value='#'/>"
+										,"VIP(钻卡)"
+										//,{type : "checkbox", name:"MCUST_LID",value : "8"} // 只能是html字符串，原因：IE 5,6,7不能支持动态createElement之后设置name等
+										,"<input type='checkbox' name:'MCUST_LID' value='8'>"
+										,"VIP(金卡)"
+										,"<input type='checkbox' name:'MCUST_LID' value='1'>"
+										,"VIP(银卡)"
+										,"<input type='checkbox' name:'MCUST_LID' value='2'>"
+										,"集团中高端"
+										,{type : "checkbox", condi : " and @st.ASS_SNAP_ID=1s",value : "@"}
+										,"<input type='hidden' condi=\" and @st.SN_SNAP_ID in (@val)@erange=samelevel@etype=checkbox@erule=checked&name=='SN_SNAP_ID'\" value='#' />"
+										,"省内中高端"
+										,"<input type='checkbox' name:'SN_SNAP_ID' value='2'>"
+										,"有价值"
+										,"<input type='checkbox' name:'SN_SNAP_ID' value='1'>"
+										//暂不支持,"关键人"
+										//,{type : "checkbox", value : "4"}
+										,"集团成员"
+										,{type : "checkbox", condi : " and @pt.group_flag='1'", value : "#"}
+									]
+								},
+								{	label : "稳定标签"
+									,elements : [
+										"话费稳定"
+										,{type : "checkbox",condi : " and @st.charge_stb_label=1 ", value : "#"}
+										,"终端稳定"
+										,{type : "checkbox",condi :  " and @st.term_stb_label=1 ", value : "#"}
+										,"V网稳定"
+										,{type : "checkbox",condi :  " and @st.VPMN_stb_label=1 ", value : "#"}
+										,"业务稳定"
+										,{type : "checkbox",condi :  " and @st.busi_stb_label=1 ", value : "#"}
+										,"付费方式"
+										,{type : "checkbox",condi :  " and @st.prepay_stb_label=1 ", value : "#"}
+									]
+								},
+								{	label : "本月消费(元)"
+									,elements : [
+										"在&nbsp;"
+										,function(){ var ipt = $C("input");ipt.elType = "form"; ipt.style.width="30px";ipt.condi=" and @pt.bill_charge/1000>=@val" ;return ipt}() // 匿名函数太他妈的强了!
+										,"&nbsp;到&nbsp;"
+										,"<input type='text' style='width : 30px' condi=' and @pt.bill_charge/1000<=@val'/>" //前面已经验证,这种方式也没问题
+										,"&nbsp;之间"
+									]
+								},
+								{	label : "时长(分)"
+									,elements : [
+											"在&nbsp;"
+											,"<input type='text' style='width : 30px' condi=' and @pt.SUM_CALL_DURA/60 >=@val'/>" 
+											,"&nbsp;到&nbsp;"
+											,"<input type='text' style='width : 30px' condi=' and @pt.SUM_CALL_DURA/60 <=@val'/>" 
+											,"&nbsp;之间"
+									]
+								},
+								{	label : "客户经理"
+									,elements : {type : "text", condi : " and @st.STAFF_NAME like'%@val%'"}
+								},
+								{	label : "品牌"
+									,elements : function(){var slct = $C("select");slct.elType="form";slct.condi=" and @pt.brand_id in (@val)"; slct.add(new Option("全部",""),undefined); slct.add(new Option("全球通","1,2,3"),undefined);slct.add(new Option("神州行","4,5,6,7"),undefined); slct.add(new Option("动感地带","8"),undefined);return slct  }()
+								},
+								{	label : "状态"
+									,elements : function(){var slct = $C("select");slct.elType="form";slct.condi=" and substr(@pt.STATE_TID,1,3)='@val'"; slct.add(new Option("全部",""),undefined); slct.add(new Option("在用","US1"),undefined);slct.add(new Option("离网","US2"),undefined);slct.add(new Option("停机","US3"),undefined);return slct  }()
+								},
+								{	label : "用户姓名"
+									,elements : {type: "text", condi : " and @pt.cust_name like '%@val%'"}
+								},
+								{	label : "手机号码"
+									,elements : {type: "text", condi : " and @pt.ACC_NBR like '%@val%'"}
+								}
+							]
+						}
+						},
+						{
+						cataInfo : {catalogName : "集团属性"}
+						,cataData :  {
+							data : [
+								{	label : "集团编码"
+									,elements : {type:"text", condi : " and @pt.GROUP_ID  like '%@val%'"}
+								},
+								/* 关键人先屏蔽
+								{	label : "关键人类型"
+									,elements : [
+										"类型1"
+										,{type : "checkbox"}
+										,"类型2"
+										,{type : "checkbox"}
+										,"类型3"
+										,{type : "checkbox"}
+									]
+												
+								},
+								*/
+								{	label : "集团名称"
+									,elements : {type:"text",condi : " and @st.groupname like '%@val%'"} //因为主表没有集团名称
+								}
+								
+							]
+						}
+						}
+					]
+				}
+			}
+			
+		} else if("3" === _type) {
+		aibiRpt = {
+				header : commonHeader,
+				sqlGenerater : function() {
+					var sqls = {};
+					//集团成员表中尽然没有人名：cust_name,集团名称:groupname之类的东西 ,不过a.ROLETYPE 就是集团名称
+					var sql= " select (select area_name from mk.bt_area where new_code=a.AREA_ID) as area_id" +  // 貌似只分到了地市
+					",a.SERV_ID as mbuser_id" + //只查询，但是不显示，因为header中没有
+					",a.SERVNUMBER as acc_nbr,a.ROLETYPE as cust_name " + //人名用role_type
+						",(case when b.mcust_lid = '1' then '金卡 'when b.mcust_lid = '2' then '银卡 ' when b.mcust_lid = '8' then '钻卡 ' else '' end) || (case when b.sn_snap_id=2 then '省内中高端 ' when b.sn_snap_id=1 then '有价值 ' else '' end ) || (case when b.ass_snap_id=1 then '集团中高端 ' else ''  end) || '集团成员 ' as c_user_type" + 
+					", case when b.bill_charge is null then 0 else b.bill_charge/1000 end as bill_charge"	 +
+					",case when b.STAFF_NAME is null then '未知' else b.STAFF_NAME end as STAFF_NAME " + //主表貌似没有
+					", case when a.BRAND_ID in (1,2,3) then '全球通' when a.BRAND_ID in (4,5,6,7) then '神州行' when a.BRAND_ID=8 then '动感地带' else '不详' end as BRAND_ID " + 
+					",(case when b.charge_stb_label=1 then '话费稳定 ' else '' end)||(case when b.term_stb_label=1 then '终端稳定 ' else '' end) || (case when b.VPMN_stb_label=1 then 'V网稳定 ' else '' end) || (case when b.busi_stb_label=1 then '业务稳定 ' else '' end) || (case when b.prepay_stb_label=1 then '付费方式稳定 ' else '' end) as c_stb_label" + 
+					",case when substr(a.STATE_TID,1,3)='US1' then '在用' when substr(a.STATE_TID,1,3)='US2' then '离网' when substr(a.STATE_TID,1,3)='US3' then '停机' else '未知' end as state_tid " +
+					",a.ROLETYPE as groupname "+ 
+					" from nwh.ENT_SUBMEMBER_" + $("date1").value + " a left join nmk.CTT_USER_BUREAU_" + $("date1").value + " b on a.SERV_ID=b.mbuser_id where 1=1 ";
+					
+					var countSql = " select count(*) as count from nwh.ENT_SUBMEMBER_" + $("date1").value + " a left join nmk.CTT_USER_BUREAU_" + $("date1").value + " b on a.SERV_ID=b.mbuser_id where 1=1 ";
+					
+					var condition = bi.genSQLConditions();
+					//alert(condition);
+					sqls.querySql = sql + condition;
+					sqls.countSql = countSql + condition; //只有当SimpleGrid时才使用
+					return sqls;
+				},
+				queryOptions : {
+					renderTo : "dim_div"
+					,catalogs : [{
+						cataInfo : {catalogName : "基本属性"}
+						,cataData :  {
+							data : [
+								{	label : "时间"
+									,elements : "<input align='right' type='text' id='date1' name='date1' onfocus='WdatePicker({readOnly:true,dateFmt:\"yyyyMM\"})' class='Wdate'/>"
+								},
+								{	label : "地市"
+									,elements : biutil.genArea("city",_params.cityId,"areacombo(1)","condi=\" and substr(@pt.channel_code,1,5)='@val' \"")						
+								},
+								{	label : "县市"
+									,elements : "<select name='county' condi=\" and substr(@pt.channel_code,1,8)='@val'\" class='form_select'><option value=''>全部</option></select>"
+								},
+								{	label : "用户类型"
+									,elements : [
+										"<input type='hidden' condi=\" and @st.MCUST_LID in ('@val')@erange=samelevel@etype=checkbox@erule=checked&name=='MCUST_LID'\" value='#'/>"
+										,"VIP(钻卡)"
+										,"<input type='checkbox' name='MCUST_LID' value='8' />"
+										//,{type : "checkbox", name:"MCUST_LID",value : "8"} // 这个name完全是给上面的表达式做筛选用
+										,"VIP(金卡)"
+										,"<input type='checkbox' name='MCUST_LID' value='1' />"
+										//,{type : "checkbox", name:"MCUST_LID",value : "1"}
+										,"VIP(银卡)"
+										,"<input type='checkbox' name='MCUST_LID' value='2' />"
+										//,{type : "checkbox", name:"MCUST_LID",value : "2"}
+										,"集团中高端"
+										,{type : "checkbox", condi : " and @st.ASS_SNAP_ID=1",value : "@"}
+										,"<input type='hidden' condi=\" and @st.SN_SNAP_ID in (@val)@erange=samelevel@etype=checkbox@erule=checked&name=='SN_SNAP_ID'\" value='#' />"
+										,"省内中高端"
+										,"<input type='checkbox' name='SN_SNAP_ID' value='2' />"
+										//,{type : "checkbox", name : "SN_SNAP_ID", value : "2"}
+										,"有价值"
+										,"<input type='checkbox' name='SN_SNAP_ID' value='1' />"
+										//,{type : "checkbox", name : "SN_SNAP_ID", value : "1"}
+										//暂不支持,"关键人"
+										//,{type : "checkbox", value : "4"}
+										,"集团成员"
+										,"<input type='checkbox' checked='checked' disabled value='' />"
+										//,{type : "checkbox", checked : true, disabled : true, value : ""}
+									]
+								},
+								{	label : "稳定标签"
+									,elements : [
+										"话费稳定"
+										,{type : "checkbox",condi : " and @st.charge_stb_label=1 ", value : "#"}
+										,"终端稳定"
+										,{type : "checkbox",condi :  " and @st.term_stb_label=1 ", value : "#"}
+										,"V网稳定"
+										,{type : "checkbox",condi :  " and @st.VPMN_stb_label=1 ", value : "#"}
+										,"业务稳定"
+										,{type : "checkbox",condi :  " and @st.busi_stb_label=1 ", value : "#"}
+										,"付费方式"
+										,{type : "checkbox",condi :  " and @st.prepay_stb_label=1 ", value : "#"}
+									]
+								},
+								{	label : "本月消费(元)"
+									,elements : [
+										"在&nbsp;"
+										,function(){ var ipt = $C("input");ipt.elType = "form"; ipt.style.width="30px";ipt.condi=" and @st.bill_charge/1000>=@val" ;return ipt}() // 匿名函数太他妈的强了!
+										,"&nbsp;到&nbsp;"
+										,"<input type='text' style='width : 30px' condi=' and @st.bill_charge/1000<=@val'/>" //前面已经验证,这种方式也没问题
+										,"&nbsp;之间"
+									]
+								},
+								{	label : "时长(分)"
+									,elements : [
+											"在&nbsp;"
+											,"<input type='text' style='width : 30px' condi=' and @st.CALL_DURA/60 >=@val'/>" 
+											,"&nbsp;到&nbsp;"
+											,"<input type='text' style='width : 30px' condi=' and @st.CALL_DURA/60 <=@val'/>" 
+											,"&nbsp;之间"
+									]
+								},
+								{	label : "客户经理"
+									,elements : {type : "text", condi : " and @st.STAFF_NAME like'%@val%'"}
+								},
+								{	label : "品牌"
+									,elements : function(){var slct = $C("select");slct.elType="form";slct.condi=" and @pt.brand_id in (@val)"; slct.add(new Option("全部",""),undefined); slct.add(new Option("全球通","1,2,3"),undefined);slct.add(new Option("神州行","4,5,6,7"),undefined); slct.add(new Option("动感地带","8"),undefined);return slct  }()
+								},
+								{	label : "状态"
+									,elements : function(){var slct = $C("select");slct.elType="form";slct.condi=" and substr(@pt.STATE_TID,1,3)='@val'"; slct.add(new Option("全部",""),undefined); slct.add(new Option("在用","US1"),undefined);slct.add(new Option("离网","US2"),undefined);slct.add(new Option("停机","US3"),undefined);return slct  }()
+								},
+								{	label : "用户姓名"
+									,elements : {type: "text", condi : " and @pt.roletype like '%@val%'"}
+								},
+								{	label : "手机号码"
+									,elements : {type: "text", condi : " and @pt.servnumber like '%@val%'"}
+								}
+							]
+						}
+						},
+						{
+						cataInfo : {catalogName : "集团属性"}
+						,cataData :  {
+							data : [
+								{	label : "集团编码"
+									,elements : {type:"text", condi : " and @pt.GROUPCODE  like '%@val%'"}
+								},
+								{	label : "集团名称"
+									,elements : {type:"text",condi : " and @pt.ROLETYPE like '%@val%'"} 
+								}
+								
+							]
+						}
+						}
+					]
+				}
+			}
+		}		
+		
+	}()	
+function query(){
+	//alert(aibiRpt.sqlGenerater() + " fetch first 500 rows only with ur ");
+	var sqls = aibiRpt.sqlGenerater();
+	var rowCounts = 500;
+	var grid = new aihb.SimpleGrid ({
+		header:aibiRpt.header
+		//,isCached : false
+		,sql: sqls.querySql + " fetch first " + rowCounts + " rows only with ur" // 这样写下载的时候后是全部，不会是500条
+		,callback:function(){
+			debugger;
+			aihb.Util.watermark();
+			var length = grid.grid.data.length;
+			if(length == rowCounts) {
+				//说明没全查,所以需要查总数
+				$("infomation").innerHTML = "";
+				var ajax = new aihb.Ajax({
+				url : "/hbirs/action/jsondata"
+				,parameters : "isCached=true&sql=" + encodeURIComponent(sqls.countSql) //即使是post 也需要encode
+				,callback : function(xmlrequest){
+					$("infomation").style.display = "block";
+					var obj= eval("(" + xmlrequest.responseText + ")");
+					$("infomation").innerHTML = "符合条件的记录共有" + (obj ? obj[0].count : 0) + "条。为保证查询效率，本次查询最多查" + rowCounts + "条记录。请点击下载获得全部数据。";
+				}
+				});
+				ajax.request();
+			}
+		}
+	});
+	grid.run();
+}
+
+function down(){
+var sqls = aibiRpt.sqlGenerater();
+	aihb.AjaxHelper.down({
+		sql : sqls.querySql
+		,header : aibiRpt.header
+	});
+}
+
+window.onload=function(){
+	createQueryOptions(aibiRpt.queryOptions);
+
+	jQuery("#accordion").accordion({
+		autoHeight: false
+		,collapsible: true 
+		,animated: "bounceslide"
+	});
+
+	var _d=new Date();
+	_d.setDate(_d.getDate()-3);
+	_d.setMonth(_d.getMonth()-1);
+	$("date1").value=_d.format("yyyymm");
+	
+	aihb.Util.loadmask();
+	aihb.Util.watermark();
+	
+}
+
+	</script>
+</head>
+<body>
+<form method="post" action="">
+<div class="divinnerfieldset">
+<fieldset>   
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'dim_div')" title="点击隐藏"><img flag='1' src="../../resources/image/default/ns-expand.gif"></img>&nbsp;查询条件区域：</td>
+	</tr></table></legend>
+	<div id="dim_div">
+	</div>
+
+</fieldset>
+</div><br>
+
+<div style="text-align : center">
+	<span style="color : red; font-size : 12px" id="infomation"></span>
+</div>
+<div>
+
+</div>
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'show_div')" title="点击隐藏"><img flag='1' src="../../resources/image/default/ns-expand.gif"></img>&nbsp;数据展现区域：</td>
+		<td></td>
+	</tr></table></legend>
+	<div id="grid" style="display:none;"></div>
+</fieldset>
+</div><br>
+</form>
+</body>
+</html>

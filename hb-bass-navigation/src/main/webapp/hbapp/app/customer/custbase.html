@@ -1,0 +1,462 @@
+<HTML><HEAD><TITLE>�ƶ��û��ۺ���Ϣ</TITLE>
+<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/default/default.js"></script>
+<script type="text/javascript"><!--
+	function TableCatalog(datas) {
+		var labelLength = datas.labelsArr.length;
+		if(labelLength <= 0)
+			return;
+		if(labelLength != datas.keysArr.length)
+			return ; // or throw an error
+			
+		var labelsPerRow = datas.labelsPerRow || 2; 
+		this.tbody = $(datas.tbodyId);
+		this.data = datas.data;
+		this.render = function() {
+			for(var _rowIndex = 0 ; _rowIndex < labelLength/labelsPerRow; _rowIndex++) { 
+				var row = this.tbody.insertRow(_rowIndex);
+				row.className = "tableRow";
+				
+				for(var _cellIndex = 0 ; _cellIndex < labelsPerRow ; _cellIndex ++) {
+					var currentIndex = _rowIndex * labelsPerRow + _cellIndex;
+					var currentLabel = datas.labelsArr[currentIndex] || "";
+					var currentKey = datas.keysArr[currentIndex];
+					var currentValue;
+					//test
+					if(currentKey) {
+						currentValue = this.data[currentKey.toLowerCase()];
+						//�����ж������е��, ���������0,��Ӧ����'����' if(!currentValue) {
+						if(!currentValue && currentValue !== 0)	{
+							currentValue = '����';
+						}
+						if("ACC_NBR" == currentKey.toUpperCase())
+							currentValue = fuzz(currentValue);
+						if("CUST_NAME" == currentKey.toUpperCase())
+							currentValue = fuzz(currentValue);
+					} else
+						currentValue = "";
+					
+					var cell = row.insertCell(_cellIndex * 2);
+					cell.appendChild(document.createTextNode(currentLabel));
+					cell.className = datas.labelClsName  || "bcellLabel";
+					row.insertCell(_cellIndex * 2 + 1).appendChild(document.createTextNode(currentValue)); //value
+				}
+			}
+		}
+
+	}
+	
+	String.prototype.trim = function() {
+		return this.replace(/(^\s*)|(\s*$)/g, "");
+	}
+	
+	/* tool functions */
+	function fuzz(value) {
+		var _res=String(value);
+		if(/[0-9]{11}/.test(value)){//�ֻ����
+			_res= value.substring(0,3)+"****"+value.substring(7,11);
+		}else if(/\W{2,4}/.test(value)){
+			_res= value.substring(0,1)+"**";
+		}
+		return _res;
+	}
+	
+	window.onload = function() {
+		var _params = aihb.Util.paramsObj();
+		var queryMonth = _params.queryMonth;
+		var mbuserId = _params.mbuser_id;
+		var reportType = _params.reportType;
+		var sql,doCallBack;
+		if("group" == reportType) {
+		sql = "select SERV_ID, OID, CUST_ID, GROUPCODE, AREA_ID, SERVNUMBER, SUBSCODE, " + 
+		"IMPORTANT, ROLETYPE, WARNBALANCE, INFOID, date(CREATEDATE) CREATEDATE, STATUS, STATUSDATE,  " + 
+		"ORGA, ACT_TID, BRAND_ID, BILLING_TID, CHANNEL_CODE, STATE_TID, EFF_DATE,  " + 
+		"EXP_DATE, TM_TID, ACCT_ID, CUSTGRADE, STAFF_ID, OWN_ORG_ID, STAFF_ORG_ID,  " + 
+		"STAFF_ORG_NAME, G_STATE, M_STATE, GM_STATE " + 
+		"from NWH.ENT_SUBMEMBER_" + queryMonth + 
+		" where serv_id=" + mbuserId + " with ur ";
+		doCallBack = function(list) {
+				var titles = ["���ų�Ա��Ϣ"]; 
+				for(var i1 = 0 ; i1 < titles.length ; i1 ++) {
+					$("title" + (i1 + 1)).innerHTML = titles[i1];
+				}
+		
+				var keys1 = "SERV_ID,CUST_ID,GROUPCODE,AREA_ID,SERVNUMBER,ROLETYPE,CREATEDATE,BILLING_TID,EFF_DATE,STAFF_ID"; // �ײ������ʱû��
+				
+				var labels1 = "�û�����,�ͻ�����,���ű���,����,�������,�������,���뼯��ʱ��,�ײ�ID,����ʱ��,VIP�ͻ�����ID";
+				new TableCatalog({
+					tbodyId : "tblCatalog1"
+					,labelsArr : labels1.split(",")
+					,keysArr : keys1.split(",")
+					,data : list[0]
+					,labelsPerRow : 5
+				}).render();
+		}
+	
+		} else if("detail" == reportType) {
+				//NMK.CTT_USER_    NMK.MBUSER_UNIFY_VIEW_    nwh.ENT_SUBMEMBER_
+			/*
+			var sql = "select MBUSER_ID,ACC_NBR,CUST_NAME,SEX,AGE,BRAND_ID,NBILLING_TID,TM_TID,AREA_ID,CHANNEL_CODE,ACT_TID,STATE_TID,STAFF_ID,STAFF_NAME," + 
+			"case when STAFF_TID=-1 then 'ϵͳ�Զ�����' when STAFF_TID=0 then '֮ǰ�ѷ���' when STAFF_TID=1 then '�����·���' else 'δ֪' end as STAFF_TID" + 
+			",groupcode,GROUPNAME," + 
+			"case when VPMN_FLAG='1' then '��' when VPMN_FLAG='0' then '��' else 'δ֪' end as VPMN_FLAG" + 
+			",date(bind_EXP_DATE) as bind_EXP_DATE,fee_EXP_DATE," + 
+			"case when MCUST_LID='1' then '��' when MCUST_LID='2' then '��' when MCUST_LID='8' then '�꿨' when MCUST_LID='0' then '��' else '����' end as MCUST_LID,SN_SNAP_ID,ASS_SNAP_ID,COUNTER,TIME_ID," + 
+			"case when CTT_FLAG=1 then '��' when CTT_FLAG=0 then '��' else 'δ֪' end as CTT_FLAG" + 
+			",call_cnt,callling_cnt,called_cnt,fcall_cnt,lmonth_call_cnt,lmonth_callling_cnt,lmonth_called_cnt,lmonth_fcall_cnt,l2month_call_cnt,l2month_callling_cnt,l2month_called_cnt,l2month_fcall_cnt,call_dura/60 as call_dura,callling_dura/60 as callling_dura,called_dura/60 as called_dura,lmonth_call_dura/60 as lmonth_call_dura,lmonth_callling_dura/60 as lmonth_callling_dura,lmonth_called_dura/60 as lmonth_called_dura,l2month_call_dura/60 as l2month_call_dura,l2month_callling_dura/60 as l2month_callling_dura,l2month_called_dura/60 as l2month_called_dura,bill_charge/1000 as bill_charge,lmonth_bill_charge/1000 as lmonth_bill_charge,l2month_bill_charge/1000 as l2month_bill_charge,complain_stf,Call_comp_svc," + 
+			// regular expression : pattern : ([\w_]+flag) ; replacement : case when $1=1 then '��' when $1=0 then '��' else 'δ֪' end as $1
+			"case when mail139_act_flag=1 then '��' when mail139_act_flag=0 then '��' else 'δ֪' end as mail139_act_flag," + 
+			"case when pim_act_flag=1 then '��' when pim_act_flag=0 then '��' else 'δ֪' end as pim_act_flag," + 
+			"case when busi12580_act_flag=1 then '��' when busi12580_act_flag=0 then '��' else 'δ֪' end as busi12580_act_flag," + 
+			"case when fetion_act_flag=1 then '��' when fetion_act_flag=0 then '��' else 'δ֪' end as fetion_act_flag," + 
+			"case when mobolipaper_act_flag=1 then '��' when mobolipaper_act_flag=0 then '��' else 'δ֪' end as mobolipaper_act_flag," + 
+			// regular expression : pattern : ([\w_]+label) ; replacement : case when $1=1 then '��' when $1=0 then '��' else 'δ֪' end as $1
+			"case when charge_stb_label=1 then '��' when charge_stb_label=0 then '��' else 'δ֪' end as charge_stb_label" + 
+			",charge_stb_EXPDATE,case when term_stb_label=1 then '��' when term_stb_label=0 then '��' else 'δ֪' end as term_stb_label" + 
+			",term_stb_EXPDATE,case when VPMN_stb_label=1 then '��' when VPMN_stb_label=0 then '��' else 'δ֪' end as VPMN_stb_label" + 
+			",VPMN_stb_EXPDATE,case when busi_stb_label=1 then '��' when busi_stb_label=0 then '��' else 'δ֪' end as busi_stb_label" + 
+			",busi_stb_EXPDATE,case when prepay_stb_label=1 then '��' when prepay_stb_label=0 then '��' else 'δ֪' end as prepay_stb_label" + 
+			",prepay_stb_EXPDATE from NMK.CTT_USER_" + queryMonth + " where mbuser_id=" + mbuserId + " with ur ";
+			*/
+			sql = "select a.MBUSER_ID,a.ACC_NBR,a.CUST_NAME" + 
+			",(case when a.sex_id=0 then 'Ů' when a.sex_id=1 then '��' end) as sex,b.AGE " + 
+			", case when a.BRAND_ID in (1,2,3) then 'ȫ��ͨ' when a.BRAND_ID in (4,5,6,7) then '������' when a.BRAND_ID=8 then '���еش�' else '����' end as BRAND_ID " + 
+			",a.NBILLING_TID,a.TM_TID," + 
+			"(select area_name from mk.bt_area where new_code=a.AREA_ID) as area_id" + 
+			",a.CHANNEL_CODE,a.ACT_TID " + 
+			",case when substr(a.STATE_TID,1,3)='US1' then '����' when substr(a.STATE_TID,1,3)='US2' then '����' when substr(a.STATE_TID,1,3)='US3' then 'ͣ��' else 'δ֪' end as state_tid " +
+			",b.STAFF_ID,b.STAFF_NAME" + 
+			",case when b.STAFF_TID=-1 then 'ϵͳ�Զ�����' when STAFF_TID=0 then '֮ǰ�ѷ���' when STAFF_TID=1 then '�����·���' else 'δ֪' end as STAFF_TID" + 
+			//",groupcode,GROUPNAME," + ����һ��tab�в�
+			",case when b.VPMN_FLAG='1' then '��' when b.VPMN_FLAG='0' then '��' else 'δ֪' end as VPMN_FLAG" + 
+			",date(bind_EXP_DATE) as bind_EXP_DATE,fee_EXP_DATE," +  //����bҲ����
+			"case when a.MCUST_LID='1' then '��' when a.MCUST_LID='2' then '��' when a.MCUST_LID='8' then '�꿨' when a.MCUST_LID='0' then '��' else '����' end as MCUST_LID" + 
+			",(case when sn_snap_id=2 then 'ʡ���и߶� ' when sn_snap_id=1 then '�м�ֵ ' else 'δ֪' end ) as SN_SNAP_ID" + 
+			",(case when ass_snap_id=1 then '�����и߶� ' else 'δ֪'  end) as ASS_SNAP_ID" + 
+			",COUNTER,TIME_ID," + 
+			"case when b.CTT_FLAG=1 then '��' when b.CTT_FLAG=0 then '��' else 'δ֪' end as CTT_FLAG" + 
+			", a.SUM_CALL_TIMES as call_cnt," + //",call_cnt," + 
+			"a.ZJTH_TIMES as callling_cnt" + //"callling_cnt" + 
+			",a.BJTH_TIMES as called_cnt " + 
+			",a.HZ_TIMES as fcall_cnt" + //���º�ת����
+			",b.lmonth_call_cnt,b.lmonth_callling_cnt,b.lmonth_called_cnt,b.lmonth_fcall_cnt,b.l2month_call_cnt,b.l2month_callling_cnt,b.l2month_called_cnt,b.l2month_fcall_cnt" + 
+			",a.SUM_CALL_DURA/60 as call_dura" + //call_dura
+			",a.ZJTH_DURA1/60 as callling_dura" + //",callling_dura/60 as callling_dura" + 
+			",a.BJTH_DURA1/60 as called_dura" + //",called_dura/60 as called_dura" + 
+			",b.lmonth_call_dura/60 as lmonth_call_dura,b.lmonth_callling_dura/60 as lmonth_callling_dura,b.lmonth_called_dura/60 as lmonth_called_dura,b.l2month_call_dura/60 as l2month_call_dura,b.l2month_callling_dura/60 as l2month_callling_dura,b.l2month_called_dura/60 as l2month_called_dura," + 
+			"a.bill_charge/1000 as bill_charge,b.lmonth_bill_charge/1000 as lmonth_bill_charge,b.l2month_bill_charge/1000 as l2month_bill_charge," + 
+			"b.complain_stf,b.Call_comp_svc," + 
+			// regular expression : pattern : ([\w_]+flag) ; replacement : case when $1=1 then '��' when $1=0 then '��' else 'δ֪' end as $1
+			"case when b.mail139_act_flag=1 then '��' when b.mail139_act_flag=0 then '��' else 'δ֪' end as mail139_act_flag," + 
+			"case when pim_act_flag=1 then '��' when pim_act_flag=0 then '��' else 'δ֪' end as pim_act_flag," + 
+			"case when busi12580_act_flag=1 then '��' when busi12580_act_flag=0 then '��' else 'δ֪' end as busi12580_act_flag," + 
+			"case when fetion_act_flag=1 then '��' when fetion_act_flag=0 then '��' else 'δ֪' end as fetion_act_flag," + 
+			"case when mobolipaper_act_flag=1 then '��' when mobolipaper_act_flag=0 then '��' else 'δ֪' end as mobolipaper_act_flag," + 
+			// regular expression : pattern : ([\w_]+label) ; replacement : case when $1=1 then '��' when $1=0 then '��' else 'δ֪' end as $1
+			"case when charge_stb_label=1 then '��' when charge_stb_label=0 then '��' else 'δ֪' end as charge_stb_label" + 
+			",charge_stb_EXPDATE,case when term_stb_label=1 then '��' when term_stb_label=0 then '��' else 'δ֪' end as term_stb_label" + 
+			",term_stb_EXPDATE,case when VPMN_stb_label=1 then '��' when VPMN_stb_label=0 then '��' else 'δ֪' end as VPMN_stb_label" + 
+			",VPMN_stb_EXPDATE,case when busi_stb_label=1 then '��' when busi_stb_label=0 then '��' else 'δ֪' end as busi_stb_label" + 
+			",busi_stb_EXPDATE,case when prepay_stb_label=1 then '��' when prepay_stb_label=0 then '��' else 'δ֪' end as prepay_stb_label" + 
+			",prepay_stb_EXPDATE " +
+			" from NMK.MBUSER_UNIFY_VIEW_" + queryMonth + " a left join NMK.CTT_USER_bureau_" + queryMonth + " b on a.mbuser_id=b.mbuser_id" + 
+			 " where a.mbuser_id=" + mbuserId + " with ur ";
+			
+			doCallBack = function(list) {
+				var titles = ["�ͻ�����Ϣ","�ͻ�������Ϣ","�û�ʹ����Ϣ","�û�������Ϣ"]; //�ĸ�����,��ʱ������
+				for(var i1 = 0 ; i1 < titles.length ; i1 ++) {
+					$("title" + (i1 + 1)).innerHTML = titles[i1];
+				}
+				//����Ϣ
+					var labels1 = "�û�����,�ֻ����,�û�����,�Ա�,����,Ʒ��,�Ʒ����,СƷ��,����,��������,�û�״̬,״̬,�ͻ��������,�ͻ���������,�ͻ��������";
+					var keys1 = "MBUSER_ID,ACC_NBR,CUST_NAME,SEX,AGE,BRAND_ID,NBILLING_TID,TM_TID,AREA_ID,CHANNEL_CODE,ACT_TID,STATE_TID,STAFF_ID,STAFF_NAME,STAFF_TID";
+					new TableCatalog({
+						tbodyId : "tblCatalog1"
+						,labelsArr : labels1.split(",")
+						,keysArr : keys1.split(",")
+						,data : list[0]
+						,labelsPerRow : 5
+					}).render();
+					
+						//������Ϣ
+					var keys2 = /*"groupcode,GROUPNAME,*/"VPMN_FLAG,bind_EXP_DATE,fee_EXP_DATE,MCUST_LID,SN_SNAP_ID,ASS_SNAP_ID,COUNTER,TIME_ID,CTT_FLAG,complain_stf,Call_comp_svc,mail139_act_flag,pim_act_flag,busi12580_act_flag,fetion_act_flag,mobolipaper_act_flag,charge_stb_label,charge_stb_EXPDATE,term_stb_label,term_stb_EXPDATE,VPMN_stb_label,VPMN_stb_EXPDATE,busi_stb_label,busi_stb_EXPDATE,prepay_stb_label,prepay_stb_EXPDATE";
+					var labels2 = /*"���Ŵ���,�������,*/"����V���û�,�û�������ʱ��,�����Żݵ���ʱ��,��ͻ���ʶ,ʡ�������и߶˱�ʶ,�����и߶˿ͻ���ʶ,������,״̬����,���Ŀͻ���ʶ,Ͷ�߽��������쳣���,��������ֿͷ����߼�¼,139�����Ծ�û�,�ű��ܼһ�Ծ�û�,12580��Ծ�û�,���Ż�Ծ�û�,�ֻ��Ծ�û�,�����ȶ���ǩ,�����ȶ���ǩ����ʱ��,�ն��ȶ���ǩ,�ն��ȶ���ǩ����ʱ��,V���ȶ���ǩ,V���ȶ���ǩ����ʱ��,ҵ���ȶ���ǩ,ҵ���ȶ���ǩ����ʱ��,���ѷ�ʽ�ȶ���ǩ,���ѷ�ʽ�ȶ���ǩ����ʱ��";
+					new TableCatalog({
+						tbodyId : "tblCatalog2"
+						,labelsArr : labels2.split(",")
+						,keysArr : keys2.split(",")
+						,data : list[0]
+						,labelClsName : "scellLabel"
+					}).render();
+				
+						//ͨ����Ϣ
+					//var labels3 = "����ͨ��ʱ��(����),��������ʱ��(����),���±���ʱ��(����),����ͨ��ʱ��(����),��������ʱ��(����),���±���ʱ��(����),������ͨ��ʱ��(����),����������ʱ��(����),�����±���ʱ��(����),����ͨ������,�������д���,���±��д���,���º�ת����,����ͨ������,�������д���,���±��д���,���º�ת����,������ͨ������,���������д���,�����±��д���,�����º�ת����";
+					//var keys3 = "call_dura,callling_dura,called_dura,lmonth_call_dura,lmonth_callling_dura,lmonth_called_dura,l2month_call_dura,l2month_callling_dura,l2month_called_dura,call_cnt,callling_cnt,called_cnt,fcall_cnt,lmonth_call_cnt,lmonth_callling_cnt,lmonth_called_cnt,lmonth_fcall_cnt,l2month_call_cnt,l2month_callling_cnt,l2month_called_cnt,l2month_fcall_cnt";
+					var labels3 = "����ͨ��ʱ��(����),����ͨ��ʱ��(����),������ͨ��ʱ��(����),��������ʱ��(����),��������ʱ��(����),����������ʱ��(����),���±���ʱ��(����),���±���ʱ��(����),�����±���ʱ��(����),����ͨ������,����ͨ������,������ͨ������,�������д���,�������д���,���������д���,���±��д���,���±��д���,�����±��д���,���º�ת����,���º�ת����,�����º�ת����";
+					var keys3 = "call_dura,lmonth_call_dura,l2month_call_dura,callling_dura,lmonth_callling_dura,l2month_callling_dura,called_dura,lmonth_called_dura,l2month_called_dura,call_cnt,lmonth_call_cnt,l2month_call_cnt,callling_cnt,lmonth_callling_cnt,l2month_callling_cnt,called_cnt,lmonth_called_cnt,l2month_called_cnt,fcall_cnt,lmonth_fcall_cnt,l2month_fcall_cnt";
+					new TableCatalog({
+						tbodyId : "tblCatalog3"
+						,labelsArr : labels3.split(",")
+						,keysArr : keys3.split(",")
+						,data : list[0]
+						,labelClsName : "scellLabel"
+						,labelsPerRow : 3
+					}).render();
+						//������Ϣ
+					var keys4 = "bill_charge,lmonth_bill_charge,l2month_bill_charge";
+					var labels4 = "�����˵�(Ԫ),�����˵�(Ԫ),�������˵�(Ԫ)";
+					new TableCatalog({
+						tbodyId : "tblCatalog4"
+						,labelsArr : labels4.split(",")
+						,keysArr : keys4.split(",")
+						,data : list[0]
+						,labelClsName : "scellLabel"
+						,labelsPerRow : 3
+					}).render();
+			}
+		}
+		var ajax = new aihb.Ajax({
+			url : "/hbirs/action/jsondata"
+			,parameters : "sql="+encodeURIComponent(sql)
+			,loadmask : true
+			,callback : function(xmlrequest){
+				var list = eval(xmlrequest.responseText);
+				doCallBack(list);	
+			}
+		});
+		ajax.request();
+		
+		
+	}
+--></script>
+<STYLE type=text/css>
+<!--
+	/*
+	body {
+		margin-left: 0px;
+		margin-top: 0px;
+		margin-right: 0px;
+		margin-bottom: 0px;
+	}
+	*/
+	td {
+		font-size: 12px;
+	}
+	.bcellLabel {
+		color: 2e9abc; 
+		background-color: #f3f1f2;
+		font: bold; 
+		text-align: right
+	}
+	.scellLabel {
+		color: 2e9abc; 
+		background-color: #f3f1f2;
+		text-align: right
+	}
+	.tableRow {
+		height : 23px
+	}
+	.line {
+		border-top-width: 1px;
+		border-top-style: solid;
+		border-top-color: #FFFFFF;
+	}
+	.STYLE4 {
+		color: #E28B00;
+		font-weight: bold;
+	}
+-->
+</STYLE>
+</HEAD>
+<BODY>
+
+<!-- ����� -->
+<TABLE border=0 cellSpacing=0 cellPadding=0 width="98%" align=center>
+<TBODY>
+<TR>
+<TD width=35>
+<!--
+<DIV align=center><IMG src="../../images/hcr/rwzx_01.gif" width=17 height=14></DIV>
+-->
+</TD>
+<TD width=798><SPAN class=STYLE4>�ƶ��û��ۺ���Ϣ</SPAN></TD>
+<TD width=72><!--<img src="../../images/hcr/home.gif" width="60" height="22" style="cursor:hand" onClick="javascript:window.close()">//-->
+</TD></TR>
+</TBODY>
+</TABLE>
+
+
+<!-- ������ -->
+<TABLE border=0 cellSpacing=0 cellPadding=0 width="98%" align=center>
+<TBODY>
+<TR>
+<TD height=8 colSpan=2></TD></TR>
+<TR>
+<TD bgColor=#ee8f00 height=4 width=128></TD>
+<TD bgColor=#e8e8e8 height=4 width=777></TD></TR></TBODY>
+</TABLE>
+<BR>
+
+
+	<TABLE style="BORDER-COLLAPSE: collapse; width : 98% ; align : center" border=0 cellSpacing=0 cellPadding=0 >
+	<TR>
+	<!-- ��һ����ǩ -->
+	<TD vAlign=top align=left>
+		<!--
+		<IMG src="" width=158 height=34 title="�ͻ�����Ϣ" alt="�ͻ�����Ϣ">
+		-->
+		<div class="imgTitle" id="title1"></div>
+	</TD>
+	<!-- ������ť
+	<TD width="30%" align=right>
+		<IMG style="CURSOR: hand" onclick=createContact(); name=run src="../../images/hcr/cjjc.gif"> &nbsp;&nbsp; 
+		<IMG style="CURSOR: hand" onclick=birthdayModify(); name=run src="../../images/hcr/birthmodify.gif"> 
+	</TD>
+	 -->
+	</TR>
+	<TR>
+	<TD width="85%" colSpan=2>
+		<!-- tblCatalog1 -->
+		<TABLE style="BORDER-COLLAPSE: collapse" border=1 cellSpacing=0 borderColor="#dcdcdc" cellPadding=0 width="100%">
+			<tbody id="tblCatalog1">
+			</tbody>
+		</TABLE>
+	</TD>
+	</TR>
+<TR>
+<TD height=20></TD></TR>
+<TR>
+<TD class=main colSpan=2 align=left>
+			<TABLE style="BORDER-COLLAPSE: collapse" border=0 cellSpacing=0 borderColor=#dcdcdc cellPadding=0 width="100%" align=center>
+			<TBODY>
+			<TR>
+			<TD class=main vAlign=top width="30%" align=left>
+				<TABLE style="BORDER-COLLAPSE: collapse" class=bluebold border=0 cellSpacing=0 borderColor=#dcdcdc cellPadding=0 width="100%" align=center>
+				<TBODY>
+				<TR>
+					<!-- �ڶ�����ǩ -->
+					<TD vAlign=top colSpan=2 align=left>
+					<!--
+						<IMG src="../../images/hcr/fyxx.gif" title="�ͻ�������Ϣ" alt="�ͻ�������Ϣ"></TD>
+					-->
+					<div class="imgTitle" id="title2"></div>
+				</TR>
+				</TBODY>
+				</TABLE>
+				<!-- tblCatalog2 -->
+				<TABLE style="BORDER-COLLAPSE: collapse" border=1 cellSpacing=0 borderColor=#dcdcdc cellPadding=0 width="100%" align=center>
+				<TBODY  id="tblCatalog2">
+				</TBODY>
+				</TABLE>
+
+</TD>
+<TD class=main width="3%" align=left></TD>
+<TD class=main vAlign=top width="32%" align=left>
+
+			<TABLE style="BORDER-COLLAPSE: collapse" class=bluebold border=0 cellSpacing=0 borderColor=#dcdcdc cellPadding=0 width="100%" align=center>
+			<TBODY>
+			<TR>
+			<!-- �������ǩ -->
+			<TD vAlign=top colSpan=2 align=left>
+				<!--
+					<IMG src="../../images/hcr/syxx.gif" title="�û�ʹ����Ϣ" alt="�û�ʹ����Ϣ"></TD></TR>
+				-->
+				<div class="imgTitle" id="title3"></div>
+			</TBODY>
+			</TABLE>
+			<!-- tblCatalog3 -->
+			<TABLE style="BORDER-COLLAPSE: collapse" border=1 cellSpacing=0 borderColor=#dcdcdc cellPadding=0 width="100%" align=center>
+			<TBODY id="tblCatalog3">
+			</TBODY>
+			</TABLE>
+			
+			<!-- added
+			<br>
+			<TABLE style="BORDER-COLLAPSE: collapse" class=bluebold border=0 cellSpacing=0 borderColor=#dcdcdc cellPadding=0 width="100%" align=center>
+				<TBODY>
+				<TR>
+					<TD height=40 vAlign=top colSpan=2 align=left><IMG src="../../images/hcr/syxx.gif" title="������Ϣ" alt="������Ϣ"></TD>
+				</TR>
+				</TBODY>
+			</TABLE>
+			<TABLE style="BORDER-COLLAPSE: collapse" border=1 cellSpacing=0 borderColor=#dcdcdc cellPadding=0 width="100%" align=center>
+				<TBODY id="tblCatalog5">
+				</TBODY>
+			</TABLE>
+			 -->
+			
+			
+</TD>
+<TD class=main width="3%" align=left></TD>
+<TD class=main vAlign=top width="34%" align=left>
+		
+			<TABLE style="BORDER-COLLAPSE: collapse" border=0 cellSpacing=0 borderColor=#dcdcdc cellPadding=0 width="100%" align=center>
+				<TBODY>
+				<TR>
+					<!-- ���ĸ���ǩ -->
+					<TD vAlign=center colSpan=2 align=left>
+					<!--
+					<IMG src="../../images/hcr/yhkbxx.gif" title="�û�������Ϣ" alt="�û�������Ϣ"></TD>
+					-->
+					<div class="imgTitle" id="title4"></div>
+
+				</TR>
+				</TBODY>
+			</TABLE>
+			
+			<!-- tblCatalog4 -->
+			<TABLE style="BORDER-COLLAPSE: collapse" border=1 cellSpacing=0 borderColor=#dcdcdc cellPadding=0 width="100%" align=center>
+			<TBODY id="tblCatalog4">
+			</TBODY>
+			</TABLE>
+
+		</TD></TR>
+		</TBODY>
+		</TABLE>
+</TD></TR>
+<TR>
+<TD height=20></TD></TR>
+<TR>
+<TD class=main colSpan=2 align=left>
+<TR>
+<TD class=main colSpan=2 align=left>
+		
+		<TABLE style="BORDER-COLLAPSE: collapse" border=0 cellSpacing=0 borderColor=#dcdcdc cellPadding=0 width="100%" align=center>
+		<TBODY>
+		<TR>
+		<TD class=main vAlign=top width="50%" colSpan=2 align=left>
+
+		</TD>
+		<TD class=main width="3%" align=left></TD>
+		<TD class=main vAlign=top width="47%" colSpan=2 align=left>
+
+		
+		</TD>
+		<TD class=main width="3%" align=left></TD>
+		<TD class=main width="30%" align=left></TD></TR>
+		</TBODY>
+		</TABLE>
+
+</TD></TR>
+<TR>
+<TD class=main colSpan=2 align=left></TD></TR>
+<TR>
+<TD class=main colSpan=2 align=left>
+		<TABLE style="BORDER-COLLAPSE: collapse" border=0 cellSpacing=0 borderColor=#dcdcdc cellPadding=0 width="100%" align=center>
+		<TBODY>
+		<TR>
+		<TD class=main vAlign=top width="30%" align=left>
+		
+
+		</TD>
+		<TD class=main width="3%" align=left>
+		<TD class=main vAlign=top width="30%" align=left>
+		
+		</TD>
+		<TD class=main width="3%" align=left></TD></TR>
+		</TBODY>
+		</TABLE>
+	</TD></TR>
+	</TBODY>
+	</TABLE>
+
+</BODY></HTML>

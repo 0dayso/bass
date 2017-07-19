@@ -1,0 +1,57 @@
+#flowPackage{
+	margin:0 auto;
+}
+
+ #mask{
+        position:absolute;
+        z-index:888;
+        background-color:#cccccc;
+        display:none;
+        top:0;
+        left:0;
+        filter:Alpha(opacity=50);/*此處用於IE不透明度為半透明百分比*/
+        -moz-opacity:0.5; /*此處用於舊版火狐不透明數*/
+        opacity:0.5;/*此處用於新版火狐不透明數值*/
+    }
+
+ #view {
+        position:absolute;
+        width:265px;
+        height:400px;
+        z-index:999;
+        display:none;
+        top:0px;
+        left:50%;
+        background-color:#ffffff;
+        border:1px solid green;
+ }
+ 
+ 
+ 
+#view .content{
+	background-color: #f4f5f6;
+}
+
+#view .content .left{
+	margin:
+	background-color: #f4f5f6;
+}
+
+#view .content .left .td_title{
+	width:100px;
+	background-color: #BED9ED;
+	text-align:right;
+}
+
+#view .content .left .td_content{
+	margin: 0 auto;
+	width:150px;
+	background-color: #f4f5f6;
+}
+
+
+#view .content .right{
+	height:auto;
+	width:340px;
+	background-color: #f4f5f6;
+}

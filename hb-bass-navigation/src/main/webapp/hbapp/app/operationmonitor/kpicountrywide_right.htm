@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<title>一锟斤拷锟斤拷锟斤拷</title>
+		<meta http-equiv="pragma" content="no-cache">
+		<meta http-equiv="cache-control" content="no-cache">
+		<meta http-equiv="expires" content="0">
+		<script type="text/javascript" src="../../resources/js/default/default.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../../resources/chart/FusionCharts.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../resources/js/codebase/dhtmlxvault.css" />
+		<script language="JavaScript" type="text/javascript" src="../../resources/js/codebase/dhtmlxvault.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../resources/css/default/default.css" />
+	</head>
+	<script type="text/javascript">
+	
+	function chart(chartSWF){
+		var chart = new FusionCharts(chartSWF, "ChartId", "680", "580");
+		chart.setDataXML(data);
+		chart.addParam("wmode","transparent");
+		chart.render("chartrender");
+	}
+	
+	function kpiCompare(columnName,titlename,date){
+		var ajax = new aihb.Ajax({
+			url : "/hbirs/action/operMonitor?method=chartkpiconntrywide"
+			,parameters : "name="+encodeURIComponent(titlename)+"&sql="+encodeURIComponent("select province_id,"+columnName+",'DDDDDD' from kpi_countrywide where time_id = '"+ date+"' order by 2 desc")
+			,loadmask : false
+			,callback : function(xmlrequest){
+				data = xmlrequest.responseText;
+				if(data=="")alert("没锟斤拷锟斤拷锟�);
+				else{
+					chart("../../resources/chart/Charts/FCF_Bar2D.swf");
+				}
+			}
+		});
+		ajax.request();
+	}
+	
+	function toDown(){
+		var date=parent.exLeftFrame.document.forms[0].date.value;
+		var _form=undefined;
+		if(document.forms.length==2){
+			_form=document.forms[1];
+		}else {
+			_form=$C("form");
+			document.body.appendChild(_form);
+		}
+		aihb.AjaxHelper.down({
+			form : _form
+			,sql :  "select time_id,province_id,USER_NEW_ADD_M,USER_NEW_ADD_Y,USER_NEW_GAIN_M,USER_NEW_GAIN_Y,USER_CALL,USER_ZERO_CALL,TRAFFIC_DURA_M,TRAFFIC_DURA_ACCUMULATE,INCOME_M,INCOME_ACCUMULATE,TRAFFIC_MOU_M,TRAFFIC_MOU_ACCUMULATE,TRAFFIC_ARPU_M,TRAFFIC_ARPU_ACCUMULATE,USER_DATABIZ,INCOME_NEWBIZ_CALL,INCOME_NEWBIZ_DATA,INCOME_DATABIZ_SMS,INCOME_DATABIZ_MOSMS,INCOME_DATABIZ_MMS,INCOME_DATABIZ_MOMMS,INCOME_DATABIZ_WAP,INCOME_DATABIZ_SYX,INCOME_DATABIZ_MAIL,INCOME_DATABIZ_HMGJ,INCOME_DATABIZ_YDSW from kpi_countrywide where time_id='"+date+"' with ur"
+			,header : "{\"time_id\":\"统锟斤拷锟铰凤拷\",\"province_id\":\"省锟斤拷\",\"USER_NEW_ADD_M\" : \"锟斤拷锟斤拷锟斤拷锟矫伙拷锟斤拷\",\"USER_NEW_ADD_Y\" : \"锟斤拷锟斤拷锟斤拷锟矫伙拷锟斤拷\",\"USER_NEW_GAIN_M\" : \"锟铰撅拷锟斤拷锟酵伙拷\",\"USER_NEW_GAIN_Y\" : \"锟疥净锟斤拷锟酵伙拷\",\"USER_CALL\" : \"通锟斤拷锟矫伙拷锟斤拷\",\"USER_ZERO_CALL\" : \"锟斤拷锟酵拷锟斤拷没锟斤拷锟絓",\"TRAFFIC_DURA_M\" : \"锟斤拷锟斤拷(锟斤拷锟斤拷锟�\",\"TRAFFIC_DURA_ACCUMULATE\" : \"锟斤拷锟桔硷拷(锟斤拷锟斤拷锟�\",\"INCOME_M\" : \"锟斤拷锟斤拷(锟斤拷元)\",\"INCOME_ACCUMULATE\" : \"锟斤拷锟桔硷拷(锟斤拷元)\",\"TRAFFIC_MOU_M\" : \"锟斤拷锟斤拷MOU\",\"TRAFFIC_MOU_ACCUMULATE\" : \"锟桔硷拷MOU\",\"TRAFFIC_ARPU_M\" : \"锟斤拷锟斤拷ARPU\",\"TRAFFIC_ARPU_ACCUMULATE\" : \"锟桔硷拷ARPU\",\"USER_DATABIZ\" : \"锟斤拷锟揭碉拷窀斗芽突锟斤拷锟絓",\"INCOME_NEWBIZ_CALL\" : \"锟斤拷锟斤拷锟斤拷值业锟斤拷通锟脚凤拷\",\"INCOME_NEWBIZ_DATA\" : \"锟狡讹拷锟斤拷锟揭碉拷锟酵拷欧锟絓",\"INCOME_DATABIZ_SMS\" : \"锟斤拷缘锟斤拷锟斤拷息\",\"INCOME_DATABIZ_MOSMS\" : \"锟斤拷锟斤拷锟斤拷锟絓",\"INCOME_DATABIZ_MMS\" : \"锟斤拷缘锟斤拷锟斤拷\",\"INCOME_DATABIZ_MOMMS\" : \"锟斤拷锟斤拷锟斤拷锟絓",\"INCOME_DATABIZ_WAP\" : \"WAP业锟斤拷锟街伙拷锟斤拷锟斤拷\",\"INCOME_DATABIZ_SYX\" : \"锟斤拷e锟斤拷\",\"INCOME_DATABIZ_MAIL\" : \"锟斤拷锟斤拷锟斤拷业锟斤拷\",\"INCOME_DATABIZ_HMGJ\" : \"锟脚诧拷锟杰硷拷业锟斤拷\",\"INCOME_DATABIZ_YDSW\" : \"锟狡讹拷锟斤拷锟斤拷\"}"
+			,fileName : "一锟斤拷锟斤拷锟�
+			,ds : "web"
+		});
+	}
+	
+	var _content=$C("div");
+	_content.innerHTML="<div style='margin-bottom:3px;'>锟较达拷锟斤拷锟节ｏ拷<input type='text' size=12 name='date' id='date'>(yyyymm) Excel Sheet锟斤拷<input type='text' size=12 name='sheetName' id='sheetName'></div>"
+	var _maskCont=$C("div");
+	_content.appendChild(_maskCont);
+	var _mask = aihb.Util.windowMask({content:_content});
+	
+	window.onload=function() {
+		var vault = new dhtmlXVaultObject();
+	    vault.setImagePath("../../resources/js/codebase/imgs/");
+	    vault.setServerHandlers("/hbirs/action/filemanage?method=importExcel", "/hbirs/action/filemanage?method=getInfoHandler", "/hbirs/action/filemanage?method=getIdHandler");
+	    vault.setFilesLimit(1);
+	   	vault.create(_maskCont);
+	    
+	    vault.onFileUpload=function(){
+	    	vault.setFormField("ds", "web");
+	    	vault.setFormField("tableName", "kpi_countrywide");
+	    	vault.setFormField("columns", "TIME_ID,province_id,USER_NEW_ADD_M,USER_NEW_ADD_Y,USER_NEW_GAIN_M,USER_NEW_GAIN_Y,USER_CALL,USER_ZERO_CALL,TRAFFIC_DURA_M,TRAFFIC_DURA_ACCUMULATE,INCOME_M,INCOME_ACCUMULATE,TRAFFIC_MOU_M,TRAFFIC_MOU_ACCUMULATE,TRAFFIC_ARPU_M,TRAFFIC_ARPU_ACCUMULATE,USER_DATABIZ,INCOME_NEWBIZ_CALL,INCOME_NEWBIZ_DATA,INCOME_DATABIZ_SMS,INCOME_DATABIZ_MOSMS,INCOME_DATABIZ_MMS,INCOME_DATABIZ_MOMMS,INCOME_DATABIZ_WAP,INCOME_DATABIZ_SYX,INCOME_DATABIZ_MAIL,INCOME_DATABIZ_HMGJ,INCOME_DATABIZ_YDSW");
+	    	
+	    	if($("sheetName").value==""||$("date").value==""){
+	    		alert("没锟斤拷锟斤拷写Sheet锟斤拷锟绞憋拷锟�);
+	    		return false;
+	    	}
+	    	
+	    	vault.setFormField("sheetName", $("sheetName").value);
+	    	vault.setFormField("date", $("date").value);
+	    	
+	    	return true;
+	    }
+	    
+	    vault.onUploadComplete=function(){
+	    	var sql=encodeURIComponent("update kpi_countrywide set PROVINCE_ID='全锟斤拷平锟斤拷',USER_NEW_ADD_M=USER_NEW_ADD_M/31,USER_NEW_ADD_Y=USER_NEW_ADD_Y/31,USER_NEW_GAIN_M=USER_NEW_GAIN_M/31,USER_NEW_GAIN_Y=USER_NEW_GAIN_Y/31,USER_CALL=USER_CALL/31,USER_ZERO_CALL=USER_ZERO_CALL/31,TRAFFIC_DURA_M=TRAFFIC_DURA_M/31,TRAFFIC_DURA_ACCUMULATE=TRAFFIC_DURA_ACCUMULATE/31,INCOME_M=INCOME_M/31,INCOME_ACCUMULATE=INCOME_ACCUMULATE/31,USER_DATABIZ=USER_DATABIZ/31,INCOME_NEWBIZ_CALL=INCOME_NEWBIZ_CALL/31,INCOME_NEWBIZ_DATA=INCOME_NEWBIZ_DATA/31,INCOME_DATABIZ_SMS=INCOME_DATABIZ_SMS/31,INCOME_DATABIZ_MOSMS=INCOME_DATABIZ_MOSMS/31,INCOME_DATABIZ_MMS=INCOME_DATABIZ_MMS/31,INCOME_DATABIZ_MOMMS=INCOME_DATABIZ_MOMMS/31,INCOME_DATABIZ_WAP=INCOME_DATABIZ_WAP/31,INCOME_DATABIZ_SYX=INCOME_DATABIZ_SYX/31,INCOME_DATABIZ_MAIL=INCOME_DATABIZ_MAIL/31,INCOME_DATABIZ_HMGJ=INCOME_DATABIZ_HMGJ/31,INCOME_DATABIZ_YDSW=INCOME_DATABIZ_YDSW/31 where PROVINCE_ID='全锟斤拷锟斤拷锟� and time_id='"+$("date").value+"'");
+			sql += "&sqls="+encodeURIComponent("update kpi_countrywide set PROVINCE_name=PROVINCE_ID where time_id='"+$("date").value+"'");
+			var ajax = new aihb.Ajax({
+				url : "/hbirs/action/sqlExec"
+				,parameters : "ds=web"+"&sqls="+sql
+				,loadmask : false
+				,callback : function(xmlrequest){
+					var res={};
+					eval("res="+xmlrequest.responseText);
+					alert(res.message);
+					parent.location.reload();
+				}
+			});
+			ajax.request();
+			$("sheetName").value="";
+			$("date").value="";
+			this.removeAllItems();
+	    }
+	  	var _params = aihb.Util.paramsObj();
+		if(_params.loginname == "wangbotao" 
+	    	|| _params.loginname == "zhangtao2" 
+	    		|| _params.loginname == "zhaojing" 
+	    			|| _params.loginname == "maowenjun" ){
+	    	$("btnUpld").onclick=function(){
+	    		_mask.style.display='';
+	    	};
+	    }else{
+	    	$("btnUpld").onclick=function(){
+	    		alert("锟斤拷没锟叫碉拷锟斤拷权锟斤拷");
+	    	};
+	    }
+    }
+  </script>
+<body>
+<table width="99%" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td valign="top">
+			<div class="portlet">
+				<div class="title">
+				<table width="100%">
+				<tr>
+				<td>图锟斤拷</td>
+				<td align="right"><input type="button" class="form_button_short" value="锟斤拷锟斤拷" onclick="toDown()"> <input id="btnUpld" type="button" class="form_button_short" value="锟较达拷"></td>
+				</tr>
+				</table>
+				
+				</div>
+				<div class="content">
+					<div id="chartrender" style="text-align: center;"></div>
+				</div>
+			</div>
+		</td>
+	</tr>
+</table>
+</body>
+</html>
+

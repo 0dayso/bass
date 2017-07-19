@@ -1,0 +1,20 @@
+@charset "utf-8";
+.selfbuttongroup{
+    @include setPadding(row,3px);
+    @include setPadding(top,9px);
+    .selfbuttongroup-title{
+        @include setPadding(right,8px);
+    }
+    .selfbuttongroup-item{
+        &:hover{
+            cursor:pointer;
+        }
+    }
+    .selfbuttongroup-split{
+        @include setPadding(row,8px);
+        font-weight: bold;
+    }
+    .clicked{
+        font-weight: bold;
+    }
+}

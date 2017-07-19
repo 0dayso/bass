@@ -1,0 +1,403 @@
+<HTML>                                                                                                                                                                                                                                                                                                                   
+<HEAD>
+<TITLE>锟斤拷锟斤拷锟狡讹拷锟斤拷营锟斤拷锟斤拷系统-锟斤拷锟斤拷校锟斤拷学营锟斤拷锟解部锟斤拷莸锟斤拷锟�/TITLE>
+<link rel="stylesheet" type="text/css" href="/hb-bass-navigation/hbapp/resources/js/codebase/dhtmlxvault.css" />
+<link rel="stylesheet" type="text/css" href="/hb-bass-navigation/hbapp/resources/css/default/default.css" />
+<!--
+	2010.08.12 : copied from jiajikaImport.html
+	2010.08.16 : taskId锟斤拷时应锟矫和撅拷锟斤拷选锟斤拷锟斤拷锟捷绑定ｏ拷锟斤拷锟劫和碉拷前锟斤拷锟节绑定ｏ拷也锟斤拷锟斤拷说锟斤拷锟揭斤拷锟斤拷锟斤拷锟斤拷锟窖⊥伙拷锟斤拷锟斤拷锟斤拷锟节碉拷锟斤拷幕锟斤拷锟絫askId应锟斤拷锟斤拷同一锟斤拷
+-->
+<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/datepicker/WdatePicker.js"></script>
+</head>
+<body bgcolor="#EFF5FB" margin=0>
+
+<fieldset width="96%" align="center" style="margin: 10px 0px 0px 10px;">
+ <legend style="cursor : pointer" onclick="javascript: var status = this.nextSibling.style.display; status =='none' ? this.nextSibling.style.display = '' : this.nextSibling.style.display='none'">
+	MM锟斤拷展锟斤拷锟斤拷锟斤拷锟�
+</legend>
+   <table border=0 cellpadding="0" cellspacing="0" >
+      <tr style="padding:5px;"> 
+        <td width="450"><div id="mmUploadDiv"></div></td>
+		
+        <td valign="top">
+		<div>
+		<b>锟斤拷锟斤拷锟斤拷锟�锟斤拷)</b>选锟斤拷<input align="right" type="text" id="mmDate" name="mmDate" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyyMMdd'})" class="Wdate" width="10px"/>
+		</div>
+		<a style="text-decoration: underline;" href="/hbirs/action/filemanage?method=downFromFtp&remotePath=college/zhuanti&fileName=MM锟斤拷展锟斤拷锟斤拷锟斤拷锟侥ｏ拷锟�xls"><font color=blue><b>锟斤拷锟斤拷锟斤拷锟侥ｏ拷锟�Excel)</b></font></a>&nbsp;<font color="red">锟诫单锟斤拷锟斤拷锟揭硷拷锟斤拷锟斤拷目锟斤拷锟斤拷锟轿拷锟斤拷锟斤拷锟�/font> 
+        	
+			<div>锟斤拷锟斤拷说锟斤拷锟斤拷</div>
+	<div>
+		<ul>
+			<li>锟斤拷锟斤拷前选锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟�锟斤拷)</li>
+			<li>锟斤拷锟斤拷同一锟斤拷锟斤拷锟斤拷锟斤拷诘亩锟轿碉拷锟诫，系统锟斤拷锟皆讹拷锟斤拷锟斤拷锟斤拷一锟斤拷锟斤拷锟�/li>
+		</ul>
+	</div>
+        	</td>
+      </tr>
+   </table>
+</fieldset>
+
+
+
+<fieldset width="96%" align="center" style="margin: 10px 0px 0px 10px;">
+ <legend style="cursor : pointer" onclick="javascript: var status = this.nextSibling.style.display; status =='none' ? this.nextSibling.style.display = '' : this.nextSibling.style.display='none'">
+	锟斤拷同学锟斤拷锟斤拷识锟斤拷锟劫碉拷锟斤拷
+</legend>
+   <table border=0 cellpadding="0" cellspacing="0">
+      <tr style="padding:5px;"> 
+        <td width="450"><div id="xtxUploadDiv"></div></td>
+		
+        <td valign="top">
+		<div>
+		<b>锟斤拷锟斤拷锟斤拷锟�锟斤拷)</b>选锟斤拷<input align="right" type="text" id="xtxDate" name="xtxDate" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd 锟斤拷WW锟斤拷',isShowWeek:true})" class="Wdate" width="10px"/>
+		</div>
+		<a style="text-decoration: underline;" href="/hbirs/action/filemanage?method=downFromFtp&remotePath=college/zhuanti&fileName=锟斤拷同学锟斤拷锟斤拷识锟筋动锟斤拷锟劫碉拷锟斤拷模锟斤拷.xls"><font color=blue><b>锟斤拷锟斤拷锟斤拷锟侥ｏ拷锟�Excel)</b></font></a>&nbsp;<font color="red">锟诫单锟斤拷锟斤拷锟揭硷拷锟斤拷锟斤拷目锟斤拷锟斤拷锟轿拷锟斤拷锟斤拷锟�/font>
+			<div>锟斤拷锟斤拷说锟斤拷锟斤拷</div>
+	<div>
+		<ul>
+			<li>锟斤拷锟斤拷前选锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟�锟斤拷)</li>
+			<li>锟斤拷锟斤拷同一锟斤拷锟斤拷锟斤拷锟斤拷诘亩锟轿碉拷锟诫，系统锟斤拷锟皆讹拷锟斤拷锟斤拷锟斤拷一锟斤拷锟斤拷锟�/li>
+		</ul>
+	</div>
+        	</td>
+      </tr>
+   </table>
+</fieldset>
+
+
+
+	
+	
+<fieldset width="96%" align="center" style="margin: 10px 0px 0px 10px;">
+ <legend style="cursor : pointer" onclick="javascript: var status = this.nextSibling.style.display; status =='none' ? this.nextSibling.style.display = '' : this.nextSibling.style.display='none'">
+	锟叫寄匡拷锟斤拷锟斤拷锟斤拷莸锟斤拷锟�
+</legend>
+   <table border=0 cellpadding="0" cellspacing="0" >
+      <tr style="padding:5px;"> 
+        <td width="450"><div id="jjkUploadDiv"></div></td>
+		
+        <td valign="top">
+		<div>
+		<b>锟斤拷锟斤拷锟斤拷锟�锟斤拷)</b>选锟斤拷<input align="right" type="text" id="jjkDate" name="jjkDate" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyyMMdd'})" class="Wdate" width="10px"/>
+		</div>
+		<a style="text-decoration: underline;" href="/hbirs/action/filemanage?method=downFromFtp&remotePath=college/zhuanti&fileName=锟叫寄匡拷锟斤拷锟斤拷锟斤拷锟侥ｏ拷锟�xls"><font color=blue><b>锟斤拷锟斤拷锟斤拷锟侥ｏ拷锟�Excel)</b></font></a>&nbsp;<font color="red">锟诫单锟斤拷锟斤拷锟揭硷拷锟斤拷锟斤拷目锟斤拷锟斤拷锟轿拷锟斤拷锟斤拷锟�/font> 
+        	
+			<div>锟斤拷锟斤拷说锟斤拷锟斤拷</div>
+	<div>
+		<ul>
+			<li style="color : red">锟斤拷锟斤拷锟绞碉拷指锟斤拷锟斤拷锟斤拷写为小锟斤拷锟绞斤拷锟斤拷锟�5%锟斤拷锟斤拷写锟斤拷0.15锟斤拷锟斤拷锟侥ｏ拷锟绞撅拷锟斤拷锟斤拷</li>
+			<li>锟斤拷锟斤拷前选锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟�锟斤拷)</li>
+			<li>锟斤拷锟斤拷同一锟斤拷锟斤拷锟斤拷锟斤拷诘亩锟轿碉拷锟诫，系统锟斤拷锟皆讹拷锟斤拷锟斤拷锟斤拷一锟斤拷锟斤拷锟�/li>
+		</ul>
+	</div>
+        	</td>
+      </tr>
+   </table>
+</fieldset>
+
+<fieldset width="96%" align="center" style="margin: 10px 0px 0px 10px;">
+ <legend style="cursor : pointer" onclick="javascript: var status = this.nextSibling.style.display; status =='none' ? this.nextSibling.style.display = '' : this.nextSibling.style.display='none'">
+	WLAN锟斤拷锟斤拷锟捷碉拷锟斤拷
+</legend>
+   <table border=0 cellpadding="0" cellspacing="0">
+      <tr style="padding:5px;"> 
+        <td width="450"><div id="wlanUploadDiv"></div></td>
+		
+        <td valign="top">
+		<div>
+		<b>锟斤拷锟斤拷锟斤拷锟�锟斤拷)</b>选锟斤拷<input align="right" type="text" id="wlanDate" name="wlanDate" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd 锟斤拷WW锟斤拷',isShowWeek:true})" class="Wdate" width="10px"/>
+		</div>
+		<a style="text-decoration: underline;" href="/hbirs/action/filemanage?method=downFromFtp&remotePath=college/zhuanti&fileName=WLAN锟解部锟斤拷锟侥ｏ拷锟�xls"><font color=blue><b>锟斤拷锟斤拷锟斤拷锟侥ｏ拷锟�Excel)</b></font></a>&nbsp;<font color="red">锟诫单锟斤拷锟斤拷锟揭硷拷锟斤拷锟斤拷目锟斤拷锟斤拷锟轿拷锟斤拷锟斤拷锟�/font>
+			<div>锟斤拷锟斤拷说锟斤拷锟斤拷</div>
+	<div>
+		<ul>
+			<li>锟斤拷锟斤拷前选锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟�锟斤拷)</li>
+			<li>锟斤拷锟斤拷同一锟斤拷锟斤拷锟斤拷锟斤拷诘亩锟轿碉拷锟诫，系统锟斤拷锟皆讹拷锟斤拷锟斤拷锟斤拷一锟斤拷锟斤拷锟�/li>
+		</ul>
+	</div>
+        	</td>
+      </tr>
+   </table>
+</fieldset>
+
+<fieldset width="96%" align="center" style="margin: 10px 0px 0px 10px;">
+<legend style="cursor : pointer" onclick="javascript: var status = this.nextSibling.style.display; status =='none' ? this.nextSibling.style.display = '' : this.nextSibling.style.display='none'">
+	锟斤拷准锟斤拷锟斤拷锟斤拷锟捷碉拷锟斤拷
+</legend>
+   <table border=0 cellpadding="0" cellspacing="0">
+      <tr style="padding:5px;"> 
+        <td width="450"><div id="jczbUploadDiv"></div></td>
+		
+        <td valign="top">
+		<div>
+		<b>锟斤拷锟斤拷锟斤拷锟�锟斤拷)</b>选锟斤拷<input align="right" type="text" id="jczbDate" name="jczbDate" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd 锟斤拷WW锟斤拷',isShowWeek:true})" class="Wdate" width="10px"/>
+		</div>
+		<a style="text-decoration: underline;" href="/hbirs/action/filemanage?method=downFromFtp&remotePath=college/zhuanti&fileName=锟斤拷准锟斤拷锟斤拷锟斤拷獠匡拷锟斤拷模锟斤拷.xls"><font color=blue><b>锟斤拷锟斤拷锟斤拷锟侥ｏ拷锟�Excel)</b></font></a>&nbsp;<font color="red">锟诫单锟斤拷锟斤拷锟揭硷拷锟斤拷锟斤拷目锟斤拷锟斤拷锟轿拷锟斤拷锟斤拷锟�/font>
+        	
+			<div>锟斤拷锟斤拷说锟斤拷锟斤拷</div>
+	<div>
+		<ul>
+			<li>锟斤拷锟斤拷前选锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟�锟斤拷)</li>
+			<li>锟斤拷锟斤拷同一锟斤拷锟斤拷锟斤拷锟斤拷诘亩锟轿碉拷锟诫，系统锟斤拷锟皆讹拷锟斤拷锟斤拷锟斤拷一锟斤拷锟斤拷锟�/li>
+		</ul>
+	</div>
+        	</td>
+      </tr>
+   </table>
+</fieldset>
+
+	<script language="JavaScript" type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/codebase/dhtmlxvault.js"></script>
+	<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/default/default.js" charset="utf-8"></script>
+	<script type="text/javascript">
+		+function(window,document,undefined){
+			
+			var _params = aihb.Util.paramsObj();
+			function crtVault(divId) {
+				var vault = new dhtmlXVaultObject();
+			    vault.setImagePath("/hbapp/resources/js/codebase/imgs/");
+			    vault.setServerHandlers("/hbirs/action/filemanage?method=importExcel", "/hbirs/action/filemanage?method=getInfoHandler", "/hbirs/action/filemanage?method=getIdHandler");
+			    vault.setFilesLimit(1);
+			   	vault.create(divId);
+	   	    	
+				vault.onAddFile = function(fileName) {
+					var ext = this.getFileExtension(fileName);
+					if (ext != "xls") {
+						alert("锟斤拷应锟斤拷只支锟斤拷锟斤拷展锟斤拷.xls,锟斤拷锟斤拷锟斤拷锟较达拷.");
+						return false;
+					} else return true;
+				};
+				return vault;
+			}
+			
+			function getThisWeekLastDay(_date){
+				/* wanted : a week start from monday to sunday in China, and the getDay() return 0 if it is monday ,return 6 if it is sunday 
+				*/
+				// way 1 : var DayOfWeekChina = _date.getDay() == 0 ? 7 : _date.getDay();
+				var lastDayOfWeekChina = 7;
+				var dayOfWeekChina = _date.getDay() || 7; // way 1 simpler
+				_date.setDate(_date.getDate() + (lastDayOfWeekChina - dayOfWeekChina)); 
+				return _date;
+			}
+			
+			function showPanels() {
+				!function(){
+					var jjkVault = crtVault("jjkUploadDiv"),
+					timeId,
+					taskId;
+					jjkVault.onFileUpload=function(){
+						if(!(timeId = $("jjkDate").value)) {
+							alert("锟斤拷锟斤拷选锟斤拷一锟斤拷锟斤拷锟斤拷锟斤拷凇锟�);
+							$("jjkDate").focus();
+							return false;
+						} else {
+							taskId = timeId +  "@" + _params.loginname;
+							jjkVault.setFormField("date", taskId);  
+							loadmask.style.display="";
+							return true;
+						}
+						
+					}
+					jjkVault.setFormField("tableName", "jjk_import_temp");
+					
+					
+					
+					jjkVault.setFormField("columns", "taskid,area_id,target,nj_cnt,wt_cnt,bj_cnt,active_rate,wh_cnt,sucs_wh_cnt,missing_cnt,sms_care_cnt,mail139_care_cnt,cu_cnt,ct_cnt,sum_count");
+				
+					jjkVault.onUploadComplete = function(files) {
+						/* 锟斤拷一锟斤拷删锟斤拷锟斤拷一锟轿硷拷录锟窖憋拷java锟斤拷锟节诧拷锟斤拷前锟斤拷锟斤拷 */	
+						var sql= encodeURIComponent("delete from jjk_import_temp where taskid='" + taskId + "' and area_id = '锟斤拷锟斤拷' or area_id like '%示锟斤拷%' ");//删锟斤拷锟酵穇锟斤拷示锟斤拷锟斤拷锟�
+						/* update temp锟斤拷 锟叫碉拷time_id */
+						sql += "&sqls=" + encodeURIComponent("update jjk_import_temp set time_id='" + timeId + "' where taskid='" + taskId + "' ");
+						var ajax = new aihb.Ajax({
+						url : "/hbirs/action/sqlExec"
+						,parameters : "sqls="+sql
+						,loadmask : false
+						,callback : function(xmlrequest){
+							alert("锟斤拷锟斤拷锟斤拷锟�");
+							loadmask.style.display = "none";
+						}
+					});
+						ajax.request();
+					}
+				}();
+				
+				
+				!function(){
+					var mmVault = crtVault("mmUploadDiv"),
+					timeId,
+					taskId;
+					mmVault.onFileUpload=function(){
+						if(!(timeId = $("mmDate").value)) {
+							alert("锟斤拷锟斤拷选锟斤拷一锟斤拷锟斤拷锟斤拷锟斤拷凇锟�);
+							$("mmDate").focus();
+							return false;
+						} else {
+							taskId = timeId +  "@" + _params.loginname;
+							mmVault.setFormField("date", taskId);  
+							loadmask.style.display="";
+							return true;
+						}
+						
+					}
+					mmVault.setFormField("tableName", "cust_college_import");
+					
+					mmVault.setFormField("columns", "task_id,dim1,ind1,ind2");
+				
+					mmVault.onUploadComplete = function(files) {
+						/* 锟斤拷一锟斤拷删锟斤拷锟斤拷一锟轿硷拷录锟窖憋拷java锟斤拷锟节诧拷锟斤拷前锟斤拷锟斤拷 */	
+						var sql= encodeURIComponent("delete from report_total where report_code='College_MM_Dev' and time_id=" + timeId);
+						sql += "&sqls=" + encodeURIComponent("insert into report_total(report_code,time_id,dim1,ind1,ind2) select 'College_MM_Dev',"+timeId+",dim1,ind1,ind2 from cust_college_import where task_id='" + taskId + "'");
+						sql += "&sqls=" + encodeURIComponent("delete from cust_college_import where task_id='" + taskId + "' ");
+						var ajax = new aihb.Ajax({
+						url : "/hbirs/action/sqlExec"
+						,parameters : "sqls="+sql
+						,loadmask : false
+						,callback : function(xmlrequest){
+							alert("锟斤拷锟斤拷锟斤拷锟�");
+							loadmask.style.display = "none";
+						}
+					});
+						ajax.request();
+					}
+				}();
+				
+				
+				!function(){
+					var xtxVault = crtVault("xtxUploadDiv"),
+					timeId,
+					taskId;
+					xtxVault.onFileUpload=function(){
+						if(!$("xtxDate").value){
+							alert("锟斤拷锟斤拷选锟斤拷一锟斤拷锟斤拷锟斤拷锟斤拷凇锟�);
+							$("xtxDate").focus();
+							return false;
+						} else {
+							timeId = $("xtxDate").value.substr(0,10);
+							timeId = getThisWeekLastDay(new Date(timeId.replace(/-/g,"/"))); //锟矫碉拷锟斤拷锟杰碉拷锟斤拷锟揭伙拷锟�
+							timeId = timeId.format("yyyymmdd"); //锟矫碉拷锟街凤拷锟绞�
+							taskId = timeId +  "@" + _params.loginname;
+							xtxVault.setFormField("date", taskId);  
+							loadmask.style.display="";
+							return true;
+						}
+						
+					}
+					xtxVault.setFormField("tableName", "cust_college_import");
+					
+					xtxVault.setFormField("columns", "task_id,dim1,ind1,ind2,ind3,ind4,ind5,ind6,ind7,ind8,ind9");
+				
+					xtxVault.onUploadComplete = function(files) {
+						/* 锟斤拷一锟斤拷删锟斤拷锟斤拷一锟轿硷拷录锟窖憋拷java锟斤拷锟节诧拷锟斤拷前锟斤拷锟斤拷 */	
+						var sql= encodeURIComponent("delete from report_total where report_code='College_XTX' and time_id=" + timeId);
+						sql += "&sqls=" + encodeURIComponent("insert into report_total(report_code,time_id,dim1,ind1,ind2,ind3,ind4,ind5,ind6,ind7,ind8,ind9) select 'College_XTX',"+timeId+",dim1,ind1,ind2,ind3,ind4,ind5,ind6,ind7,ind8,ind9 from cust_college_import where task_id='" + taskId + "'");
+						sql += "&sqls=" + encodeURIComponent("delete from cust_college_import where task_id='" + taskId + "' ");
+						var ajax = new aihb.Ajax({
+						url : "/hbirs/action/sqlExec"
+						,parameters : "sqls="+sql
+						,loadmask : false
+						,callback : function(xmlrequest){
+							alert("锟斤拷锟斤拷锟斤拷锟�");
+							loadmask.style.display = "none";
+						}
+					});
+						ajax.request();
+					}
+				}();
+				
+				
+				!function(){
+					var wlanVault = crtVault("wlanUploadDiv"),
+					timeId,
+					taskId;
+					wlanVault.onFileUpload=function(){
+						if(!$("wlanDate").value){
+							alert("锟斤拷锟斤拷选锟斤拷一锟斤拷锟斤拷锟斤拷锟斤拷凇锟�);
+							$("wlanDate").focus();
+							return false;
+						} else {
+							timeId = $("wlanDate").value.substr(0,10);
+							timeId = getThisWeekLastDay(new Date(timeId.replace(/-/g,"/"))); //锟矫碉拷锟斤拷锟杰碉拷锟斤拷锟揭伙拷锟�
+							timeId = timeId.format("yyyymmdd"); //锟矫碉拷锟街凤拷锟绞�
+							taskId = timeId +  "@" + _params.loginname;
+							wlanVault.setFormField("date", taskId);  
+							loadmask.style.display="";
+							return true;
+						}
+						
+					}
+
+					wlanVault.setFormField("tableName", "wlan_import_temp");
+					wlanVault.setFormField("columns", "taskid,area_id,pre_crtwk_cnt,pre_lstwk_cnt,doing_crtwk_cnt,doing_lstwk_cnt,done_crtwk_cnt,done_lstwk_cnt,wfdc_crtwk_cnt,wfdc_lstwk_cnt,plan_cnt,sum_lstwk_cnt,sum_crtwk_cnt");
+				
+					wlanVault.onUploadComplete = function(files) {
+						/* 锟斤拷一锟斤拷删锟斤拷锟斤拷一锟轿硷拷录锟窖憋拷java锟斤拷锟节诧拷锟斤拷前锟斤拷锟斤拷 */	
+						var sql= encodeURIComponent("delete from wlan_import_temp where taskid='" + taskId + "' and area_id = '锟斤拷锟斤拷' or area_id like '%示锟斤拷%'");//删锟斤拷锟酵�
+						/* update temp锟斤拷 锟叫碉拷time_id */
+						sql += "&sqls=" + encodeURIComponent("update wlan_import_temp set time_id='" + timeId + "' where taskid='" + taskId + "' ");
+						var ajax = new aihb.Ajax({
+						url : "/hbirs/action/sqlExec"
+						,parameters : "sqls="+sql
+						,loadmask : false
+						,callback : function(xmlrequest){
+							alert("锟斤拷锟斤拷锟斤拷锟�");
+							loadmask.style.display = "none";
+						}
+					});
+						ajax.request();
+					}
+				}();
+				
+				!function(){
+					var jczbVault = crtVault("jczbUploadDiv"),
+					timeId,
+					taskId;
+					jczbVault.onFileUpload=function(){
+						if(!$("jczbDate").value){
+							alert("锟斤拷锟斤拷选锟斤拷一锟斤拷锟斤拷锟斤拷锟斤拷凇锟�);
+							$("jczbDate").focus();
+							return false;
+						} else {
+							timeId = $("jczbDate").value.substr(0,10);
+							timeId = getThisWeekLastDay(new Date(timeId.replace(/-/g,"/"))); //锟矫碉拷锟斤拷锟杰碉拷锟斤拷锟揭伙拷锟�
+							timeId = timeId.format("yyyymmdd"); //锟矫碉拷锟街凤拷锟绞�
+							taskId = timeId +  "@" + _params.loginname;
+							jczbVault.setFormField("date", taskId);  
+							loadmask.style.display="";
+							return true;
+						}
+						
+					}
+
+					jczbVault.setFormField("tableName", "jczb_import_temp");
+					jczbVault.setFormField("columns", "taskid,area_id,signed_crtwk,signed_lstwk,doing_crtwk,doing_lstwk,fail_crtwk,fail_lstwk,fail_cu,fail_ct,fail_cuct,fail_all");
+				
+					jczbVault.onUploadComplete = function(files) {
+						/* 锟斤拷一锟斤拷删锟斤拷锟斤拷一锟轿硷拷录锟窖憋拷java锟斤拷锟节诧拷锟斤拷前锟斤拷锟斤拷 */	
+						var sql= encodeURIComponent("delete from jczb_import_temp where taskid='" + taskId + "' and area_id = '锟斤拷锟斤拷' or area_id like '%示锟斤拷%'");//删锟斤拷锟酵�
+						/* update temp锟斤拷 锟叫碉拷time_id */
+						sql += "&sqls=" + encodeURIComponent("update jczb_import_temp set time_id='" + timeId + "' where taskid='" + taskId + "' ");
+						var ajax = new aihb.Ajax({
+							url : "/hbirs/action/sqlExec"
+							,parameters : "sqls="+sql
+							,loadmask : false
+							,callback : function(xmlrequest){
+								alert("锟斤拷锟斤拷锟斤拷锟�");
+								loadmask.style.display = "none";
+							}
+						});
+						ajax.request();
+					}
+				}();
+				
+			};
+			
+			window.onload=function(){
+				aihb.Util.loadmask();
+				showPanels();
+			}
+		
+		}(window,document);
+		
+	</script>
+</body>
+</html>

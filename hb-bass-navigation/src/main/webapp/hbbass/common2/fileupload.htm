@@ -1,0 +1,93 @@
+<html>
+<head>
+<style type="text/css">
+	/*html, body {
+        margin:0;
+        padding:0;
+        border:0 none;
+        overflow:hidden;
+        height:100%;
+    }*/
+  #loading{
+		position:absolute;
+		left:40%;
+		top:35%;
+		border:1px solid #6593cf;
+		padding:2px;
+		background:#c3daf9;
+		width:200px;
+		text-align:center;
+		z-index:20001;
+	}
+	#loading .loading-indicator{
+		border:1px solid #a3bad9;
+		background:white url(/hb-bass-navigation/hbbass/common2/image/block-bg.gif) repeat-x;
+		color:#003366;
+		font:bold 13px tahoma,arial,helvetica;
+		padding:10px;
+		margin:0;
+	}
+</style>
+<script>
+	function check()
+	{
+		if(document.forms[0].fileName.value==""){
+			alert("���ϴ��ļ�");return false;
+		}
+	}
+	
+	function addappendix()
+	{
+		var appendixs = document.getElementsByName('fileName');
+		
+		for (i = 0; i < appendixs.length; i++)
+		{
+			if(appendixs[i].value == "")
+			{
+				alert("ȷ����Ҫ���Ӹ���");
+				return;
+			}
+		}
+		var appendix = document.getElementById('app');
+		var child = document.createElement("div");
+		appendix.appendChild(child);
+		child.innerHTML ='<div><input type="file" name="fileName" size="30"><input type="button" class=form_button_short value="����" onClick="addappendix()">&nbsp;<input type="button" class=form_button_short value="ɾ��" onClick="delappendix(this)"></div>';
+	}
+	
+	function delappendix(foo)
+	{
+		var el = foo.parentNode.parentNode;
+		var parent = el.parentNode;
+		if(parent.childNodes.length > 1)
+			parent.removeChild(el);
+		else
+			alert("����ɾ��");
+	}
+</script>
+<script type="text/javascript" src="/hb-bass-navigation/hbbass/common2/basscommon.js" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css" href="/hb-bass-navigation/hbbass/css/bass21.css" />
+</head>
+<body bgcolor="#EFF5FB">
+<form action="/hbirs/action/filemanage?method=uploadToFtp&remotePath=countyRank" method="post" enctype="multipart/form-data" onsubmit="return check();">
+	<table width="99%">
+		<tr>
+			<td>�ϴ��ļ���</td>
+			<td height="30 px">
+	 		<div id='app'>
+	 		<div><input type="file" name="fileName" size="30"><input type="button" class=form_button_short value="����" onClick="addappendix()">&nbsp;<input type="button" class=form_button_short value="ɾ��" onClick="delappendix(this)"></div>
+	 		</div>
+			</td>
+		</tr>
+	</table>
+</form>
+<div id="loadmask" style="display:none">
+	<div id="loadingmask" style="width:200%;height:200%;background:#c3daf9;position:absolute;z-index:20000;left:0;top:0;">&#160;</div>
+	<div id="loading">
+			<div class="loading-indicator">
+				<img src="/hb-bass-navigation/hbbass/common2/image/grid-loading.gif" style="width:16px;height:16px;" align="absmiddle">
+				&#160;���������Ժ�.....
+			</div>
+	</div>
+</div>
+</body>
+</html>

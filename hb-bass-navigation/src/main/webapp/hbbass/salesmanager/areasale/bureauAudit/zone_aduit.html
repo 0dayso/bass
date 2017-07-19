@@ -1,0 +1,620 @@
+<html xmlns:ai>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+		<title>全省营销中心区域属性设置</title>
+		<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/ext/ext-base.js"></script>
+		<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/ext/ext-all.js"></script>
+		<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/default/default.js"></script>
+		<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/default/json2.js"></script>
+		<link rel="stylesheet" type="text/css" href="/hb-bass-navigation/hbapp/resources/js/ext/resources/css/ext-all.css" />
+		<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/default/default.js" charset="utf-8"></script>
+	
+		<link rel="stylesheet" type="text/css" href="/hb-bass-navigation/hbapp/resources/css/default/default.css" />
+		<script type="text/javascript">
+			  var _header=[
+	{"name":["营销中心编码"],"dataIndex":"id"}
+	,{"name":["营销中心名称"],"dataIndex":"name"}
+	,{"name":["地市编码"],"dataIndex":"area_code"}
+	,{"name":["营销中心属性"],"dataIndex":"arributesid"}	
+      ];
+  var contextPath = window.location['pathname'].split('/')[1];
+   var paramMap={};
+ var temp = window.location.search; 
+if(temp.length!=0){
+	temp = temp.substr(1).split('&');
+	for (i=0;i<temp.length;++i){
+		f = temp[i].split('=');
+		paramMap[f[0]]=f[1];
+	} 
+}
+var stateflag = (paramMap.EDIT=='TRUE');
+		function genSQL(){
+		var sql = "select id,name,area_code,arributesid from (\n" +
+"select  a.*,\n" + 
+"case when arributesid ='未知' then 1\n" + 
+"     when arributesid like '%虚拟归属' then 2\n" + 
+"\t when arributesid = '暂未归属' then 3\n" + 
+"\t when arributesid = '城区'     then 4\n" + 
+"\t when arributesid = '县城'     then 5\n" + 
+"\t else 6 end num\n" + 
+" from nwh.ZONE_ATTRIBUTES_LIST a )  a\n" + 
+" order by arributesid, num,area_code,id";
+		  return sql;
+		}
+		function genASQL(){
+		  var sql = "select id,attributes from nwh.ZONE_ATTRIBUTES";
+		  return sql;
+		}
+		
+		Ext.BLANK_IMAGE_URL = '/hb-bass-navigation/hbapp/resources/js/ext/resources/images/default/s.gif';
+		Ext.onReady(function(){
+		    Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+		    Ext.MessageBox.buttonText.ok='确定';
+		    Ext.MessageBox.buttonText.yes='确定';
+		    Ext.MessageBox.buttonText.no='取消';
+            Ext.MessageBox.buttonText.cancel="取消";
+		    var ds=new Ext.data.Store({
+                    proxy: new Ext.data.HttpProxy({url:"/hb-bass-navigation/hbirs/action/jsondata?method=query&sql="+encodeURIComponent(genSQL())+"&isCached=false&qType=limit&start=1&limit=10000"}),
+                    reader: new Ext.data.JsonReader({
+                        root: 'data',
+                        totalProperty:'total'
+                   },[ 'id','name','area_code','arributesid']
+                    ) 
+               });
+		    ds.load();
+function getUnionZone(){
+    var _sqls = "select id,name,pid,area_code from nwh.bureau_tree where level=3 and id not in (select id from nwh.ZONE_ATTRIBUTES_LIST) order by area_code,name";
+    var ds_u=new Ext.data.Store({
+                    proxy: new Ext.data.HttpProxy({url:"/hb-bass-navigation/hbirs/action/jsondata?method=query&sql="+encodeURIComponent(_sqls)+"&isCached=false&qType=limit&start=1&limit=10000"}),
+                    reader: new Ext.data.JsonReader({
+                        root: 'data',
+                        totalProperty:'total'
+                   },[ 'id','name','pid','area_code']
+                    ) 
+               });
+		    ds_u.load();
+	 _sqlsAREA = "select id,name,pid,area_code from nwh.bureau_tree where level=1 order by area_code,name";
+	 var ds_AREA=new Ext.data.Store({
+                    proxy: new Ext.data.HttpProxy({url:"/hb-bass-navigation/hbirs/action/jsondata?method=query&sql="+encodeURIComponent(_sqlsAREA)+"&isCached=false&qType=limit&start=1&limit=10000"}),
+                    reader: new Ext.data.JsonReader({
+                        root: 'data',
+                        totalProperty:'total'
+                   },[ 'id','name','pid','area_code']
+                    ) 
+               });
+		    ds_AREA.load();
+	var pn_AREA_name = new Ext.Toolbar.TextItem({xtype: 'tbtext',text:'地市:'});
+    var fd_AREA_name = new Ext.form.ComboBox({
+	     fieldLabel:"地市",
+	     name:'AREA_name',
+	     id:'AREA_name',
+	     //width:100,
+	     width:'auto',
+	     height:21,
+	     disabled:false,
+	     mode: 'remote', 
+	     value:'',
+	     editable:false,
+	     triggerAction:'all',
+	     store:ds_AREA,
+      	valueField: 'id',displayField: 'name',
+	     anchor:'92%',
+         allowBlank:false
+      });	   	   
+	fd_AREA_name.on('select', function(comboBox){
+	     var comboCity = Ext.getCmp('town_name');        
+                        comboCity.clearValue();
+                        comboCity.store.filter('pid', comboBox.getValue());
+      });
+	_sqlsTOWN = "select id,name,pid,area_code from nwh.bureau_tree where level=2 order by area_code,name";
+	 var ds_TOWN=new Ext.data.Store({
+                    proxy: new Ext.data.HttpProxy({url:"/hb-bass-navigation/hbirs/action/jsondata?method=query&sql="+encodeURIComponent(_sqlsTOWN)+"&isCached=false&qType=limit&start=1&limit=10000"}),
+                    reader: new Ext.data.JsonReader({
+                        root: 'data',
+                        totalProperty:'total'
+                   },[ 'id','name','pid','area_code']
+                    ) 
+               });
+		    ds_TOWN.load({
+				    params : {//这两个参数是分页的关键，当你点击 下一页 时，这里的值会传到后台,也就是会重新运行：store.load
+				    start : 0,   
+				    limit : 200
+		      }
+		   });	
+	var pn_TOWN = new Ext.Toolbar.TextItem({xtype: 'tbtext',text:'县市:'});
+    var fd_TOWN = new Ext.form.ComboBox({
+	     fieldLabel:"县市",
+	     name:'town_name',
+	     id:'town_name',
+	     //width:100,
+	     width:'auto',
+	     height:21,
+	     disabled:false,
+	     mode: 'remote', 
+	     value:'',
+	     editable:false,
+	     triggerAction:'all',
+	     store:ds_TOWN,
+      	valueField: 'id',displayField: 'name',
+	     anchor:'92%',
+         allowBlank:false
+      });	
+    var fd_addbtnQuery = new Ext.Button({
+	    text: '查询',
+        cls:'x-btn-text-icon',
+        //disabled : !_flagstate,
+        icon:'../../../../hbapp/resources/image/default/search_icon.gif',
+        handler:function(){
+          //getGridPanelA();
+          var _subSQl='';
+          var _sqls = "select id,name,pid,area_code from nwh.bureau_tree where level=3 and id not in (select id from nwh.ZONE_ATTRIBUTES_LIST) order by area_code,name";
+          if (fd_AREA_name.getValue()!=''){
+             subSQl = " and pid like '"+fd_AREA_name.getValue()+"%' order by area_code,name " ;
+          }
+          if (fd_TOWN.getValue()!=''){
+             subSQl = " and pid like '"+fd_TOWN.getValue()+"%' order by area_code,name " ;
+          }
+          _subSQl = _sqls.replace('order by area_code,name',subSQl);
+          //Ext.MessageBox.alert('提示', _subSQl, function(btn) {  });
+          ds_u=new Ext.data.Store({
+                    proxy: new Ext.data.HttpProxy({url:"/hb-bass-navigation/hbirs/action/jsondata?method=query&sql="+encodeURIComponent(_subSQl)+"&isCached=false&qType=limit&start=1&limit=10000"}),
+                    reader: new Ext.data.JsonReader({
+                        root: 'data',
+                        totalProperty:'total'
+                   },[ 'id','name','pid','area_code']
+                 ) 
+           });
+           ds_u.load({
+		     params : {//这两个参数是分页的关键，当你点击 下一页 时，这里的值会传到后台,也就是会重新运行：store.load
+		     start : 0,   
+		     limit : 200
+		      }
+		    });
+           gd_u.reconfigure(ds_u, new Ext.grid.ColumnModel([
+		    new Ext.grid.CheckboxSelectionModel(),
+		    {header:"营销中心编码",width:180,sortable:true,dataIndex:"id"},
+         {header:"营销中心名称",width:260,sortable:true,dataIndex:"name"},
+		{header:"地区编码",width:80,sortable:true,dataIndex:"area_code"}
+		    ])); 
+		    
+        }
+	   });
+	   var pn_set_aduit = new Ext.Toolbar.TextItem({xtype: 'tbtext',text:'设置属性:'});
+	   var _sqls_set_aduit = "select id,attributes from nwh.ZONE_ATTRIBUTES";
+	 var ds_set_aduit=new Ext.data.Store({
+                    proxy: new Ext.data.HttpProxy({url:"/hb-bass-navigation/hbirs/action/jsondata?method=query&sql="+encodeURIComponent(_sqls_set_aduit)+"&isCached=false&qType=limit&start=1&limit=10000"}),
+                    reader: new Ext.data.JsonReader({
+                        root: 'data',
+                        totalProperty:'total'
+                   },[ 'id','attributes']
+                    ) 
+               });
+		    ds_set_aduit.load();
+	   var fd_set_aduit = new Ext.form.ComboBox({
+	     fieldLabel:"设置属性",
+	     name:'set_aduit',
+	     id:'set_aduit',
+	     //width:100,
+	     width:'auto',
+	     height:21,
+	     disabled:false,
+	     mode: 'remote', 
+	     value:'',
+	     editable:false,
+	     triggerAction:'all',
+	     store:ds_set_aduit,
+      	valueField: 'id',displayField: 'attributes',
+	     anchor:'92%',
+         allowBlank:false
+      });
+	   var tb_3 = new Ext.Toolbar({
+         autoWidth:true,autoShow:true,
+	    items:[pn_set_aduit,fd_set_aduit]
+       }); 
+	   var tb_3_1 = new Ext.Toolbar({
+         autoWidth:true,autoShow:true,
+	    items:[pn_AREA_name,fd_AREA_name,pn_TOWN,fd_TOWN,'-',fd_addbtnQuery]
+        });  
+	var smck_gd = new Ext.grid.CheckboxSelectionModel();
+	   var gd_u = new Ext.grid.GridPanel({
+         region:'center',
+         //el: 'grid',
+         id : 'gd_u',
+	     ds: ds_u,
+	     sm: smck_gd,	     
+	     columns:[
+	     smck_gd,
+	     {header:"营销中心编码",width:180,sortable:true,dataIndex:"id"},
+         {header:"营销中心名称",width:260,sortable:true,dataIndex:"name"},
+		{header:"地区编码",width:80,sortable:true,dataIndex:"area_code"}
+		
+	     ],
+	     tbar: tb_3,
+	     listeners: {   
+            'render': function () {   
+                tb_3_1.render(this.tbar); //add one tbar                 
+            }},
+//	     bbar : ['->',
+//	     new Ext.PagingToolbar({id:'pagingtoolbar',pageSize: 200, store: ds_u,displayInfo: true,loadMask: true,
+//displayMsg: '显示第 {0} 条到 {1} 条记录，一共 {2} 条',
+//emptyMsg: "没有记录",width:400 })
+//	     ],
+	     loadMask: true,		     
+	     border:false,
+	     bodyStyle:'Height:100%;',
+	     bodyStyle:'width:90%;',
+	     autoWidth:true
+	     });	   
+    var win_u = new Ext.Window({   
+        title: "营销中心属性维护",    
+        width: 600,
+        height:400,
+        id:'win_u',
+        minWidth: 300,
+        minHeight: 200,
+        layout: 'fit',
+        plain:true,
+        modal: true,
+        bodyStyle:'padding:1px;',
+        buttonAlign:'center',
+             items: [gd_u],   
+             buttons: [{   
+                text: "确定", 
+                handler: onOKSave_u,   
+                scope: this  
+            }, {   
+                text: "退出",   
+                handler: closeWin_u,   
+                scope: this  
+            }]   
+  });
+  function onOKSave_u(){
+     if (fd_set_aduit.getValue()!=''){
+     var _arribu = fd_set_aduit.getValue();
+     var records=gd_u.getSelectionModel().getSelections();
+        var _sqls = "";
+        if (records.length >0){
+          Ext.MessageBox.confirm('提示', "您确定要设置此"+records.length+"项为'"+_arribu+"'属性吗?", function(btn) {
+            if (btn == 'yes'){
+		           for (var i=0 ;i<records.length;i++){
+		                var _onesql = encodeURIComponent("insert into nwh.ZONE_ATTRIBUTES_LIST(id,name,area_code,arributesid) values('"+records[i].get('id')+"','"+records[i].get('name')+"','"+records[i].get('area_code')+"','"+_arribu+"') ");
+                        _sqls += ((_sqls==''?'':'&') + ("sqls="+_onesql));
+		           }
+		           var ajax = new aihb.Ajax({
+											url : "/hb-bass-navigation/hbirs/action/sqlExec?"+_sqls
+											,loadmask : false
+											,callback : function(xmlrequest){
+												//alert(xmlrequest.responseText);
+											}
+										});
+										ajax.request();
+										Ext.MessageBox.alert('提示', '执行成功!', function(btn) {  });
+										Ext.getCmp('win_u').hide();
+                                        Ext.getCmp('win_u').destroy();
+                                        location.reload();
+           }
+           });
+        }else{
+           Ext.MessageBox.alert('提示', '请选择需要设置的营销中心!', function(btn) {  });
+           return ;
+        }
+      }else{
+           Ext.MessageBox.alert('提示', '请选择需要设置的属性!', function(btn) {  });
+           return ;
+      }  
+  };
+  win_u.show();
+  function closeWin_u(){
+      Ext.getCmp('win_u').hide();
+      Ext.getCmp('win_u').destroy();
+  };
+};		   
+	var fd_addbtn = new Ext.Button({
+	    text: '添加区域属性',
+        cls:'x-btn-text-icon',
+        disabled : !stateflag,
+        icon:'../../../../hbapp/resources/image/default/custrpt.gif',
+        handler:function(){
+        //alert(genSQLB());
+        //Ext.MessageBox.alert('标题', genSQLB(), function(btn) { alert('你刚刚点击了 ' + btn); });
+         //getGridPanel();
+        // Ext.getCmp('university_win').show();
+        getUnionZone();
+        }
+	   });
+	   var fd_addbtnA = new Ext.Button({
+	    text: '属性维度设置',
+        cls:'x-btn-text-icon',
+        disabled : !stateflag,
+        icon:'../../../../hbapp/resources/image/default/topmenu_icon01.gif',
+        handler:function(){
+          getGridPanelA();
+        }
+	   });
+	   var fd_delbtn = new Ext.Button({
+	    text: '删除区域属性',
+     cls:'x-btn-text-icon',
+     disabled : !stateflag,
+     icon:'../../../../hbapp/resources/image/default/delete.gif',
+     handler:function(){
+        var records=gd_1.getSelectionModel().getSelections();
+        if (records.length >0){
+            Ext.MessageBox.confirm('提示', "您确定要删除"+records.length+"项吗?", function(btn) {
+               var _sqls = "";
+                if (btn == 'yes'){
+                    for (var i=0 ;i<records.length;i++){
+		                var _onesql = encodeURIComponent("delete from nwh.ZONE_ATTRIBUTES_LIST where id='"+records[i].get('id')+"'");
+                        _sqls += ((_sqls==''?'':'&') + ("sqls="+_onesql));
+		           }
+		           var ajax = new aihb.Ajax({
+											url : "/hbirs/action/sqlExec?"+_sqls
+											,loadmask : false
+											,callback : function(xmlrequest){
+												//alert(xmlrequest.responseText);
+											}
+										});
+										ajax.request();
+										Ext.MessageBox.alert('提示', '执行成功!', function(btn) {  });
+                                        location.reload();
+                }
+            });
+        }
+     }
+     });
+     var fd_down = new Ext.Button({
+	    text: '下载',
+        cls:'x-btn-text-icon',
+        //disabled : !_flagstate,
+        icon:'../../../../hbapp/resources/image/default/down.gif',
+        handler:function(){
+           var _fileName=document.title;
+	       
+	       aihb.AjaxHelper.down({url: "/hb-bass-navigation/hbirs/action/jsondata?method=down&fileKind=excel&header="+aihb.AjaxHelper.transHeader(_header)+"&sql="+encodeURIComponent(genSQL())+"&fileName="+_fileName});
+        }
+	   });
+		   var smck_gd = new Ext.grid.CheckboxSelectionModel();
+	   var gd_1 = new Ext.grid.GridPanel({
+         region:'center',
+         //el: 'grid',
+         id : 'gd_1',
+	     ds: ds,
+	     sm: smck_gd,	     
+	     columns:[
+	     smck_gd,
+	     {header:"营销中心编码",width:180,sortable:true,dataIndex:"id"},
+         {header:"营销中心名称",width:260,sortable:true,dataIndex:"name"},
+		{header:"地区编码",width:80,sortable:true,dataIndex:"area_code"},
+		{header:"营销中心属性",width:120,sortable:true,dataIndex:"arributesid"}
+	     ],
+	     tbar : [fd_addbtn,fd_delbtn,fd_addbtnA,'-',fd_down],
+//	     bbar : ['->',
+//	     new Ext.PagingToolbar({id:'pagingtoolbar',pageSize: 200, store: ds,displayInfo: true,loadMask: true,
+//displayMsg: '显示第 {0} 条到 {1} 条记录，一共 {2} 条',
+//emptyMsg: "没有记录",width:400 })
+//	     ],
+	     loadMask: true,		     
+	     border:false,
+	     bodyStyle:'Height:100%;',
+	     bodyStyle:'width:90%;',
+	     autoWidth:true
+	     }); 
+
+function getGridPanelA(){
+    
+     var _ds=new Ext.data.Store({
+                    proxy: new Ext.data.HttpProxy({url:"/hb-bass-navigation/hbirs/action/jsondata?method=query&sql="+genASQL()+"&isCached=false&qType=limit&start=1&limit=10000"}),
+                    reader: new Ext.data.JsonReader({
+                        root: 'data',
+                        totalProperty:'total'
+                   },['id','attributes']
+                 ) 
+           });
+    _ds.load();
+    function add_attri(){
+    var fd_AttriName = new Ext.form.TextField({
+	     fieldLabel:'属性名称',
+	     name:'CREATER',
+	     id : 'AttriName',
+	     //ds:ds_proc,
+	     //listeners:{change:fieldChang},
+	     width:80,
+	     height:21,
+	     anchor:'97%',
+      allowBlank:false
+     });
+    var win_A = new Ext.Window({   
+        title: "新增营销中心属性名称",    
+        width: 200,
+        height:100,
+        id:'zone_attributes_add',
+        minWidth: 200,
+        minHeight: 100,
+        layout: 'fit',
+        plain:true,
+        modal: true,
+        bodyStyle:'padding:1px;',
+        buttonAlign:'center',
+             items: [fd_AttriName],   
+             buttons: [{   
+                text: "确定", 
+                handler: onOKSave1,   
+                scope: this  
+            }, {   
+                text: "退出",   
+                handler: closeWin1,   
+                scope: this  
+            }]   
+  });
+  win_A.show();
+  };
+    var add_Abtn = new Ext.Button({
+	    text: '新增属性',
+     cls:'x-btn-text-icon',
+     //disabled : !_flagstate,
+     icon:'../../../../hbapp/resources/image/default/add.gif',
+     handler:function(){
+        add_attri();
+     }
+     });
+      function onOKSave1(){
+        var _name = Ext.getCmp('AttriName').getValue();
+        if (_name != ''){
+        
+          Ext.MessageBox.confirm('提示:', "您确认新增'"+_name+"'属性吗?", function(btn) { 
+          if (btn == 'yes'){
+               var _sqlA = "insert into nwh.ZONE_ATTRIBUTES(id,attributes) values('"+_name+"','"+_name+"')";
+               //Ext.getCmp('AttriName').setValue(_sqlA);
+              var ajax = new aihb.Ajax({
+											url : "/hb-bass-navigation/hbirs/action/sqlExec?sqls="+encodeURIComponent(_sqlA)
+											,loadmask : false
+											,callback : function(xmlrequest){
+												/*alert(xmlrequest.responseText.message);
+												if (xmlrequest.responseText.message == '执行成功'){
+												   Ext.MessageBox.alert('提示', '删除成功!', function(btn) {  });
+												}else{
+												   Ext.MessageBox.alert('提示', '删除失败!', function(btn) {  });
+												}*/
+												Ext.MessageBox.alert('提示', '执行成功!', function(btn) {  });
+											}
+										});
+					ajax.request();
+					Ext.getCmp('zone_attributes_add').hide();
+					Ext.getCmp('zone_attributes').hide();
+                    Ext.getCmp('zone_attributes_add').destroy();
+                    Ext.getCmp('zone_attributes').destroy();
+                    getGridPanelA();
+          } 
+          });
+        }
+     };
+  function closeWin1(){
+      Ext.getCmp('zone_attributes_add').hide();
+      Ext.getCmp('zone_attributes_add').destroy();
+  };
+  
+  var del_attributes = new Ext.Button({
+	    text: '删除属性',
+     cls:'x-btn-text-icon',
+     //disabled : !_flagstate,
+     icon:'../../../../hbapp/resources/image/default/delete.gif',
+     handler:function(){
+        //add_attri();
+        var records=gd_2.getSelectionModel().getSelections();
+        var _sqls = "";
+        if (records.length >0){
+         
+           for (var i=0 ;i<records.length;i++){
+               var _onesql = encodeURIComponent("DELETE FROM nwh.ZONE_ATTRIBUTES WHERE id='"+records[i].get('id')+"' ");
+               _sqls += ((_sqls==''?'':'&') + ("sqls="+_onesql));
+           }
+        }else{
+           Ext.MessageBox.alert('提示', '未选择需要删除的属性!', function(btn) {  });
+        }
+        if (_sqls != ''){
+            //alert(_sqls);
+            Ext.MessageBox.confirm('提示', '您确定要删除'+records.length+'项?', function(btn) {
+              if (btn == 'yes'){
+                 var ajax = new aihb.Ajax({
+											url : "/hbirs/action/sqlExec?"+_sqls
+											,loadmask : false
+											,callback : function(xmlrequest){
+												//alert(xmlrequest.responseText);
+												Ext.MessageBox.alert('提示', '执行成功!', function(btn) {  });
+												Ext.getCmp('zone_attributes').hide();
+                                                Ext.getCmp('zone_attributes').destroy();
+                                                getGridPanelA();
+											}
+										});
+					ajax.request();
+              }
+             //alert('你刚刚点击了 ' + btn); 
+             });
+            
+        }
+     }
+     });
+     var smd = new Ext.grid.CheckboxSelectionModel();
+    var gd_2 = new Ext.grid.EditorGridPanel({
+         //region:'center',
+	     ds: _ds,
+	     id:'attributesSet', 
+	     sm:smd,	     
+	     columns:[
+	     smd,
+	     {header: "属性编号", width:120,sortable:true,dataIndex: 'id'},
+	     {header: "属性名称", width:120,sortable:true, dataIndex: 'attributes'}
+	     ],
+	     layoutConfig:{
+                    animate:true
+                },
+         tbar : [add_Abtn,del_attributes],        
+//	     bbar : ['->',//new Ext.PagingToolbar({ pageSize: 20, store: ds})
+//	     new Ext.PagingToolbar({id:'pagingtoolbar',pageSize: 30, store: _ds,displayInfo: true,loadMask: true,
+// displayMsg: '显示第 {0} 条到 {1} 条记录，一共 {2} 条',
+//emptyMsg: "没有记录",width:480 })
+//	     ],
+	     loadMask: true,		     
+	     border:false
+	     });
+   
+         //Ext.MessageBox.confirm('选择框', resultDate, function(btn) { alert('你刚刚点击了 ' + btn); });
+
+      var win = new Ext.Window({   
+        title: "营销中心属性维护",    
+        width: 600,
+        height:400,
+        id:'zone_attributes',
+        minWidth: 300,
+        minHeight: 200,
+        layout: 'fit',
+        plain:true,
+        modal: true,
+        bodyStyle:'padding:1px;',
+        buttonAlign:'center',
+             items: [gd_2],   
+             buttons: [{   
+                text: "确定", 
+                handler: onOKSave,   
+                scope: this  
+            }, {   
+                text: "退出",   
+                handler: closeWin,   
+                scope: this  
+            }]   
+  });
+  
+  function onOKSave(){
+     Ext.getCmp('zone_attributes').hide();
+     Ext.getCmp('zone_attributes').destroy();
+  }
+  function closeWin(){
+      Ext.getCmp('zone_attributes').hide();
+      Ext.getCmp('zone_attributes').destroy();
+  }
+  win.show();
+};
+		
+		var ly_1 = new Ext.Viewport({
+	     layout:'border',
+	     items:[gd_1]
+        });    
+		    
+		});
+		</script>
+		<style>
+.dim_cell_title_wide {
+	font-family: "宋体";
+	font-size: 12px;
+	line-height: 20px;
+	font-weight: normal;
+	font-variant: normal;
+	color: #000000;
+	width: 20%;
+	background-color: #D9ECF6;
+}
+</style>
+	</head>
+	<body>
+		<form action="" method="post" style=""></form>
+	</body>
+</html>

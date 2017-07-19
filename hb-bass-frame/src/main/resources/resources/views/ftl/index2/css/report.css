@@ -1,0 +1,441 @@
+body{
+	/* background-color: rgba(244, 244, 244, 1); */
+	}
+*{
+	margin:0;
+	padding:0;
+}
+li{
+	font-family:MicrosoftYaHei,Microsoft YaHei;
+	color: #999999;
+	font-style: normal;
+  font-size: 12px;
+  height: 32px;
+  text-align: left;
+}
+
+ ul{  
+position: absolute;
+width: 150px;
+}  
+
+li.mouseOver {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:67px;
+  height:16px;
+  background:inherit;
+  background-color:rgba(255, 255, 255, 0);
+  border:none;
+  border-radius:0px;
+  -moz-box-shadow:none;
+  -webkit-box-shadow:none;
+  box-shadow:none;
+  font-family:'Cloud-analysis-icon';
+  font-weight:400;
+  font-style:normal;
+  font-size:12px;
+  color:#999999;
+}
+#div_00  {
+	 position: absolute;
+   width: 80%;
+   top: 90px;
+   left: 231px;
+	}
+	
+#div_1 {
+    position: absolute;
+    width: 67px;
+    left: -5px;
+    top: 96px;
+	}
+.text_input{
+	 width: 180px;
+    background-color: rgba(244, 244, 244, 1);
+    border: none;
+    height: 27px;
+    border-radius: 2px;
+}
+#div_2  {
+	position: absolute;
+	width: 96%;
+	top: 5.4%;
+	left: 2%;
+	border-top: 0px solid #ccc;
+}
+	
+#div_3 {
+	 position: absolute;
+   width: 100px;
+   font-family: 'MicrosoftYaHei', 'Microsoft YaHei';
+   font-weight: 400;
+   font-style: normal;
+   font-size: 16px;
+   color: #666666;
+   top: 15px;
+  left: 15px;
+}
+
+#div_4 {
+	 position: absolute;
+   width: 100px;
+   top: 45px;
+   color: #666666;
+}
+
+#div_5 {
+position: absolute;
+top: 60px;
+left:15px;
+width: 160px;
+height: 20px;
+}
+
+.1_input {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 133px;
+    height: 28px;
+    font-family: 'ArialMT', 'Arial';
+    font-weight: 400;
+    font-style: normal;
+    font-size: 12px;
+    text-decoration: none;
+    color: #C9C9C9;
+    text-align: left;
+    border-color: transparent;
+    outline-style: none;
+}
+
+#div_6 {
+	 position: absolute;
+   width: 130px;
+   top: 2%;
+   left: 5%;
+   font-family: 'MicrosoftYaHei', 'Microsoft YaHei';
+   font-weight: 400;
+   font-style: normal;
+   font-size: 17px;
+   color: #456789;
+   margin-left: 1.1%
+}
+
+#div_7 {
+position: absolute;
+top: 50px;
+left: 150px;
+/*width: 133px;
+height: 20px;*/
+}
+
+#div_8 {
+   /*  position: absolute;
+    top: 3%;
+    right: 10%; */
+    width: 290px;
+    white-space: nowrap;
+    font-family: 'MicrosoftYaHei', 'Microsoft YaHei';
+    font-weight: 400;
+    font-style: normal;
+    font-size: 14px;
+    display: inline-block;
+    float: right;
+    margin-right: 4.5%;
+    margin-top: 1%;
+   font-size: 12px;
+}
+
+
+#div_9 {
+    position: absolute;
+    /*! left: 200px; */
+    /*! top: 100px; */
+    width: 18%;
+    height: 90%;
+    background: inherit;
+    background-color: rgba(255, 255, 255, 1);
+    border: none;
+    border-radius: 4px;
+    box-shadow: 0px 0px 7px rgba(201, 201, 201, 0.349019607843137);
+}
+
+#div_10 {
+    position: absolute;
+    left: 19%;
+    /*! top: 100px; */
+    width: 81%;
+    height: 130%;
+    background: inherit;
+    background-color: rgba(255, 255, 255, 1);
+    border: none;
+    border-radius: 4px;
+    box-shadow: 0px 0px 7px rgba(201, 201, 201, 0.349019607843137);
+}
+
+
+.u1_th {
+  font-family: 'PingFangSC-Semibold', 'PingFang SC Semibold', 'PingFang SC';
+  font-style: normal;
+  font-size: 12px;
+  color: #666666;
+  height:30px;
+  border: solid #E9E9E9;
+  border-width: 0px 1px 1px 0px;
+}
+
+
+#u1_td {
+	font-family: 'MicrosoftYaHei', 'Microsoft YaHei';
+  font-weight: 400;
+  font-style: normal;
+  font-size: 12px;
+  color: #4BB901;
+}
+	
+.table{
+	width:100%;
+	border: none;
+    border-collapse: collapse;
+    border:solid #E9E9E9; border-width:0px 0px 0px 1px;
+}
+td {
+	 font-family: 'MicrosoftYaHei', 'Microsoft YaHei';
+	  font-weight: 400;
+	  font-style: normal;
+	  font-size: 12px;
+	  color: #999999;
+	  text-align: center;
+	  border:solid #E9E9E9; border-width:1px 1px 1px 0px; 
+	  width:90px;
+	  padding:5px 0px;
+	}	
+	
+#repBody{
+	 height: 22px;
+	line-height: 20px;
+}
+.tr_title{
+		height: 40px;
+		line-height: 20px;
+		background-color: rgba(244, 244, 244, 1);
+		border:solid #E9E9E9; border-width:1px 0px 1px 0px; 
+}
+.div_11{
+		position: absolute;
+    /*! left: 200px; */
+    top: 92%;
+    width: 18%;
+    height: 39%;
+    background: inherit;
+    background-color: rgba(255, 255, 255, 1);
+    border: none;
+    border-radius: 4px;
+    box-shadow: 0px 0px 7px rgba(201, 201, 201, 0.349019607843137);
+	}
+	
+#div_12{
+	 position: absolute;
+   width: 100px;
+   top: 15px;
+   left: 15px;
+   font-family: 'MicrosoftYaHei', 'Microsoft YaHei';
+   font-weight: 400;
+   font-style: normal;
+   font-size: 16px;
+   color: #666666;
+	}
+	
+#div_13{
+	 position: absolute;
+   width: 100px;
+   top: 45px;
+   color: #666666;
+	}
+	
+	.div_14{
+	 position: absolute;
+   width: 100px;
+   left: 15px;
+	}
+	
+	
+.div_16{ 
+    background-color:rgba(162, 162, 162, 0.45); 
+    color:#222; 
+    height:15px; 
+    width:89px; 
+    border:1px solid #bbb; 
+    text-align:left; 
+    position:absolute;
+    left: 80px;
+    top: 0px;
+} 
+.div_16 .bar { 
+    background-color:#2D9CE6; 
+    height:15px; 
+    width:0; 
+    left:0; 
+    top:0; 
+    z-index:10; 
+} 
+.div_16 .text { 
+    height:15px; 
+    float: right;
+    left:0; 
+    top:0; 
+    width:100%; 
+    line-height:16px; 
+    font-size: 11px;
+    color: #FFFFFF;
+    z-index:100; 
+  }
+  
+.div_15{
+	font-family: 'Cloud-analysis-icon';
+  font-weight: 400;
+  font-style: normal;
+  font-size: 12px;
+  line-height: 18px;
+  color: #999999;
+	}
+
+	a{
+	text-decoration: none;
+	}
+	a:link{
+	color:#999999;
+	}
+	a:visited{
+	color:#999999;
+	}
+	a:hover{
+	 cursor: pointer;
+	 color: #2D9CE6;
+	}
+	a:active {
+	 color: #2D9CE6;
+	}
+	
+	.coll-col{
+	   color:#4BB901;
+	}
+	.text:hover{
+	   color:#2D9CE6; 
+	}
+.div_15 span:nth-child(1){
+	color: #399ED8;
+}
+
+.gridSubContent {
+	height: 100px;
+	line-height: 100px;
+	margin: 16px 16px 10px 10px;
+	padding-left: 30px;
+	vertical-align: middle;
+	/* border-bottom:1px solid #E6E6E6; */
+	cursor: pointer;
+	margin-top:4%;
+}
+
+.excelIcon{    		
+     height: 90px;
+     line-height: 30px;
+    /*  background: url("../img/report/u2588.png") no-repeat;    */ 
+    border-bottom: 1px solid #E6E6E6;
+    margin-left: -5%;
+    margin-top:1%;
+    	}
+  .repport_img1{
+     width: 75px;
+    height: 75px;
+    background-color: #ddd;
+    border-radius: 50%;
+    display: inline-block;
+    float: left;
+    text-align: center;
+    margin: 9px 0 0 -38px;
+  }
+  .repport_img1 img{
+      margin-top: 11px;
+  }
+  .excelTitle {
+  	height: 30px;
+  line-height: 30px;
+  vertical-align: middle;
+  color: #666;
+  font-size: 12px;
+  font-family: arial
+  }
+  .text_over{
+   width: 557px;
+    height: 30px;
+    display: inline-block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  .boldTitle{
+  	font-weight: bold;
+   color: #456789;
+   font-size: 14px;
+  }
+.excel{
+	margin-left:100px;
+}
+.collect{
+	  color: #456789;
+    /* margin-left: 54%; */
+    position: absolute;
+    left: 90%;
+}	
+
+.prog {
+    border-radius: 4px;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+}
+
+.prog-bar{
+	float: left;
+	background-color: rgb(57, 158, 216);
+	text-align: left;
+	height: 100%;
+	font-size: 12px;
+	color: #fff;
+	box-shadow: inset 0 -1px 0 rgba(0,0,0,.15);
+	transition: width .6s ease;
+}
+
+.aa{
+	padding-left: 5px;
+	color: white;
+}
+
+.ser-name-box{
+	border: 1px solid #E8E8E8;
+	border-radius: 3px;
+	height: 26px;
+	line-height: 26px;
+	padding: 0 4px;
+	position: absolute;
+    top: 1.2%;
+    left: 17%;
+}
+
+.ser-inp{
+	border-color: transparent;
+    font-family: "MicrosoftYaHei", "Microsoft YaHei";
+    font-weight: 400;
+    font-style: normal;
+    font-size: 12px;
+    text-decoration: none;
+    outline-style: none;
+	color:#999999;
+	width: 160px;
+}
+
+.ser-btn{
+	cursor: pointer;
+}

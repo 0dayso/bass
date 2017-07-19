@@ -1,0 +1,42 @@
+.ztree2 * {
+	font-size: 10pt;
+	font-family: "Microsoft Yahei", Verdana, Simsun, "Segoe UI Web Light",
+		"Segoe UI Light", "Segoe UI Web Regular", "Segoe UI",
+		"Segoe UI Symbol", "Helvetica Neue", Arial
+}
+
+
+.ztree2 li {
+	line-height: 30px;
+}
+
+.ztree2 li a {
+	width: 100%;
+	height: 30px;
+	padding-top: 0px;
+}
+
+.ztree2 li a:hover {
+	text-decoration: none;
+	background-color: #E7E7E7;
+}
+
+
+.ztree2 li a.curSelectedNode {
+	background-color: #D4D4D4;
+	border: 0;
+	height: 30px;
+}
+
+.sys-btn {
+    padding: 0 5px;
+    height: 26px;
+    line-height: 26px;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    box-shadow: 0 1px 0 #ccc;
+    color: #555;
+    background-color: #f7f7f7;
+    text-shadow: 0 1px 0 #fff;
+}
+

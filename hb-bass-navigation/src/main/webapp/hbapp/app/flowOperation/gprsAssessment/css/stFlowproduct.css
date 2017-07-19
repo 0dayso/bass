@@ -1,0 +1,96 @@
+
+#gprsAssessment {
+	width: 960px;
+	margin: 0 auto;
+	background-color: #FFFFFF;
+}
+
+#gprsAssessment .header{
+	height: 20px;
+	padding:10px 0 10px 0;
+}
+
+#gprsAssessment .bodyStyle{
+	margin: 0 auto;
+}
+#gprsAssessment .bodyStyle .orderDiv{
+	height:300px;
+	width:960px;
+	float:left;
+}
+
+#gprsAssessment .bodyStyle .orderDiv .orderTitle{
+	height:10px;
+	padding: 5px 0 5px 0;
+	font:normal small-caps 600 12pts/18pts 宋体;
+}
+#gprsAssessment .bodyStyle .orderDiv .orderLeft{
+	width:310px;
+	height:240px;
+	padding: 5px 0 5px 0;
+	margin-right:10px;
+	float:left;
+}
+#gprsAssessment .bodyStyle .orderDiv .orderCenter{
+	width:310px;
+	height:240px;
+	padding: 5px 0 5px 0;
+	margin-right:10px;
+	float:left;
+}
+#gprsAssessment .bodyStyle .orderDiv .orderRight{
+	width:310px;
+	height:240px;
+	padding: 5px 0 5px 0;
+	margin-left:10px;
+	float:left;
+}
+
+#gprsAssessment .bodyStyle .chargeDiv{
+	height:250px;
+	float:left;
+}
+
+#gprsAssessment .bodyStyle .chargeDiv .chargeTitle{
+	height:10px;
+	padding: 5px 0 5px 0;
+	font:normal small-caps 600 12pts/18pts 宋体;
+	
+}
+#gprsAssessment .bodyStyle .chargeDiv .chargeLeft{
+	width:310px;
+	height:240px;
+	padding: 10px 0 10px 0;
+	margin-right:5px;
+	float:left;
+}
+#gprsAssessment .bodyStyle .chargeDiv .chargeCenter{
+	width:310px;
+	height:240px;
+	padding: 10px 0 10px 0;
+	margin:0 5px 0 5px;
+	float:left;
+}
+#gprsAssessment .bodyStyle .chargeDiv .chargeRight{
+	width:310px;
+	height:240px;
+	padding: 10px 0 10px 0;
+	margin-left:5px;
+	float:left;
+}
+#gprsAssessment .bodyStyle .feeDivTitle{
+	font:normal small-caps 600 12pts/18pts 宋体;
+}
+#gprsAssessment .bodyStyle .feeDiv{
+	width:960px;
+	height:300px;
+	float:left;
+}
+#gprsAssessment .bodyStyle .reportDivTitle{
+	font:normal small-caps 600 12pts/18pts 宋体;
+}
+#gprsAssessment .bodyStyle .reportDiv{
+	height:100px;
+	width:960px;
+	float:left;
+}

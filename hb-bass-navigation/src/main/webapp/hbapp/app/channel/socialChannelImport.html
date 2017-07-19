@@ -1,0 +1,86 @@
+<HTML>                                                                                                                                                                                                                                                                                                                   
+<HEAD>
+<TITLE>�����ƶ���Ӫ����ϵͳ</TITLE>
+<link rel="stylesheet" type="text/css" href="/hb-bass-navigation/hbapp/resources/js/codebase/dhtmlxvault.css" />
+<link rel="stylesheet" type="text/css" href="/hb-bass-navigation/hbapp/resources/css/default/default.css" />
+
+	<script language="JavaScript" type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/codebase/dhtmlxvault.js"></script>
+	<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/default/default.js" charset="utf-8"></script>
+	<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/default/tabext.js" charset="utf-8"></script>
+	<script type="text/javascript">
+		var _params = aihb.Util.paramsObj();
+		var taskId = new Date().format("yyyymmdd") + "@" + _params.loginname;
+		function showPanel() {
+			var vault = new dhtmlXVaultObject();
+		    vault.setImagePath("/hbapp/resources/js/codebase/imgs/");
+		    vault.setServerHandlers("/hbirs/action/filemanage?method=importExcel", "/hbirs/action/filemanage?method=getInfoHandler", "/hbirs/action/filemanage?method=getIdHandler");
+		    vault.setFilesLimit(1);
+		   	vault.create("uploadDiv");
+		   	
+		
+		   	
+		   	//var taskId = new Date().toLocaleString() + "@" + _params.loginname + "@" + _params.areaid;
+		   	//var taskId = new Date().toLocaleString() + "@" + _params.loginname;
+		   	
+		   	
+   	    	vault.onFileUpload=function(){
+    			loadmask.style.display="";
+    			return true;
+    		}
+		   	
+		   	vault.setFormField("tableName", "NMK.CHL_SOCIAL_VALUE_IMPORT_SCORE_UPLOADTEMP");
+	    	vault.setFormField("columns", "taskid,CHANNEL_ID,Customer_service_score,Competitive_strategy_score,Image_score,Development_strategy_score");
+	    	vault.setFormField("date", taskId);  
+	    	
+	    	vault.onUploadComplete = function(files) {
+	    		var tempDate = new Date();
+	    		tempDate.setMonth(tempDate.getMonth() - 1);//�ϸ��µ�
+	    		var _date = tempDate.format("yyyymm");
+	    		var sql=encodeURIComponent("update NMK.CHL_SOCIAL_VALUE_IMPORT_SCORE_UPLOADTEMP set flag='�ɹ�' where taskid='" + taskId + "'"); //��ȫ����Ϊ�ɹ�
+	    		/*
+	    		sql += "&sqls=" + encodeURIComponent("update NMK.CHL_SOCIAL_VALUE_IMPORT_SCORE_UPLOADTEMP set flag='�Ѵ�����ͬ��������' where taskid='" + taskId + "' and channel_id in (select distinct channel_id from NMK.CHL_SOCIAL_VALUE_IMPORT_SCORE_" + _date + " )");
+				sql += "&sqls=" + encodeURIComponent("insert into  NMK.CHL_SOCIAL_VALUE_IMPORT_SCORE_" + _date + " (CHANNEL_ID,Customer_service_score,Competitive_strategy_score,Image_score,Development_strategy_score) select CHANNEL_ID,round(Customer_service_score,2),round(Competitive_strategy_score,2),round(Image_score,2),round(Development_strategy_score,2) from NMK.CHL_SOCIAL_VALUE_IMPORT_SCORE_UPLOADTEMP where taskid='" + taskId + "' and flag='�ɹ�'");
+				*/
+				sql += "&sqls=" + encodeURIComponent("update NMK.CHL_SOCIAL_VALUE_IMPORT_SCORE_UPLOADTEMP set flag='�Ѵ�����ͬ��������' where taskid='" + taskId + "' and channel_id in (select distinct channel_id from NMK.CHL_SOCIAL_VALUE_IMPORT_SCORE )");
+				sql += "&sqls=" + encodeURIComponent("insert into  NMK.CHL_SOCIAL_VALUE_IMPORT_SCORE (CHANNEL_ID,Customer_service_score,Competitive_strategy_score,Image_score,Development_strategy_score) select CHANNEL_ID,round(Customer_service_score,2),round(Competitive_strategy_score,2),round(Image_score,2),round(Development_strategy_score,2) from NMK.CHL_SOCIAL_VALUE_IMPORT_SCORE_UPLOADTEMP where taskid='" + taskId + "' and flag='�ɹ�'");
+				sql += "&sqls=" + encodeURIComponent("delete from NMK.CHL_SOCIAL_VALUE_IMPORT_SCORE_UPLOADTEMP where taskid='" + taskId + "' and flag='�ɹ�'");
+				var ajax = new aihb.Ajax({
+				url : "/hbirs/action/sqlExec"
+				,parameters : "sqls="+sql
+				,loadmask : false
+				,callback : function(xmlrequest){
+					alert("�������,��鿴δ����ɹ�����");
+					loadmask.style.display="none";
+					tabAdd({title:'δ����ɹ�����',url:"/hbapp/app/channel/uploadinfo.html?taskId=" + taskId + "&" + _params._oriUri});
+				}
+			});
+				ajax.request();
+	    	}
+		};
+		aihb.Util.loadmask();
+		window.onload=function(){
+			showPanel();
+		$("failNum").onclick=function(){
+ 			tabAdd({title:'δ����ɹ�����',url:"/hbapp/app/channel/uploadinfo.html?taskId=" + taskId + "&" +_params._oriUri})
+ 		}
+	}
+	</script>
+<body bgcolor="#EFF5FB" margin=0>
+<fieldset width="96%" align="center" style="margin: 10px 0px 0px 10px;">
+ <legend>
+	��ݵ���
+	</legend>
+   <table border=0 cellpadding="0" cellspacing="0">
+      <tr style="padding:5px;"> 
+        <td width="450"><div id="uploadDiv"></div><input type="button" id="failNum" value="δ����ɹ�����鿴"/></td>
+        <td valign="top"><a style="text-decoration: underline;" href="/hbbass/common/FileDown.jsp?filename=sample.xls&filepath=/hbapp/app/channel/"><font color=blue><b>�������ģ��(Excel)</b></font></a>&nbsp;<font color="red">���Ҽ�����Ŀ�����Ϊ������</font>
+        	<div>����˵����</div>
+	<div>1.�����ļ��в������ظ��ļ�¼(��ͬ������ID)��</div>
+	<div>2.������ļ��в�Ҫ���հ��к��У�</div>
+	<div>3.����������������������Զ���֤��ֻ�з��Ҫ��ļ�¼���ܱ����롣</div>
+        	<td> 
+      </tr>
+   </table>
+</fieldset>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<html xmlns:ai>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<title>营业厅短信评测回复清单</title>
+	<script type="text/javascript" src="../../../resources/js/default/default.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../../../resources/js/default/calendar.js"></script>
+	<link rel="stylesheet" type="text/css" href="../../../resources/css/default/default.css" />
+	<script type="text/javascript">
+
+/*
+var _header=[
+	{"name":"地市","dataIndex":"col2"}
+	,{"name":"县市","dataIndex":"col3","cellStyle":"grid_row_cell_text"}
+	,{"name":"定向地点","dataIndex":"dirc","cellStyle":"grid_row_cell_text"}
+	,{"name":"用户到达数（户）","dataIndex":"c1","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":"当日办理用户数（户）","dataIndex":"c2","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":"当月累计办理用户数（户）","dataIndex":"c3","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":"当日定向长途时长（分钟）","dataIndex":"c4","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":"当日定向长途收入（元）","dataIndex":"c5","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":"当月定向长途时长（分钟）","dataIndex":"c6","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":"当月定向长途收入（元）","dataIndex":"c7","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":"用户总长途时长（分钟）","dataIndex":"c8","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":"用户总长途收入（元）","dataIndex":"c9","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":"定向长途时长占总长途时长比重","dataIndex":"c10","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":"定向长途收入占总长途收入比重","dataIndex":"c11","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number","title":""}
+];
+var _header=[
+	{"name":["地市"],"dataIndex":"col2"}
+	,{"name":["县市"],"dataIndex":"col3","cellStyle":"grid_row_cell_text"}
+	,{"name":["定向地点"],"dataIndex":"dirc","cellStyle":"grid_row_cell_text"}
+	,{"name":["用户到达数（户）"],"dataIndex":"c1","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":["当日办理用户数（户）"],"dataIndex":"c2","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":["当月累计办理用户数（户）"],"dataIndex":"c3","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":["当日定向长途时长（分钟）"],"dataIndex":"c4","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":["当日定向长途收入（元）"],"dataIndex":"c5","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":["当月定向长途时长（分钟）"],"dataIndex":"c6","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":["当月定向长途收入（元）"],"dataIndex":"c7","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":["用户总长途时长（分钟）"],"dataIndex":"c8","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":["用户总长途收入（元）"],"dataIndex":"c9","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":["定向长途时长占总长途时长比重"],"dataIndex":"c10","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":["定向长途收入占总长途收入比重"],"dataIndex":"c11","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number","title":""}
+];*/
+
+var _header=[
+	{"name":["地市","#rspan"],"dataIndex":"col2"}
+	,{"name":["县市","#rspan"],"dataIndex":"col3","cellStyle":"grid_row_cell_text"}
+	,{"name":["定向地点","#rspan"],"dataIndex":"dirc","cellStyle":"grid_row_cell_text"}
+	,{"name":["用户数（户）","到达数"],"dataIndex":"c1","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":["#cspan","当日办理"],"dataIndex":"c2","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":["#cspan","当月累计办理"],"dataIndex":"c3","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":["当日定向长途","时长（分钟）"],"dataIndex":"c4","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":["#cspan","收入（元）"],"dataIndex":"c5","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":["当月定向长途","时长（分钟）"],"dataIndex":"c6","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":["#cspan","收入（元）"],"dataIndex":"c7","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":["用户总长途时长（分钟）","#rspan"],"dataIndex":"c8","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":["用户总长途收入（元）","#rspan"],"dataIndex":"c9","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":["定向长途","时长占总长途时长比重"],"dataIndex":"c10","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":["#cspan","收入占总长途收入比重"],"dataIndex":"c11","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number","title":""}
+];
+
+
+function genSQL(){
+	var colPiece="value(col6,'总计') dirc";
+	var groupPiece="rollup(col6)";
+	var orderPiece=" order by 1";
+	with(document.forms[0]){
+		if(groupType.value=="region"){
+			if(city.value!="0"){
+				groupPiece="rollup(col3)";
+				colPiece="max(col2) col2,col3";
+			}else {
+				groupPiece="rollup(col2)";
+				colPiece="value(col2,'总计') dirc";
+			}
+		}
+	}
+	
+	var sql="select "+colPiece
+		+" ,sum(int(col7)) c1"
+		+" ,sum(int(col8)) c2"
+		+" ,sum(int(col9)) c3"
+		+" ,sum(decimal(col10,12,2)) c4"
+		+" ,sum(decimal(col11,12,2)) c5"
+		+" ,sum(decimal(col12,12,2)) c6"
+		+" ,sum(decimal(col13,12,2)) c7"
+		+" ,sum(decimal(col14,12,2)) c8"
+		+" ,sum(decimal(col15,12,2)) c9"
+		+" ,case when sum(decimal(col14,12,2))=0 then 0 else decimal(sum(decimal(col12,12,2)),12,2)/sum(decimal(col14,12,2)) end c10"
+		+" ,case when sum(decimal(col15,12,2))=0 then 0 else decimal(sum(decimal(col13,12,2)),12,2)/sum(decimal(col15,12,2)) end c11"
+		+" from report_fact "
+		+" where reportcode='QQLX' "
+		+ aihb.AjaxHelper.parseCondition()
+		+" group by "+groupPiece
+		+ orderPiece
+		+" with ur";
+	
+	return sql;
+}
+function query(){
+	
+	var grid = new aihb.SimpleGrid({
+		header:_header
+		,sql: genSQL()
+		,pageSize : 31
+	});
+	grid.run();
+	/*aihb.AjaxHelper.request({
+		header:_header
+		,url:"/hb-bass-navigation/hbirs/action/jsondata?sql="+sql
+	});*/
+}
+
+function down(){
+	aihb.AjaxHelper.down({
+		sql : genSQL()
+		,header : _header
+	});
+}
+
+window.onload=function(){
+	var _d=new Date();
+	_d.setDate(_d.getDate()-1);
+	$("date").value=_d.format("yyyymmdd");
+	
+	aihb.Util.loadmask();
+}
+	</script>
+</head>
+<body>
+<form method="post" action="">
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'dim_div')" title="点击隐藏"><img flag='1' src="../../../../hbapp/resources/image/default/ns-expand.gif"></img>&nbsp;查询条件区域：</td>
+	</tr></table></legend>
+	<div id="dim_div">
+	<table align='center' width='99%' class='grid-tab-blue' cellspacing='1' cellpadding='0' border='0'>
+	<tr class='dim_row'>
+		<td class='dim_cell_title'>统计周期</td><td class='dim_cell_content'><ai:dim name='date' dbName="time_id" operType="int"><script type='text/javascript'>var calendar_date=new Calendar('calendar_date');document.write(calendar_date);</script><table cellspacing='0' cellpadding='0' style='width: 120px;height: 22px;border:1px solid #999999;background-color:#FFFFFF;'><tr><td><input type='text' name='date' id='date' value='' onchange="if(calendar_date.callback)calendar_date.callback(this.value)" style='border:0 none;padding:1px 0 0 3px;width:76px'/><td align='right' style='padding-right : 2 px;'><span class='calendarimage' onclick="calendar_date.showMoreDay = true;calendar_date.show($('date'),this)" ></span></td></tr></table></ai:dim></td>
+		<td class='dim_cell_title'>地市</td><td class='dim_cell_content'><ai:dim name='city' dbName="substr(col1,1,5)"><select name='city' class='form_select' onchange="areacombo('1')"><option value='0' selected='selected'>全省</option><option value='HB.WH'>武汉</option><option value='HB.HS'>黄石</option><option value='HB.EZ'>鄂州</option><option value='HB.YC'>宜昌</option><option value='HB.ES'>恩施</option><option value='HB.SY'>十堰</option><option value='HB.XF'>襄樊</option><option value='HB.JH'>江汉</option><option value='HB.XN'>咸宁</option><option value='HB.JZ'>荆州</option><option value='HB.JM'>荆门</option><option value='HB.SZ'>随州</option><option value='HB.HG'>黄冈</option><option value='HB.XG'>孝感</option><option value='HB.TM'>天门</option><option value='HB.QJ'>潜江</option></select></ai:dim></td>
+		<td class='dim_cell_title'>县市</td><td class='dim_cell_content'><ai:dim name='county' dbName="col1"><select name='county' class='form_select' onchange=""><option value=''>全部</option></select></ai:dim></td>
+	</tr>
+	<tr class='dim_row'>
+		<td class='dim_cell_title'>产品包</td><td class='dim_cell_content'><ai:dim name='fee_id' dbName="col4"><select name='fee_id' class='form_select'><option value='G220070'>亲情连线省际(G220070)</option><option value='G210088'>亲情连线省内(G210088)</option></select></ai:dim></td>
+		<td class='dim_cell_title'>分组类型</td><td class='dim_cell_content'><select name='groupType' class='form_select'><option value='prov'>长途地点</option><option value='region'>用户归属地</option></select></td>
+		<td class='dim_cell_title'></td><td class='dim_cell_content'></td>
+	</tr>
+	</table>
+	<table align="center" width="99%">
+		<tr class="dim_row_submit">
+			<td align="right">
+				<input type="button" class="form_button" value="查询" onClick="query()">&nbsp;
+				<input type="button" class="form_button" value="下载" onclick="down()">&nbsp;
+			</td>
+		</tr>
+	</table>
+	</div>
+</fieldset>
+</div><br>
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'show_div')" title="点击隐藏"><img flag='1' src="../../../../hbapp/resources/image/default/ns-expand.gif"></img>&nbsp;数据展现区域：</td>
+		<td></td>
+	</tr></table></legend>
+	<div id="grid" style="display:none;"></div>
+</fieldset>
+</div><br>
+</form>
+</body>
+</html>

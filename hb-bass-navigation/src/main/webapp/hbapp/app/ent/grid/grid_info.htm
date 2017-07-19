@@ -1,0 +1,454 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>湖北移动经营分析系统</title>
+<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/ext/ext-base.js"></script>
+<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/ext/ext-all.js"></script>
+<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/default/default.js"></script>
+<link rel="stylesheet" type="text/css" href="/hb-bass-navigation/hbapp/resources/js/ext/resources/css/ext-all.css" />
+<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/default/json2.js"></script>
+<link rel="stylesheet" type="text/css" href="/hb-bass-navigation/hbapp/resources/css/default/default.css" />
+<script type="text/javascript" src="http://api.map.baidu.com/api?key=9e62ccb3e5cf42f31598904c01abae5b&v=1.0&services=false" ></script>
+<style>
+.x-panel-header  {
+	background-image:url(img/banner.png) ! important;
+	background-repeat:repeat-x ! important;
+	background-attachment:scroll ! important;
+	background-position:right ! important;
+}
+.bannerTitle{
+	position:relative;height:15px;
+	color: #ffffff;
+}
+.bannerTitle a{
+	color:#fff
+}
+.x-border-layout-ct{background:#ffffff ! important;}
+</style>
+<script type="text/javascript">
+var map = undefined;
+var polyline = undefined;//存放点的临时变量
+var GID=undefined;
+var GNAME="";
+Ext.onReady(function(){
+	map = new BMap.Map("gis");
+	map.enableScrollWheelZoom();
+	map.centerAndZoom(new BMap.Point(114.312, 30.598), 13);
+	map.addControl(new BMap.NavigationControl());
+	map.addControl(new BMap.ScaleControl());
+	map.addControl(new BMap.OverviewMapControl());
+	
+	Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+	var viewport = new Ext.Viewport({
+	    layout:'border',
+	    items:[
+        {
+        	region:'north',
+            split:true,
+           	title:'<div class="bannerTitle"><div style="position:absolute; bottom:-2;"><img src="/hb-bass-navigation/hbapp/resources/image/default/preview.png"  />  网格基础信息   <a href="javascript:void(0)" onclick="update()"><img src="/hb-bass-navigation/hbapp/resources/image/default/save.gif" />保存</a> </div></div>',
+            collapsible: true,
+            collapseMode:'mini',
+            height : 190,
+            margins:'1 1 0 0',
+            items: [
+            	new Ext.BoxComponent({
+                	region:'north',
+                	el: 'northEL'
+            	})
+            ]
+        }
+        ,{
+        	region:'center',
+            split:true,
+            title:'<div class="bannerTitle"><div style="position:absolute; bottom:-2;"><img src="/hb-bass-navigation/hbapp/resources/image/default/plugin_add.gif"  /> 地图区  <a href="javascript:void(0)" onclick="enableDraw()"><img src="/hb-bass-navigation/hbapp/resources/image/default/user_edit.png" />重新开始</a>  <a href="javascript:void(0)" onclick="savePoints()"><img src="/hb-bass-navigation/hbapp/resources/image/default/save.gif" />保存地图</a> </div></div> ',
+            margins:'1 1 0 0',
+            items: [
+            	new Ext.BoxComponent({
+                	region:'center',
+                	el: 'gis'
+            	})
+            ]
+        }
+        
+        
+         ,{
+        	region:'east',
+        	//el: 'east',
+           	split:true,
+           	title:'<div class="bannerTitle"><div style="position:absolute; bottom:-2;"><img src="/hb-bass-navigation/hbapp/resources/image/default/columns.gif"  />  经纬度  </div></div> ',
+           	width : 200,
+            collapsible: true
+            ,collapseMode:'mini'
+            ,items: [{
+                contentEl: 'east',
+                border:false,
+                iconCls:'nav'
+            }]
+        }
+        
+        ]
+	});
+});
+
+function draw(e){
+	var arr =[]
+	if(polyline){
+		this.removeOverlay(polyline);
+		arr = polyline.getPoints();
+	}
+	if(arr.length==0){
+		var offset = 0.0003;
+		if(map.getZoom()==14){
+			offset = 0.0001;
+		}else if(map.getZoom()==15){
+			offset = 0.00005;
+		}else if(map.getZoom()==16){
+			offset = 0.00003;
+		}else if(map.getZoom()==17){
+			offset = 0.00001;
+		}else if(map.getZoom()==18){
+			offset = 0.000005;
+		}
+		arr.push(new BMap.Point(e.point.lng, e.point.lat+offset))
+	}
+	arr.push(e.point);
+	
+	potsGrid(arr)
+	$("pots").innerHTML= JSON.stringify(arr);
+	polyline = new BMap.Polyline(arr);
+	this.addOverlay(polyline);
+}
+
+function enableDraw(){
+	if(!GID){
+		alert("请先选择网格节点，再开始绘制网格区域");
+		return;
+	}
+	map.removeEventListener("click",draw);
+	map.clearOverlays();
+	polyline=undefined;
+	map.addEventListener("click",draw);
+}
+
+function savePoints(){
+	map.removeEventListener("click",draw);
+	map.removeOverlay(polyline);
+	var arr = polyline.getPoints();
+	arr.splice(0,1);
+	//document.getElementById("aaa").innerHTML=arr;
+	var polygon = new BMap.Polygon(arr,{strokeWeight:2});
+	map.addOverlay(polygon);
+	polyline=undefined;
+	//alert(JSON.stringify(arr));
+	var ajax = new aihb.Ajax({
+		url : "/hbirs/action/entGrid?method=savePoints"
+		,parameters : "gid="+GID+"&points="+ JSON.stringify(arr)
+		,loadmask : true
+		,callback : function(xmlrequest){
+			alert(xmlrequest.responseText);
+		}
+	});
+	ajax.request();
+}
+
+function initMap(noSa){
+	map.clearOverlays();
+	
+	var ajax = new aihb.Ajax({
+		url : "/hbirs/action/entGrid?method=getPoints"
+		,parameters : "gid="+GID
+		,loadmask : true
+		,callback : function(xmlrequest){
+			var data=undefined;
+			try{
+				eval("data="+xmlrequest.responseText);
+			}catch(e){}
+			if(data && data.length>1){
+				var pots=[];
+				for(var i=0;i<data.length;i++){
+					pots[i]=new BMap.Point(data[i].lng,data[i].lat);
+				}
+				map.addOverlay(new BMap.Polygon (pots,{strokeWeight:2}));
+				potsGrid(pots)
+				$("pots").innerHTML= JSON.stringify(pots);
+				
+				
+				var infoWindow = new BMap.InfoWindow(GNAME,{height:30,width:50});
+				map.openInfoWindow(infoWindow, pots[0]);
+			}else if(!noSa){
+				if(confirm("该网格还没有画，是否开始画网格？")){
+					enableDraw();
+				}
+			}
+		}
+	});
+	ajax.request();
+}
+
+function init(gid,gname){
+	GID=gid;
+	GNAME=gname;
+	initBasic();
+}
+
+function initBasic(){
+	var ajax = new aihb.Ajax({
+		url : "/hbirs/action/entGrid?method=query"
+		,parameters : "id="+GID
+		,loadmask : true
+		,callback : function(xmlrequest){
+			//alert(xmlrequest.responseText);
+			var data = {};
+			eval("data="+xmlrequest.responseText);
+			$("north").innerHTML="";
+			$("north").appendChild(fillForm(data,meta["level"+data.level]));
+			
+			initMap(/(sa|spe)/gi.test(data["type"]));
+		}
+	});
+	ajax.request();
+}
+//保存网格基础信息
+function update(method,forms){
+	var _form=forms||document.forms[0];
+	var str = "";
+	for(var i=0;i<_form.length;i++) {
+		if(str.length>0){
+			str+="&";
+		}
+		str+=_form.elements[i].name+"="+encodeURIComponent(_form.elements[i].value);
+	}
+	//alert(str);
+	var ajax = new aihb.Ajax({
+		url : "/hbirs/action/entGrid?method="+(method||"update")
+		,parameters : str
+		,loadmask : true
+		,callback : function(xmlrequest){
+			alert(xmlrequest.responseText);
+			parent.refreshTree();
+			initBasic();
+		}
+	});
+	ajax.request();
+}
+
+var meta={
+"level3":[
+		{label:"主网格编码",id: "id"}
+		,{label:"主网格名称",id:"name"}
+		,{label:"网格类型",id:"type"}
+		,{label:"地市编码",id:"cityId"}
+		,{label:"网格级别",id:"level"}
+		,{label:"网格描述",id:"remark"}
+	]
+,"level4":[
+		{label:"子网格编码",id: "id"}
+		,{label:"子网格名称",id:"name"}
+		,{label:"网格类型",id:"type"}
+		,{label:"地市编码",id:"cityId"}
+		,{label:"划分方式 ",id:"partitionType"}
+		,{label:"归属主网格 ",id:"pid"}
+		,{label:"网格特征描述 ",id:"remark"}
+		,{label:"覆盖营业厅1",id:"channelCode1"}
+		,{label:"地址1",id:"channelAddress1"}
+		,{label:"覆盖营业厅2",id:"channelCode2"}
+		,{label:"地址2",id:"channelAddress2"}
+		//,{label:"覆盖营业厅3",id:"channelCode3"}
+		//,{label:"地址3",id:"channelAddress3"}
+		,{label:"网格级别",id:"level"}
+		,{label:"覆盖街道",id:"street"}
+		,{label:"覆盖路段 ",id:"section"}
+		,{label:"覆盖面积 ",id:"acreage"}
+		,{label:"子网负责人 ",id:"chargerName"}
+		,{label:"负责人电话 ",id:"chargerPhone"}
+		
+	]
+,"level5":[
+		{label:"微网格编码",id: "id"}
+		,{label:"微网格名称",id:"name"}
+		,{label:"归属子网格 ",id:"pid"}
+		,{label:"网格类型",id:"type"}
+		,{label:"地市编码",id:"cityId"}
+		,{label:"网格级别",id:"level"}
+		,{label:"客户经理编码 ",id:"staffId"}
+		,{label:"客户经理姓名  ",id:"staffName"}
+		,{label:"查看集团统一试图",id:"ent_view"}
+	]
+}
+function fillForm(data,meta){
+	var labelsPerRow = 3;
+	var labelLength = meta.length;
+	var table=$C('<table width="99%" class=grid-tab-blue align=center border=0 cellspacing="1" cellpadding="0" ></table>');
+	var _form=$C("form");
+	_form.appendChild(table);
+	for(var _rowIndex = 0 ; _rowIndex < labelLength/labelsPerRow ; _rowIndex ++) {
+		var _row = table.insertRow();
+		_row.className = "dim_row";
+		for(var _cellIndex = 0 ; _cellIndex < labelsPerRow ; _cellIndex ++) {
+			////debugger;
+			var crtIndx = _rowIndex * labelsPerRow + _cellIndex;
+			var metaInst = meta[crtIndx] || {};
+			var _cell = _row.insertCell();
+			_cell.className = "dim_cell_title";
+			_cell.appendChild($CT(metaInst.label || ""));
+			
+			_cell = _row.insertCell();
+			_cell.className = "dim_cell_content";
+			
+			if(metaInst.id){
+				var element = $C(metaInst.tag||"<input type='text'>");
+							
+				if(metaInst.id=="ent_view"){
+					element=$C("a");
+					element.href="#";
+					element.title="链接到集团客户统一视图";
+					element.sid=data.staffId;
+					element.onclick=function(){
+						try{
+							parent.parent.addTab("集团客户统一视图","/hbbass/groupcust/20/groupcustview.jsp?loginname=meikefu&cityId=0&nologin=true&custmanager="+this.sid);	
+						}catch(e){
+							debugger;
+							window.open("/hbbass/groupcust/20/groupcustview.jsp?loginname=meikefu&cityId=0&nologin=true&custmanager="+this.sid);	
+						}
+					}
+					element.appendChild($CT("集团客户统一视图"));
+					_cell.appendChild(element);
+					continue;
+				}else if(metaInst.id=="type"){
+					element=$C("select");
+					element[0]=new Option("特征网格","SPE");
+					element[1]=new Option("物理网格","ADMIN");
+					element[2]=new Option("SA","SA");
+				}else if(metaInst.id=="id" || metaInst.id=="level"){
+					element.readOnly="readonly";
+				}else if(metaInst.id=="partitionType"){
+					element=$C("select");
+					element[0]=new Option("区域营销中心划分","REGION");
+					element[1]=new Option("街道划分","STREET");
+					element[2]=new Option("其它","OTHER");
+				}
+				element.name=metaInst.id;
+				element.value=data[metaInst.id]||"";
+				_cell.appendChild(element)
+			}else{
+				_cell.appendChild($CT(""));
+			}
+		}
+	}
+	return _form;
+}
+
+function add(gid,gname,glevel){
+	
+	var ajax = new aihb.Ajax({
+		url : "/hbirs/action/entGrid?method=genId"
+		,parameters : "pid="+gid
+		,loadmask : true
+		,callback : function(xmlrequest){
+			if($("newFrom")){
+				$("newFrom").outerHTML="";
+			}
+			var form=fillForm({id: xmlrequest.responseText ,cityId:gid.substring(0,5),pid:gid,level:glevel},meta["level"+glevel]);
+			form.id="newFrom";
+			
+			$("mb3").appendChild(form);
+			Ext.MessageBox.show({
+		        title: '新增网格',
+		        msg: form.innerHTML,
+		        minWidth :800,
+		        buttons: Ext.MessageBox.OK,
+		        //multiline: true,
+		        fn: function(btn){
+		        	if(btn=="ok" && confirm("确定添加？")){
+		        		update("save",$("newFrom"));
+		        	}
+		        }
+		        ,animEl: 'mb3'
+		    });
+		}
+	});
+	ajax.request();
+}
+
+function del(gid){
+	if(confirm("是否删除该网格？")){
+		var ajax = new aihb.Ajax({
+			url : "/hbirs/action/entGrid?method=del"
+			,parameters : "id="+gid
+			,loadmask : true
+			,callback : function(xmlrequest){
+				alert(xmlrequest.responseText);
+				
+				parent.refreshTree();
+			}
+		});
+		ajax.request();
+	}
+}
+
+function saveFromPost(){
+	var ajax = new aihb.Ajax({
+		url : "/hbirs/action/entGrid?method=savePoints"
+		,parameters : "gid="+GID+"&points="+ $("pots").value
+		,loadmask : true
+		,callback : function(xmlrequest){
+			alert(xmlrequest.responseText);
+		}
+	});
+	ajax.request();
+}
+
+function loadPost(){
+	var pots = [];
+	var data=JSON.parse($("pots").value);
+	for(var i=0;i<data.length;i++){
+		pots[i]=new BMap.Point(data[i].lng,data[i].lat);
+	}
+	enableDraw();
+	polyline = new BMap.Polyline(pots)
+	map.addOverlay(polyline);
+}
+
+var _header=[
+		{name:"东经",dataIndex:"lng"}
+		,{name:"北纬",dataIndex:"lat"}
+	];
+	
+function potsGrid(data){
+	var _grid = new aihb.Grid({
+		container : $("potsGrid")
+		,data : data
+		,header : _header
+	});
+	
+	_grid.render();
+}
+
+</script>
+</head>
+<body>
+<div id="northEL" style="padding-top:3px;">
+
+	<div id="north"></div>
+	
+	<div id="northText" style="display:none;color: red">客户经理管辖集团的维护操作请到“BOSS客户管理-集团客户管理”下进行</div>
+</div>
+<br>
+<div id="gis" style="width:100%;height: 100%"></div>
+<br>
+
+<div id="east" >
+<div style="overflow: auto; height: 450px; width: 200px;">
+<div id="potsGrid"></div>
+
+<input type="button" class="form_button_short" value="保存" onclick="saveFromPost()"/>
+<input type="button" class="form_button_short" value="加载" onclick="loadPost()"/>
+<textarea id="pots" rows="15" cols="22"></textarea>
+</div>
+</div>
+<br>
+
+<div id="mb3" style="display:none">Show</div>
+
+</body>
+</html>

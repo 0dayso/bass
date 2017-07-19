@@ -1,0 +1,2 @@
+var sysUtils = require("../nodeUtils/sysUtils.js");
+sysUtils.runSysProcess("sass target.scss target.css");//--style compressed 压缩选项

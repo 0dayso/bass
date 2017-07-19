@@ -1,0 +1,253 @@
+<html>
+	<head>
+		<title>湖北移动经营分析系统-农村基站信息导入</title>
+		<link rel="stylesheet" type="text/css" href="/hb-bass-navigation/hbapp/resources/js/codebase/dhtmlxvault.css" />
+		<link rel="stylesheet" type="text/css" href="/hb-bass-navigation/hbapp/resources/css/default/default.css" />
+		<!--
+			2010.08.02 : 倒入不了的问题：因为excel模板中的字段为六个，所以对应的sql的字段数也改成六个
+			2010.08.20 : 验证问题
+		-->
+	</head>
+	<body bgcolor="#EFF5FB" margin="0">
+		<fieldset width="96%" align="center" style="margin: 10px 0px 0px 10px;">
+			<legend>
+				数据导入
+			</legend>
+			<table border="0" cellpadding="0" cellspacing="0">
+				<tr style="padding: 5px;">
+					<td width="450">
+						<div id="uploadDiv"></div>
+					</td>
+					<td valign="top">
+						<a style="text-decoration: underline;" href="/hb-bass-navigation/hbirs/action/filemanage?method=downFromFtp&amp;remotePath=town&amp;fileName=农村基站信息导入.xls"><font color="blue"><b>下载数据模板(Excel)</b>
+						</font>
+						</a>&nbsp;
+						<font color="red">请单击或右键点击“目标另存为”下载</font>
+						<div>
+							导入说明：
+						</div>
+						<div>
+							<ul>
+							<li>6列信息全为必填项,不得为空</li>
+							<li>LAC\CELL码必须为数字</li>
+							<li>是否村通基站：只能填写"是"或"否"</li>
+							<li>行政区划划分：只能填写"市区","市属农村","县区","县属农村","县辖农村"</li>
+							<li>归属地市:只能填写各地市,不能填写县市名称</li>
+							</ul>
+						</div>
+						<div>
+							请按照上述规则检查并上传数据文件。
+						</div>
+					</td>
+					<td>
+					</td>
+				</tr>
+			</table>
+		</fieldset>
+		<form method="post" action="">
+			<br>
+			<div style="text-align: right;">
+				<font color="red">请下载未成功导入的数据编辑后重新上传</font>
+				<input type="button" id="queryBtn" class="form_button" style="width: 120px" value="未导入成功号码查看" />
+				&nbsp;
+				<input type="button" id="downBtn" class="form_button" value="下载数据" onclick="down()">
+				&nbsp;
+				<input type="button" id="delBtn" class="form_button" value="删除非法数据" onclick="_delete()">
+				&nbsp;
+			</div>
+			<div class="divinnerfieldset">
+				<fieldset>
+					<legend>
+						<table>
+							<tr>
+								<td>
+									<img src="/hb-bass-navigation/hbapp/resources/image/default/ns-expand.gif" alt=""></img>
+									&nbsp;数据展现区域：
+								</td>
+								<td></td>
+							</tr>
+						</table>
+					</legend>
+					<div id="grid" style="display: none;"></div>
+				</fieldset>
+			</div>
+			<br>
+		</form>
+		<script language="JavaScript" type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/codebase/dhtmlxvault.js"></script>
+		<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/default/default.js" charset="utf-8"></script>
+		<script type="text/javascript">
+		+function(window,document,undefined){
+			var _params = aihb.Util.paramsObj();
+			var taskId = new Date().format("yyyymmdd") + "@" + _params.loginname;
+			function showPanel() {
+				var vault = new dhtmlXVaultObject();
+			    vault.setImagePath("/hb-bass-navigation/hbapp/resources/js/codebase/imgs/");
+			    vault.setServerHandlers("/hb-bass-navigation/hbirs/action/filemanage?method=importExcel", "/hb-bass-navigation/hbirs/action/filemanage?method=getInfoHandler", "/hb-bass-navigation/hbirs/action/filemanage?method=getIdHandler");
+			    vault.setFilesLimit(1);
+			   	vault.create("uploadDiv");
+	   	    	vault.onFileUpload=function(){
+	    			loadmask.style.display="";
+	    			return true;
+	    		}
+		   	
+				vault.onAddFile = function(fileName) {
+					var ext = this.getFileExtension(fileName);
+					if (ext != "xls") {
+						alert("本应用只支持扩展名.xls,请重新上传.");
+						return false;
+					} else return true;
+				};
+				/*
+				vault.enableAddButton(function(time){
+					if(time.getDate()>=15)
+						return true;
+					else {
+						alert("当前时间禁止导入。导入时间为每月15号之后。");
+						return false;
+					}
+				}(new Date()));
+				*/
+			   	vault.setFormField("tableName", "nwh.county_cfg_template_temp");
+		    	//vault.setFormField("columns", "taskid,lac_dec, bureau_name, cellid_dec, type_remark, area_name, open_remark, open_flag, lac, cellid, area_code, bureau_type, bureau_id");
+		    	vault.setFormField("columns", "taskid,lac_dec, bureau_name, cellid_dec, type_remark, area_name, open_remark");
+		    	vault.setFormField("date", taskId);  
+		    	vault.onUploadComplete = function(files) {
+		    		
+					/* 规则1 area_name 地市*/
+					var sql = encodeURIComponent("update nwh.county_cfg_template_temp set flag = flag || '地市不在允许范围;' where taskid='" + taskId + "' and area_name not in (select distinct area_name from mk.bt_area) ");
+					
+						/* 规则2 type_remark 行政区区划分 */
+					sql += "&sqls=" + encodeURIComponent("update nwh.county_cfg_template_temp set flag = flag || '行政区划分不在允许范围;' where taskid='" + taskId + "' and type_remark not in ('市区','市属农村','县区','县属农村','县辖农村') ");
+					
+						/* 规则3 lac_dec需要< cellid_dec */
+					sql += "&sqls=" + encodeURIComponent("update nwh.county_cfg_template_temp set flag = flag || 'LAC码数大于或等于cell码数;' where taskid='" + taskId + "' and lac_dec in (select lac_dec from nwh.county_cfg_template_temp group by lac_dec having count(distinct lac_dec)>= count(distinct cellid_dec) ) ");
+					
+					 	/* 规则4 在lac_dec相同的情况下，cellid_dec不能相同 */
+					sql += "&sqls=" + encodeURIComponent("update nwh.county_cfg_template_temp set flag = flag || 'cell码重复;' where taskid='" + taskId + "' and cellid_dec in (select distinct cellid_dec from nwh.county_cfg_template_temp group by lac_dec,cellid_dec having count(*)>1) ");
+					 
+						/* 规则5 open_remark 是否村通基站 */
+					sql += "&sqls=" + encodeURIComponent("update nwh.county_cfg_template_temp set flag = flag || '是否村通基站不在允许范围;' where taskid='" + taskId + "' and open_remark not in ('是','否') ");
+					 
+					 /* 规则6 各列不能为空 */
+					sql += "&sqls=" + encodeURIComponent("update nwh.county_cfg_template_temp set flag = flag || '有空列;' where taskid='" + taskId + "' and lac_dec is null or lac_dec=0 or bureau_name is null or bureau_name = '' or cellid_dec is null or cellid_dec=0 or type_remark is null or type_remark = '' or area_name is null or area_name = '' or open_remark is null or open_remark = '' ");
+					 
+					 /* 导数据前清数据*/
+					 sql += "&sqls=" + encodeURIComponent("delete from nwh.county_cfg_template");
+					 
+					 /* 导数据*/
+					 sql += "&sqls=" + encodeURIComponent("insert into nwh.county_cfg_template(lac_dec, bureau_name, cellid_dec, type_remark, area_name, open_remark) select lac_dec, bureau_name, cellid_dec, type_remark, area_name, open_remark from nwh.county_cfg_template_temp where taskid='" + taskId +"' and flag='' ");
+					 
+					 /* 删除成功记录 */
+					sql += "&sqls=" + encodeURIComponent("delete from nwh.county_cfg_template_temp where taskid='" + taskId + "' and flag = '' ");
+					
+					var ajax = new aihb.Ajax({
+					url : "/hb-bass-navigation/hbirs/action/sqlExec"
+					,parameters : "sqls="+sql
+					,loadmask : false
+					,callback : function(xmlrequest){
+						alert("导入完成,请查询未导入成功号码");
+						location.reload();
+						//query();
+						//loadmask.style.display="none";
+						//tabAdd({title:'未导入成功号码',url:"/hbapp/app/report/college/uploadinfo.html?taskId=" + taskId + "&" + _params._oriUri});
+					}
+				});
+					ajax.request();
+		    	}
+			};
+			
+			var _header= [
+				{
+					"cellStyle":"grid_row_cell_text",
+					"dataIndex":"lac_dec",
+					"name":["LAC码"],
+					"title":"",
+					"cellFunc":""
+				},
+				{
+					"cellStyle":"grid_row_cell_text",
+					"dataIndex":"bureau_name",
+					"name":["基站名称"],
+					"title":"",
+					"cellFunc":""
+				},
+				{
+					"cellStyle":"grid_row_cell_text",
+					"dataIndex":"cellid_dec",
+					"name":["小区代码"],
+					"title":"",
+					"cellFunc":""
+				},
+				{
+					"cellStyle":"grid_row_cell_text",
+					"dataIndex":"type_remark",
+					"name":["行政区划划分"],
+					"title":"",
+					"cellFunc":""
+				},
+				{
+					"cellStyle":"grid_row_cell_text",
+					"dataIndex":"flag",
+					"name":["失败原因"],
+					"title":"",
+					"cellFunc":""
+				}
+			];
+		
+			function query(){
+				var grid = new aihb.SimpleGrid({
+					header:_header
+					,sql: "select lac_dec, bureau_name, cellid_dec, type_remark, area_name, open_remark, open_flag, lac, cellid, area_code, bureau_type, bureau_id, taskid ,flag from nwh.county_cfg_template_temp where taskid='" + taskId + "'"
+					,isCached : false
+					,callback : function() {
+						var _length = grid.grid.data.length;
+						//alert(_length);
+						if(_length == 0)alert("本次导入全部成功!");
+					}
+				});
+				grid.run();
+			}
+
+			function down(){
+				aihb.AjaxHelper.down({
+					sql : "select lac_dec, bureau_name, cellid_dec, type_remark, area_name, open_remark, open_flag, lac, cellid, area_code, bureau_type, bureau_id from nwh.county_cfg_template_temp where taskid='" + taskId + "'"
+					,header : _header
+					,isCached : false
+					,"url" : "/hb-bass-navigation/hbirs/action/jsondata?method=down&fileKind=excel"
+				});
+			}
+
+			function _delete() {
+				if(!window.confirm("确定要删除吗？删除前应先下载这些记录做备份"))
+					return;
+				var sql=encodeURIComponent("delete from nwh.county_cfg_template_temp where taskid='" + taskId + "'");
+				var ajax = new aihb.Ajax({
+					url : "/hb-bass-navigation/hbirs/action/sqlExec"
+					,parameters : "sqls="+sql
+					,loadmask : false
+					,callback : function(xmlrequest){
+						var result = eval("(" + xmlrequest.responseText + ")");
+						alert(result.message);
+					}
+				});
+				ajax.request();
+			}
+			
+			window.onload=function(){
+				aihb.Util.loadmask();
+				showPanel();
+				/*
+				$("failNum").onclick=function(){
+		 			tabAdd({title:'未导入成功号码',url:"/hbapp/app/channel/uploadinfo.html?taskId=" + taskId + "&" +_params._oriUri})
+				}
+				*/
+				$("queryBtn").onclick = query;
+				$("delBtn").onclick = _delete;
+				$("downBtn").onclick = down;
+			}
+		
+		}(window,document);
+		
+	</script>
+	</body>
+</html>

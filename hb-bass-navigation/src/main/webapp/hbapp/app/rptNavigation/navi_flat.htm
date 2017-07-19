@@ -1,0 +1,41 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html xmlns:ai>
+  <head>
+    <title>湖北移动经营分析系统</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">
+	<script type="text/javascript" src="../../resources/js/default/default.js"></script>
+	<script type="text/javascript" src="../../resources/js/default/tabext.js"></script>
+	<script type="text/javascript" src="rpt_display.js"></script>
+	<link rel="stylesheet" type="text/css" href="../../resources/css/default/default.css" />
+	<script type="text/javascript">
+//aihb.URL="/hbapp";
+window.onload=function(){
+	_render();
+}
+
+function _render(){
+	var ajax = new aihb.Ajax({
+		url : "/hbirs/action/rptNavi?method=init"
+		,parameters : _params._encoderOriUri
+		,callback : function(xmlrequest){
+			var res =null;
+			try{ 
+				eval("res="+xmlrequest.responseText);
+			}catch(e){debugger;}
+			
+			if(res!=null){
+				naviFlat($("t1"),res.elements)
+			}
+		}
+	});
+	ajax.request();
+}
+	</script>
+  </head>
+  <body>
+  	<table id="t1" style="margin-left:10px;"></table>
+  </body>
+</html>

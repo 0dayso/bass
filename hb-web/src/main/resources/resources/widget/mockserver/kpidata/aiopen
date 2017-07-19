@@ -1,0 +1,70 @@
+(function($,window){
+	var AiOpen={};
+	AiOpen = {
+		url : "http://localhost:8080/pst",
+		init : function(url){
+			this.url= url || this.url;
+		}
+		,param : function(options){
+			var str="";
+			for (var _p in options){
+				if(_p!="id"){//id加载uri中不需要跟在参数中
+					str+= (str.length>0?"&":"");
+					str+=_p+"="+encodeURIComponent(options[_p]);
+				}
+			}
+			return str;
+		}
+		,kpi : function(options,callback){
+			if(callback){//异步
+				$.getJSON(this.url+"/api/kpi/"+options.id+"?jsoncallback=?&"+AiOpen.param(options),function(data){
+					callback(data);
+				});
+			}else{//同步
+				return this.getData(this.url+"/api/kpi/"+options.id,this.param(options));
+			}
+		}
+		,kpiDef : function(options,callback){
+			if(options.id){
+				if(callback){//异步
+					$.getJSON(this.url+"/api/kpiDef/"+options.id+"?jsoncallback=?&"+AiOpen.param(options),function(data){
+						callback(data);
+					});
+				}else{//同步
+					return this.getData(this.url+"/api/kpiDef/"+options.id,this.param(options));
+				}
+			}else{//取所有的定义
+				if(callback){//异步
+					$.getJSON(this.url+"/api/kpiDefs?jsoncallback=?&"+AiOpen.param(options),function(data){
+						callback(data);
+					});
+				}else{//同步
+					return this.getData(this.url+"/api/kpiDefs",this.param(options));
+				}
+			}
+		}
+		,getData : function(url,data){
+			var _result=null;
+			$.ajax({
+				url: url,
+				async : false,
+				data : data,
+				dataType : "json",
+				success : function(data){
+					_result=data;
+				}
+			});
+			return _result;
+		}
+		,kpiTrend : function(options,callback){
+			if(callback){//异步
+				$.getJSON(this.url+"/api/kpi/"+options.id+"/trendData?jsoncallback=?&"+AiOpen.param(options),function(data){
+					callback(data);
+				});
+			}else{
+				return this.getData(this.url+"/api/kpi/"+options.id+"/trendData",this.param(options));
+			}
+		}
+	}
+	window.AiOpen=AiOpen;
+})(jQuery,window);

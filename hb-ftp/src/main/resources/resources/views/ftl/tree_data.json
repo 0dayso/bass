@@ -1,0 +1,15 @@
+[{    
+    "id": 3,    
+    "text": "文件管理",    
+    "state": "open",
+    "attributes":{    
+        "url":"/fileMgr.ftl"
+     }
+},{
+	"id": 4,    
+    "text": "日志查询",    
+    "state": "open",
+    "attributes":{    
+        "url":"/fileLog.ftl"
+     }
+}]  

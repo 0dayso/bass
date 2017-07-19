@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+	<title>jQuery EasyUI Demo</title>
+	<link rel="stylesheet" type="text/css" href="themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="themes/icon.css">
+	
+	<script type="text/javascript" src="jquery-1.8.0.min.js"></script>
+	<script type="text/javascript" src="jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="locale/easyui-lang-zh_CN.js"></script>
+</head>
+<body>
+	<ol>
+		<li>
+			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'">显示Form</a>
+		</li>	
+	</ol>
+	<div id="mypanel" class="easyui-panel" title="My Panel"   
+        style="width:500px;height:180px;padding:10px;background:#fafafa;"  
+        data-options="iconCls:'icon-save',closable:true,  
+                collapsible:true,minimizable:true,maximizable:true"> 
+		
+		<ul>
+			<li>Hello Jeasyui !</li>
+			<li>
+				用户名:<input class="easyui-validatebox" type="text" name="name" data-options="required:true"></input>
+			</li>
+			<li>
+				出生日期:<input id="dd" type="text" class="easyui-datebox" required="required"></input>
+			</li>
+			<li>
+				<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" id="ok">确定</a>&nbsp;
+				<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">取消</a>
+			</li>
+		</ul>
+	</div>
+	
+	<div id="ddd" class="easyui-dialog" title="My Dialog" style="width:400px;height:200px;"  
+        data-options="iconCls:'icon-help',resizable:true,modal:true,toolbar:'#tbar'">  
+	    
+	</div>  
+	<div id="tbar">
+		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-print'" id="btn1">确定</a>&nbsp;
+		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" id="btn2">取消</a>
+	</div>
+</body>
+<script type="text/javascript" language="javascript">
+	$(document).ready(function(){
+			$("div:eq(0)").hide();
+			$("#ddd").dialog('close');
+			
+			$("#ok").click(function(){
+					var msg="<span>用户名为:";
+					
+					var _name="";
+					var _date="";
+					
+					_name=$("input[name='name']").val();
+					_date=$("#dd").datebox('getValue');
+					
+					msg+=_name+"<br/>";
+					msg+="生日:"+_date+"</span>";
+					//$("<div/>").html(msg).appendTo($("#ddd"));
+					$("#ddd").dialog('open');
+				});
+			
+			$("ol >li").find("a").toggle(function(){
+					$("div:eq(0)").show();
+					
+				},function(){
+						$("div:eq(0)").hide();
+						
+					});
+			
+			
+			$("ul >li").find("input").change(function(){
+					//$.messager.alert('fuck',$(this).val(),'error');
+					showTip('fuck',$(this).val(),3000,'show');
+				});
+				
+			$("#dd").datebox({
+					onSelect:function(){
+							var _v=$(this).datebox('getValue');
+							showTip('shit',_v,3000,'show');
+						}
+				});
+			function showTip(tit,msg,timeout,type){
+				var box=	$.messager.show({
+						title:tit,
+						msg:msg,
+						timeout:timeout,
+						showType:type==""?"show":type,
+						style:{
+									right:'',
+									top:document.body.scrollTop+document.documentElement.scrollTop,
+									bottom:''
+								}
+					});
+				return box;
+			}
+		});
+</script>
+</html>

@@ -1,0 +1,28 @@
+@charset "utf-8";
+.BulletinLeftImage{
+    float: left;
+    width:204px;
+    .imgTitle{
+        width : 62px;
+        height : 38px;
+        float:left;
+        margin: 5px;
+    }
+    .BulletinName{
+        @include textLimit(99%);
+        width: 110px;
+        font-size : $font-m1;
+        color : $color-normal;
+        padding-top:5px;
+        cursor:pointer;
+        text-indent: 5px;
+    }
+    .BulletinName:hover{
+        text-decoration:underline
+    }
+    .Bulletincollect{
+        font-size : $font-s;
+        color : $color-notice;
+        text-indent: 5px;       
+    }
+}

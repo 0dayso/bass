@@ -1,0 +1,211 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:ai>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<TITLE>集团产品总体分析</TITLE>
+	<script type="text/javascript" src="../../../resources/js/default/default.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../../../resources/js/default/tabext.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../../../resources/js/datepicker/WdatePicker.js"></script>
+	<link rel="stylesheet" type="text/css" href="../../../resources/css/default/default.css" />
+	<script type="text/javascript">
+var _header=[
+	{"name":["地市","#rspan"],"dataIndex":"city"}
+	,{"name":["县市","#rspan"],"dataIndex":"county","cellStyle":"grid_row_cell_text"}
+	,{"name":["客户经理","#rspan"],"dataIndex":"mgr","cellStyle":"grid_row_cell_text"}
+	,{"name":["集团名称","#rspan"],"dataIndex":"groupname","cellStyle":"grid_row_cell_text"}
+	,{"name":["产品名称","#rspan"],"dataIndex":"prod_name","cellStyle":"grid_row_cell_text"}
+	
+	,{"name":["集团客户(家)","到达数"],"dataIndex":"ent_cnt","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":["#cspan","累计新增"],"dataIndex":"ent_new","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":"本月累计新增产品"}
+	,{"name":["#cspan","累计取消"],"dataIndex":"ent_lose","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":"本月累计取消产品"}
+	,{"name":["集团成员(户)","到达数"],"dataIndex":"member_cnt","cellFunc":"member","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":["#cspan","累计新增"],"dataIndex":"member_new","cellFunc":"member","cellStyle":"grid_row_cell_number","title":"本月累计新增产品"}
+	,{"name":["#cspan","累计取消"],"dataIndex":"member_lose","cellFunc":"member","cellStyle":"grid_row_cell_number","title":"本月累计取消产品"}
+	,{"name":["产品收入(元)","#rspan"],"dataIndex":"sum_charge","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+];
+
+function member(val,options){
+	if(options.record.groupcode){
+		var obj=$C("a");
+		obj.href="javascript:void(0)";
+		obj.title="细分到集团时可以查询成员产品明细";
+		obj.appendChild($CT(aihb.Util.numberFormat(val)));
+		obj.onclick=function(){
+			tabAdd({url:"/hbapp/app/report/ent/member_prod.htm?date="+$("date").value+"&groupcode="+options.record.groupcode,title:options.record.groupname+"成员产品明细"});
+		}
+		return obj;
+	}else{
+		return $CT(aihb.Util.numberFormat(val));
+	}
+}
+
+function genSQL(){
+	var colPiece="";
+	var groupPiece="";
+	
+	if($("detail_city").checked){
+		if(groupPiece.length>0)groupPiece+=",";
+		if(colPiece.length>0)colPiece+=",";
+		groupPiece +="substr(staff_org_id,1,5)";
+		colPiece +="substr(staff_org_id,1,5) city";
+	}
+	
+	if($("detail_county").checked){
+		if(groupPiece.length>0)groupPiece+=",";
+		if(colPiece.length>0)colPiece+=",";
+		groupPiece +="substr(staff_org_id,1,8)";
+		colPiece +="substr(staff_org_id,1,8) county";
+	}
+	
+	if($("detail_mgr").checked){
+		if(groupPiece.length>0)groupPiece+=",";
+		if(colPiece.length>0)colPiece+=",";
+		groupPiece +="staff_id||staff_name";
+		colPiece +="staff_id||staff_name mgr";
+	}
+	
+	
+	if($("detail_ent").checked){
+		if(groupPiece.length>0)groupPiece+=",";
+		if(colPiece.length>0)colPiece+=",";
+		groupPiece +="groupcode,groupname";
+		colPiece +="groupcode,groupname";
+	}
+	
+	if($("detail_prod").checked){
+		if(groupPiece.length>0)groupPiece+=",";
+		if(colPiece.length>0)colPiece+=",";
+		groupPiece +="prod_name";
+		colPiece +="prod_name";
+	}
+	
+	var time=$("date").value;
+	var sql=" select "+colPiece
+		+" ,count(*)ent_cnt,count(case when replace(substr(char(eff_date),1,7),'-','')='"+time.substring(0,6)+"' then groupcode else null end) ent_new,count(case when replace(substr(char(exp_date),1,7),'-','')='"+time.substring(0,6)+"' then groupcode else null end) ent_lose"
+		+" ,sum(user_num) member_cnt,sum(user_num_new) member_new,sum(user_num_cancel) member_lose"
+		+" ,decimal(sum(sum_charge),16,4)/1000 sum_charge"
+		+" from (select a.*,b.groupname from nmk.ent_prod_"+time +" a,nwh.ent_info_"+time+" b where a.groupcode=b.groupcode) t"
+		+" where 1=1 "+ aihb.AjaxHelper.parseCondition() 
+		+" group by "+ groupPiece
+		+" order by 1 desc with ur";
+
+	return sql;
+}
+
+var grid = {};
+function query(){
+	grid = new aihb.AjaxGrid({
+		header:_header
+		,sql: genSQL()
+		,callback:function(){
+			aihb.Util.watermark();
+		}
+	});
+	grid.run();
+}
+
+function down(){
+	aihb.AjaxHelper.down({
+		sql : genSQL()
+		,header : _header
+	});
+}
+
+function areacombo(level){
+	var selects = [];
+	var sqls = [];
+	selects.push(document.forms[0].city);
+
+	if(document.forms[0].county != undefined){
+		selects.push(document.forms[0].county);
+		sqls.push("select country_id key,org_name value from NMK.DIM_ent_AREAORG where country_id like '#{value}%'  order by seq with ur");
+	}
+	
+	if(document.forms[0].custmanager!= undefined){
+		selects.push(document.forms[0].custmanager);
+		sqls.push("select distinct staff_id key,staff_id||staff_name value from nmk.ENT_PROD_"+document.forms[0].date.value+" where staff_org_id like '#{value}%' order by 1 with ur");
+	}
+	
+	//调用联动方法
+	aihb.FormHelper.comboLink({
+		elements : selects
+		,datas : sqls
+		,level : level
+	});
+}
+var _params = aihb.Util.paramsObj();
+window.onload=function(){
+	aihb.Util.loadmask();
+	aihb.Util.watermark();
+	var _d=new Date();
+	_d.setDate(_d.getDate()-1);
+	$("date").value=_d.format("yyyymmdd");
+	
+	$("dim_city").innerHTML=aihb.BassDimHelper.areaCodeHtml("city",_params.cityId,"areacombo(1)");
+}
+	</script>
+<HEAD>
+<body>
+<form method="post" action="">
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'dim_div')" title="点击隐藏"><img flag='1' src="../../../resources/image/default/ns-expand.gif"></img>&nbsp;查询条件区域：</td>
+	</tr></table></legend>
+	<div id="dim_div">
+		<table align="center" width="99%" class="grid-tab-blue" cellspacing="1" cellpadding="0" border="0">
+			<tr class='dim_row'>
+				<td class='dim_cell_title'>统计周期</td>
+				<td class='dim_cell_content'>
+					<input type="text" style="width:160px;" class="Wdate" id="date" name="date" onfocus="WdatePicker()"/>
+				</td>
+				<td class='dim_cell_title'>地市 <input type="checkbox" id="detail_city">细分</td><td class='dim_cell_content'><ai:dim id="dim_city" name='city' dbName="substr(staff_org_id,1,5)"></ai:dim></td>
+				<td class='dim_cell_title'>县市 <input type="checkbox" id="detail_county">细分</td><td class='dim_cell_content'><ai:dim name='county' dbName="substr(staff_org_id,1,8)"><select name='county' class='form_select' onchange="areacombo('2')"><option value=''>全部</option></select></ai:dim></td>
+			</tr>
+			<tr class="dim_row">
+				<td class='dim_cell_title'>客户经理 <input type="checkbox" id="detail_mgr">细分</td><td class='dim_cell_content'><ai:dim name='custmanager' dbName="staff_id"><select name='custmanager' class='form_select' onchange=""><option value=''>全部</option></select></ai:dim></td>
+				<td class='dim_cell_title'>集团客户 <input type="checkbox" id="detail_ent">细分</td><td class='dim_cell_content'><ai:dim name='ent' dbName="groupname" operType="like"><input type="text" id="groupcust" name='ent'></ai:dim></td>
+				<td class='dim_cell_title'>产品 <input type="checkbox" id="detail_prod" checked>细分</td><td class='dim_cell_content'><ai:dim name='prod_name' dbName="prod_name"><input type="text" id="prod_name"></ai:dim></td>
+				
+				<!--
+				<td class="dim_cell_title">集团行业类型</td>
+				<td class="dim_cell_content"><span name="value(engage_trade,'未知')" type="varchar"><%=QueryTools3.getStaticHTMLSelect("industrytype","")%></span></td>
+				<td class="dim_cell_title">集团级别</td>
+				<td class="dim_cell_content"><span name="value(value_grade,'未知')" type="varchar"><%=QueryTools3.getStaticHTMLSelect("grouplevel","")%></span></td>
+		  -->
+			</tr>
+		<!--	
+			<tr class="dim_row">
+				<td class="dim_cell_title">集团产品类型</td>
+				<td class="dim_cell_content"><span name="prod_code" type="varchar" grouping="1"><%=QueryTools3.getStaticHTMLSelect("producttype","")%></span></td>
+				<td class="dim_cell_title"></td>
+				<td class="dim_cell_content"></td>
+				<td class="dim_cell_title"></td>
+				<td class="dim_cell_content"></td>
+			</tr>
+			-->
+		</table>
+		<table align="center" width="99%">
+			<tr class="dim_row_submit" >
+				<td align="right">
+					<input type="button" class="form_button" value="查询" onClick="query()">&nbsp;
+					<input type="button" class="form_button" value="下载" onclick="down()">&nbsp;
+				</td>
+			</tr>
+		</table>
+	</div>
+</fieldset>
+</div><br>
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'show_div')" title="点击隐藏"><img flag='1' src="../../../resources/image/default/ns-expand.gif"></img>&nbsp;数据展现区域：</td>
+		<td></td>
+	</tr></table></legend>
+	<div id="grid" style="display:none;"></div>
+</fieldset>
+</div><br>
+</form>
+
+</body>
+</html>

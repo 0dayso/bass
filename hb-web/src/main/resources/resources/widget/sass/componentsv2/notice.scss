@@ -1,0 +1,33 @@
+@charset "utf-8";
+.notice{
+    @include setBorder();
+    width:100%;
+    height: 40px;
+    line-height: 40px;
+    background-color:white;
+    .notice-icon{
+        @include setMargin(left,10px);
+        color: #F37276;
+        line-height: 36px;
+        font-size: 19px;
+    }
+    .notice-title{
+        font-size: $font-m2;
+        color: $color-notice;
+        float: left;
+        margin-right: 9px;
+        line-height: 36px;
+    }
+    .notice-text{
+        @include textLimit(75%);
+        font-size: $font-s;
+        color: $color-notice;
+        float: left;
+    }
+    .notice-moretitle{
+        @include textLimit(7%);
+        color: $color-notice1;
+        text-align: center;
+        float:right;
+    }
+}

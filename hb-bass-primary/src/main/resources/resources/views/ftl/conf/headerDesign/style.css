@@ -1,0 +1,196 @@
+/***  2006.9.12 by jaken ----laputa 灰色版 草绿色色值:浅（面）#BCDE74 深（线） #779538*******/
+html{SCROLLBAR-FACE-COLOR: #E8F1BB; SCROLLBAR-HIGHLIGHT-COLOR: #ffffff; 
+SCROLLBAR-SHADOW-COLOR: #ffffff; SCROLLBAR-3DLIGHT-COLOR: #E8F1BB; SCROLLBAR-ARROW-COLOR: #99B63C;
+SCROLLBAR-TRACK-COLOR: #ffffff;SCROLLBAR-DARKSHADOW-COLOR:E8F1BB ;}/*#E8F1BB*/
+html, body{margin:0px;padding:0px;border:0px}
+body,div,table,select,td,p,a{font-size:12px;line-height:150%;/*color:#484848*/}
+button{cursor:hand;}
+img{border:0;blr:expression(this.onFocus=this. blur());}
+/****失去焦点*****/
+.nofocus{blr:expression(this.onFocus=this. blur());}	
+
+.divBorder{border:1px solid #A6C12B}
+.bgcolor{background:#eeeeee;}
+input{padding-top:2px;color:#484848;padding-left:2px}
+
+.input,.select,.btn{border-bottom:1px solid #799B3D;height:20px;border-top:0px;border-right:0px;border-left:0px;}
+.input-All-Border{border:1px solid #799B3D;height:20px;}
+/****内页按钮 样式 应用于input标签****/
+.in_btn{
+text-align:center;border:1px solid #9AB61F;height:20px; background: url(images/3.gif) repeat-x; color:#414125;}
+.in_btnB{text-align:center;border:1px solid #C1BC39;height:20px; background: url(images/3B.gif) repeat-x; color:#414125;}
+/**********内页按钮 应用于button标签*****/
+.button{text-align:center;border:1px solid #9AB61F;height:20px; background:url(images/3.gif) repeat-x; color:#414125}
+
+/*.HeadDiv{
+  position: absolute;
+  z-index:-10;
+  top:0px;
+  left:0px;
+  width:100%;
+  white-space:nowrap;
+  height:98px;
+  background:url(images/indextop_bg_2.gif) repeat-x;
+}*/
+.printHead{width:100%;line-height:58px;white-space:nowrap; height:60px; background:url(images/printbg.jpg) repeat-x;}
+/***** *rv鼠标滑过* *rs鼠标点击*****/
+.head_td{background: url(images/head_td_6.gif) center repeat-x; height:25px;color:#444444;}/*表头*/
+.hand{ cursor:hand;}
+/*账簿的合计和累计*/
+.rg{color:blue;}
+.rv{background:#D8F173;}/*mouse over*/
+.rs{background:#BFDB4D;}/*选中行*/
+
+/****** rl奇数样式 r0偶数样式 ********/
+.r1{background-color: #FFFFFF;}
+.r0{background-color:#F1F9D0/*#E4E8EF;*/}
+/*这种颜色用于帐簿的行头*/
+.r2{background-color:#E6E0BB;}
+/********** 多行表格统一样式/*不能直接加在table或td 只能加在包含有table的div,table之类上面 *******/
+/****************无线表格*************/
+.tabname  {border:1px solid #ffffff;border-collapse:collapse;}
+.tabname td {border-collapse:collapse;background:#ffffff;padding:2px 6px 1px 6px;}
+/*细线表格|LaputacTable*/
+.laputac_table table{border:1px solid #A6C12B; border-collapse:collapse;background:#fff;}
+.laputac_table td{border:1px solid #A6C12B; text-indent:12px;height:25px;}
+/**结账**/
+.b-border table{margin:15px auto}
+.b-border td{border-bottom:1px solid #A6C12B;height:25px; vertical-align:middle}
+.b-border span{border-bottom:1px solid #A6C12B; line-height:220%; text-align:left}
+.vtoolbox_top{border-bottom:1px solid #A6C12B; padding:5px;}
+
+/*鼠标滑过表格效果：*/
+.laputac_move{background:#F1F9D0}
+/*正文样式**/
+.color_main{color:#799B3D}
+.text_gray{ color:#777777;}
+.text_deep{color:#484848;font-weight:bold;}
+.text_deep_thin{color:#484848}
+
+/****各类a标签****/
+
+.text_link a:link,.text_link a:visited{color:#9AB61F; text-decoration: underline;}
+.text_link a:hover{color: #FF9900;text-decoration: underline}
+.oftenlink a:link,.oftenlink a:visited,.nonelink a:link,.nonelink a:visited{color:#000;
+text-decoration:none;}
+.oftenlink a:hover{color:#D0690D;text-decoration:underline;}
+.nonelink a:hover{color:#D0690D;text-decoration:none;}
+
+.bigfont a:link, .bigfont a:visited{font-size:11pt;color:#91A434;text-decoration:none;}
+.bigfont a:hover{font-size:11pt;color:#D0690D;text-decoration:none;}
+.help a:link, .help a:visited{blr:expression(this.onFocus=this. blur()); color:#000; text-decoration:none;}
+.help a:hover{blr:expression(this.onFocus=this. blur()); color:#fff; text-decoration:none;}
+.headLink a:link, .headLink a:visited{font-size:13px;blr:expression(this.onFocus=this. blur());color:#000;text-decoration:none;}
+.headLink a:hover{blr:expression(this.onFocus=this. blur());font-size:13px;color: #D0690D;
+text-decoration:underline;}
+.underlink a:link,.underlink a:visited{color:#000000;text-decoration: underline;
+}
+.underlink a:hover{color:#D0690D;text-decoration:none;}
+.underlink2 a:link,.underlink2 a:visited{color:#D0690D;text-decoration: underline;}
+.underlink2 a:hover{color:#000000;text-decoration:none;}
+/***表头---列表标签***/
+
+.DivBottom{text-align:center;padding-top:10px;height:41px;position:absolute; bottom:0px; left:0px;width:100%; background:  url(images/exit_19.jpg) repeat-x;}
+.positiontRight{position:absolute;text-align:center;float:right;top:20px;right:0px; }
+.positiontRight ul{padding:0px;margin:0px;list-style:none;}
+/***标题***/
+
+.positiont{color: #ffffff;font-size:21px;font-weight:bold;filter:dropshadow(color=#5D5D5D,offx=1,offy=1);}
+.middletitle{color: #ffffff;font-size:18px;font-weight:bold;}
+.positiont div{text-align:center;float:left;width:60px;height:80px;}
+.positiont a:link,.positiont a:visited{font-weight:normal;font-size:12px;color:#000000;width:60px;
+height:80px;text-decoration:none;}
+.positiont a:hover{font-weight:normal;font-size:12px;color:#D0690D;text-decoration:underline;}
+.positiont a{text-align:center;padding-top:48px;}
+.middleLeft{border-right:3px solid  #94BA21;}
+.positiontLeft{text-align:left;float:left;height:98px;padding-left:10px;}
+.positiontLeft ul{margin:0px;padding:0px;list-style:none;text-align:left;}
+.iframehead{position:relative;width:100%;white-space:nowrap;height:54px;background: url(images/zhuce_2.gif) repeat-x;}
+.accmgr_head{ position:relative;width:100%; white-space:normal;height:61px;background:url(images/top_2.gif) repeat-x;}
+
+.your_positiont{letter-spacing:1pt;font-family:arial,helvetica,sans-serif;float:left;margin-left:25px;width:60%;font-size:14px;color:#1B8CD3;font-weight:bold;
+filter:dropshadow(color=#F2F2F2,offx=1,offy=1);
+}
+
+/*********动态输入提示*************/
+.SuggestListItem{line-height:100%;BACKGROUND-COLOR:#ece9d8;FONT-SIZE: 12px;padding:2px;width:100%;color:#000000;cursor:hand;height:18px}
+.SuggestListItemSel{line-height:100%;BACKGROUND-COLOR:#0000FF;FONT-SIZE: 12px;padding:2px;width:100%;color:#FFFFFF;cursor:hand;height:18px}
+.SuggestDiv{line-height:100%;position:absolute;border:1px solid #A6B802;overflow:hidden;}
+/*********************/
+
+/****最大化　最小化　还原****/
+.xWin-title-bar{position:absolute;overflow:hidden;top:0px;left:0px;width:100%;height:50px; border:0px solid red}
+#big-small-close-bg{ background:url(images/big-small-close.gif) no-repeat; margin-right:2px;}
+.window-positiont{position:absolute; top:2px; right:0px; width:72px;height:18px;margin-right:2px;}
+.big-small-close{cursor:hand;width:18px;height:18px; display: inline;}
+.big-small-close-over{cursor:hand;width:18px;display: inline;height:18px;background:#ffffff;filter: alpha(opacity=25);}
+/*****最大化　最小化　还原 结束*******/
+ 
+/*只控制登录和退出页面**/
+.land_head{ text-indent:75px;padding-top:15px;position:relative;width:100%;white-space:nowrap;height:93px;background: url(images/land_head.gif) repeat-x;text-align:left;}
+.land_button{text-align:center;border:1px solid #9AB61F;height:23px; background: url(images/3.jpg);padding-top:0px;color:#414125}
+.laputac_top{width:100%; height:54px; text-align:left; background:url(images/zhuce_2.gif); }
+.laputac_bottom{position:absolute; bottom:0px; left:0px;width:100%; background: url(images/bottombg_7.gif); height:25px;}
+.land ul{
+line-height:180%;text-align:right;padding:0px;margin:0px; list-style:none;
+}
+.land li{padding:4px 0px;list-style:none;text-align:left;height:30px;}
+.land_login ul{
+line-height:180%;text-align:right;padding:0px;margin:0px; list-style:none;
+}
+.land_login li{padding:1px 0px;list-style:none;text-align:left;height:30px;}
+.exit_feather{width:68px;height:73px; position:absolute;top:15px;left:20px;z-index:1px;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="skins/default/images/feather_3.png",sizingMethod="image");}
+.exit_top{position:relative;height:61px; padding-top:10px; background:url(images/top_2.gif); }
+.tkzc{width:208px;height:26px;position:absolute;left:5px;top:1px; background: url(images/laputac_text_5.gif) no-repeat;}
+.sth{position:absolute;right:0px;bottom:0px;color:#FFFFFF;}
+.img_line{width:100%; background: url(images/top_4.gif) center top no-repeat;text-align:center;height:2px;}
+.exit{color:#414125; text-align:center; cursor:hand;}
+.closeTd{width:90px;height:76px; background: url(images/exit_14.jpg) no-repeat center center;cursor:hand;text-align:center;}
+.closeTd_beifen{width:100px;height:76px;background: url(images/exit_11.jpg) no-repeat center center;cursor:hand;text-align:center;}
+/*以下标签是打印相关的请不要修改*/
+ @media print{
+    .np{color:white!important;padding-top:99999px;padding-left:99999px;}
+    .noprint_{display:none;}
+    .printall_{}
+    .pagebreak{page-break-after:always}
+	iframe{display:none;}
+ }
+ 
+@media screen{
+    .np{}
+    .noprint_{}
+    .printall_{display:none;}
+    .pagebreak{}
+ }
+ 
+
+ /***出纳模块 中的 导入，导出，设置，打印样式***/
+ /**********************cashier出纳模块|余额核对表*********************/
+.dr a:link,.dr a:visited{background:url(images/p.gif) no-repeat  -5px top;}
+.print a:link,.print a:visited{background:url(images/p.gif) no-repeat  -70px top;}
+.option a:link,.option a:visited{background:url(images/p.gif) no-repeat  -135px top;}
+/************************************************************************************************/
+
+/*****************会计之家|基础数据管理  （图片不一样 另外处理）*********************/
+.add_B a:link,.add_B a:visited{background:url(images/s.gif) no-repeat -12px top;}
+.edit_B{background:url(images/s.gif) no-repeat -72px top;}
+.delete_B{background:url(images/s.gif) no-repeat -145px top;}
+.adds_B{background:url(images/s.gif) no-repeat -210px top;}
+.option_B{background:url(images/s.gif) no-repeat -275px top;}
+/***************************************/
+
+
+/*****************圆角表格*****************************/
+.fieldset{ border:1px solid #799B3D;padding:5px 0px;}
+.legend{color:#484848}
+.rptcheck_fies{
+ position:absolute;padding:8px;width:300px; height:50px;border:1px solid #799B3D;line-height:2.0; }
+.fies legend{color:#484848;font-weight:bold}
+/*********************************/
+.fies{
+ position:absolute;padding:0px 8px;width:500px; height:60px;border:1px solid #999999; line-height:2.0; }
+.fies legend{color:#484848;font-weight:bold;}
+/******************树之门*****************/
+.tree_bg{ background:url(images/side_bg.gif) repeat-y;height:14px;}
+.tree_close{ background:url(images/side_close.gif) center center  no-repeat;height:78px;}
+.tree_open{ background:url(images/side_open.gif) center center  no-repeat;height:78px;}

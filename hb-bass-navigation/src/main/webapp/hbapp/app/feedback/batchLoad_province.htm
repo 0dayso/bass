@@ -1,0 +1,127 @@
+<html xmlns:ai>
+<HEAD>
+<TITLE>湖北移动经营分析系统</TITLE>
+<link rel="stylesheet" type="text/css" href="/hb-bass-navigation/hbapp/resources/css/default/default.css" />
+<link rel="stylesheet" type="text/css" href="/hb-bass-navigation/hbapp/resources/js/codebase/dhtmlxvault.css" />
+<script language="JavaScript" type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/codebase/dhtmlxvault.js"></script>
+<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/default/default.js" charset="utf-8"></script>
+<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/default/tabext.js" charset="utf-8"></script>
+<script type="text/javascript">
+	var _params = aihb.Util.paramsObj();
+	var loginname = "";
+	function getLoginName(){
+		xmlHttp = new ActiveXObject("Msxml2.XMLHTTP.3.0");
+    	xmlHttp.onreadystatechange=addBack; // 设置回掉函数
+    	xmlHttp.open("POST","/hbapp/app/feedback/getSessionLogin.jsp",false);
+    	xmlHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+    	xmlHttp.setRequestHeader("X-Requested-With","XMLHttpRequest");
+    	var str = "";
+    	str = encodeURI(str,"utf-8"); 
+    	xmlHttp.send(str);
+	};
+	function addBack()
+	{
+		if(xmlHttp.readyState == 4)
+		{
+			if(xmlHttp.status == 200)
+			{
+				loginname = xmlHttp.responseText.replace(/(^\s*)|(\s*$)/g, "");
+				loadmask.style.display = "none";	
+			}
+		}
+	}
+	function showPanel() {
+		/* var _params = aihb.Util.paramsObj();
+		var vault = new dhtmlXVaultObject();
+	    vault.setImagePath("/hbapp/resources/js/codebase/imgs/");
+	    vault.setServerHandlers("/hbirs/action/filemanage?method=importExcelAny", "/hbirs/action/filemanage?method=getInfoHandler", "/hbirs/action/filemanage?method=getIdHandler");
+	    vault.setFilesLimit(1);
+	   	vault.create("uploadDiv");
+	   	var task_id = new Date().format("yyyymmdd") + "@" + _params.loginname;
+	   	var tableName = "COMPETE_OPPSTATE_PROVINCE";
+	   	
+	   	vault.setFormField("tableName", tableName);
+    	vault.setFormField("columns", "EMPLOYEE_NUM,EMPLOYEE_PART_NAME,NET_PORTIN,NET_NEWACC_NBR,GROUP_CUSTNAME,GROUP_CUSTID,OPBACKDATE,CITY_ID");
+    	vault.setFormField("date", task_id);
+    	vault.setFormField("ds", "web");
+    	
+    	vault.onFileUpload=function(){
+    		loadmask.style.display="";
+    		return true;
+    	}  */
+    	
+    	/***************************************新代码********************************************/
+    	
+		var vault = new dhtmlXVaultObject();
+	    vault.setImagePath("/hb-bass-navigation/hbapp/resources/js/codebase/imgs/");
+	    vault.setServerHandlers("/hb-bass-navigation/hbirs/action/filemanage?method=importExcel", "/hb-bass-navigation/hbirs/action/filemanage?method=getInfoHandler", "/hb-bass-navigation/hbirs/action/filemanage?method=getIdHandler");
+	    vault.setFilesLimit(1);
+	   	vault.create("uploadDiv");
+	   	var task_id = new Date().format("yyyymmdd") + "@" + loginname;
+	   	var tableName = "COMPETE_OPPSTATE_PROVINCE_UPLOAD";
+	   	
+	   	vault.setFormField("tableName", tableName);
+    	vault.setFormField("columns", "TASK_ID,EMPLOYEE_NUM,EMPLOYEE_PART_NAME,NET_PORTIN,NET_NEWACC_NBR,GROUP_CUSTNAME,GROUP_CUSTID,OPBACKDATE,CITY_ID");
+    	vault.setFormField("date", task_id);
+    	vault.setFormField("ds", "web");
+    	
+    	vault.onFileUpload=function(){
+    		loadmask.style.display="";
+    		return true;
+    	} 
+    	
+    	vault.onUploadComplete = function(files) {    		
+    		this.removeAllItems();
+    		//alert("数据已成功导入，请观察相关表!\r\n无需重复导入!");
+			loadmask.style.display="none";
+    		var sql=encodeURIComponent("update COMPETE_OPPSTATE_PROVINCE_UPLOAD set flag='成功' where task_id='" + task_id + "'");
+ 			sql += "&sqls="+encodeURIComponent("update COMPETE_OPPSTATE_PROVINCE_UPLOAD set flag='已经导入' where task_id='"+ task_id +"' and net_portin||'&'||net_newacc_nbr in (select net_portin||'&'||net_newacc_nbr from COMPETE_OPPSTATE_PROVINCE)");   	
+ 			sql += "&sqls="+encodeURIComponent("update COMPETE_OPPSTATE_PROVINCE_UPLOAD set flag='重复导入' where task_id='" + task_id + "' and net_portin||'&'||net_newacc_nbr in (select net_portin||'&'||net_newacc_nbr from COMPETE_OPPSTATE_PROVINCE_UPLOAD where task_id ='"+task_id+"' group by net_portin,net_newacc_nbr having count(*) > 1 )");
+			sql += "&sqls=" + encodeURIComponent("insert into COMPETE_OPPSTATE_PROVINCE (EMPLOYEE_PART_NAME,EMPLOYEE_NUM,CITY_ID,OPBACKDATE,GROUP_CUSTID,GROUP_CUSTNAME,NET_PORTIN,NET_NEWACC_NBR) select EMPLOYEE_PART_NAME,EMPLOYEE_NUM,CITY_ID,OPBACKDATE,GROUP_CUSTID,GROUP_CUSTNAME,NET_PORTIN,NET_NEWACC_NBR from COMPETE_OPPSTATE_PROVINCE_UPLOAD where task_id ='"+task_id+"' and flag = '成功'");
+			sql += "&sqls=" + encodeURIComponent("delete from COMPETE_OPPSTATE_PROVINCE_UPLOAD where task_id='" + task_id + "' and flag='成功'");
+			
+			var ajax = new aihb.Ajax({
+			url : "/hb-bass-navigation/hbirs/action/sqlExec"
+			,parameters : "sqls="+sql+"&ds=web"
+			,loadmask : false
+			,callback : function(xmlrequest){
+				alert("导入完成,请查看未导入成功号码");
+				loadmask.style.display="none";
+				tabAdd({title:'未导入成功号码',url:"uploadinfo.html?"+_params._oriUri});
+			}
+		});
+			ajax.request(); 
+			location.refresh();
+    	}
+	}
+	aihb.Util.loadmask();
+	window.onload=function(){
+		getLoginName();
+		showPanel();
+		$("failNum").onclick=function(){
+ 			tabAdd({title:'未导入成功号码',url:"uploadinfo.html?"+_params._oriUri})
+ 		}
+	}
+</script>
+</head>                                                                                                                                                                                                                                                                                                             
+<body>
+<fieldset width="96%" align="center" style="margin: 10px 0px 0px 10px;">
+ <legend>
+	数据导入
+	</legend>
+   <table border=0 cellpadding="0" cellspacing="0">
+      <tr style="padding:5px;"> 
+        <td width="450"><div id="uploadDiv"></div><input type="button" id="failNum" value="未导入成功号码查看"/></td>
+        <td valign="top"><a style="text-decoration: underline;" href="/hb-bass-navigation/hbapp/app/feedback/sample.xls"><font color=blue><b>导入数据模板(Excel)</b></font></a>&nbsp;<font color="red">请右键点击“目标另存为”下载</font>
+        	<div>导入说明：</div>
+	<div>1.导入文件中不能有重复的记录(相同的策反号码和移动号码)；</div>
+	<div>2.同一个回流异网号码不能对应多个新发展本网号码；同一个新发展本网号码也不能对应多个回流异网号码；</div>
+	<div>3.导入的记录不能与已导入的历史记录相同（根据回流异网号码和新发展本网号码校验）；</div>
+	<div style="color : red">4.导入的文件中不要留空白行和列；</div>
+	<div>5.本程序将做基于上述规则的自动验证，只有符合要求的记录才能被导入。</div>
+        	<td> 
+      </tr>
+   </table>
+</fieldset>
+</body>
+</html>

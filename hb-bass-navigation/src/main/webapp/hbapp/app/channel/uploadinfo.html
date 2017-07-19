@@ -1,0 +1,127 @@
+<html xmlns:ai>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<title>策反数据导入不成功表单</title>
+	<script type="text/javascript" src="../../../hbapp/resources/js/default/default.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../../../hbapp/resources/js/datepicker/WdatePicker.js"></script>
+	<link rel="stylesheet" type="text/css" href="../../../hbapp/resources/css/default/default.css" />
+	<!-- 目前问题： 缓存问题 -->
+	<script type="text/javascript">
+	//aihb.URL="/hbapp";
+var _header= [
+	{
+		"cellStyle":"grid_row_cell_text",
+		"dataIndex":"channel_id",
+		"name":["渠道ID"],
+		"title":"",
+		"cellFunc":""
+	},
+	{
+		"cellStyle":"grid_row_cell_text",
+		"dataIndex":"customer_service_score",
+		"name":["客户服务得分"],
+		"title":"",
+		"cellFunc":""
+	},
+	{
+		"cellStyle":"grid_row_cell_text",
+		"dataIndex":"competitive_strategy_score",
+		"name":["竞争策略得分"],
+		"title":"",
+		"cellFunc":""
+	},
+	{
+		"cellStyle":"grid_row_cell_text",
+		"dataIndex":"image_score",
+		"name":["形象得分"],
+		"title":"",
+		"cellFunc":""
+	},
+	{
+		"cellStyle":"grid_row_cell_text",
+		"dataIndex":"development_strategy_score",
+		"name":["发展战略得分"],
+		"title":"",
+		"cellFunc":""
+	},
+	{
+		"cellStyle":"grid_row_cell_text",
+		"dataIndex":"flag",
+		"name":["不成功原因"],
+		"title":"",
+		"cellFunc":""
+	}
+	];
+
+function genSQL(){
+	var _params = aihb.Util.paramsObj();
+	return "select TASKID, CHANNEL_ID, CUSTOMER_SERVICE_SCORE, COMPETITIVE_STRATEGY_SCORE, IMAGE_SCORE, DEVELOPMENT_STRATEGY_SCORE,FLAG from NMK.CHL_SOCIAL_VALUE_IMPORT_SCORE_UPLOADTEMP where taskid='" + _params.taskId + "'";
+}
+
+
+
+function query(){
+	var grid = new aihb.SimpleGrid({
+		header:_header
+		,sql: genSQL()
+		,isCached : false
+		,callback:function(){
+			aihb.Util.watermark();
+		}
+	});
+	grid.run();
+}
+
+function down(){
+	aihb.AjaxHelper.down({
+		sql : genSQL()
+		,header : _header
+		,isCached : false
+		,"url" : "/hbirs/action/jsondata?method=down&fileKind=excel"
+	});
+}
+
+function _delete() {
+	if(!window.confirm("确定要删除吗？删除前应先下载这些记录做备份"))
+		return;
+	var _params = aihb.Util.paramsObj();
+	var sql=encodeURIComponent("delete from nmk.CHL_SOCIAL_VALUE_IMPORT_SCORE_UPLOADTEMP where taskid='" + _params.taskId + "'");
+	var ajax = new aihb.Ajax({
+		url : "/hbirs/action/sqlExec"
+		,parameters : "sqls="+sql
+		,loadmask : false
+		,callback : function(xmlrequest){
+			var result = eval("(" + xmlrequest.responseText + ")");
+			alert(result.message);
+		}
+	});
+	ajax.request();
+}
+
+window.onload=function(){
+	aihb.Util.loadmask();
+	aihb.Util.watermark();
+	query();
+}
+	</script>
+</head>
+<body>
+<form method="post" action=""><br>
+<div style="text-align:right;">
+	<font color=red>请下载未成功导入的数据编辑后重新上传</font>
+	<input type="button" class="form_button" value="下载数据" onclick="down()">&nbsp;
+<input type="button" class="form_button" value="删除非法数据" onClick="_delete()">&nbsp;
+</div>
+
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'show_div')" title="点击隐藏"><img flag='1' src="../../../hbapp/resources/image/default/ns-expand.gif"></img>&nbsp;数据展现区域：</td>
+		<td></td>
+	</tr></table></legend>
+	<div id="grid" style="display:none;"></div>
+</fieldset>
+</div><br>
+</form>
+</body>
+</html>

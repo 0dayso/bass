@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html xmlns:ai>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<title>核心客户之客户经理编辑</title>
+	<link rel="stylesheet" type="text/css" href="../../resources/css/default/default.css" />
+	<link rel="stylesheet" type="text/css" href="../../resources/js/tooltip/style.css" />
+	<link type="text/css" href="../../resources/js/jquery/themes/redmond/jquery.ui.css" rel="stylesheet" />
+	<style type="text/css">
+	/* 顺序很重要，这样才能覆盖 */
+	body {
+		font-size: 66.5%;
+	}
+	/* row class */
+	.fmRow {
+
+	}
+	/* label class */
+	.fmLabel {
+		color : #3182be;
+		font-weight : bold;
+	}
+	/* fel class*/
+	.fmEl {
+		
+	}
+	</style>
+</head>
+<body>
+<form method="post" action="">
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'dim_div')" title="点击隐藏"><img flag='1' src="../../resources/image/default/ns-expand.gif"></img>&nbsp;查询条件区域：</td>
+	</tr></table></legend>
+	<div id="dim_div">
+	<table align="center" width="99%">
+		<tr class="dim_row_submit">
+			<td align="right" bgcolor="">
+				<input id="addBtn" type="button" class="form_button" value="新增">&nbsp;
+				<input id="editBtn" type="button" class="form_button" value="编辑">&nbsp;
+				<input id="queryBtn" type="button" class="form_button" value="查询">&nbsp;
+				<input id="downBtn" type="button" class="form_button" value="下载">&nbsp;
+			</td>
+		</tr>
+	</table>
+	</div>
+</fieldset>
+</div><br>
+<div style="text-align : center">
+	<span style="color : red; font-size : 12px" id="infomation"></span>
+</div>
+
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'show_div')" title="点击隐藏"><img flag='1' src="../../resources/image/default/ns-expand.gif"></img>&nbsp;数据展现区域：</td>
+		<td></td>
+	</tr></table></legend>
+	<div id="grid" style="display:none;"></div>
+</fieldset>
+</div><br>
+</form>
+
+<DIV style="display : none" id=loadmask2>
+	<DIV style="Z-INDEX: 20000; POSITION: absolute; WIDTH: 100%; BACKGROUND: #c3daf9; HEIGHT: 120%; TOP: 0px; LEFT: 0px;FILTER: alpha(opacity=60)" id=loadingmask>&nbsp;
+	</DIV>
+</DIV>
+
+	<div id="edit" style="display : block; background-color : #DDEEEE">
+	</div>
+<input type="hidden" name="ids"/>
+
+<!-- lots of scripts start! -->
+	<script type="text/javascript" src="../../resources/js/default/default.js" charset="utf-8"></script>
+	<!-- IE8兼容模式下不能用原生JSON -->
+	<script type="text/javascript" src="../../resources/js/default/json2.js" charset="utf-8"></script>
+	
+	<script type="text/javascript" src="../../resources/js/default/util.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../../resources/js/datepicker/WdatePicker.js"></script>
+	<script type="text/javascript" src="../../resources/js/jquery/jquery.js"></script>
+	<script type="text/javascript" src="../../resources/js/jquery/ui/jquery.ui.js"></script>
+	<script type="text/javascript">
+		
+		chBoxName = "box1"; //写在里面不行是因为在一个function a  内部用到了这个变量，而这个function将在default.js中被eval()的方式调用,这种调用方式不会追溯function a 的 scope
+		
+		void function(window,document,undefined){
+			/* 全局设置和声明 */
+			$.noConflict();
+			var _params = aihb.Util.paramsObj(),
+			//chBoxName = "box1",
+			_header,
+			/* 本应用所用的变量字典 */
+			dic = {
+				addBtnId : "addBtn"
+				//,delBtnId : "deleteBtn"
+				,queryBtnId : "queryBtn"
+				,editBtnId : "editBtn"
+				,downBtnId : "downBtn"
+				,editDivId : "edit"
+			},
+			//zoneSelect,//营销中心下拉框
+			nameOfZzone = "area_id";
+			aihb.Grid.prototype.headerInterceptor=function(elementTd,headData){
+				if(headData.dataIndex=="select_all"){
+					var ipt=$C("input");
+					ipt.type="checkbox";
+					ipt.onclick = function() {
+						var ckBoxes = document.getElementsByName(chBoxName);
+						if(this.checked) {
+							for(var i = 0 ; i < ckBoxes.length ; i++) {
+								ckBoxes[i].checked = true;
+							}
+						} else {
+							for(var i = 0 ; i < ckBoxes.length ; i++) {
+								ckBoxes[i].checked = false;
+							}
+						}
+					}
+					elementTd.appendChild(ipt);
+				}
+			}
+			/* 全局设置和结束 */
+			
+			/* 初始化方法 */
+			function init() {
+				/* 查询条件 */
+				var queryOptions = 	{
+					data : [
+						{	label : "时间"
+							,elements : "<input align='right' type='text' id='date1' name='date1' onfocus='WdatePicker({readOnly:true,dateFmt:\"yyyyMM\"})' class='Wdate'/>"
+						},
+						{	label : "地市"
+						,elements : biutil.genArea("city",_params.cityId,"areacombo(1)","condi=\" and @st.area_code='@val'\"")						
+						},
+						{	label : "县市"
+							,elements : "<select name='county_bureau' onchange='areacombo(2)' condi=\" and substr(@pt.AREA_ID,1,6)='@val'\"  class='form_select'><option value=''>全部</option></select>"
+						},
+						{	label : "营销中心"
+							,elements : "<select name='marketing_center' onchange='areacombo(3)' condi=\" and @pt.AREA_ID='@val'\"  class='form_select'><option value=''>全部</option></select>"
+						},
+						{	label : "手机号码"
+							,elements : { type : "text", condi : " and @pt.mobilephone like '%@val%'"}
+						}
+					]
+				};
+				var _table = createTblOptions(queryOptions);
+				$("dim_div").insertBefore(_table,$("dim_div").lastChild);
+				/* 表头 */
+				_header=[
+					
+					{"name":"全部选择","dataIndex":"select_all","cellStyle":"grid_row_cell","cellFunc" : function(value,options){
+						var ckBox = $C("<input name='" + chBoxName + "'>");
+						ckBox.type="checkbox";
+						var records = options.record;						
+						ckBox.value = JSON.stringify(records);
+						return ckBox;
+					}},
+					{"name":"地区","dataIndex":"area_id","cellStyle":"grid_row_cell","cellFunc" : function(value,options){
+						var v = value.split("@");
+						return v[0];//展示只展示中文部分,但修改不同
+					}}
+					,{"name":"手机号码","dataIndex":"mobilephone","cellStyle":"grid_row_cell"}
+					,{"name":"姓名","dataIndex":"manager_name","cellStyle":"grid_row_cell_text"}
+					,{"name":"工号","dataIndex":"manager_id","cellStyle":"grid_row_cell"}
+					,{"name":"登陆名","dataIndex":"login_name","cellStyle":"grid_row_cell"}
+					,{"name":"VIP客户经理ID","dataIndex":"vip_manager_id","cellStyle":"grid_row_cell"}
+					,{"name":"本月维系用户个数","dataIndex":"user_num","cellStyle":"grid_row_cell_number"}
+					,{"name":"本月维系新用户个数","dataIndex":"user_new_num","cellStyle":"grid_row_cell_number"}
+					,{"name":"本月平均用户个数","dataIndex":"user_avg_num","cellStyle":"grid_row_cell_number"}
+					,{"name":"地区平均用户个数","dataIndex":"area_sum_num","cellStyle":"grid_row_cell_number"}
+				];
+				/* 设置初始时间 */
+				var _d=new Date();
+				_d.setDate(_d.getDate()-3);
+				_d.setMonth(_d.getMonth()-1);
+				$("date1").value=_d.format("yyyymm");
+	
+				aihb.Util.loadmask();
+				aihb.Util.watermark();
+				
+				/* 添加事件监听 */
+				$(dic.queryBtnId).onclick = query;
+				$(dic.downBtnId).onclick = down;
+				$(dic.editBtnId).onclick = modify;
+				//$(dic.delBtnId).onclick = modify;
+				$(dic.addBtnId).onclick = modify;	
+				
+				//getZoneCode();
+			};
+			function getZoneCode(callback) {
+				/* 初始化营销中心选择框,直接初始化成一个select对象*/
+				var sql = "select id,name   from NWH.BUREAU_TREE where  level=3  "
+				if(_params.cityId && _params.cityId !== "0") {
+					//进来意味着cityId有值而且不是0
+					var areaId = aihb.Constants.getArea(_params.cityId)["cityCode"]; //取到'HB.WH'形式的areaId
+					sql += " and area_code='" + areaId + "' ";
+				}
+				var ajax = new aihb.Ajax({
+					url : "/hbirs/action/jsondata"
+					,parameters : "isCached=true&sql=" + encodeURIComponent(sql)
+					,callback : function(xmlrequest){
+						var objs = eval(xmlrequest.responseText);
+						/*不兼容IE6的写法
+						zoneSelect = $C("select");
+						zoneSelect.name = nameOfZzone;
+						zoneSelect.elType = "form";
+						*/
+						/* 兼容IE6 的 写法 */
+						var zoneSelect = $C("<select name='" + nameOfZzone + "' elType='form'>");
+						for(var i = 0 ; i < objs.length ; i ++) {
+							zoneSelect.add(new Option(objs[i]["name"],objs[i]["id"]),undefined);
+						}
+						callback(zoneSelect);
+					}
+				});
+				ajax.request();	
+			}
+			/* 查询下载相关 */
+			function query(){
+				var grid = new aihb.AjaxGrid({
+					header:_header
+					,sql: genSQL()
+					,isCached : false
+					,callback:function(){
+						aihb.Util.watermark();
+					}
+				});
+				grid.run();
+			}
+			function down(){
+				aihb.AjaxHelper.down({
+					sql : genSQL()
+					,header : _header
+				});
+			}			
+			function genSQL(){
+				var condition = bi.genSQLConditions(document.forms[0]);
+				var sql = " select '' as select_all,MANAGER_ID,MANAGER_NAME,LOGIN_NAME," + 
+				" b.name || '@' || b.id area_id, " +  //有变化,需要变化
+				" case when MOBILEPHONE is null then '未知' else MOBILEPHONE end mobilephone," + 
+				" case when VIP_MANAGER_ID is null then '未知' else VIP_MANAGER_ID end vip_manager_id," + 
+				" USER_NUM,USER_NEW_NUM,USER_AVG_NUM,AREA_SUM_NUM " + 
+				" from NWH.CTT_MANAGER a left join (select id,name,area_code from NWH.BUREAU_TREE where level=3 ) b on a.area_id = b.id where 1=1  " + condition;         
+				return sql;
+			}
+			
+			window.onload=function(){
+				init();
+			}
+			
+			/* 修改、添加 */
+			// 一个class
+			function JPanel(id,options) {
+				var oriObj  =  jQuery("#" + id);
+				this.clear = function () {
+					oriObj.html(""); // 应该也可以
+					oriObj.dialog("destroy");
+					//getZoneCode(); //再查一次,否则select不可用
+				}
+				oriObj.dialog(options);
+			}
+			var _window ; 
+			function modify(e) {
+				e = e || window.event;
+				var srcObj = e.target || e.srcElement;
+				getZoneCode(function(zoneSelect){
+					if(_window) {
+					_window.clear();
+					}
+					
+					var editDiv = $(dic.editDivId);
+					//editDiv.innerHTML = ""; //先清空，防止用户用X的方式关闭而无法销毁
+					editDiv.title = srcObj.value + "客户经理";
+				
+					if(dic.addBtnId === srcObj.id) {
+					/* 创建form */
+					var datas = [
+					{
+						label : "手机号码: [必填]"
+						,elements : "<input type='text' name='mobilephone' />"
+					},
+					{
+						label : "客户经理姓名: [必填]"
+						,elements : "<input type='text' name='manager_name' />"
+					},
+					{
+						label : "营销中心编码: [必填]"
+						,elements : zoneSelect
+					},
+					{
+						label : "工号: [可选]"
+						,elements : "<input type='text' name='manager_id' />"
+					},{
+						label : "登录名: [可选]"
+						,elements : "<input type='text' name='login_name' />"
+					}];
+					var queryOptions = {
+						data : datas
+						,tableProps : {}
+						,fmProps : {name : "form1"}
+						,rowClass : "fmRow"
+						,labelClass : "fmLabel"
+						,felClass : "fmEl"
+					};
+					var _table = createTblOptions(queryOptions);
+					editDiv.appendChild(_table);
+					
+					var okBtnHandler = function() {
+						
+						var fm = document.forms[1], valArr = [];
+						var colNames = ["manager_id","manager_name","login_name",nameOfZzone,"mobilephone"];
+						if(!fm["mobilephone"].length)
+							fm["mobilephone"].length = 1; //当只拿到一个元素的时候，length就是undefined
+						for(var i = 0 ; i < fm["mobilephone"].length ; i ++) {
+							var tempArr = [];
+							for(var j = 0 ; j < colNames.length ; j++) {
+								var tempVal;
+								if(fm["mobilephone"].length == 1) {
+														//不再是数组
+									//如果是空字符串就置为null,因为JSON会把""空字符串转换成"null"。最新发现 ： 1. JSON 对象 IE8 ,chrome , FF都有实现,所以这里很多时候调用的并不是json2.js中的JSON; 2.IE JSON似乎有bug, 解析""在特定情况下会成为"null",这种特定情况现在还不清楚.上网查询之后果然有IE8的JSON有bug,具体为： 解析input text的value，会将""解析成"null"
+									tempVal = ( fm[colNames[j]].value && fm[colNames[j]].value.trim() )|| null; 
+								} else {
+									tempVal = fm[colNames[j]][i].value;
+								}
+								tempArr.push(tempVal ? encodeURIComponent(tempVal) :tempVal ); /* 如果是null或者undefined(几乎不可能)的话，就不要encodeURIComponent()了，因为encode之后就成了"null" */
+								//tempArr.push(tempVal);
+							}
+							valArr.push(tempArr);
+						};
+						var jsonObj = {
+							tableName : "nwh.ctt_manager"
+							,oper : "insert" //冗余
+							,cols : ["manager_id","manager_name","login_name",nameOfZzone,"mobilephone"]
+							,vals : valArr
+						};
+						var jsonStr = JSON.stringify(jsonObj);
+						var ajax = new aihb.Ajax({
+							url : "/hbirs/action/updateDB?oper=insert"
+							,parameters :  "json=" + jsonStr// a json string
+							,callback : function(xmlrequest){
+								alert(xmlrequest.responseText);
+							}
+						});
+						ajax.request();
+						jp.clear();
+						jQuery(this).dialog('close');
+					}
+					
+					var jp = _window = new JPanel(dic.editDivId,{
+						modal : true,
+						height: "auto",
+						width: "900",
+						buttons: {
+							"取消" : function() {
+								jp.clear();
+							},
+							"确定" : okBtnHandler
+						}
+					});
+					
+				} else if(dic.editBtnId === srcObj.id) {
+					
+					var vals = getCheckedVals();
+					if(!vals.length) {
+						alert("请先至少勾选一个客户经理!");
+						return;
+					}
+					var fm = $C("form"); //因为又不止一个queryOptions,所以不能用createTblOptions()来才创建fm
+					editDiv.appendChild(fm);
+					for(var i = 0 ; i < vals.length ; i++) {
+						var crtVal = JSON.parse(vals[i]);
+						var datas = [
+							{label : "手机号码: ",elements : "<input type='text' readonly='readonly' value='" + crtVal["mobilephone"] + "' name='mobilephone'>"}
+							,{label : "客户经理姓名: ",elements : "<input type='text' value='" + crtVal["manager_name"] + "' name='manager_name'>"}
+							,{label : "营销中心编码: ",elements : function(){
+								var zoneCode = crtVal["area_id"].split("@")[1];
+								for(var i = 0 ; i < zoneSelect.options.length ; i ++) {
+									(zoneCode == zoneSelect.options[i].value) && (zoneSelect.options[i].selected = true)
+								}
+								return zoneSelect
+							}()}
+							,{label : "工号: ",elements : "<input  type='text' value='" + crtVal["manager_id"] + "' name='manager_id'>"}
+							,{label : "登陆名: ",elements : "<input type='text' value='" + crtVal["login_name"] + "' name='login_name'>"}
+						];
+						var queryOptions = 	{
+							data : datas
+							,tableProps : {}
+							,rowClass : "fmRow"
+							,labelClass : "fmLabel"
+							,felClass : "fmEl"
+						},
+							_table = createTblOptions(queryOptions),
+							splitDiv = $C("div");
+							
+						splitDiv.style.cssText = " margin : 5px 0px ; background-color : #99cccc ";
+						splitDiv.appendChild(_table);
+						fm.appendChild(splitDiv);
+					}
+					var okBtnHandler = function() {
+						var fm = document.forms[1], valArr = [],ids=[];
+						var colNames = ["manager_id","manager_name","login_name",nameOfZzone,"mobilephone"];
+						if(!fm["mobilephone"].length)
+							fm["mobilephone"].length = 1; //当只拿到一个元素的时候，length就是undefined
+						for(var i = 0 ; i < fm["mobilephone"].length ; i ++) {
+							var tempArr = [],tempId;
+							
+							for(var j = 0 ; j < colNames.length ; j++) {
+								var tempVal;
+								if(fm["mobilephone"].length == 1) {
+									tempVal = ( fm[colNames[j]].value && fm[colNames[j]].value.trim() )|| null; 
+								} else {
+									tempVal =( fm[colNames[j]][i].value && fm[colNames[j]][i].value.trim() ) || null;
+								}
+								tempVal = tempVal.trim();
+								tempArr.push(tempVal ? encodeURIComponent(tempVal) : tempVal ); /* 如果是null或者undefined(几乎不可能)的话，就不要encodeURIComponent()了，因为encode之后就成了"null" */
+							}
+							tempId = (fm["mobilephone"].length == 1) ? fm["mobilephone"].value : fm["mobilephone"][i].value
+							ids.push( ( tempId && tempId.trim() ) || null );
+							valArr.push(tempArr);
+						};
+						var jsonObj = {
+							tableName : "NWH.CTT_MANAGER"
+							,oper : "updateJson" //冗余
+							,cols : colNames
+							,pkCol : "mobilephone"
+							,ids : ids
+							,vals : valArr
+						};
+						var jsonStr = JSON.stringify(jsonObj);
+						var ajax = new aihb.Ajax({
+							url : "/hbirs/action/updateDB?oper=updateJson"
+							,parameters :  "json=" + jsonStr// a json string
+							,callback : function(xmlrequest){
+								alert(xmlrequest.responseText);
+								query();
+							}
+						});
+						ajax.request();
+						jp.clear();
+						jQuery(this).dialog('close');
+					}
+					
+					var jp = _window = new JPanel(dic.editDivId,{
+						modal : true,
+						height: "400",
+						width: "800",
+						buttons: {
+							"取消" : function() {
+								jp.clear();
+							},
+							"确定" : function() {
+								okBtnHandler();
+							}
+						}
+					});
+				}
+				
+				});
+			
+			}
+			function getCheckedVals() {
+				//debugger;
+				var ckBoxes = document.getElementsByName(chBoxName);
+				var vals = [];
+				for(var i = 0 ; i < ckBoxes.length ; i ++) {
+					if(ckBoxes[i].checked)
+						vals.push(ckBoxes[i].value);
+				}
+				return vals;
+			}
+			
+		}(window,window.document);
+		
+
+</script>
+
+</body>
+</html>

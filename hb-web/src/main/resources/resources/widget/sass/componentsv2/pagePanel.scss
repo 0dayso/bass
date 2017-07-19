@@ -1,0 +1,31 @@
+@charset "utf-8";
+.pagePanel{
+	@include setPadding(row,3px);
+	.pagePanel-heading{
+		background-color: $bgColor-blue1;
+		height: 35px;
+		.pagePanel-heading-left{	
+			@include setMargin(left,10px);
+		}
+		.pagePanel-heading-right{
+			@include setMargin(right,30px);
+		}
+	}
+	.pagePanel-body{
+		display: inline-block;
+		width:100%;
+	}
+	.pagePanel-foot{
+		background-color: $bgColor-blue1;
+		height: 35px;
+		padding-right: 24px;
+	}
+	.panel-fix-width{
+	    width:100%;
+	    border-color:$borderColor2;
+	    @include setPadding(right,30px);
+	}
+	.panel-container{
+	    margin-top:0;
+	}
+}

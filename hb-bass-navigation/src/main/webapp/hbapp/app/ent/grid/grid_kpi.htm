@@ -1,0 +1,127 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>湖北移动经营分析系统</title>
+<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/ext/ext-base.js"></script>
+<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/ext/ext-all.js"></script>
+<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/ext/ext-ext.js"></script>
+<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/default/default.js"></script>
+<link rel="stylesheet" type="text/css" href="/hb-bass-navigation/hbapp/resources/js/ext/resources/css/ext-all.css" />
+<style>
+.tabs {
+    background-image:url( /hbapp/resources/image/default/tabs.gif ) !important;
+}
+.x-panel-header  {
+	background-image:url(img/banner.png) ! important;
+	background-repeat:repeat-x ! important;
+	background-attachment:scroll ! important;
+	background-position:right ! important;
+}
+.bannerTitle{
+	position:relative;height:15px;
+	color: #ffffff;
+}
+.x-border-layout-ct{background:#ffffff ! important;}
+</style>
+<script type="text/javascript">
+Ext.BLANK_IMAGE_URL = '/hb-bass-navigation/hbapp/resources/js/ext/resources/images/default/s.gif';
+//var _uriParams=aihb.Util.paramsObj();
+var _params = aihb.Util.paramsObj();
+var cityCode = _params.cityId=="0"?"HB":aihb.Constants.getArea(_params.cityId).cityCode;
+var cityName = _params.cityId=="0"?"湖北":aihb.Constants.getArea(_params.cityId).cityName;
+Ext.onReady(function(){
+	Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+	
+    var tree = new Ext.tree.TreePanel({
+        el:'west',
+        //useArrows:true,
+       	border : false,
+       	loader: new Ext.tree.TreeLoader({
+            dataUrl:'/hb-bass-navigation/hbirs/action/entGrid?method=gridNodes&condi='+cityCode
+            ,listeners : {
+            	load : function(t,node){
+					//node.getUI().getIconEl().src = "../../../resources/image/frame/tabs.gif";
+					node.eachChild(function(_node){
+						//alert(_node.isLeaf)
+       					_node.getUI().getIconEl().src = "/hbapp/resources/image/default/tabs.gif";
+					});
+            	}
+            	
+            }
+        })
+        ,root : new Ext.tree.AsyncTreeNode({
+	       	text: '湖北',
+	        draggable:false,
+	        iconCls :'tabs',
+	        expanded:true,
+	        id:'HB'
+	        ,listeners: { 
+				click: function(node,event){
+					//$("ifrGiInfo").src="grid_info.htm?gid="+node.id
+					
+		           //if(node.leaf)parent.addTab(node.text,node.attributes.url);
+		           self.ifrkpi._click(node.id)
+				}
+			}
+	    })
+	    ,listeners: { 
+			click: function(node,event){
+				//$("ifrGiInfo").src="grid_info.htm?gid="+node.id
+				
+	           //if(node.leaf)parent.addTab(node.text,node.attributes.url);
+			   //alert(node.id);
+	           self.ifrkpi._click(node.id)
+			}
+       	}
+	    
+    });
+    
+    tree.render();
+    
+    var viewport = new Ext.Viewport({
+	    layout:'border',
+	    items:[{
+			region:'west',
+			//el:'west',
+			title:'<div class="bannerTitle"><div style="position:absolute; bottom:-2;"><img src="img/chatroom.gif" /> 网格层次</div></div>',
+			split:true,
+			width: 200,
+			minSize: 175,
+			maxSize: 400,
+			//collapsed : true,
+			collapsible: true,
+			collapseMode:'mini',
+			autoScroll : true,
+			margins:'1 0 0 3',
+			layoutConfig:{
+			    animate:true
+			},
+			items: [tree]
+        }
+        ,{
+            region:'center',
+            split:true,
+            title:'<div class="bannerTitle"><div style="position:absolute; bottom:-2;"><img src="/hb-bass-navigation/hbapp/resources/image/default/plugin_add.gif"  /> 业绩发展  <span id="curDateDiv"></span></div></div>',
+            margins:'1 1 0 0',
+            items: [
+            	new Ext.BoxComponent({
+                	region:'center',
+                	el: 'center'
+            	})
+            ]
+        }
+        ]
+	});
+});
+</script>
+</head>
+<body>
+	<div id="west"></div>
+	<div id="center">
+	<IFRAME id="ifrkpi" border=0 frameBorder=0 width="100%" scrolling="auto" height="100%" src="kpi.htm"></IFRAME>
+    </div>
+</body>
+</html>
+<script>
+	document.getElementById("ifrkpi").src="kpi.htm?cityId="+_params.cityId;
+</script>	

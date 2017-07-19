@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<import resource="classpath:conf/spring/beans.xml" />
+		<context:component-scan base-package="com.asiainfo.pst.controllers" />
+
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath*:conf/pst.properties</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="dataSource" name="dataSource,defaultDB,null," class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="com.ibm.db2.jcc.DB2Driver"></property>
+		<property name="url" value="jdbc:db2://localhost:50000/cwm:retrieveMessagesFromServerOnGetMessage=true;currentSchema=ZHANGDS;"></property>
+		<property name="username" value="zhangds" />
+		<property name="password" value="zhangds123" />
+	</bean>
+   <bean id="userDao" class="com.asiainfo.hb.web.models.UserDaoImpl"/>
+</beans>

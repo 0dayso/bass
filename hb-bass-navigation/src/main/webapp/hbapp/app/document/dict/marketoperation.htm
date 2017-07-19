@@ -1,0 +1,672 @@
+<script>
+var NS4 = (document.layers);    // Which browser? 
+var IE4 = (document.all); 
+var win = window;    // window to search. 
+var n   = 0; 
+function findKeyword(str) { 
+  var txt, i, found; 
+  if (str == "") 
+    return false; 
+  // Find next occurance of the given string on the page, wrap around to the 
+  // start of the page if necessary. 
+  if (NS4) { 
+    // Look for match starting at the current point. If not found, rewind 
+    // back to the first match. 
+    if (!win.find(str)) 
+      while(win.find(str, false, true)) 
+        n++; 
+    else 
+      n++; 
+    // If not found in either direction, give message. 
+    if (n == 0) 
+      alert("Not found."); 
+  } 
+  if (IE4) { 
+    txt = win.document.body.createTextRange(); 
+    // Find the nth match from the top of the page. 
+    for (i = 0; i <= n && (found = txt.findText(str)) != false; i++) { 
+      txt.moveStart("character", 1); 
+      txt.moveEnd("textedit"); 
+    } 
+    // If found, mark it and scroll it into view. 
+    if (found) { 
+      txt.moveStart("character", -1); 
+      txt.findText(str); 
+      txt.select(); 
+      txt.scrollIntoView(); 
+      n++; 
+    }else {// Otherwise, start over at the top of the page and find first match. 
+      if (n > 0) { 
+        n = 0; 
+        findKeyword(str); 
+      } else {// Not found anywhere, give message.
+		alert("Not found.");
+		} 
+    } 
+  } 
+  return false; 
+}
+</script>
+<style>
+	h1{font-family:黑体;font-size:14pt;}
+	h2{font-family:黑体;font-size:12pt;}
+	h3{font-family:黑体;font-size:11pt;}
+	p{padding-left:30px;}
+</style>
+<a name='1'><h1>1.客户发展指标</h1></a>
+<a name='1.1'><h2>1.1.指标定义</h2></a>
+<a name='1.1.1'><h3>1.1.1.带号内部转网客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：只统计中国移动客户带号内部转网客户数，凡是不带号内部转网客户一律算离网，若用户一个月内多次内部转网只统计一次。分品牌的带号转网客户按照三大品牌进行统计。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>注释：品牌为全球通、动感地带、神州行。</p>
+<a name='1.1.2'><h3>1.1.2.离网率</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：离网率=本月离网客户数/（本月天数×12/本年天数）/本月平均客户数＊100％</p>
+<h0>本月平均客户数=（本月末客户到达数+上月末客户到达数）/2</h0>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：%</p>
+<a name='1.1.3'><h3>1.1.3.收费客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：对移动公司有收入贡献的用户。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>注释：对于出帐用户为优惠后帐单收入大于0的用户，对于不出帐的预付费智能网用户为清单收入大于0的用户。</p>
+<a name='1.1.4'><h3>1.1.4.高价值客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计月内平均每日消费大于、等于7元人民币的客户总数，不含测试卡用户。如果移动公司对客户提供优惠、打折等计划，则计算时相应收入取优惠、打折后的实际收入值。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>注释：平均每日消费指某客户在统计月内的月租费、通话费（包括IP话费）、信息费、增值业务和数据业务等收入（含代收费）总和除以该统计月的天数。</p>
+<a name='1.1.5'><h3>1.1.5.呼转客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内发生语音呼转的客户数。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<a name='1.1.6'><h3>1.1.6.净增客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：截至统计时间【客户到达数】与上周期末【客户到达数】之差。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<a name='1.1.7'><h3>1.1.7.累计平均月离网率</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：平均离网率=本年累计离网客户数/（截止到本月末本年累计天数×12/本年天数）/本年累计平均客户数×100％</p>
+<h0>累计平均客户数=（上年末客户到达数+截至统计月的本年各月末客户到达数之和）/（月份数+1）</h0>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：%</p>
+<a name='1.1.8'><h3>1.1.8.离网客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：指统计周期内离开移动公司网络的全部客户。包括欠费销号、主动申请销号客户及新进入冷冻期的客户，不包括主动预销号客户、进入保留期客户、不可充值预付卡、测试卡及网内各品牌间互转、当月复机客户。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<a name='1.1.9'><h3>1.1.9.零次通话客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内未发生过话音通话的用户，不包含仅拨打免费特服电话的用户。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>注释：月末离网客户数（主动销号、被动销号、冷冻期）、保留期、主动预销号状态的客户不统计在内。</p>
+<a name='1.1.10'><h3>1.1.10.零次通信客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：指本月未发生过话音通话和数据业务的客户。本年零次通信客户数统计12月份零次通信客户数。月末离网客户数和进入保留期客户不统计在内。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>注释：月末离网客户数（主动销号、被动销号、冷冻期）、保留期、主动预销号状态的客户不统计在内。</p>
+<a name='1.1.11'><h3>1.1.11.拍照中高端客户离网数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计上年拍照中高端客户数集合中的离网客户。每月上报的是当月离网客户数。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>注释：</p>
+<a name='1.1.12'><h3>1.1.12.拍照中高端客户到达数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：截至统计时间，【上年底中高端拍照客户】的【客户到达数】。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>注释：</p>
+<a name='1.1.13'><h3>1.1.13.全球通VIP积分评定客户数</h3></a>
+<h0>定义：指依据客户年度消费积分判定的各类全球通VIP客户（钻石卡、金卡、银卡），即以客户上一积分年度周期内累计的价值积分为标准判定客户身份级别：客户等级评定标准按有限公司本年对各省核定的VIP评定标准执行。客户身份评定后，除非客户离网等非正常原因，其身份在下一积分年度内有效。该方式是评定全球通VIP客户的基本方式。</h0>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<a name='1.1.14'><h3>1.1.14.全球通VIP客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：指全球通品牌下VIP客户，包括全球通钻石卡客户、全球通金卡客户、全球通银卡客户，其为积分评定客户数、VIP套餐客户数和特殊批准客户数之和。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<a name='1.1.15'><h3>1.1.15.全球通VIP特殊批准客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：指各类全球通VIP客户（钻石卡、金卡、银卡）中，不是依据客户年度价值积分标准，而是根据客户的重要性评定的VIP客户。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<a name='1.1.16'><h3>1.1.16.全球通VIP套餐客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：指使用含VIP权益（钻石卡、金卡、银卡）的套餐、并处于正常使用状态的客户。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<a name='1.1.17'><h3>1.1.17.全球通客户比重</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：指【客户到达数】中全球通用户占所有用户到达数的比重。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：%</p>
+<a name='1.1.18'><h3>1.1.18.全球通客户纯度</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：指当月ARPU在120元及以上的全球通用户到达数占所有全球通用户到达数的比重。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：%</p>
+<a name='1.1.19'><h3>1.1.19.全球通目标市场占有率</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：在【客户到达数】中，指全球通月ARPU值≥120元客户数与总体月ARPU值≥120元客户数之比。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：%</p>
+<a name='1.1.20'><h3>1.1.20.上年底拍照中高端客户数</h3></a>
+<h0>定义：上年10、11、12月三个月累计ARPU不低于360元（即大于等于360元）的客户，且客户年底状态正常且12是通话客户。</h0>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>注释1：年底状态正常即上年12月31日客户状态=0，剔除离网状态、各类停机状态、保留期、冷冻期、各类预销号状态等等一些状态不正常的情况。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>注释2：12月通话客户沿用一经的通话客户定义：上年12月使用语音业务的用户数，包括基本语音、拨打IP和语音增值业务，也包含仅拨打免费特服电话的用户。月末离网客户数（主动销号、被动销号、冷冻期）、保留期、主动预销号状态的客户不统计在内</p>
+<a name='1.1.21'><h3>1.1.21.手机补贴客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：手机补贴客户包括通过手机与业务捆绑（业务包捆绑方式）发展的客户数或通过积分回馈方式或同时采用业务捆绑与积分回馈方式或其他方式发展的客户数。含预存话费送手机和积分回馈方式送手机，不含买手机送话费和礼品赠送。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>注释：指截止统计期末享受手机补贴的所有客户，包含已离网的该类客户。</p>
+<a name='1.1.22'><h3>1.1.22.通话客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内使用语音业务的用户数，包括基本语音、拨打IP和语音增值业务，也包含仅拨打免费特服电话的用户。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>注释：月末离网客户数（主动销号、被动销号、冷冻期）、保留期、主动预销号状态的客户不统计在内。</p>
+<a name='1.1.23'><h3>1.1.23.通信客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内产生语音话单、点对点上行短信、点对点上行彩信、GPRS话单（彩信核减后且流量大于0）的客户，不判断客户是否在网。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>注释：。</p>
+<a name='1.1.24'><h3>1.1.24.无效客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：当月MOU和ARPU同时为零的在网客户。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<a name='1.1.25'><h3>1.1.25.增值业务普及率（数据及信息业务普及率）</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内【增值业务付费用户数】占截至统计时间【客户达到数】的比重</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：%</p>
+<a name='1.1.26'><h3>1.1.26.增值业务付费用户数（数据及信息业务付费用户数）</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：指统计周期内使用除基本语音业务外的所有新业务（包括语音增值业务、移动数据业务、CM-NET业务等）至少一次的客户，不含测试卡和不可充值预付费卡用户。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>注释：手机一次拨号IP电话和拨打其他运营商所有IP电话属于基本语音业务；中国移动客户使用中国移动二次拨号IP电话客户包含在新业务客户中。</p>
+<a name='1.1.27'><h3>1.1.27.新增客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：指定统计周期内新入网的用户，包括新开户、新激活的用户，不包括内部转网用户和复机用户、不可充值预付卡和测试卡客户。本月累计新增是日新增之和，本年累计新增是月新增之和。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<a name='1.1.28'><h3>1.1.28.客户到达数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：包括正常使用、各种停机、欠费预销号、主动预销号、进入保留期的客户（包含数据卡客户），不含主/被动销号、不可充值的预付卡、冷冻期客户，不含测试卡客户。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>注释：用户到达数的状态判定原则上以每日24点的用户状态为依据。</p>
+<a name='1.1.29'><h3>1.1.29.智能网客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：本统计周期末，智能网平台上正在使用的客户数，神州行标准卡仅为其中数。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<a name='1.1.30'><h3>1.1.30.拍照中高端客户保有数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计【上年底中高端拍照客户数】集合中的未曾出现在【中高端拍照客户流失数】集合中的客户数。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<a name='1.1.31'><h3>1.1.31.拍照中高端客户流失数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计【上年底中高端拍照客户数】集合中的【离网用户数】（申请销号离网和欠费销号离网），与在网客户中累计三个月（含）以上ARPU低于50元的客户。如果用户转为测试卡，则计算为流失。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>注释：</p>
+<h0>1)ARPU指每客户帐单收入（优惠后的包含信息费收入）；</h0>
+<h0>2)分品牌统计时按照统计时点客户的归属品牌计；</h0>
+<h0>3)累计三个月可以是任意的三个月，包含连续的三个月，也可以是间断的任三个月；</h0>
+<h0>4)ARPU低于50元指不包含50元。</h0>
+<a name='1.1.32'><h3>1.1.32.出账客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内，有账单的客户数。对于不出帐的智能网用户统计产生清单的用户。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<a name='1.1.33'><h3>1.1.33.重入网客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内，已经拥有中国移动某个地市分公司一个移动号码，由于某种原因又新买了中国移动该地市分公司的另一个移动号码入网，新号码以全部或者部分替代原有号码的客户数。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<a name='1.1.34'><h3>1.1.34.长途客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内，发生过长途通话的客户数。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>注释：长途业务包括普通长途和IP长途。IP长途仅包括中国移动IP一次和二次拨号的的长途业务。</p>
+<a name='1.1.35'><h3>1.1.35.省内漫游客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内，在省内漫游状态下发生过通话的客户数。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<a name='1.1.36'><h3>1.1.36.省际漫游客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内，在省际漫游状态下发生过通话的客户数。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<a name='1.1.37'><h3>1.1.37.国内漫游客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内，在国内漫游状态下发生过通话的客户数。包括省内和省际，剔重。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<a name='1.1.38'><h3>1.1.38.国际漫游出访客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内，在国际漫游出访状态下发生过通话的客户数。包括港澳台漫游出访用户。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<a name='1.1.39'><h3>1.1.39.增值业务使用客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内，至少使用过一项语音增值业务或短信业务或非短信业务的客户数。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<a name='1.1.40'><h3>1.1.40.拍照中高端客户保有率</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：拍照中高端客户保有率=1-【拍照中高端客户本年累计流失客户数】/【拍照中高端客户到达数】。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：%</p>
+<a name='1.1.41'><h3>1.1.41.新增净增比</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内，【新增客户数】/【净增客户数】。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：%</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>注释：净增为负值或0时此指标无法计算填空。</p>
+<a name='1.1.42'><h3>1.1.42.点对点短信普及率</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：点对点短信普及率=点对点短消息使用客户数/【客户到达数】。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：%</p>
+<a name='1.1.43'><h3>1.1.43.彩铃普及率</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：彩铃普及率=彩铃业务客户到达数/【客户到达数】。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：%</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>注释：彩铃业务客户到达数指开通了彩铃，且月末在网的客户数，不包括月末已取消彩铃功能的客户数。</p>
+<a name='1.1.44'><h3>1.1.44.彩信普及率</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：彩信普及率=点对点彩信使用客户数/【客户到达数】。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：%</p>
+<a name='1.1.45'><h3>1.1.45.上月通话客户本月零次率</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：上月通话客户本月零次率=上月发生过话音通话而本月未发生话音通话的客户数/上月通话客户数。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：%</p>
+<a name='1.2'><h2>1.2.审核公式</h2></a>
+<h0>1)全球通VIP客户数＝全球通VIP积分评定客户数＋全球通特殊批准定客户数+全球通VIP套餐客户数</h0>
+<h0>2)全球通VIP客户数＝全球通VIP钻石卡客户数＋全球通VIP金卡客户数＋全球通VIP银卡客户数</h0>
+<a name='2'><h1>2.业务发展指标</h1></a>
+<h0>呼叫类型</h0>
+<h0>被叫计费时长</h0>
+<h0>主叫计费时长</h0>
+<h0>漫游</h0>
+<h0>非漫游计费时长</h0>
+<h0>漫游计费时长</h0>
+<h0>网内/运营商</h0>
+<h0>网间计费时长</h0>
+<h0>网内计费时长</h0>
+<h0>中国电信</h0>
+<h0>移动</h0>
+<h0>固话</h0>
+<h0>小灵通</h0>
+<h0>中国联通</h0>
+<h0>移动</h0>
+<h0>固话</h0>
+<h0>小灵通</h0>
+<h0>长途类型</h0>
+<h0>长途计费时长</h0>
+<h0>本地计费时长</h0>
+<h0>省内计费时长</h0>
+<h0>省际计费时长</h0>
+<h0>国际计费时长</h0>
+<h0>港澳台计费时长</h0>
+<h0>非港澳台计费时长</h0>
+<a name='2.1'><h2>2.1.指标定义</h2></a>
+<a name='2.1.1'><h3>2.1.1.MOU</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：</p>
+<h0>1)MOU是平均每用户【总计费时长】。</h0>
+<h0>2)本月MOU=本月【总计费时长】/（本月天数×12/本年天数）/（（本月末【客户到达数】＋上月末【客户到达数】）/2）。</h0>
+<h0>3)本年累计MOU＝本年累计【总计费时长】/（截止到本月末本年累计天数×12/本年天数）/（上年末【客户到达数】＋截至统计月的本年各月末【客户到达数】之和）/（统计月月份数＋1）。</h0>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：分钟</p>
+<a name='2.1.2'><h3>2.1.2.呼转时长</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内，中国移动客户呼转通话发生的基本计费时长。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：分钟</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>注释：包括呼转到中国移动、中国联通、中国电信的手机、固定电话、小灵通、业务台和其他号码。</p>
+<a name='2.1.3'><h3>2.1.3.通话时长中免费分钟数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内，客户拨打免费特服、客服电话、充值电话等不收取通话费的免费时长、不收费客户（测试号用户不包括在内，长期免费的客户数，不是由于优惠造成）产生的免费时长。该指标按基本计费时长统计。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：分钟</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>注释：不包含其他运营商用户使用中国移动IP的计费时长。</p>
+<a name='2.1.4'><h3>2.1.4.通话时长中优惠分钟数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内，套餐赠送的免费时长、促销免费时长的合计。不包含客户拨打免费特服、客服电话、充值电话等不收取通话费的免费时长、不收费客户（测试号用户不包括在内，长期免费的客户数，不是由于优惠造成）产生的免费时长。该指标按基本计费时长统计。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：分钟</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>注释：不包含其他运营商用户使用中国移动IP的计费时长。</p>
+<a name='2.1.5'><h3>2.1.5.被叫计费时长</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：在【中国移动客户计费时长(不含IP)】中，统计中国移动客户[接听]时，通话发生的基本计费时长。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：分钟</p>
+<a name='2.1.6'><h3>2.1.6.计费时长(不含IP)</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：在语音计费时长中非测试号客户产生的计费时长，再除去中国移动客户使用中国移动IP业务（17950、17951）之后的基本计费时长。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：分钟</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>注释：不包含其他运营商用户使用中国移动IP的计费时长。不包含中国移动客户使用中国移动IP业务（17950、17951）的基本计费时长。包括超短话单。</p>
+<a name='2.1.7'><h3>2.1.7.主叫计费时长</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：在语音计费时长中，统计中国移动客户[拨叫]或呼转时，通话发生的基本计费时长。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：分钟</p>
+<a name='2.1.8'><h3>2.1.8.总计费时长</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：包括中国移动客户非漫游主（被）叫、国内漫游出访主（被）叫、国际漫游出访主（被）叫计费时长、IP电话计费时长、话音增值业务及数据业务产生的计费时长、移动公话产生的计费时长（移动公话品牌按各省实际归属）、TD可视电话计费时长。统计总计费时长时，无论是本地通话（包括漫游）还是长途通话均按基本计费时长相加（计费单元为1分钟）；但单独统计各类长途电话的计费时长（目前IP长途除外）时按长途时长统计，即将报告期内每条长途通话记录按“6秒”折算的基础上进行累计，截止日将报告期内累计结果折算为“分钟”后取整。(注：总计费时长中包括客户拨打免费特服、客服电话、充值电话等不收取通话费的免费时长、套餐赠送的免费时长、促销免费时长，不包括套餐中当月末被客户所使用的分钟数和测试号客户产生的分钟数)。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：分钟</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>注释：总计费时长中包括客户拨打免费特服、客服电话、充值电话等不收取通话费的免费时长、套餐赠送的免费时长、促销免费时长以及不收费客户产生的免费时长，不包括套餐中当月末被客户所使用的分钟数和测试号客户产生的分钟数。</p>
+<a name='2.1.9'><h3>2.1.9.基本计费时长</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：目前计费单元为1分钟，对应于收取基本通话费（非漫游状态下）的计费时长。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：分钟</p>
+<a name='2.2'><h2>2.2.审核公式</h2></a>
+<h0>1)总计费时长=中国移动客户计费时长(不含IP)+中国移动客户使用中国移动IP计费时长+其他运营商使用中国移动通信计费时长（IP、拨号上网）</h0>
+<h0>2)各品牌计费时长=中国移动客户计费时长(不含IP)+中国移动客户使用中国移动IP计费时长。</h0>
+<h0>3)中国移动客户使用中国移动IP计费时长=全球通+神州行+动感地带。</h0>
+<h0>4)各项中国移动客户计费时长(不含IP)=全球通+神州行+动感地带</h0>
+<h0>5)中国移动客户计费时长(不含IP)=非漫游计费时长+国内漫游出访计费时长+国际漫游出访计费时长</h0>
+<h0>6)中国移动客户计费时长(不含IP)=主叫计费时长+被叫计费时长</h0>
+<h0>7)中国移动客户计费时长(不含IP)=中国移动打中国移动+中国移动打其他运营商移动+其他运营商移动打中国移动+中国移动打固定+固定打中国移动+其他</h0>
+<h0>8)中国移动打中国移动=主叫+被叫</h0>
+<h0>9)中国移动打其他运营商移动=中国移动打中国联通移动+中国移动打中国电信移动</h0>
+<h0>10)其他运营商移动打中国移动=中国联通移动打中国移动+中国电信移动打中国移动</h0>
+<h0>11)中国移动打固定=中国移动打铁通+中国移动打中国联通固定+中国移动打中国电信固定</h0>
+<h0>12)固定打中国移动=铁通打中国移动+中国联通固定打中国移动+中国电信固定打中国移动</h0>
+<a name='3'><h1>3.收入发展指标</h1></a>
+<h0>通话费</h0>
+<h0>本地基本通话费</h0>
+<h0>本地通话费</h0>
+<h0>本地国内长途通话费</h0>
+<h0>本地长途通话费</h0>
+<h0>本地国际长途通话费</h0>
+<h0>本地国际港澳台长途通话费</h0>
+<h0>本地国际非港澳台长途通话费</h0>
+<h0>漫游通话费</h0>
+<h0>国内漫游通话费</h0>
+<h0>国际漫游通话费</h0>
+<h0>国际港澳台漫游通话费</h0>
+<h0>国际非港澳台漫游通话费</h0>
+<a name='3.1'><h2>3.1.指标定义</h2></a>
+<a name='3.1.1'><h3>3.1.1.ARPU</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：</p>
+<h0>1)中国移动客户当月平均每用户【业务收入】。</h0>
+<h0>2)本月ARPU=本月总【业务收入】/（本月天数×12/本年天数）/本月平均客户数</h0>
+<h0>其中，本月平均客户数=（本月末【客户到达数】＋上月末【客户到达数】）/2</h0>
+<h0>3)累计ARPU=本年累计【业务收入】/（截止到本月末本年累计天数×12/本年天数）/本年累计平均客户数</h0>
+<h0>其中，本年累计平均客户数＝（上年末【客户到达数】＋截至统计月的本年各月末【客户到达数】之和）/（月份数＋1）</h0>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：元</p>
+<a name='3.1.2'><h3>3.1.2.基本通话费</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：包含本地通话费及漫游通话费两部分。均为优惠后收入。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：元</p>
+<a name='3.1.3'><h3>3.1.3.国际长途通话费</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：在统计周期内中国移动客户在本地通过非IP方式进行港澳台、国际长途直拨通话时产生的长途费收入，为帐务优惠后的收入。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：元</p>
+<a name='3.1.4'><h3>3.1.4.国内长途通话费</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：在统计周期内中国移动客户在归属地进行国内非IP长途通话产生的长途费收入，为帐务优惠后的收入。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：元</p>
+<a name='3.1.5'><h3>3.1.5.本地通话费</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：在统计周期内中国移动客户在归属地通话产生的基本通话费收入，为帐务优惠后的收入，不含拨打语音增值业务、数据业务产生的信息费收入。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：元</p>
+<a name='3.1.6'><h3>3.1.6.国际漫游通话费</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：</p>
+<h0>1)中国移动客户在国际漫游（包括港澳台漫游）时产生的漫游通话费收入，为帐务优惠后的费用，包括主叫当地产生的漫游费、做被叫产生的漫游费以及主叫漫游地以外国家和地区时的漫游费。</h0>
+<h0>2)由于国际漫游主叫长途时，当地运营商并不分别收取漫游费和长途费，则将此费用记入国际漫游长途收入。</h0>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：元</p>
+<a name='3.1.7'><h3>3.1.7.国内漫游通话费</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：在统计周期内中国移动客户国内漫游时通话产生的漫游通话费收入，为帐务优惠后的费用。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：元</p>
+<a name='3.1.8'><h3>3.1.8.拍照中高端客户收入</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：【拍照中高端客户】在统计月产生的【业务收入】。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：元</p>
+<a name='3.1.9'><h3>3.1.9.增值业务收入（数据及信息业务收入）</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：</p>
+<h0>1)统计周期内，由于客户使用中国移动的通信承载网络而带来的增值业务收入总和，为使用语音增值业务、短信业务和非短信业务产生的收入，包含分成前的代收信息费收入。（财务除掉了结算费代收费）</h0>
+<h0>2)该指标包括增值业务套餐费、包月费，各省在上传帐单时可按照包月套餐包含的费用对应到语音业务、增值业务或数据业务帐单科目中。如为多业务的混合套餐，应尽可能按照业务的实际使用情况或一定的规则进行分摊，以确保真实的反映各类业务的收入。</h0>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：元</p>
+<a name='3.1.10'><h3>3.1.10.数据增值业务收入</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：</p>
+<h0>1)中国移动客户在统计周期内产生的数据业务和CMNET业务收入。</h0>
+<h0>2)数据业务收入包括因通过短信、彩信、GPRS、WAP、USSD、WLAN、流媒体等方式享受中国移动的短信、彩信、信息点播、移动梦网、手机上网（包括CSD和GPRS方式）、移动秘书、手机银行、移动证券、语音杂志、全球呼、语音短信等业务而产生的收入，包括分成前的信息费收入；</h0>
+<h0>3)CMNET收入包括使用IP二次拨号通话、固定电话一次拨号（包含IP充值卡和IP直通车）产生的国内、港澳台及国际IP长途电话的通话费收入，包含固定电话拨号上网收入、专线业务收入、无线局域网（WLAN）业务收入、IDC业务收入等。</h0>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：元</p>
+<a name='3.1.11'><h3>3.1.11.语音通话费</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内，中国移动用户进行基本语音、拨打IP（不含IP直通车和其他运营商用户使用中国移动IP的通话）、语音增值业务、数据业务等通话产生的通话费之和，为二次批价后、帐单优惠前的收入。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：元</p>
+<a name='3.1.12'><h3>3.1.12.月租费</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：因占用中国移动网络资源而按固定频率收取的费用，不与任何业务或服务相关联。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：元</p>
+<a name='3.1.13'><h3>3.1.13.语音增值业务收入</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：在统计周期内，中国移动客户因使用各项语音增值业务而产生的收入。</p>
+<h0>其中，话音增值业务包括主叫显示、呼叫转移、主叫付费、被叫付费、呼叫限制、呼叫等待、语音信箱、主叫隐藏、移动800业务、移动沙龙、会议电话等。</h0>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：元</p>
+<a name='3.1.14'><h3>3.1.14.综合单价</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：综合单价=【业务收入】/【语音计费时长】。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：元/分钟</p>
+<a name='3.1.15'><h3>3.1.15.语音单价</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：综合单价=（【业务收入】－【增值业务收入】）/【语音计费时长】。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：元/分钟</p>
+<a name='3.2'><h2>3.2.审核公式</h2></a>
+<h0>1)拍照客户本月累计收入=拍照客户本月收入+上月拍照客户本月累计收入</h0>
+<h0>2)拍照中高端客户本月累计收入=拍照中高端客户本月收入+上月拍照中高端客户本月累计收入</h0>
+<h0>3)拍照中高端保有客户本月累计收入=拍照中高端保有客户本月收入+上月拍照中高端保有客户本月累计收入</h0>
+<a name='4'><h1>4.市场竞争指标</h1></a>
+<h0>说明：移动指重组后的新移动，联通指重组后的新联通，电信指重组后的新电信。（下同）</h0>
+<a name='4.1'><h2>4.1.指标定义</h2></a>
+<a name='4.1.1'><h3>4.1.1.竞争对手客户到达数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：截至统计时间，在三个月内与中国移动客户发生过互联互通（包括语音、短信和彩信）的竞争对手用户数。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<h0>注释：竞争对手是指中国联通（联通GSM、联通小灵通和联通固话）和中国电信（电信CDMA、电信小灵通和电信固网）。（下同）</h0>
+<a name='4.1.2'><h3>4.1.2.竞争对手离网客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：指定统计周期内，曾经与中国移动用户发生过互联互通（含语音、短信和彩信）的竞争对手用户，在最近一次发生互联互通后连续三个月未发生互联互通的客户数。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>注释：竞争对手可按联通GSM、联通CDMA、小灵通统计。</p>
+<a name='4.1.3'><h3>4.1.3.竞争对手新增客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：指三个月内首次与中国移动用户发生互联互通（含语音、短信和彩信）的竞争对手用户数。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>注释：月新增为日新增之和，年新增为月新增为和。</p>
+<a name='4.1.4'><h3>4.1.4.竞争对手净增客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：截至统计时间与上统计时间的竞争对手客户达到数之差。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<a name='4.1.5'><h3>4.1.5.竞争对手与我公司通话次数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：本统计周期内，竞争对手与中国移动用户的通话次数。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：次</p>
+<a name='4.1.6'><h3>4.1.6.竞争对手与我公司通话时长</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：本统计周期内，竞争对手与中国移动用户的通话时长。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：分钟</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>注释：通话时长指按秒进行累加的时长，最后以分钟作为单位。</p>
+<a name='4.1.7'><h3>4.1.7.竞争对手与我公司通话客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内，与中国移动用户通话的竞争对手客户数。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>注释：包括主被叫。</p>
+<a name='4.1.8'><h3>4.1.8.通信市场客户市场份额</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内，中国移动用户在通信市场(中国移动、中国联通、中国电信)的占有比率。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：％</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>注释：中国移动、中国联通、中国电信用户统计包括移动用户、小灵通用户和固网用户。</p>
+<a name='4.1.9'><h3>4.1.9.通信市场新增客户市场份额</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内，中国移动新增用户在通信市场新增用户(中国移动、中国联通、中国电信)的占有比率。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：％</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>注释：中国移动、中国联通、中国电信用户统计包括移动用户、小灵通用户和固网用户。</p>
+<a name='4.1.10'><h3>4.1.10.通信市场净增客户市场份额</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内，中国移动净增用户在通信市场净增用户(中国移动、中国联通、中国电信)的占有比率。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：%</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>注释：中国移动、中国联通、中国电信用户统计包括移动用户、小灵通用户和固网用户。</p>
+<a name='4.1.11'><h3>4.1.11.移动通信客户市场份额</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内，中国移动用户在移动通信市场(中国移动、中国联通、中国电信)的占有比率。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：％</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>注释：不含小灵通</p>
+<a name='4.1.12'><h3>4.1.12.移动通信新增客户市场份额</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内，中国移动新增用户在移动通信市场新增用户(中国移动、中国联通、中国电信)的占有比率。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：％</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>注释：不含小灵通</p>
+<a name='4.1.13'><h3>4.1.13.移动通信净增客户市场份额</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内，中国移动净增用户在移动通信市场净增用户(中国移动、中国联通、中国电信)的占有比率。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：%</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>注释：不含小灵通</p>
+<a name='5'><h1>5.国际业务指标</h1></a>
+<a name='5.1.1'><h3>5.1.1.开通国际及港澳台漫游功能的客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：具有国际及港澳台漫游功能的客户数。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<a name='5.1.2'><h3>5.1.2.开通国际及港澳台长途功能的客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：具有国际及港澳台长途功能的客户数。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<a name='5.1.3'><h3>5.1.3.国际及港澳台漫游出访客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：指本月漫游到国际及港澳台地区的中国移动客户在漫游地发生了话音通话或增值业务，并产生漫游费的客户数。要剔重。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<a name='5.1.4'><h3>5.1.4.国际及港澳台漫游来访客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：指国外的移动客户本月漫游到中国大陆（除港澳台地区）发生通话或增值业务的客户数。要剔重。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<a name='5.1.5'><h3>5.1.5.国际及港澳台IDD客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：指中国移动客户通过普通长途方式在中国大陆（除港澳台地区）主动拨打国际及港澳台地区电话的客户数。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<a name='5.1.6'><h3>5.1.6.国际及港澳台IP电话客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：指中国移动客户通过IP长途方式在中国大陆（除港澳台地区）主动拨打国际及港澳台地区电话的客户数。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<a name='5.1.7'><h3>5.1.7.国际及港澳台短信客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：指中国移动客户在中国大陆主动发送国际及港澳台地区客户的点对点短信的客户数。要剔重。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<a name='5.1.8'><h3>5.1.8.国际及港澳台彩信客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：指中国移动客户在中国大陆主动发送国际及港澳台地区客户的点对点彩信的客户数。要剔重。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<a name='5.1.9'><h3>5.1.9.漫游出访计费时长</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：指中国移动客户漫游出访到其他国家或港澳台地区发生的话音通话的计费时长。包括主、被叫。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：分钟</p>
+<a name='5.1.10'><h3>5.1.10.漫游来访计费时长</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：指其他国家的客户或中国港澳台地区的客户漫游到中国大陆，在漫游地发生的本地通话的计费时长，只收取漫游费。包括主叫、被叫</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：分钟</p>
+<a name='5.1.11'><h3>5.1.11.IDD计费时长</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：指中国移动客户在国内作为主叫以普通长途的方式拨打其他国家或港澳台地区客户产生的长途计费时长。其中拨打其他国家的统计为国际长途计费时长，拨打港澳台地区的统计为港澳台长途计费时长。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：分钟</p>
+<a name='5.1.12'><h3>5.1.12.IP计费时长</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：指中国移动客户在国内作为主叫以IP长途的方式拨打其他国家或港澳台地区客户产生的长途计费时长。其中拨打其他国家的统计为国际长途计费时长，拨打港澳台地区的统计为港澳台长途计费时长。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：分钟</p>
+<a name='5.1.13'><h3>5.1.13.漫游出访短信计费量</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：指中国移动客户漫游出访到其他国家或港澳台地区发生的点对点短信的计费条数。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：条</p>
+<a name='5.1.14'><h3>5.1.14.漫游出访GPRS计费量</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：指中国移动客户漫游出访到其他国家或港澳台地区使用手机上网、彩信、百宝箱、及随e行等业务产生的GPRS总流量。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：MB</p>
+<a name='5.1.15'><h3>5.1.15.国际短信计费量</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：指中国移动客户在国内作为主叫发送点对点短信到其他国家或港澳台地区客户产生的计费条数。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：条</p>
+<a name='5.1.16'><h3>5.1.16.国际彩信计费量</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：指中国移动客户在国内作为主叫发送点对点彩信到其他国家或港澳台地区客户产生的计费条数。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：条</p>
+<a name='5.1.17'><h3>5.1.17.国际及港澳台业务收入</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：漫游出访收入+IDD收入+IP电话收入+国际短信收入+国际彩信收入</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：元</p>
+<a name='5.1.18'><h3>5.1.18.漫游出访收入</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：指中国移动客户漫游出访到其他国家或港澳台地区发生的所有计费收入。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：元</p>
+<a name='5.1.19'><h3>5.1.19.漫游出访短信收入</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：指中国移动客户漫游出访到其他国家或港澳台地区发生的点对点短信的计费收入。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：元</p>
+<a name='5.1.20'><h3>5.1.20.漫游出访GPRS收入</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：指中国移动客户漫游出访到其他国家或港澳台地区发生的GPRS的计费收入。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：元</p>
+<a name='5.1.21'><h3>5.1.21.IDD收入</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：指中国移动客户在国内作为主叫以普通长途的方式拨打其他国家或港澳台地区客户产生的长途收入。其中拨打其他国家的统计为国际长途收入，拨打港澳台地区的统计为港澳台长途收入。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：元</p>
+<a name='5.1.22'><h3>5.1.22.IP收入</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：指中国移动客户在国内作为主叫以IP长途的方式拨打其他国家或港澳台地区客户产生的长途收入。其中拨打其他国家的统计为国际长途收入，拨打港澳台地区的统计为港澳台长途收入。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：元</p>
+<a name='5.1.23'><h3>5.1.23.国际短信收入</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：指中国移动客户在国内作为主叫发送点对点短信到其他国家或港澳台地区客户产生的计费收入。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：元</p>
+<a name='5.1.24'><h3>5.1.24.国际彩信收入</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：指中国移动客户在国内作为主叫发送点对点彩信到其他国家或港澳台地区客户产生的计费收入。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：元</p>
+<a name='6'><h1>6.TD业务指标</h1></a>
+<a name='6.1.1'><h3>6.1.1.使用TD网络的客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内使用过TD网络的在网客户，即统计周期有TD语音话单、TD-GPRS话单或使用过TD特有增值业务的在网客户。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：日</p>
+<a name='6.1.2'><h3>6.1.2.使用TD网络的手机客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内使用过TD网络的手机在网客户，即统计周期有TD语音话单或使用过TD特有增值业务，或统计周期有除上网本GPRS话单之外的TD-GPRS话单的非数据卡、非信息机客户。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：日</p>
+<a name='6.1.3'><h3>6.1.3.可视电话使用客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内使用可视电话业务的在网客户数。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：日</p>
+<a name='6.1.4'><h3>6.1.4.两网融合的使用TD网络的手机客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：原2G客户通过双模手机使用TD网络的TD手机客户数，目前为除188和157的TD手机客户之外的使用TD网络的手机客户。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：日</p>
+<a name='6.1.5'><h3>6.1.5.使用TD网络的数据卡客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内使用TD网络（即产生除上网本GPRS话单之外的TD-GPRS话单）的数据卡在网客户，排除手机、信息机客户，包括原2G随e行或各省指定发展TD数据卡的套餐客户使用TD网络产生TD-GPRS话单的客户。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：日</p>
+<a name='6.1.6'><h3>6.1.6.两网融合的数据卡客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：原2G随E行客户通过双模数据卡使用TD网络产生TD-GPRS话单的TD数据卡客户数。目前为除147和157的TD数据卡客户之外的使用TD网络的数据卡客户。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：日</p>
+<a name='6.1.7'><h3>6.1.7.TD专用号段客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内专用号段的在网客户。目前专用号段为188号段和147号段。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：日</p>
+<a name='6.1.8'><h3>6.1.8.使用TD网络的上网本客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内，利用上网本终端使用TD网络的在网客户，即当日产生上网本TD-GPRS话单的在网客户。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：日</p>
+<a name='6.1.9'><h3>6.1.9.使用TD网络的信息机客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内，利用信息机终端使用TD网络的在网客户，即当日产生TD语音、除上网本GPRS话单之外的TD-GPRS话单或TD特色增值业务的信息机在网客户，排除手机、数据卡客户。目前包括无线固话客户和家庭信息机、家庭网关客户。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：日</p>
+<a name='6.1.10'><h3>6.1.10.使用TD网络的客户的总计费时长</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内使用TD网络的客户产生的话音计费时长，包括G网和T网上的话音计费时长。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：分钟</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：日</p>
+<a name='6.1.11'><h3>6.1.11.使用TD网络的客户在T网上的计费时长</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内使用TD网络的客户使用T网产生的话音计费时长。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：分钟</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：日</p>
+<a name='6.1.12'><h3>6.1.12.使用TD网络的客户的总数据流量</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：使用TD网络的客户使用相关业务产生的移动数据计费流量，包括G网和T网产生的。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：MB</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：日</p>
+<a name='6.1.13'><h3>6.1.13.使用TD网络的客户在T网上的数据流量</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：使用TD网络的客户在T网上使用相关业务产生的移动数据计费流量。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：MB</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：日</p>
+<a name='6.1.14'><h3>6.1.14.使用TD网络的数据卡客户的总数据流量</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：使用TD网络的数据卡客户使用相关业务产生的移动数据计费流量，包括G网和T网产生的。如果该客户同时是上网本客户，则不包含上网本产生的移动数据流量。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：MB</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：日</p>
+<a name='6.1.15'><h3>6.1.15.使用TD网络的数据卡客户在T网上的数据流量</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：使用TD网络的数据卡客户在T网上使用相关业务产生的移动数据计费流量。如果该客户同时是上网本客户，则不包含上网本产生的T网数据流量。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：MB</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：日</p>
+<a name='6.1.16'><h3>6.1.16.TD客户收入</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内TD客户产生的收入总和，如果某TD客户仅是TD上网本客户（即不是TD手机客户、TD数据卡客户或TD信息机客户），则需剔除该客户的非上网本相关科目的收入。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：元</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：月</p>
+<a name='6.1.17'><h3>6.1.17.TD手机客户收入</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内TD手机客户产生的收入总和，需剔除上网本相关科目收入。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：元</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：月</p>
+<a name='6.1.18'><h3>6.1.18.TD手机客户使用手机电视业务产生的收入</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内，客户使用手机电视业务产生的费用总和。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：元</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：月</p>
+<a name='6.1.19'><h3>6.1.19.TD数据卡客户收入</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内TD数据卡客户产生的收入总和，需剔除上网本相关科目收入。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：元</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：月</p>
+<a name='6.1.20'><h3>6.1.20.TD上网本客户收入</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内TD上网本客户产生的上网本相关科目收入总和。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：元</p>
+<h0>统计周期：月</h0>
+<a name='6.1.21'><h3>6.1.21.TD信息机客户收入</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内TD信息机客户产生的收入总和，需剔除上网本相关科目收入。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：元</p>
+<h0>统计周期：月</h0>
+<a name='6.1.22'><h3>6.1.22.TD客户总数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：至少满足以下条件之一：</p>
+<h0>1、使用过TD网络的客户，即统计周期内有TD语音话单、TD-GPRS话单或使用过TD特有增值业务的客户。</h0>
+<p><span style='font-family:Wingdings;'>&sup2;</span>、使用TD终端的客户，即统计周期内MSC下发的语音话单中IMEI号码前8位对应的终端型号为TD终端的客户。</p>
+<h0>3、TD专用号段的客户，目前为188号段和147号段。</h0>
+<h0>4、收取TD特色业务功能费的客户，即有功能费的TD特色业务统计月出现过开通状态且收取功能费的客户，目前收取功能费的TD特色业务包括视频留言、视频共享、视频会议、多媒体彩铃。</h0>
+<h0>5、开通TD数据卡专用套餐、TD上网本专用套餐、TD信息机专用套餐的客户。</h0>
+<h0>对满足上述条件的在网客户进行剔重后即为TD客户总数。</h0>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：月</p>
+<a name='6.1.23'><h3>6.1.23.TD手机客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：满足【TD客户总数】指标的手机客户数，且排除数据卡、信息机和仅产生了上网本TD-GPRS话单的上网本客户。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：月</p>
+<a name='6.1.24'><h3>6.1.24.使用可视电话的TD客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：满足【TD客户总数】指标的在统计周期内使用可视电话业务的TD手机客户数。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：月</p>
+<a name='6.1.25'><h3>6.1.25.两网融合的TD手机客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：满足【TD客户总数】指标的两网融合的TD手机客户数。即原2G客户通过双模手机使用TD网络的TD客户数，目前为除去188和157号段的TD手机客户数。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：月</p>
+<a name='6.1.26'><h3>6.1.26.TD数据卡客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：满足【TD客户总数】的数据卡客户数。即：统计周期内数据卡客户包括申请开通TD数据卡套餐的客户、使用过TD网络的数据卡客户(包括使用TD网络的2G随e行客户)以及TD数据卡专用号段（147）客户，并对上述客户进行剔重，排除手机客户、信息机客户和仅产生了上网本TD-GPRS话单的上网本客户。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：月</p>
+<a name='6.1.27'><h3>6.1.27.两网融合的数据卡客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：满足【TD客户总数】的两网融合的数据卡客户数。即：原2G随E行客户通过双模数据卡使用TD网络产生TD-GPRS话单的TD数据卡客户数。目前为除147和157号段之外的TD数据卡客户数</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：月</p>
+<a name='6.1.28'><h3>6.1.28.使用过TD网络的TD客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内有TD语音话单、TD-GPRS话单或使用过TD特有增值业务的TD客户。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：月</p>
+<a name='6.1.29'><h3>6.1.29.使用过TD网络的手机客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内使用过TD网络的手机在网客户，即统计周期有TD语音话单或使用过TD特有增值业务，或统计周期有除上网本GPRS话单之外的TD-GPRS话单的非数据卡、非信息机客户。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：月</p>
+<a name='6.1.30'><h3>6.1.30.使用过TD网络的数据卡客户数</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内使用TD网络（即产生除上网本GPRS话单之外的TD-GPRS话单）的数据卡在网客户，排除手机、信息机客户，包括原2G随e行或各省指定发展TD数据卡的套餐客户使用TD网络产生TD-GPRS话单的客户。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：月</p>
+<a name='6.1.31'><h3>6.1.31.TD客户的总计费时长</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内TD客户产生的话音计费时长，包括G网和T网上的话音计费时长。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：分钟</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：月</p>
+<a name='6.1.32'><h3>6.1.32.TD客户在T网上的计费时长</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内TD客户使用T网产生的话音计费时长。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：分钟</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：月</p>
+<a name='6.1.33'><h3>6.1.33.TD手机客户的总计费时长</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内TD手机客户产生的总话音计费时长，包括G网和T网上的计费时长。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：分钟</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：月</p>
+<a name='6.1.34'><h3>6.1.34.TD手机客户在T网上的计费时长</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内TD手机客户使用T网产生的话音计费时长。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：分钟</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：月</p>
+<a name='6.1.35'><h3>6.1.35.可视电话计费时长</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内TD客户使用可视电话产生的话音计费时长。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：分钟</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：月</p>
+<a name='6.1.36'><h3>6.1.36.TD客户的总数据流量</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内TD客户使用相关业务产生的移动数据计费流量，包括G网和T网产生的。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：MB</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：月</p>
+<a name='6.1.37'><h3>6.1.37.TD客户在T网上的数据流量</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内TD客户在T网上使用相关业务产生的移动数据计费流量。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：MB</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：月</p>
+<a name='6.1.38'><h3>6.1.38.TD手机客户的总数据流量</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内TD手机客户使用相关业务产生的移动数据计费流量，包括G网和T网产生的。如果该客户同时是上网本客户，则不包含上网本产生的移动数据流量。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：MB</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：月</p>
+<a name='6.1.39'><h3>6.1.39.TD手机客户使用T网产生的数据流量</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内TD手机客户在T网上使用相关业务产生的移动数据流量。如果该客户同时是上网本客户，则不包含上网本产生的移动数据流量。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：MB</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：月</p>
+<a name='6.1.40'><h3>6.1.40.TD数据卡客户的总数据流量</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内TD数据卡客户使用相关业务产生的移动数据计费流量，包括G网和T网产生的。如果该客户同时是上网本客户，则不包含上网本产生的移动数据流量。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：MB</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：月</p>
+<a name='6.1.41'><h3>6.1.41.TD数据卡客户使用T网产生的数据流量</h3></a>
+<p><span style='font-family:Wingdings;'>&sup2;</span>定义：统计周期内TD数据卡客户在T网上使用相关业务产生的移动数据流量。如果该客户同时是上网本客户，则不包含上网本产生的移动数据流量。</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：MB</p>
+<a name='6.1.42'><h3>6.1.42.G3客户数（考核口径）</h3></a>
+<h0>定义：指统计周期内使用G3双模终端的期末在网客户数，包括G3手机、无线座机、上网本和数据卡客户。其中G3手机客户和G3无线座机客户通过语音话单中的IMEI信息进行判定；G3上网本客户是指激活且有TD网络移动数据流量的上网本客户；G3数据卡客户是指使用TD网络且发生TD网络移动数据流量的数据卡客户。</h0>
+<p><span style='font-family:Wingdings;'>&sup2;</span>单位：户</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>统计周期：月</p>
+<p><span style='font-family:Wingdings;'>&sup2;</span>注释：如果在一个统计周期内同一部G3终端对应多个用户，则以业务量最多的客户为准。若多个客户的业务量相同，则以最近使用该终端的客户为准。</p>

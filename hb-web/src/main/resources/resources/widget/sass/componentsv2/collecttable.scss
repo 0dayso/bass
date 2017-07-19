@@ -1,0 +1,42 @@
+.CollectTable{
+	width:100%;
+	@include setPadding(row,3px);
+	.CollectTable-thead{
+		@include setRadius(top);
+		background-color : $bgColor-blue1;
+		color:$color-reporttable;
+		.CollectTable-thead-no{
+			width:8%;
+			text-align:center;
+		}
+		.CollectTable-thead-title{
+			width:55%;
+		}
+		.CollectTable-thead-type{
+			width:10%;
+		}
+		.CollectTable-thead-time{
+			width:20%;
+		}
+		.CollectTable-thead-dell{
+			width:5%;
+		}
+	}
+	.CollectTable-tbody{
+		tr{
+			&:hover{cursor:pointer;}
+			td{
+				vertical-align: middle;
+			}
+		}
+		.CollectTable-tbody-single1{
+			background-color : $bgColor-blue2;
+		}
+		.CollectTable-tbody-no{
+			text-align:center;
+		}
+	}
+	.clicked{
+		font-weight:bold;
+	}
+}

@@ -1,0 +1,39 @@
+@charset "utf-8";
+.BulletinImage{
+    @include setBorder();
+    @include setRadius(top);
+    padding-bottom:10px;
+    float: left;
+    width:204px;
+    background-color: $bgColor-gray;
+    @include setMargin(null,6px);
+    .imgTitle{
+        @include setRadius(top);
+        width : 204px;
+        height : 170px;
+    }
+    .BulletinImage-title{
+        &:hover{
+            color:$color-notice1;
+        }
+    }
+    .BulletinImage-date{
+        &:hover{
+            color:$color-notice1;
+        }
+    }
+    div{
+        font-size : $font-m1;
+        color : $color-notice;
+        text-indent : 7px;
+        @include textLimit(100%);
+        padding-top:5px;
+        cursor:pointer;
+        .icon-list-alt{
+            color: #00DD77;
+        }
+        .icon-time{
+            color: #00DDDD;
+        }
+    }
+}

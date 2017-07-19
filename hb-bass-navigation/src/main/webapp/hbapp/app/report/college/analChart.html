@@ -1,0 +1,370 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+<title>高校重点指标趋势分析图</title>
+	<link rel="stylesheet" type="text/css" href="/hb-bass-navigation/hbapp/resources/css/default/default.css" />
+<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/default/default.js"></script>
+<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/chart/FusionCharts.js"></script>
+<script type="text/javascript">
+	window.onload = function() {
+		init(); // 位置无所谓
+		function init() {
+			getComboMenu({
+				levels : 2,
+				_div : $("menu"),
+				load : function(level,key) {
+				//这里是写死的，如果查数据库，也是在这个方法中进行,总之返回一个array
+					if(!level)level = 0;
+					if(level == 0) {
+						return ["市场占有率走势图","三家通话用户数、净增用户数走势图","人均单价与出账收入、通话用户数、ARPU、人均MOU的组合走势图","重点业务用户数及普及率发展走势图","拍照用户走势图"];
+					} else if(level == 1){
+						return [
+						{
+							"CMC001" : "移动占有率变化走势图"
+							,"CMC002" : "联通G网市场占有率变化走势图"
+							,"CMC003" : "电信C网占有率变化走势图"
+						},{
+							"C20007,C20008,C20009" : "三家通话用户数走势图"
+							,"C20015,C20016,C20017" : "三家净增用户数走势图"
+						},{
+							"C20078,C20010" : "人均单价与出账收入组合走势图"
+							,"C20078,C20007" : "人均单价与通话用户数组合走势图"
+							,"C20078,C20058" : "人均单价与ARPU组合走势图"
+							,"C20078,C20045" : "人均单价与人均MOU组合走势图"
+						},{
+							"C20026,CMC006" : "V网用户数与普及率"
+							,"C20027,CMC007" : "飞信(定购)用户数与普及率"
+							,"C20053,CMC008" : "GPRS(定购)用户数与普及率"
+							,"C20034,CMC008" : "GPRS流量与普及率"// 去掉了人均
+						},{
+							"C20072,C20073,C20074" : "拍照用户到达数与拍照V网、飞信活跃用户数对比分析"
+							,"C20075,C20076,C20077" : "拍照用户保有率与拍照V网、飞信用户普及率对比分析"
+						}][key];
+					} /*else if(level == 2){
+						var _options = [];
+						var _options1 = [];
+						_options["chart14"] = _options1;
+						_options1["1"] = "adf";
+						_options1["2"] = "adf223";
+						return _options[key];
+						
+					} */
+				}
+			});
+		}
+		function getComboMenu(config) {
+			if(!config.levels)config.levels=2;
+			
+			for(var i = 0 ; i < config.levels ; i ++) {
+				var _select = document.createElement("select");
+				_select.id = _select.name = "lv" + i;
+				//初始化一个默认的Option
+				_select.add(config.defOptions ? config.defOptions[i] : new Option("全部","") , undefined);
+				
+				//自定义一个方法，添加以数组为数据源的Option
+				_select.addOptions = function(arr) {
+					for(var indx in arr) {
+						if(arr.hasOwnProperty(indx)) // [higherzl]good
+							this.add(new Option(arr[indx],indx),undefined);
+					}
+				}
+				
+				//[higherzl]最后一个level不添加事件监听,后续可自定义判断方法
+				if(i < config.levels-1) {
+					/* 关键点 [higherzl] great */
+					_select.onchange = function(level){
+						return function() {
+							//先清空
+							var _level = level;
+							while($("lv" + _level)) {
+								$("lv" + _level).length = 1;
+								_level++;
+							}
+							if(!this.value) return; //选择全部(全省)时下一级收回即可,不加载
+							var arr = config.load(level, this.value);
+							$("lv" + level).addOptions(arr);//找到下一级id,有点耦合高的感觉
+						}
+					}(i+1)
+				}  
+				// 初始化level0
+				if(i == 0) {
+					var lv0Options = config.load(); //level 0 不用缓存
+					_select.addOptions(lv0Options);
+				}
+				config._div.appendChild(_select);
+			}
+		}
+	}
+	var kpiDics = {
+		"CMC001" : "移动通话用户市场占有率"
+		,"CMC002" : "联通通话用户市场占有率"
+		,'CMC003' : '电信通话用户市场占有率'
+		,'CMC006': 'V网普及率'
+		,'CMC007': '飞信普及率'
+		,'CMC008': 'GPRS普及率'
+		,'C20007': '移动通话客户数'
+		,'C20008': '联通通话客户数'
+		,'C20009':'电信C网通话客户数'
+		,'C20010': '出帐收入'
+		,'C20015':'移动净增用户数'
+		,'C20016':'联通净增用户数'
+		,'C20017':'电信净增用户数'
+		,'C20026': 'V网用户数'
+		,'C20027': '飞信定购用户数'
+		,'C20034': 'GPRS流量'
+		,'C20045': '移动人均MOU'
+		,'C20053': 'GPRS订购用户数'
+		,'C20058': '移动人均ARPU'
+		,'C20078': '人均单价'
+		,'C20072': '拍照用户到达数'
+		,'C20073': '拍照V网活跃用户数'
+		,'C20074': '拍照飞信活跃用户数'
+		,'C20075': '拍照用户保有率'
+		,'C20076': '拍照V网用户普及率'
+		,'C20077': '拍照飞信用户普及率'
+	};// kpi字典,数量多的时候就要通过数据库来查得
+	
+	//为了方便日后扩展，增加一个指标组，用来方便查询是否在同一组,暂时还是不实现了
+	function showChart() {
+		if(!$("lv0").value) {
+			alert("请至少选择一个一级分类");
+			return ;
+		}
+		var swfFileName,zbcode=""; // 由级联菜单决定
+		var dualY = false;
+		if($("lv0").value == 2 ||
+		   $("lv0").value == 3
+		) {
+			swfFileName = "FCF_MSColumn3DLineDY.swf";
+			zbcode = $("lv1").value;
+			dualY = true;
+			// 双Y轴
+		} else if(
+			($("lv0").value == 1 && $("lv1").value) /* 二级目录有值 */||
+			($("lv0").value == 4 && $("lv1").value) /* 二级目录有值 */||
+			($("lv0").value == 0 && !$("lv1").value)/* 二级目录没有值 */
+		) {
+			//单Y轴，多维
+			swfFileName = "FCF_MSLine.swf";
+			if($("lv0").value == 0) {
+				var opts = $("lv1").options;
+				for(var i = 1 ; i < opts.length; i++) {
+					zbcode += opts[i].value + ",";
+				}
+				zbcode = zbcode.replace(/,$/,"");
+			}
+				
+			else
+				zbcode = $("lv1").value;				
+			
+		} else if ($("lv0").value == 0) {
+			// 单Y轴，单维
+			swfFileName = "FCF_Line.swf";
+			zbcode = $("lv1").value;
+		} else {
+			alert("请选择二级目录的值");
+			return;
+		}
+		var sql = "";
+		var _ajax = new aihb.Ajax({
+			url : '/hb-bass-navigation/hbirs/action/collegeChart?method=getDataMonth'
+			,parameters : "zbcode=" + zbcode
+			,loadmask : true
+			,callback : function(xmlrequest){
+				//[real]
+				var jsonArr = eval( "(" + xmlrequest.responseText + ")");
+				/*[test 1.1]
+				var jsonArr = [{"zbcode":"CMC001","values":[{"value":0.7863331200003956,"key":"201003"},{"value":0.7829583999674045,"key":"201004"},{"value":0.7774269744778224,"key":"201005"},{"value":0.7745469208731003,"key":"201006"},{"value":0.7872547300863793,"key":"201007"},{"value":0.789698664357225,"key":"201008"}]}];
+				*/
+				/*[test 1.2 联通]
+				var jsonArr = [{"zbcode":"CMC002","values":[{"value":0.14139110933264978,"key":"201003"},{"value":0.1417646229954604,"key":"201004"},{"value":0.14389940992348565,"key":"201005"},{"value":0.14422326515984155,"key":"201006"},{"value":0.13686523279323295,"key":"201007"},{"value":0.13130317383162837,"key":"201008"}]}];
+				*/
+				/*[test 1.3 电信]
+				var jsonArr = [{"zbcode":"CMC003","values":[{"value":0.07227577066695459,"key":"201003"},{"value":0.07527697703713512,"key":"201004"},{"value":0.07867361559869196,"key":"201005"},{"value":0.08122981396705818,"key":"201006"},{"value":0.07588003712038782,"key":"201007"},{"value":0.07899816181114656,"key":"201008"}]}]
+				*/
+				/*[test 1 综合] 
+				var jsonArr = [{"zbcode":"CMC001","values":[{"value":0.7863331200003956,"key":"201003"},{"value":0.7829583999674045,"key":"201004"},{"value":0.7774269744778224,"key":"201005"},{"value":0.7745469208731003,"key":"201006"},{"value":0.7872547300863793,"key":"201007"},{"value":0.789698664357225,"key":"201008"}]},{"zbcode":"CMC002","values":[{"value":0.14139110933264978,"key":"201003"},{"value":0.1417646229954604,"key":"201004"},{"value":0.14389940992348565,"key":"201005"},{"value":0.14422326515984155,"key":"201006"},{"value":0.13686523279323295,"key":"201007"},{"value":0.13130317383162837,"key":"201008"}]},{"zbcode":"CMC003","values":[{"value":0.07227577066695459,"key":"201003"},{"value":0.07527697703713512,"key":"201004"},{"value":0.07867361559869196,"key":"201005"},{"value":0.08122981396705818,"key":"201006"},{"value":0.07588003712038782,"key":"201007"},{"value":0.07899816181114656,"key":"201008"}]}]
+				*/
+				var maxVal,minVal,precision=0
+					,dataSetsXml = "",categoryInfoXml = "",addons = "";
+				if(jsonArr.length == 1) {
+					// 单指标,单Y轴
+					for(indx in jsonArr) {
+						if(jsonArr.hasOwnProperty(indx)) {
+							var zbcodeInfo = jsonArr[indx];
+							var zbcodeValues = zbcodeInfo["values"];
+							
+							for(var i = 0 ; i < zbcodeValues.length ; i++) {
+								if(!maxVal || !minVal)
+									maxVal = minVal = zbcodeValues[i].value;
+								else {
+									if(maxVal > zbcodeValues[i].value) {
+										if(minVal > zbcodeValues[i].value)
+											minVal = zbcodeValues[i].value;
+									} else
+											maxVal = zbcodeValues[i].value;
+								}
+								dataSetsXml += "<set name='" + zbcodeValues[i].key + "' value='" + zbcodeValues[i].value + "'/>";;
+							}
+						}
+					}
+				} else {
+					//单Y轴多维或双Y轴
+					var cateDone = false, pYaxis = true;
+					for(indx in jsonArr) {
+						if(jsonArr.hasOwnProperty(indx)) {
+							var zbcodeInfo = jsonArr[indx];
+							var zbcodeValues = zbcodeInfo["values"];
+							var crtZbcode = zbcodeInfo["zbcode"];
+							
+							dataSetsXml += "<dataset seriesName='" + kpiDics[crtZbcode] + "' color='" + getColor() + "' @tempAddOn@ >"
+							for(var i = 0 ; i < zbcodeValues.length ; i++) {
+								//category 信息 ，只迭代一次
+								if(!cateDone) { 
+									categoryInfoXml += "<categories>";
+										categoryInfoXml += "<category name='" + zbcodeValues[i].key + "' />"; // 加月份
+									categoryInfoXml += "</categories>";
+								}
+								//每次迭代
+								dataSetsXml += "<set value='" + zbcodeValues[i].value + "' /> ";
+								
+								if(!maxVal || !minVal)
+									maxVal = minVal = zbcodeValues[i].value;
+								else {
+									if(maxVal < zbcodeValues[i].value)
+										maxVal = zbcodeValues[i].value;
+									if(minVal > zbcodeValues[i].value)
+										minVal = zbcodeValues[i].value;
+								}
+							}
+							cateDone = true;
+							dataSetsXml += "</dataset>";	
+							
+							if(dualY) {
+								if(pYaxis) {
+									dataSetsXml = dataSetsXml.replace(/@tempAddOn@/,"parentYAxis='P'");
+									addons += "PYAxisMaxValue='" + getBound("max",maxVal) + "' PYAxisMinValue='" + getBound("min",minVal) + "' ";
+								} else {
+									dataSetsXml = dataSetsXml.replace(/@tempAddOn@/,"parentYAxis='S'");
+									addons += "SYAxisMaxValue='" + getBound("max",maxVal) + "' SYAxisMinValue='" + getBound("min",minVal) + "' ";
+								}
+								pYaxis = !pYaxis;
+								precision < getPrecision(minVal) && (precision = getPrecision(minVal));
+								minVal = maxVal = undefined;
+							} else {
+								dataSetsXml = dataSetsXml.replace(/@tempAddOn@/,"");
+							}
+						}
+					}
+				}
+				if(!dualY) {
+					precision = getPrecision(minVal);
+					maxVal = getBound("max",maxVal);
+					minVal = getBound("min",minVal);
+				}
+				
+				var _chart = new FusionCharts("/hbapp/resources/chart/Charts/" + swfFileName, "chart" + $("lv1").value, "800", "600"); 
+				var dataXml = "<graph chartLeftMargin='20' chartRightMargin='50' showAlternateHGridColor='1' chartTopMargin='20' chartBottomMargin='50' formatNumber='1' formatNumberScale='0'  @addons@   caption='@title@' baseFontSize='12' yAxisMinValue='@min@' yAxisMaxValue='@max@' decimalPrecision='@precision@'    xAxisName='月份' baseFont='宋体'  showNames='1' showValues='0' >"; 
+				dataXml += categoryInfoXml;
+				dataXml += dataSetsXml;
+				dataXml += "</graph>";
+				var _title = $("lv1").value ? $("lv1").options[$("lv1").selectedIndex].text : ($("lv0").options[$("lv0").selectedIndex].text);
+				
+				dataXml = dataXml.replace("@title@",_title).replace("@precision@",precision).replace("@max@", maxVal || "0").replace("@min@",minVal || "0" );		
+				dataXml =dataXml.replace("@addons@",addons);//附加的一些东西，不同类型的图不一样	
+				_chart.setDataXML(dataXml);
+				//alert(dataXml);
+				_chart.render("_chart");
+			}
+		});
+		_ajax.request();
+	}
+	
+	function getPrecision(numStr) {
+		numStr = String(numStr);
+		numStr = numStr.replace(/(^\s*)|(\s*$)/g, "");
+		var indx = numStr.indexOf(".");
+		if(indx == -1)
+			return 0;
+		var result = numStr.length - (indx+1);
+		if(result > 4)
+			result = 4; //最多四位差不多了
+		return result;
+	}
+	
+	function getColor(num) {
+		if(!num)num = 6;
+		var color = "";
+		for(var i = 0 ; i < num; i++)
+			color += parseInt(Math.random() * 16).toString(16); //一个简单的计算公式
+		return color;
+	}
+	function getBound(type,val) {
+		var precision = getPrecision(val + "");
+		var num ;
+		if(Math.abs(val) < 1) {
+			//算法一 ,针对小于1的小数
+			precision -= 2; // 边界值精读比一般值小1
+			num = parseFloat(val.toFixed(precision)); //截取
+			if("max" === type) {
+			//上边界
+				while(num < val) {
+					//加1个边界精度的最小值 ,如果边界精度为3,则是0.001
+					num = num + Math.pow(10, -precision);
+				}
+			} else if("min" === type) {
+				//下边界
+				while(num >= val) {
+					//加1个边界精度的最小值 ,如果边界精度为3,则是0.001
+					num = num - Math.pow(10, -precision);
+				}
+			}
+			return num.toFixed(precision);//不直接return num的原因是：如果num在上面进行过与小数的运算，则结果会增大小数位数，例如0.12-0.1 -> 0.11000000000001
+		} else {
+			//if(precision == 0) {
+				//算法二 ，针对大于1的整数
+				precision = 1; //暂定为取到个位
+				num = parseInt(val/(Math.pow(10, precision)));//整数部分
+				if("max" === type) {
+					num += 1;
+				} else if("min" === type) {
+					num -= 1;
+				}
+				return num * (Math.pow(10, precision)) ; // 还原位数
+			//}
+		}
+	}
+	
+</script>
+</head>
+<body>
+	<fieldset style="margin : 5px 10px">
+		<legend>
+			条件选择
+		</legend>
+		<div style="margin : 2px 10px">
+			<div id="menu">
+			</div>
+			<div id="operation" style="">
+				<input type="button" value="展示" onclick="showChart()"/>
+			</div>
+		</div>
+	</fieldset>
+	
+	<fieldset style="margin : 5px 10px">
+		<legend>
+			图形展示
+		</legend>
+	<div id="_chart"></div>
+	</fieldset>
+	<div style="display: none" id="loadmask">
+		<div class="loadingmask" style="filter: alpha(opacity=60)">&nbsp;
+		</div>
+		<div class="loading">
+			<div class="loading-indicator"><span class=image></span>&nbsp;加载中请稍候.....
+			</div>
+		</div>
+	</div>
+</body>
+</html>

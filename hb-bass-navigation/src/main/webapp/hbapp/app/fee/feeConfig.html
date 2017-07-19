@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html xmlns:ai>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>资费预演用户群推荐资费配置</title>
+	<link rel="stylesheet" type="text/css" href="../../resources/css/default/default.css" />
+	<!-- dev 
+	<link type="text/css" href="../../resources/js/jqueryui1.8.2/css/redmond/jquery-ui.css" rel="stylesheet" />
+	-->
+	<!-- product-->
+	<link type="text/css" href="../../resources/js/jquery/themes/redmond/jquery.ui.css" rel="stylesheet" />
+	
+	<link rel="stylesheet" type="text/css" href="../../resources/js/acbox/css/jquery.ajaxComboBox.css" />
+	<style type="text/css">
+	/* 顺序很重要，这样才能覆盖 */
+	body {
+		font-size: 66.5%;
+	}
+	/* row class */
+	.fmRow {
+
+	}
+	/* label class */
+	.fmLabel {
+		color : #3182be;
+		font-weight : bold;
+	}
+	/* fel class*/
+	.fmEl {
+		
+	}
+	</style>
+</head>
+<body>
+<form method="post" action="">
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'dim_div')" title="点击隐藏"><img flag='1' src="../../resources/image/default/ns-expand.gif"></img>&nbsp;查询条件区域：</td>
+	</tr></table></legend>
+	<div id="dim_div">
+	<table align="center" width="99%">
+		<tr class="dim_row_submit">
+			<td align="right" bgcolor="">
+				<input type="button" id="addBtn" class="form_button" value="新增">&nbsp;
+				<input type="button" id="queryBtn" class="form_button" value="查询">&nbsp;
+				<input type="button" id="downBtn" class="form_button" value="下载">&nbsp;
+			</td>
+		</tr>
+	</table>
+	</div>
+</fieldset>
+</div><br>
+<div style="text-align : center">
+	<span style="color : red; font-size : 12px" id="infomation"></span>
+</div>
+
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'show_div')" title="点击隐藏"><img flag='1' src="../../resources/image/default/ns-expand.gif"></img>&nbsp;数据展现区域：</td>
+		<td></td>
+	</tr></table></legend>
+	<div id="grid" style="display:none;"></div>
+</fieldset>
+</div><br>
+</form>
+
+<form name="tempValForm">
+	<input type="hidden" name="ids"/>
+</form>
+
+<!-- 不用这一套了-->
+<DIV style="display : none" id=loadmask2>
+	<DIV style="Z-INDEX: 20000; POSITION: absolute; WIDTH: 100%; BACKGROUND: #c3daf9; HEIGHT: 120%; TOP: 0px; LEFT: 0px;FILTER: alpha(opacity=60)" id=loadingmask>&nbsp;
+	</DIV>
+</DIV>
+<div id="infoDiv" style="display : none;Z-INDEX: 20001">
+	<DIV class=loading>
+	<div id="info" class="loading-indicator">
+	</div>
+	</DIV>
+</div>
+
+<div title="增加用户群资费" id="edit" style="display : block; background-color : DDEEEE">
+</div>
+
+	<script type="text/javascript" src="../../resources/js/default/default.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../../resources/js/default/json2.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../../resources/js/default/util.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../../resources/js/datepicker/WdatePicker.js"></script>
+	<!-- dev 
+	<script type="text/javascript" src="../../resources/js/jqueryui1.8.2/js/jquery-1.4.2.js"></script>
+	<script type="text/javascript" src="../../resources/js/jqueryui1.8.2/js/jquery-ui-1.8.2.custom.js"></script>
+	-->
+	<!-- product-->
+	<script type="text/javascript" src="../../resources/js/jquery/jquery.js"></script>
+	<script type="text/javascript" src="../../resources/js/jquery/ui/jquery.ui.js"></script>
+	
+	<script type="text/javascript" src="../../resources/js/acbox/js/jquery.ajaxComboBox.3.5.3_cvt.js"></script>
+	
+	<script type="text/javascript">
+	/*
+		本次处理乱码的方法
+		BUG : autocomplete的width第二次之后变小，目前没有好解决办法
+	*/
+	void function (window,document,undefined) {
+		jQuery.noConflict();
+		var _params = aihb.Util.paramsObj(),
+			_header = [
+					{"name":"用户群编号","dataIndex":"cust_group_id","cellStyle":"grid_row_cell_text"}
+					,{"name":"用户群名称","dataIndex":"cust_group_name","cellStyle":"grid_row_cell_text"}
+					,{"name":"推荐资费编码","dataIndex":"fee_id","cellStyle":"grid_row_cell_text"}
+					,{"name":"推荐资费名称","dataIndex":"fee_name","cellStyle":"grid_row_cell_text"} 
+					,{"name":"创建时间","dataIndex":"create_date","cellStyle":"grid_row_cell"}
+					,{"name":"预演时间","dataIndex":"calculate_date","cellStyle":"grid_row_cell"}
+			],
+			limitRows = 500,
+			_window,
+			custGrpSlct,
+			custGrpSlctOptions = [],
+			acDiv;
+		function init() {
+			var queryOptions = 	{
+				data : [
+					{	label : "创建时间"
+						,elements : "<input align='right' type='text' id='date1' name='date1' onfocus='WdatePicker({readOnly:true,dateFmt:\"yyyy-MM-dd\"})' class='Wdate' condi=\" and @pt.create_date='@val'  \" />"
+					}
+				]
+			};
+			var _table = createTblOptions(queryOptions);
+			$("dim_div").insertBefore(_table,$("dim_div").lastChild);
+			
+			initVaribles();
+			
+			var _d=new Date();
+			$("date1").value=_d.format("yyyy-mm-dd");
+			
+			aihb.Util.loadmask();
+			aihb.Util.watermark();
+			registerHandler();
+		};
+		function registerHandler() {
+			$("addBtn").onclick = add;
+			$("queryBtn").onclick = query;
+			$("downBtn").onclick = down;
+		}
+		//初始化一个业务相关的变量 : 客户群
+		function initVaribles() {
+			var ajax = new aihb.Ajax({
+				url : "/hbirs/action/jsondata"
+				,parameters : "sql=" + encodeURIComponent(" select CUST_GROUP_ID, CUST_GROUP_NAME from DB2MPM.MTL_CUST_GROUP where cust_group_tab_name is not null order by create_date desc")
+				,callback : function(xmlrequest){
+					var arr;
+					eval("arr = " + xmlrequest.responseText);
+					custGrpSlctOptions.push(new Option("全部",""));
+					for(var i = 0 ; i < arr.length ; i++) {
+						custGrpSlctOptions.push(new Option(arr[i]["cust_group_name"],arr[i]["cust_group_id"]));
+					}
+				}
+			});
+			ajax.request();
+			/**/
+			acDiv = $C("div");
+			acDiv.id = "acDivId";
+			acDiv.elType = "form";
+		}
+		
+		function genSQL(){
+			var condition = bi.genSQLConditions(document.forms[0]);
+			var sql = " select cust_group_id, cust_group_name, fee_id, fee_name, create_date, calculate_date from NMK.DIM_FEE_PREVIEW_CUSTGROUP a where 1=1 " + condition;         
+			return sql;
+		}
+		
+		function query(){
+			var grid = new aihb.SimpleGrid({
+				header:_header
+				,sql: genSQL() + " fetch first " + limitRows + " rows only with ur"
+				,isCached : false
+				,callback:function(){
+					aihb.Util.watermark();
+					var length = grid.grid.data.length;
+					if(length == limitRows) {
+						//说明没全查,所以需要查总数
+						$("infomation").innerHTML = "";
+						var condition = bi.genSQLConditions(document.forms[0]);
+						var sql = " select count(*) as count from NMK.dim_FEE_Preview_custgroup a where 1=1 " + condition; 
+						var ajax = new aihb.Ajax({
+							url : "/hbirs/action/jsondata"
+							,parameters : "sql=" + encodeURIComponent(sql)
+							,callback : function(xmlrequest){
+								$("infomation").style.display = "block";
+								var obj= eval("(" + xmlrequest.responseText + ")");
+								$("infomation").innerHTML = "符合条件的记录共有" + (obj ? obj[0].count : 0) + "条。为保证查询效率，本次查询最多查" + limitRows + "条记录。请点击下载获得全部数据。";
+							}
+						});
+						ajax.request();
+					}
+				}
+			});
+			grid.run();
+		}
+		
+		function down(){
+			aihb.AjaxHelper.down({
+				sql : genSQL()
+				,header : _header
+			});
+		}
+		//封装
+		function autoComplete(id) {
+			jQuery('#' + id).ajaxComboBox(
+				'/hb-bass-navigation/hbirs/action/autoComplete',
+				{
+				  'lang'        : 'en',
+				  'db_table'    : 'nwh.dim_brand',
+				  'navi_simple' : true,
+				  'field' : "brand_name,brand_id",
+				  'order_field' : 'brand_name'
+				  ,'mini'        : true
+				}
+			);
+		}
+	
+		function getACVal(div_id){
+			var result = {};
+			jQuery('#' + div_id + ' input').each(function(idx){
+				result[jQuery(this).attr('name')] = jQuery(this).val();
+			});
+			var text = '';
+			for(var key in result){
+				text += result[key] + '\n';
+			}
+			return text.trim();
+		}
+		//封装
+		function JPanel(id,options) {
+			var oriObj  =  jQuery("#" + id);
+			this.clear = function (){
+				oriObj.html(""); // 应该也可以
+				oriObj.dialog("destroy");
+			}
+			oriObj.dialog(options);
+		}
+		
+		function add(e) {
+			if(_window) {
+				_window.clear();
+			}
+			e = e || window.event;
+			var srcObj = e.target || e.srcElement;
+			var editDiv = $("edit");
+			var datas = [{
+				label : "选择客户群: "
+					,elements : function(){
+						custGrpSlct = $C("select");
+						custGrpSlct.elType = "form";
+						custGrpSlct.id="custGrps";
+						for(var i = 0 ; i < custGrpSlctOptions.length; i++) {
+							custGrpSlct.add(custGrpSlctOptions[i],undefined);
+						}
+						return custGrpSlct;
+					}()
+				},{
+					label : "选择资费: "
+					,elements : acDiv
+					/*function(){
+							acDiv = $C("div");
+							acDiv.id = "acDivId";
+							acDiv.elType = "form";
+							return acDiv;
+					}()*/
+				}
+			];
+			var queryOptions = 	{
+				labelsPerRow : 1
+				,data : datas
+				,tableProps : {}
+				,fmProps : {name : "form1"}
+				,rowClass : "fmRow"	
+				,labelClass : "fmLabel"
+				,felClass : "fmEl"
+			};  
+			var _table = createTblOptions(queryOptions);
+			editDiv.appendChild(_table);
+			autoComplete(acDiv.id);
+			// 业务逻辑在这里写	
+			var okBtnHandler = function() {
+				var feeInfo;
+				if(!custGrpSlct.value) {
+					alert("请先选择客户群!");
+					return;
+				}
+				if(!(feeInfo = getACVal(acDiv.id))) {
+					alert("请先选择一个资费!");
+					return;
+				}
+				var jsonObj = {
+						tableName : "NMK.dim_FEE_Preview_custgroup"
+						,oper : "insert" //冗余
+						,cols : ["cust_group_id", "cust_group_name", "fee_id", "fee_name", "create_date","calculate_date"]
+						,vals : [[custGrpSlct.value
+								,encodeURIComponent(custGrpSlct.options[custGrpSlct.selectedIndex].text)
+								,feeInfo.split(" ")[1]
+								,encodeURIComponent(feeInfo.split(" ")[0])
+								,new Date().format("yyyy-mm-dd")
+								]]
+				};
+				var ajax = new aihb.Ajax({
+					url : "/hbirs/action/jsondata"
+					,parameters : "isCached=false&sql=" + encodeURIComponent("select calculate_date cal_date from  NMK.DIM_FEE_PREVIEW_CUSTGROUP where calculate_date = (select max(calculate_date) from NMK.DIM_FEE_PREVIEW_CUSTGROUP)")
+					,callback : function(xmlrequest){
+						var obj,calculate_date;
+						eval("obj = " + xmlrequest.responseText);
+						if(obj.length != 0) {
+							calculate_date = obj[0]["cal_date"]; //str
+							calculate_date= calculate_date.split("-"); //array
+							calculate_date=new Date(calculate_date[0],calculate_date[1]-1,calculate_date[2]); // date object
+							if(obj.length >= 3)
+								calculate_date.setDate(calculate_date.getDate() + 1); //会有并发问题，不过对于经分而言，一般不会出现
+						} else 
+							calculate_date = new Date();//查不出来就是今天
+						
+						var valsArr = jsonObj["vals"][0];
+						valsArr[valsArr.length] = calculate_date.format("yyyy-mm-dd");
+						var jsonStr = JSON.stringify(jsonObj);
+						
+						var ajax1 = new aihb.Ajax({
+							url : "/hbirs/action/updateDB?oper=insert"
+							,parameters :  "json=" + jsonStr
+							,callback : function(xmlrequest){
+								var str = "系统为此目标用户群设定的预演时间为：" + calculate_date.format("yyyy-mm-dd") + ", 请通过 : 营销与客户管理 -> 资费与产品分析 -> 预演结果查询 进行查看";
+								alert(xmlrequest.responseText + "。" + str);
+							}
+						});
+						ajax1.request();
+						
+					}
+				});
+				debugger;
+				ajax.request();
+				
+				
+				jp.clear();
+				jQuery(this).dialog('close');
+			}
+					
+			var jp = _window = new JPanel("edit",{
+				modal : true,
+				height: 350,
+				width: 600,
+				buttons: {
+					"取消" : function() {
+						jp.clear();
+					},
+					"确定" : okBtnHandler
+				}
+			});
+		}
+			
+		window.onload = init;			
+		
+		
+	}(window,window.document);
+
+	
+
+</script>
+
+	
+</body>
+</html>

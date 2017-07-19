@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html xmlns:ai>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<title>核心客户之客户经理分配</title>
+	
+	<link rel="stylesheet" type="text/css" href="../../resources/css/default/default.css" />
+    <!-- ext -->
+    <link rel="stylesheet" type="text/css" href="../../resources/js/ext/resources/css/ext-all.css" />
+	<link rel="stylesheet" type="text/css" href="../../resources/js/tooltip/style.css" />
+	<!-- div
+	<link type="text/css" href="../../resources/js/jqueryui1.8.2/css/redmond/jquery-ui.css" rel="stylesheet" />
+	-->
+	<!-- product -->
+	<link type="text/css" href="../../resources/js/jquery/themes/redmond/jquery.ui.css" rel="stylesheet" />
+	
+	<link rel="stylesheet" type="text/css" href="../../resources/js/acbox/css/jquery.ajaxComboBox.css" />
+	<style type="text/css">
+	/* 顺序很重要，这样才能覆盖 */
+	body {
+		font-size: 66.5%;
+	}
+	/* row class */
+	.fmRow {
+
+	}
+	/* label class */
+	.fmLabel {
+		color : #3182be;
+		font-weight : bold;
+	}
+	/* fel class*/
+	.fmEl {
+		
+	}
+	</style>
+</head>
+<body>
+<form method="post" action="">
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'dim_div')" title="点击隐藏"><img flag='1' src="../../resources/image/default/ns-expand.gif"></img>&nbsp;查询条件区域：</td>
+	</tr></table></legend>
+	<div id="dim_div">
+	<table align="center" width="99%">
+		<tr class="dim_row_submit">
+			<td align="right" bgcolor="">
+				<input type="button" style="width : 120px" class="form_button" value="批量指定客户经理" onClick="editManager()">&nbsp;
+				<input type="button" class="form_button" value="查询" onClick="query()">&nbsp;
+				<input type="button" class="form_button" value="下载" onclick="down()">&nbsp;
+			</td>
+		</tr>
+	</table>
+	</div>
+</fieldset>
+</div><br>
+<div style="text-align : center">
+	<span style="color : red; font-size : 12px" id="infomation"></span>
+</div>
+
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'show_div')" title="点击隐藏"><img flag='1' src="../../resources/image/default/ns-expand.gif"></img>&nbsp;数据展现区域：</td>
+		<td></td>
+	</tr></table></legend>
+	<div id="grid" style="display:none;"></div>
+</fieldset>
+</div><br>
+</form>
+
+<form name="tempValForm">
+	<input type="hidden" name="ids"/>
+</form>
+
+<!-- 不用这一套了-->
+<DIV style="display : none" id=loadmask2>
+	<DIV style="Z-INDEX: 20000; POSITION: absolute; WIDTH: 100%; BACKGROUND: #c3daf9; HEIGHT: 120%; TOP: 0px; LEFT: 0px;FILTER: alpha(opacity=60)" id=loadingmask>&nbsp;
+	</DIV>
+</DIV>
+<div id="infoDiv" style="display : none;Z-INDEX: 20001">
+	<DIV class=loading>
+	<div id="info" class="loading-indicator">
+	</div>
+	</DIV>
+</div>
+
+<div title="修改客户经理" id="edit" style="display : none; background-color : #DDEEEE; overflow :auto ">
+</div>
+
+	<!-- 先加载ext,否则和my97datepicker冲突 
+	<script type="text/javascript" src="../../resources/js/ext/ext-base.js"></script>
+    <script type="text/javascript" src="../../resources/js/ext/ext-all.js"></script>
+	-->
+	<script type="text/javascript" src="../../resources/js/default/default.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../../resources/js/default/util.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../../resources/js/datepicker/WdatePicker.js"></script>
+	<script type="text/javascript" src="../../resources/js/tooltip/script.js"></script>
+	<!-- dev
+	<script type="text/javascript" src="../../resources/js/jqueryui1.8.2/js/jquery-1.4.2.js"></script>
+	<script type="text/javascript" src="../../resources/js/jqueryui1.8.2/js/jquery-ui-1.8.2.custom.js"></script>
+	-->
+	<!-- product -->
+	<script type="text/javascript" src="../../resources/js/jquery/jquery.js"></script>
+	<script type="text/javascript" src="../../resources/js/jquery/ui/jquery.ui.js"></script>
+	<script type="text/javascript" src="../../resources/js/acbox/js/jquery.ajaxComboBox.3.5.3_cvt.js"></script>
+	<script type="text/javascript">
+	/*
+		本次处理乱码的方法
+	*/
+		$.noConflict();
+		var _params = aihb.Util.paramsObj();	
+		var chBoxName = "box1"
+		aihb.Grid.prototype.headerInterceptor=function(elementTd,headData){
+			if(headData.dataIndex=="select_all"){
+				var ipt=$C("input");
+				ipt.type="checkbox";
+				ipt.onclick = function() {
+					var ckBoxes = document.getElementsByName(chBoxName);
+					if(this.checked) {
+						for(var i = 0 ; i < ckBoxes.length ; i++) {
+							ckBoxes[i].checked = true;
+						}
+					} else {
+						for(var i = 0 ; i < ckBoxes.length ; i++) {
+							ckBoxes[i].checked = false;
+						}
+					}
+				}
+				elementTd.appendChild(ipt);
+			}
+		}
+		
+		function init() {
+			var queryOptions = 	{
+				data : [
+					{	label : "时间"
+						,elements : "<input align='right' type='text' id='date1' name='date1' onfocus='WdatePicker({readOnly:true,dateFmt:\"yyyyMM\"})' class='Wdate'/>"
+					},
+					{	label : "地市"
+						,elements : biutil.genArea("city",_params.cityId,"areacombo(1)","condi=\" and @st.area_code='@val'\"")						
+					},
+					{	label : "县市"
+						,elements : "<select name='county_bureau' onchange='areacombo(2)' condi=\" and @pt.AREA_ID='@val'\"  class='form_select'><option value=''>全部</option></select>"
+					},
+					{	label : "营销中心"
+						,elements : "<select name='marketing_center' onchange='areacombo(3)' condi=\" and @pt.zone_code='@val'\"  class='form_select'><option value=''>全部</option></select>"
+					},
+					{	label : "乡镇"
+						,elements : "<select name='town' condi=\" and @pt.town_code='@val'\"  class='form_select'><option value=''>全部</option></select>"
+					},
+					{
+						label : "是否有客户经理"
+						,elements :	[
+							"是",
+							{ type : "radio", name : "manager" ,condi : " and @pt.staff_id is not null ", value : "#", checked : "true"},
+							" 否",
+							{ type : "radio", name : "manager" ,condi : " and @pt.staff_id is null ", value : "#"}
+						]
+					},
+					{//done
+						label : "是否已分配"
+						,elements :	[
+							"是",
+							{ type : "radio", name : "isDispatched" ,condi : " and @pt.kfmanager is not null ", value : "#"},
+							" 否",
+							{ type : "radio", name : "isDispatched" ,condi : " and @pt.kfmanager is null ", value : "#",checked : "true" }
+						]
+					},
+					{ // copied from custReport.html?type=1
+						label : "用户类型"
+						,elements : [
+							"<input type='hidden' condi=\" and @pt.MCUST_LID in ('@val')@erange=samelevel@etype=checkbox@erule=checked&name=='MCUST_LID'\" value='#'/>"
+							,"VIP(钻卡)"
+							,"<input type='checkbox' name='MCUST_LID' value='8' />"
+							,"&nbsp;&nbsp;VIP(金卡)"
+							,"<input type='checkbox' name='MCUST_LID' value='1' />"
+							,"&nbsp;&nbsp;VIP(银卡)"
+							,"<input type='checkbox' name='MCUST_LID' value='2' />"
+							,"&nbsp;&nbsp;集团中高端"
+							,{type : "checkbox", condi : " and @pt.ASS_SNAP_ID=1",value : "@"}
+							,"<input type='hidden' condi=\" and @pt.SN_SNAP_ID in (@val)@erange=samelevel@etype=checkbox@erule=checked&name=='SN_SNAP_ID'\" value='#' />"
+							,"&nbsp;&nbsp;省内中高端"
+							,"<input type='checkbox' name='SN_SNAP_ID' value='2' />"
+							,"&nbsp;&nbsp;有价值"
+							,"<input type='checkbox' name='SN_SNAP_ID' value='1' />"
+							//暂不支持,"关键人"
+							,"&nbsp;&nbsp;集团成员"
+							,{type : "checkbox", condi : " and @pt.groupcode is not null", value : "#"}
+						]
+					},
+					{
+						label : "提取最大数量"
+						,elements : [
+							"<input type='text' id='maxRows' style='width : 30px' value='500'/>"
+							,"条"
+						]
+					},
+					{	label : "手机号码"
+						,elements : { type : "text", condi : " and @pt.acc_nbr like '%@val%'"}
+					}
+				]
+			};
+			var _table = createTblOptions(queryOptions);
+			$("dim_div").insertBefore(_table,$("dim_div").lastChild);
+		};
+		//同统一视图的commonHeader
+	var _header=[
+					{"name":"全部选择","dataIndex":"select_all","cellStyle":"grid_row_cell","cellFunc" : function(value,options){
+						var ckBox = $C("<input name='" + chBoxName + "'>");
+						ckBox.type="checkbox";
+						// 不能这样定义ckBox.name=chBoxName;
+						ckBox.value=options.record["mbuser_id"] + "@" + 
+							options.record["cust_name"] + "@" + 
+							options.record["area_id"] + "@" + 
+							options.record["staff_name"] + "@" + 
+							options.record["acc_nbr"]; //为了方便后期取值
+						return ckBox;
+					}}
+					,{"name":"用户姓名","dataIndex":"cust_name","cellStyle":"grid_row_cell"} //认为有必要，自己加的
+					,{"name":"地区","dataIndex":"area_id","cellStyle":"grid_row_cell_text"}
+					,{"name":"手机号码","dataIndex":"acc_nbr","cellStyle":"grid_row_cell"}
+					//,{"name":"用户类型","dataIndex":"c_user_type","cellStyle":"grid_row_cell_text", "cellFunc" : "trimShow(8)"}//虽然重要，但是核心客户中应该用下面两个代替,//database中没有c_user_type这个字段   c_代表聚合生成  
+					//,{"name":"稳定标签","dataIndex":"c_stb_label","cellStyle":"grid_row_cell_text"}
+					,{"name":"本月消费(元)","dataIndex":"bill_charge","cellStyle":"grid_row_cell_number"} //就是bill_charge 本月账单
+					,{"name":"客户经理姓名","dataIndex":"staff_name","cellStyle":"grid_row_cell"}
+					,{"name":"品牌","dataIndex":"brand_id","cellStyle":"grid_row_cell"}
+					,{"name":"状态","dataIndex":"state_tid","cellStyle":"grid_row_cell"} //没加停机
+					,{"name":"集团名称","dataIndex":"groupname","cellStyle":"grid_row_cell_text", "cellFunc" : "trimShow(10)"}
+	];
+function genSQL(){
+	var condition = bi.genSQLConditions(document.forms[0]);
+	var sql = " select '' as select_all" + 
+	",cust_name" + 
+	//",(select area_name from MK.BT_AREA_ALL where county_code=a.AREA_ID) as area_id" + 
+	",b.name area_id " + 
+	",acc_nbr" + 
+	",mbuser_id " + 
+	",bill_charge/1000 as bill_charge" + 
+	",staff_name" + 
+	", case when a.BRAND_ID in (1,2,3) then '全球通' when a.BRAND_ID in (4,5,6,7) then '神州行' when a.BRAND_ID=8 then '动感地带' else '不详' end as BRAND_ID " + 
+	",case when substr(a.STATE_TID,1,3)='US1' then '在用' when substr(a.STATE_TID,1,3)='US2' then '离网' when substr(a.STATE_TID,1,3)='US3' then '停机' else '未知' end as state_tid " +
+	",groupname" + 
+	//" from NMK.CTT_USER_BUREAU_TEMP_" + $("date1").value + " a where 1=1 " + condition;         
+	" from NMK.CTT_USER_BUREAU_" + $("date1").value + " a left join (select id,name,area_code from NWH.BUREAU_TREE where level=2 ) b on a.area_id = b.id where 1=1 " + condition;         
+	return sql;
+}
+function query(){
+	var limitRows = document.getElementById("maxRows").value;
+	
+	var grid = new aihb.SimpleGrid({
+		header:_header
+		,sql: genSQL() + " fetch first " + limitRows + " rows only with ur"
+		//,isCached : false
+		,callback:function(){
+			aihb.Util.watermark();
+			var length = grid.grid.data.length;
+			$("infomation").innerHTML = "";
+			if(length == limitRows) {
+				//说明没全查,所以需要查总数
+				var condition = bi.genSQLConditions(document.forms[0]);
+				var sql = " select count(*) as count from NMK.CTT_USER_BUREAU_" + $("date1").value + " a left join (select id,name,area_code from NWH.BUREAU_TREE where level=2 ) b on substr(a.area_id,1,3) = b.id where 1=1 " + condition; 
+				var ajax = new aihb.Ajax({
+				url : "/hbirs/action/jsondata"
+				,parameters : "sql=" + encodeURIComponent(sql) //即使是post 也需要encode
+				,callback : function(xmlrequest){
+					$("infomation").style.display = "block";
+					debugger;
+					var obj= eval("(" + xmlrequest.responseText + ")");
+					$("infomation").innerHTML = "符合条件的记录共有" + (obj ? obj[0].count : 0) + "条。为保证查询效率，本次查询最多查" + limitRows + "条记录。请点击下载获得全部数据。";
+				}
+				});
+				ajax.request();
+			}
+		}
+	});
+	grid.run();
+}
+
+function down(){
+	aihb.AjaxHelper.down({
+		sql : genSQL()
+		,header : _header
+	});
+}
+
+window.onload=function(){
+	//alert("loaded");
+	init();
+	var _d=new Date();
+	_d.setDate(_d.getDate()-3);
+	_d.setMonth(_d.getMonth()-1);
+	$("date1").value=_d.format("yyyymm");
+	
+	aihb.Util.loadmask();
+	aihb.Util.watermark();
+}
+//先加载客户经理
+function editManager() {
+		
+	var editDiv = $("edit");
+	clear(); 
+	var vals = getCheckedVals();
+	if(!vals.length) {
+		alert("请先至少勾选一个核心客户!");
+		return;
+	}
+	var areaId = getAreaId();
+	var staffNames;
+	/*
+	if(areaId)
+		staffNames = getStaffNamesByCityId(areaId);
+	else return;
+	*/
+	if(!areaId)
+		return;
+	/*	
+	$("loadmask2").style.display = "block";
+	$("infoDiv").style.display = "block";
+	$("info").innerHTML = "加载客户经理中...请稍后";
+	*/
+	showPanel();
+	//此方法作废
+	function getStaffNamesByCityId(area_id) {
+		var sql = "select login_name as manager_info from NWH.CTT_MANAGER where " +  //表是待分配客户经理表 
+		" area_id='" + area_id + "'";
+		var ajax = new aihb.Ajax({
+			url : "/hbirs/action/jsondata"
+			,parameters : "sql=" + encodeURIComponent(sql)
+			,callback : function(xmlrequest){
+				$("loadmask2").style.display = "none";
+				$("infoDiv").style.display = "none";
+				$("info").innerHTML = "";
+				var arr;
+				if(xmlrequest.responseText) {
+					eval( "(arr = " + xmlrequest.responseText + ")");
+					//alert(Object.prototype.toString.call(arr));
+					if(Object.prototype.toString.call(arr) == "[object Array]" && arr.length > 0) {
+						for(var i = 0 ; i < arr.length; i ++) {
+							arr[i] = arr[i]["manager_info"];
+						}
+						//alert(arr);
+						//alert(typeof arr[0])
+						showPanel(arr);
+					} else {
+						alert("服务器错误，请稍后再试");
+						return;
+					}
+				} else {
+					alert("服务器错误，请稍后再试");
+					return;
+				}
+			}
+		});
+		ajax.request();
+	}
+	function clear(){
+		editDiv.innerHTML = "";
+		document.tempValForm.ids.value = "";
+		jQuery("#edit").dialog("destroy");		//成功
+	}
+	function addButton(){
+		if(!vals.length) {
+			return {
+				取消 : function() {
+					jQuery(this).dialog('close');
+				}
+			}
+		} else 
+			return {
+				取消 : function() {
+					jQuery(this).dialog('close');
+				},
+				确定 : function() {
+					var staff = getACVal("total");
+					staff = staff.trim();
+					if(!staff) {
+						alert("请选择以上客户的客户经理!");
+						return;
+					}
+					
+					var ids = document.tempValForm.ids.value;
+					ids = ids.replace(/\,$/,"");
+					var idsArr = ids.split(",");
+					var vals = "";
+					
+					for(var i = 0 ; i < idsArr.length ; i ++){
+						var crtId = idsArr[i];
+						var acVal = getACVal("dv" + crtId);
+						acVal = acVal.trim() || staff;
+						/*
+						acVal = acVal.split(" ");
+						for(var j = 0 ; j < acVal.length ; j ++) {
+							acVal[j] = encodeURIComponent(acVal[j]);
+						}
+						*/
+						//vals += "&vals=" + $("nbr" + crtId).value + "," + encodeURIComponent(acVal.split(" ").join(",")); // ,服务端应该拿得到，虽然encode了
+						vals += "&vals=" + encodeURIComponent(acVal.split(" ")[0] + "," + acVal.split(" ")[2]); // 改成只有客户经理的姓名和手机号
+					}
+					alert(vals);
+					//return;
+					// 其实这些信息都可以封装在一个对象中，在java端，也就是一个Map，json真是好
+					//var params = "table=NMK.CTT_USER_BUREAU_TEMP_" + $("date1").value +
+					var params = "table=NMK.CTT_USER_BUREAU_" + $("date1").value +
+						//"&cols=acc_nbr,staff_name,staff_id" + // 手机号不修改了
+						"&cols=kfmanager_name,kfmanager" + 
+						"&pkcol=mbuser_id" + 
+						"&ids="  + ids +  vals;
+						
+					var ajax = new aihb.Ajax({
+						url : "/hbirs/action/updateDB?oper=update"
+						,parameters : params
+						,callback : function(xmlrequest){
+							alert(xmlrequest.responseText);
+							query();
+						}
+					});
+					ajax.request();
+					jQuery(this).dialog('close');
+				}
+			}
+	}
+	function getCheckedVals() {
+		debugger;
+		var ckBoxes = document.getElementsByName(chBoxName);
+		var vals = [];
+		for(var i = 0 ; i < ckBoxes.length ; i ++) {
+			if(ckBoxes[i].checked)
+				vals.push(ckBoxes[i].value);
+		}
+		return vals;
+	}
+	function getAreaId() {
+		var areaId = "";
+		for(var i = 0 ; i < vals.length ; i ++) {
+			var crtAreaId = vals[i].split("@")[2];
+			if(!areaId)
+				areaId = crtAreaId;
+			else if(areaId != crtAreaId) {
+				alert("所选择的核心客户所在的县市不同，无法批量分配客户经理!");
+				return false;
+			}
+		}
+		return areaId;
+	}
+	
+	function autoComplete(id,options) {
+		var dftOptions = {
+			  'lang'        : 'en',
+			  'db_table'    : 'NWH.CTT_MANAGER',
+			  'navi_simple' : true,
+			  'field' : "manager_name@manager_id@value(mobilephone,'')",
+			  'order_field' : 'manager_name' //不指明就报错,这里随便指一个
+			  //,'select_only' : true	  //和子菜单一起做
+			  //,'primary_key' : 'manager_id'
+		};
+		if(options) {
+			for(var prop in options) {
+				dftOptions[prop] = options[prop]
+			}
+		}
+		
+		jQuery('#' + id).ajaxComboBox(
+			'/hb-bass-navigation/hbirs/action/autoComplete',
+			dftOptions
+		);
+	}
+	
+	function getACVal(div_id){
+		var result = {};
+		jQuery('#' + div_id + ' input').each(function(idx){
+			result[jQuery(this).attr('name')] = jQuery(this).val();
+		});
+
+		var text = '';
+		for(var key in result){
+			//text += key + ' : ' + result[key] + '\n';
+			text += result[key] + '\n';
+		}
+		return text;
+	}
+	
+	function showPanel(managerArr) {
+		var datas = [];
+		for(var i = 0 ; i < vals.length ; i++) {
+			var crtVal = vals[i];
+			var valArr = crtVal.split("@");
+			var mbuserId = valArr[0], userName = valArr[1], areaId = valArr[2], staffName = valArr[3],accNbr = valArr[4];
+			document.tempValForm.ids.value += mbuserId + ",";
+			var obj = {
+				label : "姓名: "
+				,elements : { type : "text", disabled : true , value : userName}
+			};
+			datas.push(obj);
+			//写个循环更好点
+			obj = {
+				label : "手机号码: "
+				,elements : { type : "text", value : accNbr , id : "nbr" + mbuserId,disabled : true}
+			}
+			datas.push(obj);
+			obj = {
+				label : "客户经理: "
+				,elements : [
+						"统一编辑",
+						{
+							type : "checkbox", checked : true,
+							id : "ck" + mbuserId // it is important
+							, onclick : function(){ 
+								if(!this.checked) {
+									debugger;
+									var ac_div = $C("div");
+									ac_div.style.width = "200px";
+									//ac_div.style.overflow = "auto";
+									ac_div.id = this.id.replace("ck","dv");
+									this.parentNode.appendChild(ac_div);
+									autoComplete(ac_div.id,{"mini" : true});
+								} else {
+									var ac_div = $(this.id.replace("ck","dv"));
+									if(ac_div)
+										this.parentNode.removeChild(ac_div); //是否需要接着destroy autocomplete
+								}
+							 }
+						}
+				]
+			};
+			datas.push(obj);
+		}
+		var queryOptions = 	{
+			data : datas
+			,tableProps : {}
+			,rowClass : "fmRow"
+			,labelClass : "fmLabel"
+			,felClass : "fmEl"
+		};
+		var _table = createTblOptions(queryOptions);
+		editDiv.appendChild(_table);
+		var _div = $C("div"); // 总的autocomplete
+		_div.style.width="100%";
+		editDiv.appendChild(_div);
+
+		/*
+		var ipt = $C("input");
+		ipt.id="total";
+		_div.appendChild(ipt);
+		*/
+		_div.appendChild($C("hr"));
+		var tbl = $C("table");
+		var tr = tbl.insertRow();
+		var td = tr.insertCell();
+		
+		td.appendChild($CT("以上客户的客户经理 : "));
+		
+		var ac1_div = $C("div");
+		ac1_div.style.width = "200px";
+		ac1_div.id = "total";
+		
+		td = tr.insertCell();
+		td.appendChild(ac1_div);
+		
+		_div.appendChild(tbl);
+		/*
+		_div.appendChild($CT("以上客户的客户经理 : "));
+		_div.appendChild($C("br"));
+		
+		var ac1_div = $C("div");
+		ac1_div.style.width = "200px";
+		ac1_div.id = "total";
+		_div.appendChild(ac1_div);
+		*/
+		var placeHolderDiv = $C("div");
+		placeHolderDiv.style.height="150px"
+		_div.appendChild(placeHolderDiv); // new added
+		
+		autoComplete(ac1_div.id,{mini : true});
+		jQuery("#edit").dialog({
+			modal: true,
+			height: "auto",
+			width: 670, // best
+			buttons: addButton()
+		});
+		
+	}
+}
+
+function edit() {
+	loadmask2.style.display = "block";
+	editable.style.display = "block";
+}
+</script>
+
+	
+</body>
+</html>

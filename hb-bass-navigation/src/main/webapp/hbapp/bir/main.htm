@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<HTML>
+<HEAD>
+	<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<TITLE>湖北移动经营分析系统_信息检索</TITLE>
+	<STYLE>
+		body{font:12px arial;text-align:center;background:#fff}
+		.btn{width:78px;height:28px;line-height:24px;font:14px arial}
+		.piece{border:1px solid #bbbbbb;width:320px;padding:5px;}
+		p{font-size:14px;}
+		.t1{font-size:20px;padding: 10px 5px;color:#006699;cursor:hand;}
+		.t2{font-size:14px;padding: 10px 5px;color:#006699;cursor:hand;}
+	</STYLE>
+	<script type="text/javascript" src="../resources/js/default/default.js"></script>
+	<script type="text/javascript" src="../resources/js/default/autocomplete.js"></script>
+	<script type="text/javascript"> 
+	window.onload=function(){
+		var ajax = new aihb.Ajax({
+			url : "/hbirs/action/bir?method=suggest"
+			,parameters : "catacode="+encodeURIComponent("经分信息检索")
+			,callback : function(xmlrequest){
+				var _suggest = [];
+				try{
+					eval("_suggest="+xmlrequest.responseText)
+				}catch(e){}
+				var obj = actb($('kw'),_suggest);
+			}
+		});
+		ajax.request();
+	}
+	function _key(){
+		if(event.keyCode==13 && document.forms[0].kw.value.length>0){
+			_s();
+		};
+	}
+	function _s(){
+		window.location="search.htm?kw="+document.forms[0].kw.value;
+	}
+	
+	function ks(obj){
+		document.forms[0].kw.value=obj.innerText;
+		_s();
+	}
+	</script>
+</HEAD>
+<BODY onkeypress="_key()" >
+<DIV style="padding: 30px 0px 15px 0px;"><IMG src="bir.gif" width="270" height="65" alt="经分信息检索"></div>
+<DIV>
+	<FORM name="f" action="">
+		<INPUT type="text" name="kw" id="kw" style="width:390px;line-height:16px;padding:3px;margin:0px;font:16px arial" maxlength="100">
+		<div style="padding-top:10px;">
+			<span style="padding-right:20px;"><INPUT type="button" value="经分搜索" class="btn" onclick="_s()"></span>
+			<INPUT type="button" value="手气不错" class="btn">
+		</div>
+	</FORM>
+</DIV>
+
+<div>
+<table width="700" align="center">
+	<tr>
+		<td>
+			<div class="piece">
+				<p>近期热门搜索</p>
+				<span class="t1" onclick="ks(this)">电信C网</span>
+				<span class="t2" onclick="ks(this)">联通G网</span>
+				<span class="t1" onclick="ks(this)">漫游</span>
+				<span class="t2" onclick="ks(this)">长途</span>
+			</div>
+		</td>
+		<td>
+			<div class="piece">
+				<p>近期热门应用</p>
+				<span class="t1">应用1</span>
+				<span class="t2">应用2</span>
+				<span class="t1">应用3</span>
+				<span class="t2">应用4</span>
+			</div>
+		</td>
+	</tr>
+</table>
+</div>
+
+</BODY>
+</HTML>

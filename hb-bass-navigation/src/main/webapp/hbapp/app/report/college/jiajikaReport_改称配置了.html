@@ -1,0 +1,107 @@
+<html xmlns:ai>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<title>夹寄卡报表</title>
+	<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/default/default.js" charset="utf-8"></script>
+	<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/datepicker/WdatePicker.js"></script>
+	<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/chart/FusionCharts.js"></script>
+	<link rel="stylesheet" type="text/css" href="/hb-bass-navigation/hbapp/resources/css/default/default.css" />
+	<script type="text/javascript">
+	//aihb.URL="/hbapp";
+var _header1= [
+{"cellStyle":"grid_row_cell_text","dataIndex":"area_id","name":["地市"],"title":"","cellFunc":""},
+{"cellStyle":"grid_row_cell_text","dataIndex":"college_id","name":["高校"],"title":"","cellFunc":""},
+{"cellStyle":"grid_row_cell_text","dataIndex":"counts","name":["导入数量"],"title":"","cellFunc":""},
+{"cellStyle":"grid_row_cell_text","dataIndex":"user_id","name":["导入经分工号"],"title":"","cellFunc":""},
+{"cellStyle":"grid_row_cell_text","dataIndex":"import_time","name":["导入日期"],"title":"","cellFunc":""}
+];
+var _header2= [
+{"cellStyle":"grid_row_cell_text","dataIndex":"import_time","name":["导入日期"],"title":"","cellFunc":"test1"},
+{"cellStyle":"grid_row_cell_text","dataIndex":"area_id","name":["地市"],"title":"","cellFunc":""},
+{"cellStyle":"grid_row_cell_text","dataIndex":"college_id","name":["高校"],"title":"","cellFunc":""},
+{"cellStyle":"grid_row_cell_text","dataIndex":"acc_nbr","name":["导入号码"],"title":"","cellFunc":""},
+{"cellStyle":"grid_row_cell_text","dataIndex":"user_id","name":["导入经分工号"],"title":"","cellFunc":""}
+];
+function test1(val) {return val.substr(0,19)};
+
+function genSQL(){
+	var queryType = document.forms[0].queryType.value;
+	if("1" == queryType) {
+		return "select area_id, college_id, count(*) as counts, user_id, date(import_time) as import_time from college_jiajika_import " + 
+		" group by area_id, college_id, user_id, date(import_time)";
+	} else if("2" == queryType) {
+		return "select area_id, college_id, acc_nbr, user_id,import_time from college_jiajika_import ";
+	}
+}
+
+function query(){
+	var grid = new aihb.SimpleGrid({
+		header:function(){return eval("_header" + document.forms[0].queryType.value)}()
+		,sql: genSQL()
+		,callback:function(){
+			aihb.Util.watermark();
+		}
+	});
+	grid.run();
+}
+
+function down(){
+	aihb.AjaxHelper.down({
+		sql : genSQL()
+		,header : function(){return eval("_header" + document.forms[0].queryType.value)}()
+	});
+}
+
+window.onload=function(){
+	aihb.Util.loadmask();
+	aihb.Util.watermark();
+}
+	</script>
+</head>
+<body>
+<form method="post" action="">
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'dim_div')" title="点击隐藏"><img flag='1' src="/hb-bass-navigation/hbapp/resources/image/default/ns-expand.gif"></img>&nbsp;查询条件区域：</td>
+	</tr></table></legend>
+	<div id="dim_div">
+		<table align='center' width='99%' class='grid-tab-blue' cellspacing='1' cellpadding='0' border='0'>
+		<tr class='dim_row'>
+			<td class='dim_cell_title'>展示类型</td>
+			<td class='dim_cell_content'>
+			<select name="queryType">
+				<option value="1">统计展示</option>
+				<option value="2">清单展示</option>
+			</select></td>
+		<!--
+			<td class='dim_cell_title'>导入日期</td>
+			<td class='dim_cell_content'>
+				<input type="text" style="width:160px;" class="Wdate" id="time" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+			</td>
+		-->
+		</tr>
+		</table>
+	<table align="center" width="99%">
+		<tr class="dim_row_submit">
+			<td align="right" bgcolor="">
+				<input type="button" class="form_button" value="查询" onClick="query()">&nbsp;
+				<input type="button" class="form_button" value="下载" onclick="down()">&nbsp;
+			</td>
+		</tr>
+	</table>
+	</div>
+</fieldset>
+</div><br>
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'show_div')" title="点击隐藏"><img flag='1' src="/hb-bass-navigation/hbapp/resources/image/default/ns-expand.gif"></img>&nbsp;数据展现区域：</td>
+		<td></td>
+	</tr></table></legend>
+	<div id="grid" style="display:none;"></div>
+</fieldset>
+</div><br>
+</form>
+</body>
+</html>

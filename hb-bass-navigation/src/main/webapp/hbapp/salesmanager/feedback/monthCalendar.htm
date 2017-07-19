@@ -1,0 +1,102 @@
+<html>
+<head>
+<title>月份选择</title>
+<meta http-equiv='Content-Type' content='text/html; charset=gb2312'>
+<STYLE TYPE="text/css">
+*{font-size: 12px; font-family: 宋体}
+.bg{  color: #FFFFFF; cursor: default; background-color: #FF6347;}
+
+.table { width: 142; height: 180;}
+.table td{ color: #FFFFFF;}
+.table  td{ font-weight: bold;}
+td#meizzYearHead, td#meizzYearMonth{color: #000040}
+.out { text-align: center; border-top: 1px solid #FFE4C4; border-left: 1px solid #FFE4C4;
+border-right: 1px solid #FFFFFF; border-bottom: 1px solid #FFFFFF;}"+
+.over{ text-align: center; border-top: 1px solid #FFFFFF; border-left: 1px solid #FFFFFF;
+border-bottom: 1px solid #FFE4C4; border-right: 1px solid #FFE4C4}
+input{ border: 1px solid #FF6347; padding-top: 1px; height: 18; cursor: hand;
+color:#000040; background-color: #FFF5A0}
+
+.class1 {
+	font-size:16px;
+	font-family:'verdana'; 
+	font-weight:bold;
+}
+.button {
+	font-size:12px;
+	font-family:'verdana'; 
+}
+</style>
+<script language="javascript">
+var currYear;
+function preYear() {
+	var currYearStr = document.all.yearContent.innerHTML;
+	currYearStr = currYearStr.substring(0,currYearStr.length - 1);
+	currYear = Math.floor(currYearStr) - 1;
+	document.all.yearContent.innerHTML = currYear + "年";
+}
+function nextYear() {
+	var currYearStr = document.all.yearContent.innerHTML;
+	currYearStr = currYearStr.substring(0,currYearStr.length - 1);
+	currYear = Math.floor(currYearStr) + 1;
+	document.all.yearContent.innerHTML = currYear + "年";
+}
+function selectMonth(month) {
+	var currYearStr = document.all.yearContent.innerHTML;
+	currYearStr = currYearStr.substring(0,currYearStr.length - 1);
+	var selectYearMonth = currYearStr + "-" + month;
+	//alert(selectYearMonth);
+	window.returnValue = selectYearMonth;
+	window.close();
+}
+</script>
+</head>
+<body bgcolor=#FBD39F onselectstart='return false' style='margin: 0px' oncontextmenu='return false'>
+<table width="100%" BORDER=1 CELLSPACING=0  CELLPADDING=0>
+	<tr>
+		<td align="center" bordercolor="#FF6347" bgcolor="#F7702F"><b><a href="#" onclick="preYear();" alt="上一年">
+		<font color="#FFFFFF">[<]</font></a></b></td>
+		<td align="center" id="yearContent" bordercolor="#FF6347" bgcolor="#FFFFCC" class=class1 ></td>
+		<td align="center" bordercolor="#FF9966" bgcolor="#F7702F"><b><a href="#" onclick="nextYear();" alt="下一年">
+		<font color="#FFFFFF">[>]</font></a></b></td>
+	</tr>
+</table>
+<table>
+<tr height=2><td>  </td></tr>
+</table>
+<table width="100%" BORDER=1>
+	<tr class="class1">
+		<td align="center" width="25%" bordercolor="#FF6347" bgcolor="#FFFFCC">
+		<b><a href="#" onclick="selectMonth('01');"><font color="#000040">一月</font></a></b></td>
+		<td align="center" width="25%" bordercolor="#FF6347" bgcolor="#FFFFCC">
+		<b><a href="#" onclick="selectMonth('02');"><font color="#000040">二月</font></a></b></td>
+		<td align="center" width="25%" bordercolor="#FF6347" bgcolor="#FFFFCC">
+		<b><a href="#" onclick="selectMonth('03');"><font color="#000040">三月</font></a></b></td>
+		<td align="center" width="25%" bordercolor="#FF6347" bgcolor="#FFFFCC">
+		<b><a href="#" onclick="selectMonth('04');"><font color="#000040">四月</font></a></b></td>
+	<tr class="class1">
+		<td align="center" bordercolor="#FF6347" bgcolor="#FFFFCC"><b><a href="#" onclick="selectMonth('05');">
+		<font color="#000040">五月</font></a></b></td>
+		<td align="center" bordercolor="#FF6347" bgcolor="#FFFFCC"><b><a href="#" onclick="selectMonth('06');">
+		<font color="#000040">六月</font></a></b></td>
+		<td align="center" bordercolor="#FF6347" bgcolor="#FFFFCC"><b><a href="#" onclick="selectMonth('07');">
+		<font color="#000040">七月</font></a></b></td>
+		<td align="center" bordercolor="#FF6347" bgcolor="#FFFFCC"><b><a href="#" onclick="selectMonth('08');">
+		<font color="#000040">八月</font></a></b></td>
+	<tr class="class1">
+		<td align="center" bordercolor="#FF6347" bgcolor="#FFFFCC"><b><a href="#" onclick="selectMonth('09');">
+		<font color="#000040">九月</font></a></b></td>
+		<td align="center" bordercolor="#FF6347" bgcolor="#FFFFCC"><b><a href="#" onclick="selectMonth('10');">
+		<font color="#000040">十月</font></a></b></td>
+		<td align="center" bordercolor="#FF6347" bgcolor="#FFFFCC"><b><a href="#" onclick="selectMonth('11');">
+		<font color="#000040">十一月</font></a></b></td>
+		<td align="center" bordercolor="#FF6347" bgcolor="#FFFFCC"><b><a href="#" onclick="selectMonth('12');">
+		<font color="#000040">十二月</font></a></b></td>
+	</table>
+</body>
+</html>
+<b>
+<script language="javascript">
+var today = new Date();
+document.all.yearContent.innerHTML = today.getYear() + "年";
+</script></b>

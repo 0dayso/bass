@@ -1,0 +1,67 @@
+<html>
+<head>
+  <title>��Уר��</title>
+	<link rel="stylesheet" type="text/css" href="/hb-bass-navigation/hbbass/js/ext202/resources/css/ext-all.css"/>
+ 	<script type="text/javascript" src="/hb-bass-navigation/hbbass/js/ext202/adapter/ext/ext-base.js"></script>
+  	<script type="text/javascript" src="/hb-bass-navigation/hbbass/js/ext202/ext-all.js"></script>
+	   <!--  
+    	��ҳ����Ƿ������ʹ�ã���ʽ�������ñ�ҳ��
+    -->
+	
+	<script type="text/javascript">
+	Ext.BLANK_IMAGE_URL = '/hb-bass-navigation/hbbass/js/ext202/resources/images/default/s.gif';
+    Ext.onReady(function(){
+    	Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+        
+		var viewport = new Ext.Viewport({
+		     layout:'border'
+		     ,items:[_tabPanel]
+		 });
+    });
+ 
+	var _tabPanel =new Ext.TabPanel({
+	   region:'center',
+	   deferredRender:false,
+	   enableTabScroll:true,
+	   activeTab:0,
+	   items:[
+	   //added
+	   {
+	   	id:'index0a',
+		title: '����Ȧ���Ԥ��(������)',
+		closable:false,
+		autoScroll:true,                                                   
+		html:'<iframe id="indexFrame" scrolling="auto" frameborder="0" width="100%" height="100%" src="/hb-bass-navigation/hbbass/report/market/reportmain_nocheck.jsp?report_type=gaoxiao&reportcode=COLLEGE_JWQ_WARN1"></iframe>',       
+		border:true
+	   },
+	   {
+	   	id:'index0b',
+		title: '����Ȧ���Ԥ��(����У)',
+		closable:false,
+		autoScroll:true,
+		html:'<iframe id="indexFrame" scrolling="auto" frameborder="0" width="100%" height="100%" src="/hb-bass-navigation/hbbass/report/market/reportmain_nocheck.jsp?report_type=gaoxiao&reportcode=COLLEGE_JWQ_WARN2"></iframe>',       
+		border:true
+	   },
+	    {
+	   	id:'index1',
+		title: '������Ƶ���û�Ԥ��',
+		closable:false,
+		autoScroll:true,
+		html:'<iframe id="indexFrame" scrolling="auto" frameborder="0" width="100%" height="100%" src="college_analysis.jsp"></iframe>',       
+		border:true
+	   },
+	    {
+	   	id:'index2',
+		title: '������10Ԫ�û�Ԥ��',
+		closable:false,
+		autoScroll:true,
+		html:'<iframe id="indexFrame" scrolling="auto" frameborder="0" width="100%" height="100%" src="alert.jsp"></iframe>',       
+		border:true
+	   }
+	   ]
+	});
+</script>
+</head>
+<body>
+</body>
+</html>

@@ -1,0 +1,104 @@
+
+/* xCell 专用 样式 by Jangogo 2006-09-27*/
+
+/*我们暂时不需要使用g和s0
+google使用.g .s0 为默认的单元格style，我们合并为td
+.g {
+	BORDER-RIGHT: #ccc 1px solid; PADDING-RIGHT: 3px; BORDER-TOP: 0px; Z-INDEX: 1; BACKGROUND: #ffffff; WORD-SPACING: 0px; OVERFLOW: hidden; BORDER-LEFT: 0px; TEXT-INDENT: 3px; BORDER-BOTTOM: #ccc 1px solid; WHITE-SPACE: nowrap; LETTER-SPACING: 0px
+}
+.s0{
+	BORDER-RIGHT: #ccc 1px solid;  BORDER-BOTTOM: #ccc 1px solid; PADDING-LEFT: 3px; FONT-WEIGHT: normal; FONT-SIZE: 100%; BACKGROUND: white; VERTICAL-ALIGN: bottom; OVERFLOW: hidden; TEXT-INDENT: 0px; FONT-STYLE: normal; FONT-FAMILY: Arial; WHITE-SPACE: normal; TEXT-DECORATION: none
+}
+*/
+
+.tblGenFixed {
+   TABLE-LAYOUT: fixed;
+   BORDER-TOP-STYLE: none;
+   BORDER-RIGHT-STYLE: none;
+   BORDER-LEFT-STYLE: none;
+   BORDER-COLLAPSE: collapse;
+   BORDER-BOTTOM-STYLE: none;
+   border-spacing: 0px;
+   cell-spacing:0px;
+   cell-padding:0px;
+   border:0;
+   FONT-STYLE: normal;
+   FONT-WEIGHT: normal;
+   TEXT-DECORATION: none;
+   LETTER-SPACING: 0px; 
+}
+
+.tblGenFixed td {
+ BORDER-RIGHT: white .5pt solid;
+ BORDER-TOP:  none; 
+ BORDER-LEFT: none;
+ BORDER-BOTTOM: white .5pt solid;
+ PADDING-RIGHT: 3px; 
+ PADDING-LEFT: 3px;
+ OVERFLOW: hidden;
+ WHITE-SPACE: normal;
+ TEXT-INDENT: 0px; 
+ Z-INDEX: 1;  WORD-SPACING: 0px;
+ WHITE-SPACE: nowrap; 
+}
+.tblGenFixed .rg{color:blue;}
+.tblGenFixed .rv{background:#D8F173/*#C0C000*/;}
+.tblGenFixed .rs{background:#BFDB4D/* #BCDE74;*/}
+
+/*右*/
+.tblGenFixed .s1 {
+  BORDER-RIGHT: #000 .5pt solid; 
+  BORDER-BOTTOM: white .5pt solid;
+}
+/*下*/
+.tblGenFixed .s2 {
+  BORDER-RIGHT: white .5pt solid; 
+  BORDER-BOTTOM:#000 .5pt solid;
+}
+/*右下*/
+.tblGenFixed .s3 {
+  BORDER-RIGHT:#000 .5pt solid;
+  BORDER-BOTTOM:#000 .5pt solid;
+}
+
+
+/*字体式样*/
+.tblGenFixed .fb{font-weight: bold;}
+.tblGenFixed .fi{font-style: oblique;}
+.tblGenFixed .fu{text-decoration: underline;}
+
+/*对齐格式*/
+.tblGenFixed .a0{VERTICAL-ALIGN: middle; TEXT-ALIGN: left;}
+.tblGenFixed .a1{VERTICAL-ALIGN: middle; TEXT-ALIGN: right;}
+.tblGenFixed .a2{VERTICAL-ALIGN: middle; TEXT-ALIGN: center;}
+.tblGenFixed .a3{VERTICAL-ALIGN: top; TEXT-ALIGN: left;}
+.tblGenFixed .a4{VERTICAL-ALIGN: top; TEXT-ALIGN: right;}
+.tblGenFixed .a5{VERTICAL-ALIGN: top; TEXT-ALIGN: center;} 
+.tblGenFixed .a6{VERTICAL-ALIGN: bottom; TEXT-ALIGN: left;}
+.tblGenFixed .a7{VERTICAL-ALIGN: bottom; TEXT-ALIGN: right;}
+.tblGenFixed .a8{VERTICAL-ALIGN: bottom; TEXT-ALIGN: center;} 
+
+@media print{
+ .tblGenFixed .np{color:white!important;padding-top:99999px;padding-left:99999px;}
+ .tblGenFixed .firstrow{position :absolute;}
+/*右*/
+.tblGenFixed .s1 {
+  BORDER-RIGHT: black .5pt solid; 
+  BORDER-BOTTOM: white .5pt solid;
+}
+/*下*/
+.tblGenFixed .s2 {
+  BORDER-RIGHT: white .5pt solid; 
+  BORDER-BOTTOM: black .5pt solid;
+}
+/*右下*/
+.tblGenFixed .s3 {
+  BORDER-RIGHT: black .5pt solid;
+  BORDER-BOTTOM: black .5pt solid;
+} 
+ 
+}
+@media screen{
+ .tblGenFixed .np{}
+ .tblGenFixed .firstrow{}
+}

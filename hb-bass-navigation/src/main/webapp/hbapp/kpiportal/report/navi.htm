@@ -1,0 +1,288 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html xmlns:ai>
+  <head>
+    <title>report</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">
+	<script type="text/javascript" src="../../resources/js/default/default.js"></script>
+	<script type="text/javascript" src="../../resources/js/default/tabext.js"></script>
+	<script type="text/javascript" src="move.js"></script>
+	<script type="text/javascript" src="kpiSelect.js"></script>
+	<link rel="stylesheet" type="text/css" href="../../resources/css/default/default.css" />
+	<script type="text/javascript">
+		//aihb.URL="/hbapp";
+		var _params = aihb.Util.paramsObj();
+		function _render(){
+			$("sid").value="";
+			$("pid").value="";
+			var _params = aihb.Util.paramsObj();
+			var _strPid = "";
+			if(_params.length>0){
+				_strPid="&pid="+_params[0].value;
+				$("pid").value=_params[0].value;
+			}
+			
+			var ajax = new aihb.Ajax({
+				url : "/hbirs/action/rptNavi?method=init"+_strPid
+				,callback : function(xmlrequest){
+					var datas = eval(xmlrequest.responseText);
+					var _table = $("t1");
+					
+					for(var i=_table.childNodes.length-1;i>=0;i--){
+						if(_table.childNodes[i])
+							_table.childNodes[i].parentNode.removeChild(_table.childNodes[i]);
+					}
+					
+					if(datas.length>0){
+						var _head=$C("thead");
+						var _tr = $C("tr");
+						_tr.className="grid_title_blue";
+						_tr.height="26";
+						
+						var _td1 = $C("td");
+						var _td2 = $C("td");
+						var _td3 = $C("td");
+						
+						_td1.width="50";
+						_td1.className="grid_title_cell"
+						_td1.innerText="序号";
+						
+						_td2.width="250";
+						_td2.className="grid_title_cell"
+						_td2.innerText="报表名称";
+						
+						_td3.className="grid_title_cell"
+						_td3.innerText="报表描述";
+						
+						_tr.appendChild(_td1);
+						_tr.appendChild(_td2);
+						_tr.appendChild(_td3);
+						
+						if(datas[0].type=="customize"||true){
+							var _td4 = $C("td");
+							_td4.width="80";
+							_td4.className="grid_title_cell"
+							_td4.innerText="操作";
+							_tr.appendChild(_td4);
+						}
+						_head.appendChild(_tr);
+						_table.appendChild(_head);
+						var _tbody = $C("tbody");
+						_table.appendChild(_tbody);
+						$("title").innerText=datas[0].pname;
+						for(var i=0; i< datas.length;i++){
+							_tr = $C("tr");
+							_tr.className="grid_row_alt_blue";
+							_tr.height=26;
+							_td1 = $C("td");
+							_td2 = $C("td");
+							_td3 = $C("td");
+							
+							_td1.className="grid_row_cell";
+							_td1.innerText=i+1;
+							
+							_td2.className="grid_row_cell_text";
+							var _a = $C("a");
+							_a.href="javascript:void(0)";
+							var name = datas[i].name;
+							_a.id= datas[i].id;
+							_a.uri="sid="+datas[i].id+"&"+_params._oriUri;
+							_a.onclick=function(){
+								tabAdd({id:this.id,title:this.innerText,url:aihb.URL+"/hbirs/action/dynamicrpt?method=render&"+this.uri});
+							}
+							
+							_a.innerText=name;
+							_td2.appendChild(_a);
+							
+							_td3.className="grid_row_cell_text";
+							_td3.innerText=datas[i].desc;
+							
+							_tr.appendChild(_td1);
+							_tr.appendChild(_td2);
+							_tr.appendChild(_td3);
+							
+							if(datas[0].type=="customize"||true){
+								
+								_td4 = $C("td");
+								_tr.appendChild(_td4);
+								
+								var _a1=$C("a");
+								var _a2=$C("a");
+								_a1.href="javascript:void(0)";
+								_a2.href="javascript:void(0)";
+								_a1.innerText="编辑";
+								_a1.id= datas[i].id;
+								_a1.onclick=function(){
+									_reportEdit(this.id);
+								}
+								
+								_a2.innerText="删除";
+								_a2.id= datas[i].id;
+								_a2.onclick=function(){
+									if(confirm("确定？")){
+										var _ajax = new aihb.Ajax({
+											url : "/hbirs/action/dynamicrpt?method=delete"
+											,parameters : "sid="+this.id
+											,callback : function(xmlrequest){
+												_render();
+											}
+										});
+										_ajax.request();
+									}
+								}
+								
+								_td4.appendChild(_a1);
+								_td4.appendChild($CT("  "));
+								_td4.appendChild(_a2);
+							}
+							_tbody.appendChild(_tr);
+						}
+					}
+				}
+			});
+			ajax.request();
+		}
+		function _new(){
+			$("sid").value="";
+			$("feedback_div").style.display="";
+			document.forms[0].desc.value="";
+			document.forms[0].name.value="";
+			objAppName=kpiSelect.select({container: $("selection"),kpiContainer:$("list1")})
+			$("list2").length=0;
+		}
+		var objAppName=undefined;
+		function _reportEdit(sid){
+			objAppName=kpiSelect.select({container: $("selection"),kpiContainer:$("list1")});
+			$("list2").length=0;
+			$("sid").value=sid;
+			var _ajax = new aihb.Ajax({
+				url : "/hbirs/action/dynamicrpt?method=edit"
+				,parameters : "sid="+sid
+				,callback : function(xmlrequest){
+					var obj={};
+					eval("obj="+xmlrequest.responseText);
+					objAppName.value=obj.subject[0].value;
+					document.forms[0].desc.value=obj.subject[0].desc;
+					document.forms[0].name.value=obj.subject[0].name;
+					
+					var list=obj.indicators
+					var elems1 = $("list1");
+					var elems2 = $("list2");
+					for(var j=0;j<list.length;j++){
+						for(var i=0; i<elems1.options.length;i++){
+							if(elems1[i].value==list[j].data_index){
+								elems2.options.add(new Option(elems1[i].text, elems1[i].value));
+								elems1.remove(i);
+								i=i-1;
+								break;
+							}
+						}
+					}
+					$("feedback_div").style.display="";
+				}
+			});
+			_ajax.request();
+		}
+	 	
+		function _check(){
+			if($("name").value.length==0){
+				alert("您必须填写报表名称");
+				return false;
+			}
+			
+			if($("list2").length==0){
+				alert("您必须选择一个以上的指标");
+				return  false;
+			}
+			return true;
+		}
+		
+		function _submit(){
+			if(!_check())return;
+			
+			var elems = $("list2");
+			var ids = "";
+			var names = "";
+			for(var i=0; i< elems.length;i++){
+				if(ids.length>0)ids +=",";
+				ids += elems[i].value
+				if(names.length>0)names +=",";
+				names += elems[i].text;
+			}
+			var _ajax = new aihb.Ajax({
+				url : "/hbirs/action/dynamicrpt?method=save"
+				,parameters : "pid="+$("pid").value+"&sid="+$("sid").value+"&appName="+objAppName.value+"&ids="+ids+"&names="+encodeURIComponent(encodeURIComponent(names))+"&name="+encodeURIComponent(encodeURIComponent(document.forms[0].name.value))+"&desc="+encodeURIComponent(encodeURIComponent(document.forms[0].desc.value))
+				,callback : function(xmlrequest){
+					$("feedback_div").style.display="none";
+					_render();
+				}
+			});
+			//alert(_ajax.options.parameters)
+			_ajax.request();
+		}
+			
+		window.onload=function(){
+			_render();
+		}
+	</script>
+  </head>
+  <body>
+  	<div style="text-align: right;"><img src="../../resources/image/default/docs.gif" style="cursor: hand;" bordor=0 onclick="window.open('instruction.mht')" title="操作说明"></img></div>
+  	<div id="title" style="margin: 20 px;text-align: center;font-size: 22px;font-weight: bold;font-family: 黑体">自定义动态报表</div>
+	<div style="text-align: right; padding: 0 20 3 0 px;"><input type="button" class="form_button_short" value="新建" onclick="_new()"></div> 
+  	<table id="t1" align="center" width="97%" class="grid-tab-blue" cellspacing="1" cellpadding="0" border="0">
+	</table>
+	
+	<div id="feedback_div" style="display:none;">
+	<div style="width:100%;height:200%;background:#dddddd;position:absolute;z-index:99;left:0;top:0;filter:alpha(opacity=80);">&#160;</div>
+	<div class="feedback">
+		
+		<div style="text-align: right"><img src='../../resources/image/default/tab-close.gif' style="cursor: hand;" onclick="{this.parentNode.parentNode.parentNode.style.display='none';}"></img></div>
+		<form action="action.jsp?method=new" method="post" onsubmit="return check();">
+		<input type="hidden" id="sid" name="sid" value="">
+		<input type="hidden" id="pid" name="pid" value="">
+		<table width="99%">
+			<tr>
+	 			<td>报表名称：<input id="name" type="text" name="name" size="40" > <font color="red">*</font> </td>
+	 		</tr>
+	 		<tr>
+	 			<td>
+	 			<div>报表描述：</div>
+	 			<textarea name="desc" cols="70" rows="3"></textarea></td>
+	 		</tr>
+	 		<tr>
+	 		<td>指标应用：<span id='selection'></span>
+	 		</td>
+	 		</tr>
+	 		<tr>
+	 		<td>
+	 			<table width="99%" border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<td align="center"><select name="list1" id="list1" multiple size="8" style="width:220" ondblclick="moveOption(this.form.list1, this.form.list2)"></select>	
+						</td>
+						<td align="center" >
+							<input type="button" class="form_button_short" value="添加" onclick="moveOption(this.form.list1, this.form.list2)"><p>
+							<input type="button" class="form_button_short" value="删除" onclick="moveOption2(this.form.list2, this.form.list1)">
+						</td>
+						<td align="center" >
+							<div id="objselectdiv2" style="text-align:left">
+						   	<select name="list2" id="list2" multiple size="8" style="width:220"	ondblclick="moveOption2(this.form.list2, this.form.list1)"></select>	
+							</div> 	
+						</td>
+						<td align="center" >
+						    <input type="button" class="form_button_short" value="上移" onclick="moveUp(this.form.list2)"><p>
+							<input type="button" class="form_button_short" value="下移" onclick="moveDown(this.form.list2)" ><p>
+							<input type="button" class="form_button_short" value="确定" onclick="_submit()">
+						</td>
+					</tr>
+				</table>
+	 			</td>
+	 		</tr>
+	 	</table>
+	 	</form>
+	</div>
+	</div>
+  </body>
+</html>

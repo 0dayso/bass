@@ -1,0 +1,68 @@
+.ReportTable{
+	width:100%;
+	@include setPadding(row,3px);
+	.ReportTable-thead{
+		@include setRadius(top);
+		background-color : $bgColor-blue1;
+		color:$color-reporttable;
+		.ReportTable-thead-name{
+			width:30%;
+		}
+		.ReportTable-thead-desc{
+			width:40%;
+		}
+		.ReportTable-thead-date{
+			width:10%;
+		}
+		.ReportTable-thead-type{
+			width:8%;
+		}
+		.ReportTable-thead-dell{
+			width:10%;
+		}
+	}
+	.ReportTable-thead>tr>th{
+		text-align:center;
+	}
+	.ReportTable-tbody{
+		tr{
+			&:hover{cursor:pointer;}
+			td{
+				vertical-align: middle;
+			}
+	}
+	}
+	.icon-plus-sign{
+		color:$bgColor-blue1;
+		@include setPadding(right,3px);
+	}
+	.icon-minus-sign{
+		color:$bgColor-blue1;
+		@include setPadding(right,3px);
+	}
+	.ReportTable-tr-level0{
+	}
+	.ReportTable-tr-level1{
+		display:none;
+		.ReportTable-tr-level1-td{
+			@include setPadding(left,30px);
+		}
+		.ReportTable-tr-level1-align{
+			text-align:center;
+			.ReportTable-tr-level1-favsnum-btn{
+				@include setBorder(null);
+				@include setPadding(null,3px);
+				background-color : #f2f2f2;
+				&:hover{
+					background-color : $bgColor-blue2;
+				}
+			}
+		}
+	}
+	.ReportTable-tr-level1-single{
+		background-color : $bgColor-blue2;
+	}
+	.clicked{
+		font-weight:bold;
+	}
+}

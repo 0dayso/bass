@@ -1,0 +1,168 @@
+<html xmlns:ai>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<title>TD业务用户报表</title>
+	<script type="text/javascript" src="../../../resources/js/default/default.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../../../resources/js/datepicker/WdatePicker.js"></script>
+	<link rel="stylesheet" type="text/css" href="../../../resources/css/default/default.css" />
+	<script type="text/javascript">
+var _header=[
+	{"name":["地市","#rspan"],"dataIndex":"city"}
+	,{"name":["县市","#rspan"],"dataIndex":"county","cellStyle":"grid_row_cell_text"}
+	,{"name":["G3客户数(考核口径)","#rspan"],"dataIndex":"tot","cellFunc":"_link","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":["其中","G3双模手机客户"],"dataIndex":"m","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":["#cspan","G3无线座机"],"dataIndex":"w","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":["#cspan","G3数据卡客户"],"dataIndex":"c","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+	,{"name":["#cspan","G3上网本客户"],"dataIndex":"n","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+];
+var _param=aihb.Util.paramsObj();
+function genSQL(){
+	var groupPiece="rollup(city_id)";
+	var colPiece="value((select area_name from mk.bt_area where area_code=city_id),'总计') city";
+	var orderPiece=" order by 1";
+	
+	with(document.forms[0]){
+		if(city.value!="0" || $("countyCk").checked){
+			groupPiece="channel_code";
+			colPiece="(select area_name from mk.bt_area where area_code=max(city_id)) city,(select county_name from mk.BT_AREA_all where county_code=channel_code) county";
+		}
+	}
+	
+	var sql="select "+colPiece
+		+" ,sum(user_nums) tot"
+		+" ,sum(case when td_usertype =1 then user_nums end) m"
+		+" ,sum(case when td_usertype =2 then user_nums end) c"
+		+" ,sum(case when td_usertype =4 then user_nums end) w"
+		+" ,sum(case when td_usertype =-1 then user_nums end) n"
+		+" from TD_USER_RPT_"+(_param.rptCode&&_param.rptCode=="month"?"MM ":"DM ")
+		+" where 1=1 "
+		+ aihb.AjaxHelper.parseCondition()
+		+" group by "+groupPiece
+		+ orderPiece
+		+" with ur";
+	
+	return sql;
+}
+function query(){
+	
+	var grid = new aihb.SimpleGrid({
+		header:_header
+		,sql: genSQL()
+		,pageSize : 31
+		,callback:function(){
+			aihb.Util.watermark();
+		}
+	});
+	grid.run();
+}
+
+function down(){
+	aihb.AjaxHelper.down({
+		sql : genSQL()
+		,header : _header
+	});
+}
+
+function _link(val,options){
+	var region=options.record.county||options.record.city;
+	return "<a href='#' onclick='downList(\""+region+"\");' title='点击下载清单'>"+val+"</a>";
+}
+
+function downList(region){
+	var sql="select CUST_NAME,ACC_NBR, B.AREA_NAME,B.COUNTY_NAME"
+		+",LTRIM(CASE WHEN TD_USERTYPE=1 THEN '手机'  WHEN TD_USERTYPE=4 THEN '无线座机' WHEN TD_USERTYPE=2 THEN '数据卡' ELSE ''END|| CASE WHEN NETBOOK=1 THEN '上网本' ELSE '' END) user_type"
+		+",VALUE(c.TERM_NAME,'未知') TERM_NAME"
+		+",RTRIM(char(INT(VALUE(SUM_CALL_DURA/60,0)))) mou"
+		+",RTRIM(CHAR(INT(VALUE(SUM_TD_CALL_DURA/60,0)))) t_dura"
+		+",STRIP(CHAR(DECIMAL(FLOAT(VALUE(SUM_INFO_LEN,0))/1024/1024,16,3)),leading,'0') gprs"
+		+",STRIP(CHAR(DECIMAL(FLOAT(VALUE(SUM_TD_GPRS_FLOW,0))/1024/1024,16,3)),leading,'0')t_gprs"
+		+",STRIP(CHAR(DECIMAL(FLOAT(VALUE(BILL_CHARGE,0))/100,10,2) ),leading,'0') arpu"
+		+" from NMK.TD_USER_"+$("date").value
+		+" a left join nmk.dim_td_imei_cfg c on substr(a.imei,1,8) = c.imei"  
+		+" left join MK.BT_AREA_ALL b  on SUBSTR(a.CHANNEL_CODE,1,8)=b.COUNTY_CODE "
+		+" where 1=1  ";
+		
+    if(region!="0"){
+    	sql+=" and ( AREA_NAME='"+region+"' or COUNTY_NAME ='"+region+"') ";
+    }
+    sql+=" with ur";
+    
+    aihb.AjaxHelper.down({
+		sql : sql
+		,fileName : "TD业务用户清单_"+region
+		,header : "{\"CUST_NAME\":\"客户姓名\",\"ACC_NBR\":\"电话号码\",\"AREA_NAME\":\"归属地市\",\"COUNTY_NAME\":\"归属县市\",\"user_type\":\"客户类型\",\"TERM_NAME\":\"终端型号\",\"mou\":\"本月MOU\",\"t_dura\":\"其中T网时长\",\"gprs\":\"本月数据流量(M)\",\"t_gprs\":\"其中T网流量(M)\",\"arpu\":\"ARPU\"}"
+	});
+}
+var _params = aihb.Util.paramsObj();
+window.onload=function(){
+	var _d=new Date();
+	if(_param.rptCode&&_param.rptCode=="month"){
+		_d.setDate(_d.getDate()-3);
+		_d.setMonth(_d.getMonth()-1);
+		$("date").value=_d.format("yyyymm");
+	}else{
+		_d.setDate(_d.getDate()-1);
+		$("date").value=_d.format("yyyymmdd");
+	}
+	
+	aihb.Util.loadmask();
+	aihb.Util.watermark();
+	
+	$("date").onfocus=function(){
+		if(_param.rptCode&&_param.rptCode=="month"){
+			WdatePicker({dateFmt:'yyyyMM'});
+		}else{
+			WdatePicker();
+		}
+	}
+	$("dim_city").innerHTML=aihb.BassDimHelper.areaCodeHtml("city",_params.cityId,"areacombo(1)");
+}
+	</script>
+</head>
+<body>
+<form method="post" action="">
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'dim_div')" title="点击隐藏"><img flag='1' src="../../../resources/image/default/ns-expand.gif"></img>&nbsp;查询条件区域：</td>
+	</tr></table></legend>
+	<div id="dim_div">
+	<table align='center' width='99%' class='grid-tab-blue' cellspacing='1' cellpadding='0' border='0'>
+	<tr class='dim_row'>
+		<td class='dim_cell_title' onclick="swichDate()">统计周期</td>
+		<td class='dim_cell_content'>
+			<ai:dim name='date' dbName="op_time" operType="int" >
+				<span id="point">
+				<input type="text" style="width:160px;" class="Wdate" id="date" name="date" />
+				</span>
+				
+			</ai:dim>
+		</td>
+		<td class='dim_cell_title'>地市</td><td class='dim_cell_content'><ai:dim name='city' dbName="city_id" id="dim_city"></ai:dim></td>
+		<td class='dim_cell_title'>县市 <input type="checkbox" id="countyCk">细分</td><td class='dim_cell_content'><ai:dim name='county' dbName="channel_code"><select id="county" name='county' class='form_select' onchange=""><option value=''>全部</option></select></ai:dim></td>
+	</tr>
+	</table>
+	<table align="center" width="99%">
+		<tr class="dim_row_submit">
+			<td align="right" bgcolor="">
+				<input type="button" class="form_button" value="查询" onClick="query()">&nbsp;
+				<input type="button" class="form_button" value="下载" onclick="down()">&nbsp;
+				<input type="button" class="form_button" value="帮助" onclick="window.open('td2010_help.htm')">&nbsp;
+			</td>
+		</tr>
+	</table>
+	</div>
+</fieldset>
+</div><br>
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'show_div')" title="点击隐藏"><img flag='1' src="../../../resources/image/default/ns-expand.gif"></img>&nbsp;数据展现区域：</td>
+		<td></td>
+	</tr></table></legend>
+	<div id="grid" style="display:none;"></div>
+</fieldset>
+</div><br>
+</form>
+</body>
+</html>

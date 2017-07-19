@@ -1,0 +1,2396 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kpiportal-app>
+	<!-- app的name 属性必需和cache的name一致 -->
+	<app name="ChannelD" type="daily">
+		<!-- 原始指标 -->
+		<kpi id="K10001" name="日累计收入" kind="income" unit="(万元)" division="10000" targetType="increase" 
+			instruction="指每月一号累计到统计日的实时出账收入"/>
+			
+		<kpi id="K10002" name="日出账收入" kind="income" unit="(万元)" division="10000" 
+			instruction="指每日的实时出帐收入，包含通话费收入、月租费日收收入、梦网信息费收入、保底收入等收有出帐收入"/>
+			
+		<kpi id="K10003" name="日通话用户数" kind="user" unit="(户)" 
+			instruction="指统计日内产生了语音通话的用户数"/>
+			
+		<kpi id="K10004" name="日通信用户数" kind="user" unit="(户)" 
+			instruction="指统计日内产生了话单的用户数"/>
+			
+		<kpi id="K10005" name="累计通话用户数" kind="user" unit="(户)" 
+			instruction="指每月一号累计到统计日产生过语音通话的用户数" />
+			
+		<kpi id="K10006" name="计费时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="指统计日内产生的语音计费时长" />
+			
+		<kpi id="K10007" name="累计计费时长" kind="traffic" unit="(万分钟)" division="10000" compTargetValue="0.18" 
+			instruction="指每月一号累计到统计日内产生的语音计费时长" />
+			
+		<kpi id="K10008" name="日新增通话用户数" kind="user" unit="(户)" 
+			instruction="指统计日内第一次发生语音通话的用户数" />
+			
+		<kpi id="K10009" name="日新增用户数" kind="user" unit="(户)" 
+			instruction="指当日新入网的客户，包括当日开户、当日新激活的客户，不包括当日内部转网客户和当日复机客户" />
+			
+		<kpi id="K11011" name="累计新增用户数" kind="user" unit="(户)" 
+			instruction="指每月一号累计到统计日新入网的客户，包括当日开户、当日新激活的客户，不包括当日内部转网客户和当日复机客户" />
+			
+		<kpi id="K10010" name="日离网用户数" kind="user" unit="(户)" 
+			instruction="指当日主动离开移动公司网络的全部客户。包括当日主动申请销号客户及当日新发生的进入冷冻期的客户，不包括网内各品牌间互转的客户及当日复机客户" />
+			
+		<kpi id="K11012" name="累计离网用户数" kind="user" unit="(户)" 
+			instruction="指每月一号累计到统计日产生主动离开移动公司网络的全部客户。包括当日主动申请销号客户及当日新发生的进入冷冻期的客户，不包括网内各品牌间互转的客户及当日复机客户" />
+			
+		<kpi id="K10011" name="累计联通G网用户数" kind="user" unit="(户)" 
+			instruction="指每月一号累计到统计日内与GSM和SCP移动用户进行语音通话、呼转和短信等业务的联通用户数" />
+			
+		<kpi id="K10012" name="累计电信固话与小灵通用户数" kind="user" unit="(户)" 
+			instruction="指每月一号累计到统计日内移动用户与电信用户发生语音通话、呼转、短信等业务的电信用户数" />
+			
+		<kpi id="K10015" name="日联通G网新增用户数" kind="user" unit="(户)" 
+			instruction="指每日第一次发现与移动用户进行语音通话、呼转和短信等业务的联通G网用户数" />
+			
+		<kpi id="K10016" name="日电信固话与小灵通新增用户数" kind="user" unit="(户)" 
+			instruction="指每日第一次发现移动用户进行语音通话、呼转和短信等业务的电信用户数" />
+			
+		<kpi id="K10017" name="日联通G网通话用户数" kind="user" unit="(户)" 
+			instruction="指统计日内与GSM移动用户进行语音通话、呼转和短信等业务的联通G网用户数" />
+			
+		<kpi id="K10018" name="日电信固话与小灵通通话用户数" kind="user" unit="(户)" 
+			instruction="指统计日内移动用户与电信用户发生语音通话、呼转、短信等业务的电信用户数" />
+			
+		<kpi id="K10019" name="在网用户数" kind="user" unit="(户)"
+			instruction="截止日期范围内的用户状态为正常、欠费预销号的GSM移动用户数" />
+			
+		<kpi id="K10020" name="日缴费金额" kind="income" unit="(万元)" division="10000"
+			instruction="指当日缴费金额" />
+			
+		<kpi id="K10021" name="日累计缴费金额" kind="income" unit="(万元)" division="10000"
+			instruction="指每月一号累计到统计日缴费的金额" />
+			
+		<kpi id="K10022" name="累计电信C网用户数" kind="user" unit="(户)"
+			instruction="指每月一号累计到统计日内移动用户与电信用户发生语音通话、呼转、短信等业务的电信C网用户数" />
+			
+		<kpi id="K10023" name="日电信C网新增用户数" kind="user" unit="(户)"
+			instruction="指每日第一次发现移动用户进行语音通话、呼转和短信等业务的电信C网用户数" />
+			
+		<kpi id="K10024" name="日电信C网通话用户数" kind="user" unit="(户)"
+			instruction="指统计日内移动用户与电信用户发生语音通话、呼转、短信等业务的电信C网用户数" />
+			
+		<kpi id="K10025" name="日新增活动用户数" kind="user" unit="(户)"
+			instruction="指统计日内第一次产生话单的用户数" />
+			
+		<kpi id="K10026" name="日电信189新增用户数" kind="user" unit="(户)"
+			instruction="指每日第一次发现移动用户进行语音通话、呼转和短信等业务的电信189用户数" />
+			
+		<kpi id="K11013" name="累计电信189新增用户数" kind="user" unit="(户)"
+			instruction="指每月一号累计到统计日产生每日第一次发现移动用户进行语音通话、呼转和短信等业务的电信189用户数" />
+			
+		<kpi id="K10027" name="日电信189通话用户数" kind="user" unit="(户)"
+			instruction="每日第一次发现移动用户进行语音通话、呼转和短信等业务的电信189用户数" />
+			
+		<kpi id="K10028" name="累计电信189通话用户数" kind="user" unit="(户)"
+			instruction="每日第一次发现移动用户进行语音通话、呼转和短信等业务的电信189用户数" />
+			
+		<kpi id="K10037" name="日联通156新增用户数" kind="user" unit="(户)"
+			instruction="指每日第一次发现与移动用户进行语音通话、呼转和短信等业务的联通156号段用户数" />
+			
+		<kpi id="K11024" name="累计联通156新增用户数" kind="user" unit="(户)"
+			instruction="指每月一号累计到统计日产生每日第一次发现与移动用户进行语音通话、呼转和短信等业务的联通156号段用户数" />
+			
+		<kpi id="K10038" name="日联通156通话用户数" kind="user" unit="(户)"
+			instruction="指统计日内与GSM移动用户进行语音通话、呼转和短信等业务的联通156号段用户数" />
+			
+		<kpi id="K10039" name="累计联通156通话用户数" kind="user" unit="(户)"
+			instruction="指每月一号累计到统计日内与GSM移动用户进行语音通话、呼转和短信等业务的联通156号段用户数" />
+		
+		
+		<kpi id="K10046" name="日移动188新增用户数" kind="user" unit="(户)"
+			instruction="指当日新入网的188号段移动用户" />
+			
+		<kpi id="K00091" name="累计移动188新增用户数" kind="user" unit="(户)"
+			instruction="指每月一号累计到统计日产生每日新入网的188号段移动用户" />
+			
+		<kpi id="K10047" name="日移动188通话用户数" kind="user" unit="(户)"
+			instruction="指统计日内产生了语音通话的188号段用户数" />
+			
+		<kpi id="K10048" name="累计移动188通话用户数" kind="user" unit="(户)"
+			instruction="指每月一号累计到统计日产生过语音通话的188号段用户数" />
+			
+		<kpi id="K10040" name="长途时长(非IP)" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="指统计日内产生的长途时长（非IP）" />
+			
+		<kpi id="K10041" name="长途时长(IP)" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="指统计日内产生的长途时长（IP）" />
+			
+		<kpi id="K10042" name="省内漫游通话时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="指统计日内产生的省内漫游通话时长" />
+			
+		<kpi id="K10043" name="省际漫游通话时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="指统计日内产生的省际漫游通话时长" />
+			
+		<kpi id="K10044" name="国际及港澳台漫游通话时长" kind="traffic" unit="(分钟)" 
+			instruction="指统计日内产生的国际及港澳台漫游通话时长" />
+			
+		<kpi id="K10045" name="来电提醒付费用户数" kind="user" unit="(户)"
+			instruction="指每月一号累计到统计日内来电提醒付费的用户数" />
+		
+		<kpi id="K10029" name="累计增值业务收入" kind="income" unit="(万元)" division="10000"
+			instruction="指每月一号累计到统计日的增值业务出账收入" />
+			
+		<kpi id="K10030" name="累计数据业务收入" kind="income" unit="(万元)" division="10000"
+			instruction="指每月一号累计到统计日的数据业务出账收入" />
+		
+		<kpi id="K10032" name="累计点对点短信收入" kind="income" unit="(万元)" division="10000"
+			instruction="指每月一号累计到统计日的点对点短信收入" />
+			
+		<kpi id="K10033" name="累计彩铃收入" kind="income" unit="(万元)" division="10000"
+			instruction="指每月一号累计到统计日的彩铃收入" />
+			
+		<kpi id="K10034" name="累计WAP收入" kind="income" unit="(万元)" division="10000"
+			instruction="指每月一号累计到统计日的WAP收入" />
+			
+		<kpi id="K10035" name="累计彩信收入" kind="income" unit="(万元)" division="10000"
+			instruction="指每月一号累计到统计日的彩信收入" />
+			
+		<kpi id="K10036" name="累计手机报收入" kind="income" unit="(万元)" division="10000"
+			instruction="指每月一号累计到统计日的手机报收入" />
+			
+		
+		<kpi id="K10013" name="短信流量" kind="traffic" unit="(条)" 
+			instruction="包括点对点短消息计费量、移动气象站计费量、移动聊天计费量、梦网短信计费量、彩铃业务计费量、语音杂志计费量、手机邮箱计费量、移动秘书计费量、全球呼计费量、集团短信计费量、其他短信计费量。包括包月短信的所有条数,不含梦网下行" />
+			
+		<kpi id="K10014" name="彩信流量" kind="traffic" unit="(条)" 
+			instruction="指统计日内产生的点对点彩、梦网彩信、邮箱彩信计费量之和" />
+			
+	  <kpi id="K10057" name="累计省际漫游活动用户数" kind="user" unit="(户)"
+			instruction="指每月一号累计到统计日内省际漫游的用户数" />
+			
+		<kpi id="K00101" name="累计联通G网新增用户数" kind="user" unit="(户)"
+			instruction="指每月一号累计到统计日内新增联通G网" />
+			
+		<kpi id="K00121" name="累计电信C网新增用户数" kind="user" unit="(户)"
+			instruction="指每月一号累计到统计日内新增电信C网" />
+			
+		<kpi id="K00141" name="累计电信固话与小灵通新增用户数" kind="user" unit="(户)"
+			instruction="指每月一号累计到统计日内电信固话与小灵通新增用户数" />
+			
+		<kpi id="K00051" name="累计新增活动用户数" kind="user" unit="(户)"
+			instruction="指每月一号累计到统计日内新增活动用户数" />
+			
+		<kpi id="K00081" name="累计新增通话用户数" kind="user" unit="(户)"
+			instruction="指每月一号累计到统计日内新增通话用户数" />
+
+		<kpi id="K00300" name="累计联通186新增用户数" kind="user" unit="(户)"
+			instruction="指每月一号累计到统计日内联通186号段新增用户数" />
+			
+		<kpi id="K00301" name="累计联通186通话用户数" kind="user" unit="(户)"
+			instruction="指每月一号累计到统计日产生过语音通话的186号段用户数。" />
+			
+		<kpi id="K00305" name="日联通186新增用户数" kind="user" unit="(户)"
+			instruction="指每日第一次发现与移动用户进行语音通话、呼转和短信等业务的联通186号段用户数" />
+			
+		<kpi id="K00306" name="日联通186通话用户数" kind="user" unit="(户)"
+			instruction="指统计日内与GSM移动用户进行语音通话、呼转和短信等业务的联通186号段用户数" />
+		
+		<kpi id="K10049" name="日联通G网离网用户数" kind="user" unit="(户)"
+			instruction="指当日离网的联通G网用户数。" />
+			
+		<kpi id="K10050" name="日累计联通G网离网用户数" kind="user" unit="(户)"
+			instruction="指从每月一号累计到统计日离网的联通G网用户数。" />
+		
+		<kpi id="K10051" name="日联通156离网用户数" kind="user" unit="(户)"
+			instruction="指当日离网的联通156用户数。" />
+			
+		<kpi id="K10052" name="日累计联通156离网用户数" kind="user" unit="(户)"
+			instruction="指从每月一号累计到统计日离网的联通156用户数" />
+			
+		<kpi id="K10053" name="日电信C网离网用户数" kind="user" unit="(户)"
+			instruction="指当日离网的电信C网用户数。" />
+			
+		<kpi id="K10054" name="日累计电信C网离网用户数" kind="user" unit="(户)"
+			instruction="指从每月一号累计到统计日离网的电信C网用户数。" />
+			
+		<kpi id="K10055" name="日电信189离网用户数" kind="user" unit="(户)"
+			instruction="指当日离网的电信189用户数。" />
+			
+		<kpi id="K10056" name="日累计电信189离网用户数" kind="user" unit="(户)"
+			instruction="指从每月一号累计到统计日离网的电信189用户数。" />
+			
+		<kpi id="K10058" name="电信C网三月日累计到达数" kind="user" unit="(户)"
+			instruction="三个月内日累计通信的电信C网用户数（包括语音、数据业务等）" />
+			
+		<kpi id="K10059" name="电信固话三月日累计到达数" kind="user" unit="(户)"
+			instruction="三个月内日累计通信的电信固话用户数" />
+			
+		<kpi id="K10060" name="电信小灵通三月日累计到达数" kind="user" unit="(户)"
+			instruction="三个月内日累计通信的电信小灵通用户数" />
+			
+		<kpi id="K10061" name="联通G网三月日累计到达数" kind="user" unit="(户)"
+			instruction="三个月内日累计通信的联通G网用户数（包括语音、数据业务等）" />
+		
+		<kpi id="K10062" name="当月累计彩信客户数" kind="user"    unit="(户)"                   
+		instruction=" " />
+
+		<kpi id="K10075" name="每日话费收入" kind="income"  unit="(万元)" division="10000"
+		instruction=" " />
+		
+		<kpi id="K10063" name="每日梦网信息费收入" kind="income"  unit="(万元)" division="10000"
+    instruction=" " />
+    
+		<kpi id="K10064" name="每日新增活动客户数" kind="user"    unit="(户)"                   
+    instruction=" " />
+    
+		<kpi id="K10065" name="每日小灵通通话客户数" kind="user"    unit="(户)"                   
+    instruction=" " />
+    
+		<kpi id="K10066" name="每日小灵通新增客户数" kind="user"    unit="(户)"                   
+    instruction=" " />
+    
+		<kpi id="K10067" name="每日主动离网客户数" kind="user"    unit="(户)"                   
+    instruction=" " />
+    
+		<kpi id="K10068" name="每日通话次数" kind="traffic" unit="(次)"                   
+    instruction=" " />
+    
+		<kpi id="K10069" name="每日彩铃到达客户数" kind="user"    unit="(户)"                   
+    instruction=" " />
+    
+		<kpi id="K10070" name="日无线音乐高级会员用户数" kind="user"    unit="(户)"                   
+    instruction=" " />
+    
+		<kpi id="K10071" name="累计日无线音乐高级会员用户数" kind="user"    unit="(户)"                   
+    instruction=" " />
+    
+		<kpi id="K10072" name="日累计彩铃下载用户数" kind="user"    unit="(户)"                   
+    instruction=" " />
+    
+		<!--kpi id="K10073" name="日数据业务总收入" kind="income"  unit="(万元)" division="10000"
+    instruction=" " /-->
+    
+		<kpi id="K10074" name="累计新增活动客户数" kind="user"    unit="(户)"                   
+    instruction=" " />
+		
+		<!--kpi id="K11028" name="累计的日数据业务总收入" kind="income"  unit="(万元)" division="10000"       
+    instruction=" " /-->
+		    
+		<kpi id="K11029" name="日累计彩信流量" kind="traffic"    unit=""                   
+    instruction=" " /> 
+    
+    <kpi id="K10076" name="日出账收入(不含SP)" kind="income"  unit="(万元)" division="10000"       
+    instruction="指每日的实时出帐收入，不包含梦网代收信息费、信息台代收费。" />
+		    
+		<kpi id="K10077" name="日累计出账收入(不含SP)" kind="income"  unit="(万元)" division="10000"          
+    instruction="指每月一号累计到统计日的实时出账收入，不包含梦网代收信息费、信息台代收费。" />  
+
+		<!-- 计算指标,依赖与原始指标 -->
+		<kpi 
+			id="K11001" name="两家日新增市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K10008/(K10008+K10015)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="移动日新增通话用户数/(移动日新增通话用户数＋联通日新增通话用户数)" 
+		/>
+		<kpi 
+			id="K11002" name="三家日新增市场占有率(移动)" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K10008/(K10008+K10015+K10023)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="移动日新增通话用户数/(移动日新增通话用户数＋联通日新增通话用户数＋电信C网日新增通话用户数)" 
+		/>
+		<kpi 
+			id="K11003" name="两家日市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K10003/(K10003+K10017)"
+			unit="" division="" formatType="percent" targetType="" targetValue="0.78"
+			instruction="移动日通话用户数/(移动日通话用户数＋联通日通话用户数)" 
+		/>
+		<kpi 
+			id="K11004" name="三家日市场占有率(移动)" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K10003/(K10003+K10017+K10024)"
+			unit="" division="" formatType="percent" targetType="" targetValue="0.62"
+			instruction="移动日通话用户数/(移动日通话用户数＋联通日通话用户数+电信C网日通话用户数)" 
+		/>
+		<kpi 
+			id="K11005" name="两家日累计市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K10005/(K10005+K10011)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="移动累计通话用户数/(移动累计通话用户数＋联通累计通话用户数)" 
+		/>
+		<kpi 
+			id="K11006" name="三家日累计市场占有率(移动)" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K10005/(K10005+K10011+K10022)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="移动累计通话用户数/(移动累计通话用户数＋联通累计通话用户数+电信C网累计通话用户数)" 
+		/>
+		<kpi 
+			id="K11007" name="本月MOU" kind="traffic" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K10007/K10005"
+			unit="(分钟/户)" division="0.0001" formatType="" targetType=""
+			instruction="累计计费时长/累计通话用户" 
+		/>
+		<kpi 
+			id="K11008" name="本月ARPU" kind="traffic" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K10001/K10019"
+			unit="(元/户)" division="0.0001" formatType="" targetType=""
+			instruction="累计收入/在网用户数" 
+		/>
+		<kpi 
+			id="K11025" name="三家日新增市场占有率(行业)" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K10008/(K10008+K10015+K10016+K10023)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="移动日新增通话用户数/(移动日新增通话用户数＋联通日新增通话用户数＋电信日新增通话用户数＋电信C网日新增通话用户数)" 
+		/>
+		<kpi 
+			id="K11026" name="三家日市场占有率(行业)" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K10003/(K10003+K10017+K10018+K10024)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="移动日通话用户数/(移动日通话用户数＋联通日通话用户数＋电信日通话用户数+电信C网日通话用户数)" 
+		/>
+		<kpi 
+			id="K11027" name="三家累计市场占有率(行业)" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K10005/(K10005+K10011+K10012+K10022)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="移动累计通话用户数/(移动累计通话用户数＋联通累计通话用户数＋电信累计通话用户数+电信C网累计通话用户" 
+		/>
+		<kpi 
+			id="K11010" name="日离网率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K11012/(K10019*$date)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="日累计离网客户数/到达客户数/本月天数" 
+		/>
+		<kpi 
+			id="K11014" name="日ARPM" kind="traffic" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K10002/K10006"
+			unit="(元/分钟)" division="" formatType="" targetType=""
+			instruction="日出账收入/日计费时长" 
+		/>
+		<kpi 
+			id="K11015" name="日累计ARPM" kind="traffic" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K10001/K10007"
+			unit="(元/分钟)" division="" formatType="" targetType=""
+			instruction="日累计出账收入/日累计计费时长" 
+		/>
+		
+		<kpi 
+			id="KC0001" name="净增通话用户数" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.NetIncrease"
+			originIds="K10005"
+			unit="(户)" division="" formatType="" targetType=""
+			instruction="日累计通话用户数-上月同期日累计通话用户数" 
+		/>
+		
+		<kpi 
+			id="KC0002" name="联通G网净增通话用户数" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.NetIncrease"
+			originIds="K10011"
+			unit="(户)" division="" formatType="" targetType=""
+			instruction="联通G网日累计通话用户数-上月同期日累计通话用户数" 
+		/>
+		
+		<kpi 
+			id="KC0003" name="电信C网净增通话用户数" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.NetIncrease"
+			originIds="K10022"
+			unit="(户)" division="" formatType="" targetType=""
+			instruction="电信C网日累计通话用户数-上月同期日累计通话用户数" 
+		/>
+		
+		<kpi 
+			id="KC0004" name="净增通话市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="KC0001/(KC0001+KC0002+KC0003)"
+			filterClassName="com.asiainfo.hbbass.kpiportal.valuefilter.PercentOverflowValueFilter" 
+			unit="" division="" formatType="percent" targetType="" targetValue="0.65"
+			instruction="净增通话用户数/(净增通话用户数+电信C网净增通话用户数+联通G网净增通话用户数)" 
+		/>
+		
+		<kpi 
+			id="KC0005" name="存活率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="KC0001/K11011"
+			unit="" division="" formatType="percent" targetType="" targetValue="0.18"
+			instruction="净增通话用户数/累计新增用户数" 
+		/>
+		
+		<kpi 
+			id="KC0006" name="联通G网净增通话市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="KC0002/(KC0001+KC0002+KC0003)"
+			filterClassName="com.asiainfo.hbbass.kpiportal.valuefilter.PercentOverflowValueFilter" 
+			unit="" division="" formatType="percent" targetType="" targetValue="0.65"
+			instruction="净增通话用户数/(净增通话用户数+电信C网净增通话用户数+联通G网净增通话用户数)" 
+		/>
+		
+		<kpi 
+			id="KC0007" name="电信C网净增通话市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="KC0003/(KC0001+KC0002+KC0003)"
+			filterClassName="com.asiainfo.hbbass.kpiportal.valuefilter.PercentOverflowValueFilter" 
+			unit="" division="" formatType="percent" targetType="" targetValue="0.65"
+			instruction="净增通话用户数/(净增通话用户数+电信C网净增通话用户数+联通G网净增通话用户数)" 
+		/>
+		
+		<kpi 
+			id="KCT001" name="开门红累计收入" kind="income" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.SFMAccumulate"
+			originIds="K10001"
+			unit="(万元)" division="10000" formatType="" targetType="" targetValue="" 
+			instruction="2009年12月1日开始累计到目前的出帐收入" 
+		/>
+		
+		<kpi 
+			id="KCT002" name="开门红累计新增用户数" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.SFMAccumulate"
+			originIds="K11011"
+			unit="(户)" division="" formatType="" targetType="" targetValue="" 
+			instruction="2009年12月1日开始累计到目前的新增用户数" 
+		/>
+		
+		<kpi 
+			id="KCT003" name="开门红净增通话用户数" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.SFMNetIncrease"
+			originIds="K10005"
+			unit="(户)" division="" formatType="" targetType=""
+			instruction="目前的日累计通话用户数-2009年11月30日累计通话用户数" 
+		/>
+		
+		<kpi 
+			id="KCT004" name="开门红联通G网净增通话用户数" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.SFMNetIncrease"
+			originIds="K10011"
+			unit="(户)" division="" formatType="" targetType=""
+			instruction="目前的联通G网日累计通话用户数-2009年11月30日联通G网累计通话用户数" 
+		/>
+		
+		<kpi 
+			id="KCT005" name="开门红电信C网净增通话用户数" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.SFMNetIncrease"
+			originIds="K10022"
+			unit="(户)" division="" formatType="" targetType=""
+			instruction="目前的电信C网日累计通话用户数-2009年11月30日电信C网累计通话用户数" 
+		/>
+		
+		<kpi 
+			id="KCT006" name="开门红净增通话市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="KCT003/(KCT003+KCT004+KCT005)" 
+			filterClassName="com.asiainfo.hbbass.kpiportal.valuefilter.PercentOverflowValueFilter" 
+			unit="" division="" formatType="percent" targetType="" targetValue="0.65"
+			instruction="开门红净增通话用户数/(开门红净增通话用户数+开门红电信C网净增通话用户数+开门红联通G网净增通话用户数)" 
+		/>
+		
+		<kpi 
+			id="KCT007" name="开门红存活率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="KCT003/KCT002"
+			unit="" division="" formatType="percent" targetType="" targetValue="0.18"
+			instruction="开门红净增通话用户数/开门红累计新增用户数" 
+		/>
+		
+	</app>
+
+<!--  **********************************************************************************      -->
+	<app name="ChannelM" type="monthly">
+		<!-- 原始指标 -->
+		<kpi id="K20001" name="出账收入" kind="income" unit="(万元)" division="10000"
+			instruction="每月2日boss出账用户总收入" />
+			
+		<kpi id="K20019" name="月缴费金额" kind="income" unit="(万元)" division="10000"
+			instruction="指当月缴费金额" />
+			
+		<kpi id="K20002" name="计费时长" kind="traffic" unit="(万分钟)" division="10000" 
+			instruction="移动用户拨打基本话音业务、手机一次IP拨号业务、增值业务、传统数据业务产生的计费时长，基本通话时长按照60秒1分钟则算，最后再累加换算成分钟" />
+		
+		<kpi id="K20003" name="新发展客户数" kind="user" unit="(户)"
+			instruction="指本月新入网的客户，包括本月开户、本月新激活的客户" />
+			
+		<kpi id="K20009" name="月到达用户数" kind="user" unit="(户)"
+			instruction="截止月末的用户状态为正常、欠费预销号的GSM移动用户数" />
+			
+		<kpi id="K20018" name="零次客户数" kind="user" unit="(户)"
+			instruction="指当月未发生话单的客户数" />
+			
+		<kpi id="K20017" name="月离网用户数" kind="user" unit="(户)"
+			instruction="指本月离网的客户数" />
+			
+		<kpi id="K20005" name="通话客户数" kind="user" unit="(户)"
+			instruction="指本月有通话行为的客户数" />
+			
+		<!-- 改为计算指标 20100222 Mei Kefu
+		<kpi id="K20004" name="净增通话客户数" kind="user" unit="(户)"
+			instruction="指本月末通话客户减去上月末通话客户" />
+			-->
+		<kpi id="K20012" name="全球通通话客户数" kind="user" unit="(户)"
+			instruction="指本月发生语音通话的全球通用户" />
+			
+		<kpi id="K20006" name="新增通话用户数" kind="user" unit="(户)"
+			instruction="指本月第一次发生过语音通话的客户" />
+			
+	<!--<kpi id="K20011" name="全球通有价值客户数" kind="user" unit="(户)"
+			instruction="指截至月末总费用在100元以上（含100元）的全球通到达用户" /> -->
+			
+		<kpi id="K20020" name="10元以上新增通话用户数" kind="user" unit="(户)"
+			instruction="指新增通话用户在本月产生的总费用大于等于10元以上的客户数" />
+			
+		<kpi id="K20013" name="10元以上通话用户数" kind="user" unit="(户)"
+			instruction="指语音通话用户在本月产生的总费用大于等于10元以上的客户数" />
+			
+		<kpi id="K20016" name="回收当月欠费" kind="income" unit="(万元)" division="10000"
+			instruction="指当月回收的欠费总金额" />
+		
+		<kpi id="K20007" name="月联通G网新增用户数" kind="user" unit="(户)"
+			instruction="本月内首次发现与移动互打的联通GSM用户数" />
+			
+		<kpi id="K20014" name="月联通G网通话用户数" kind="user" unit="(户)"
+			instruction="本月内与移动用户发生语音通话及短信业务至少一次的联通GSM用户数" />
+			
+		<kpi id="K20021" name="月电信C网新增用户数" kind="user" unit="(户)"
+			instruction="本月内首次发现与移动互打的电信CDMA用户数" />
+			
+		<kpi id="K20022" name="月电信C网通话用户数" kind="user" unit="(户)"
+			instruction="本月内与移动用户发生语音通话及短信业务至少一次的电信CDMA用户数" />
+			
+		<kpi id="K20008" name="月电信新增用户数" kind="user" unit="(户)"
+			instruction="本月内首次发现与移动互打的电信用户数，包含固话和小灵通用户数" />
+			
+		<kpi id="K20015" name="月电信通话用户数" kind="user" unit="(户)"
+			instruction="本月内与移动用户发生语音通话及短信业务至少一次的电信用户数" />
+			
+		<kpi id="K20010" name="拍照有价值客户累计流失数" kind="user" unit="(户)"
+			instruction="本年内累计6个月消费低于50元用户数，包含离网用户数" />
+			
+		<kpi id="K90001" name="上年拍照有价值客户数" kind="user" unit="(户)"
+			instruction="指上年10、11、12三个月月每月消费超过100元的客户作为拍照客户，年底考核拍照有价值客户的保有率" />
+			
+		<kpi id="KM0056" name="省际漫游活动用户数" kind="user" unit="(户)"
+			instruction="指每月省际漫游的用户数" />
+		
+		<kpi id="KM0072" name="月有价值客户数" kind="user" unit="(户)"
+			instruction="当月出帐收入>=80元的客户总数" />
+			
+		<kpi id="KM0073" name="全球通有价值客户数" kind="user" unit="(户)"
+			instruction="当月出帐收入>=80元，且品牌为全球通的客户总数" />
+			
+		<kpi id="KM0074" name="当月有价值客户捆绑数" kind="user" unit="(户)"
+			instruction="当月出帐收入>=80元，且为手机、业务、话费捆绑的客户数" />
+			
+		<kpi id="KM0083" name="月联通186新增用户数" kind="user" unit="(户)"
+			instruction="当月第一次发现移动用户进行语音通话、呼转和短信等业务的电信186用户数" />
+			
+		<kpi id="KM0084" name="月联通186新增用户数" kind="user" unit="(户)"
+			instruction="指当月移动用户与电信用户发生语音通话、呼转、短信等业务的电信186用户数。" />
+			
+		<kpi id="K20027" name="联通G网三月累计到达数" kind="user" unit="(户)"
+			instruction="三个月累计通信的联通G网用户数（包括语音、数据业务等）" />
+			
+		<kpi id="K20028" name="电信C网三月累计到达数" kind="user" unit="(户)"
+			instruction="三个月累计通信的电信C网用户数（包括语音、数据业务等）" />
+			
+		<kpi id="K20029" name="电信固话三月累计到达数" kind="user" unit="(户)"
+			instruction="三个月累计通信的电信固话用户数" />
+		
+		<kpi id="K20030" name="电信小灵通三月累计到达数" kind="user" unit="(户)"
+			instruction="三个月累计通信的电信小灵通用户数" />
+			
+		<kpi id="K20023" name="月联通G网离网用户数" kind="user" unit="(户)"
+			instruction="指当月离网的联通G网用户数。" />
+			
+		<kpi id="K20024" name="月联通156离网用户数" kind="user" unit="(户)"
+			instruction="指当月离网的联通156用户数。" />
+			
+		<kpi id="K20025" name="月电信C网离网用户数" kind="user" unit="(户)"
+			instruction="指当月离网的电信C网用户数。" />
+			
+		<kpi id="K20026" name="月电信189离网用户数" kind="user" unit="(户)"
+			instruction="指当月离网的电信189用户数。" />
+			
+		<kpi id="K20076" name="出账收入(不含SP费用)"  kind="income" unit="(万元)" division="10000"
+			instruction="出帐收入为计费中心报表，不包含SP费用。" />	
+			
+		<kpi id="K20110" name="TD客户净增数"  kind="user" unit="(户)"
+			instruction="TD客户净增数＝期末在网TD客户数-期初在网TD客户数。TD客户数（考核口径）是指使用TD双模终端的期末在网客户数，包括TD手机、无线座机、上网本和数据卡客户。统计周期内同一部TD终端对应多个用户，则以业务量最多的客户为准。若多个客户的业务量接近，则以最近使用该终端的客户为准。" />		
+
+		<kpi id="K20111" name="中高端客户数"   kind="user" unit="(户)"
+			instruction="中高端客户是指月ARPU不低于120元，且当月主叫MOU不低于100分钟的月末在网客户数。ARPU按照优惠后的账单收入计算。" />	
+
+		<kpi id="K20112" name="月联通G网净增通话用户数"   kind="user" unit="(户)"
+			instruction="指本月末联通G网通话客户减去上月末通话客户" />	
+		
+		<kpi id="K20115" name="月电信C网净增通话用户数"   kind="user" unit="(户)"
+			instruction="指本月末电信C网通话客户减去上月末通话客户" />	
+			
+		<kpi id="K20113" name="存活率"   kind="user" 
+			instruction="存活率＝截止考核期末的正常状态用户数/在考核期末的累计放号数。" />			、
+			
+		<kpi id="K20114" name="年累计MOU"   kind="user" 
+			instruction="年累计MOU=所有语音计费时长（分钟）/ 年累计平均通话用户数。" />							
+		
+		<!-- 计算指标,依赖与原始指标 -->
+		<kpi 
+			id="K20004" name="净增通话客户数" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.NetIncrease"
+			originIds="K20005"
+			unit="(户)" division="" formatType="" targetType=""
+			instruction="指本月末通话客户减去上月末通话客户" 
+		/>
+		
+		<kpi 
+			id="K22002" name="MOU" kind="traffic" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K20002/K20005"
+			unit="(分钟/户)" division="0.0001"  formatType="" targetType=""
+			instruction="计费时长/通话用户数"
+		/>
+		<kpi 
+			id="K22003" name="ARPU" kind="traffic" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K20001/K20009"
+			unit="(元/户)" division="0.0001" formatType="" targetType=""
+			instruction="收入/到达数"
+		/>
+		<kpi 
+			id="K22007" name="月零次客户占比" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K20018/K20009"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="零次客户/月到达客户"
+		/>
+		<kpi 
+			id="K22010" name="月全球通品牌纯度" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K20011/K20012"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="全球通有价值客户数/全球通通话客户数"
+		/>
+		
+		<kpi 
+			id="K22011" name="两家月新增市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K20006/(K20006+K20007)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="移动月新增通话用户数/(移动月新增通话用户数＋联通月新增通话用户数)"
+		/>
+		<kpi 
+			id="K22012" name="两家用户市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K20005/(K20005+K20014)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="移动月通话用户数/(移动月通话用户数＋联通月通话用户数)" targetValue="0.78"
+		/>
+		<kpi 
+			id="K22013" name="两家10元以上月新增市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K20020/(K20020+K20007)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="移动月新增10元以上通话用户数/(移动月新增10元以上通话用户数＋联通月新增通话用户数)"
+		/>
+		<kpi 
+			id="K22014" name="两家10元以上用户市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K20013/(K20013+K20014)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="移动月10元以上通话用户数/(移动月新增10元以上通话用户数＋联通月通话用户数)"
+		/>
+		
+		<kpi 
+			id="K22016" name="三家新增市场占有率(移动)" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K20006/(K20006+K20007+K20021)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="移动新增通话用户数/(移动新增通话用户数+联通G网新增通话用户数+电信C网新增通话用户数)"
+		/>
+		<kpi 
+			id="K22017" name="三家市场占有率(移动)" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K20005/(K20005+K20014+K20022)"
+			unit="" division="" formatType="percent" targetType="" targetValue="0.62"
+			instruction="移动通话用户数/(移动通话用户数+联通G网通话用户数+电信C网通话用户数)"
+		/>
+		<kpi 
+			id="K22018" name="三家新增市场占有率(行业)" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K20006/(K20006+K20007+K20021+K20008)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="移动新增通话用户数/(移动新增通话用户数+联通G网新增通话用户数+电信C网新增通话用户数+电信固话与小灵通新增通话用户数)"
+		/>
+		<kpi 
+			id="K22019" name="三家市场占有率(行业)" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K20005/(K20005+K20014+K20022+K20015)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="移动通话用户数/(移动通话用户数+联通G网通话用户数+电信C网通话用户数+电信固话与小灵通通话用户数)"
+		/>
+		<kpi 
+			id="K22020" name="三家净增市场份额" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K20004/(K20004+K20004+K20115)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="净增市场份额=移动通话用户净增/（移动通话用户净增+电信、联通移动电话互打用户净增）"
+		/>
+		<!-- 计算指标,不依赖原始指标,使用SQL计算 -->
+		<kpi 
+			id="K22001" name="出账收入增幅" kind="income" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.IncreasedLoad"
+			originIds="K20001" formatType="percent" 
+			instruction="(当月出账收入-上月出账收入)/上月出账收入"
+		/>
+		
+		<kpi 
+			id="K22004" name="计费时长增幅" kind="traffic" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.IncreasedLoad"
+			originIds="K20002" formatType="percent" 
+			instruction="(当月计费时长-上月计费时长)/上月计费时长"
+		/>
+		<kpi 
+			id="K22005" name="月离网率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.OffnetLoad"
+			originIds="K20017,K20009" formatType="percent" 
+			instruction="月离网用户数/((上月到达+本月到达)/2)	"
+		/>
+		<kpi 
+			id="K22006" name="月欠费率" kind="income" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.DebtLoad"
+			originIds="K20016,K20001" formatType="percent" 
+			instruction="1-回收当月欠费/上月收入"
+		/>
+	</app>
+	
+<!--  **********************************************************************************      -->	
+	<app name="BureauD" type="daily">
+		<!-- 原始指标 -->
+		<kpi id="K10001" name="日累计收入" kind="income" unit="(万元)" division="10000" targetType="increase" 
+			instruction="指每月一号累计到统计日的实时出账收入"/>
+			
+		<kpi id="K10002" name="日出账收入" kind="income" unit="(万元)" division="10000" 
+			instruction="指每日的实时出帐收入，包含通话费收入、月租费日收收入、梦网信息费收入、保底收入等收有出帐收入"/>
+			
+		<kpi id="K10003" name="日通话用户数" kind="user" unit="(户)" 
+			instruction="指统计日内产生了语音通话的用户数"/>
+			
+		<kpi id="K10004" name="日通信用户数" kind="user" unit="(户)" 
+			instruction="指统计日内产生了话单的用户数"/>
+			
+		<kpi id="K10005" name="累计通话用户数" kind="user" unit="(户)" 
+			instruction="指每月一号累计到统计日产生过语音通话的用户数" />
+			
+		<kpi id="K10006" name="计费时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="指统计日内产生的语音计费时长" />
+			
+		<kpi id="K10007" name="累计计费时长" kind="traffic" unit="(万分钟)" division="10000" compTargetValue="0.18"
+			instruction="指每月一号累计到统计日内产生的语音计费时长" />
+			
+		<kpi id="K10008" name="日新增通话用户数" kind="user" unit="(户)" 
+			instruction="指统计日内第一次发生语音通话的用户数" />
+			
+		<kpi id="K10009" name="日新增用户数" kind="user" unit="(户)" 
+			instruction="指当日新入网的客户，包括当日开户、当日新激活的客户，不包括当日内部转网客户和当日复机客户" />
+			
+		<kpi id="K11011" name="累计新增用户数" kind="user" unit="(户)" 
+			instruction="指每月一号累计到统计日新入网的客户，包括当日开户、当日新激活的客户，不包括当日内部转网客户和当日复机客户" />
+			
+		<kpi id="K10010" name="日离网用户数" kind="user" unit="(户)" 
+			instruction="指当日主动离开移动公司网络的全部客户。包括当日主动申请销号客户及当日新发生的进入冷冻期的客户，不包括网内各品牌间互转的客户及当日复机客户" />
+			
+		<kpi id="K11012" name="累计离网用户数" kind="user" unit="(户)" 
+			instruction="指每月一号累计到统计日产生主动离开移动公司网络的全部客户。包括当日主动申请销号客户及当日新发生的进入冷冻期的客户，不包括网内各品牌间互转的客户及当日复机客户" />
+			
+		<kpi id="K10011" name="累计联通G网用户数" kind="user" unit="(户)" 
+			instruction="指每月一号累计到统计日内与GSM和SCP移动用户进行语音通话、呼转和短信等业务的联通用户数" />
+			
+		<kpi id="K10012" name="累计电信固话与小灵通用户数" kind="user" unit="(户)" 
+			instruction="指每月一号累计到统计日内移动用户与电信用户发生语音通话、呼转、短信等业务的电信用户数" />
+			
+		<kpi id="K10015" name="日联通G网新增用户数" kind="user" unit="(户)" 
+			instruction="指每日第一次发现与移动用户进行语音通话、呼转和短信等业务的联通G网用户数" />
+			
+		<kpi id="K10016" name="日电信固话与小灵通新增用户数" kind="user" unit="(户)" 
+			instruction="指每日第一次发现移动用户进行语音通话、呼转和短信等业务的电信用户数" />
+			
+		<kpi id="K10017" name="日联通G网通话用户数" kind="user" unit="(户)" 
+			instruction="指统计日内与GSM移动用户进行语音通话、呼转和短信等业务的联通G网用户数" />
+			
+		<kpi id="K10018" name="日电信固话与小灵通通话用户数" kind="user" unit="(户)" 
+			instruction="指统计日内移动用户与电信用户发生语音通话、呼转、短信等业务的电信用户数" />
+			
+		<kpi id="K10019" name="在网用户数" kind="user" unit="(户)"
+			instruction="截止日期范围内的用户状态为正常、欠费预销号的GSM移动用户数" />
+			
+		<kpi id="K10020" name="日缴费金额" kind="income" unit="(万元)" division="10000"
+			instruction="指当日缴费金额" />
+			
+		<kpi id="K10021" name="日累计缴费金额" kind="income" unit="(万元)" division="10000"
+			instruction="指每月一号累计到统计日缴费的金额" />
+			
+		<kpi id="K10022" name="累计电信C网用户数" kind="user" unit="(户)"
+			instruction="指每月一号累计到统计日内移动用户与电信用户发生语音通话、呼转、短信等业务的电信C网用户数" />
+			
+		<kpi id="K10023" name="日电信C网新增用户数" kind="user" unit="(户)"
+			instruction="指每日第一次发现移动用户进行语音通话、呼转和短信等业务的电信C网用户数" />
+			
+		<kpi id="K10024" name="日电信C网通话用户数" kind="user" unit="(户)"
+			instruction="指统计日内移动用户与电信用户发生语音通话、呼转、短信等业务的电信C网用户数" />
+			
+		<kpi id="K10025" name="日新增活动用户数" kind="user" unit="(户)"
+			instruction="指统计日内第一次产生话单的用户数" />
+			
+		<kpi id="K10026" name="日电信189新增用户数" kind="user" unit="(户)"
+			instruction="指每日第一次发现移动用户进行语音通话、呼转和短信等业务的电信189用户数" />
+			
+		<kpi id="K11013" name="累计电信189新增用户数" kind="user" unit="(户)"
+			instruction="指每月一号累计到统计日产生每日第一次发现移动用户进行语音通话、呼转和短信等业务的电信189用户数" />
+			
+		<kpi id="K10027" name="日电信189通话用户数" kind="user" unit="(户)"
+			instruction="每日第一次发现移动用户进行语音通话、呼转和短信等业务的电信189用户数" />
+			
+		<kpi id="K10028" name="累计电信189通话用户数" kind="user" unit="(户)"
+			instruction="每日第一次发现移动用户进行语音通话、呼转和短信等业务的电信189用户数" />
+			
+		<kpi id="K10037" name="日联通156新增用户数" kind="user" unit="(户)"
+			instruction="指每日第一次发现与移动用户进行语音通话、呼转和短信等业务的联通156号段用户数" />
+			
+		<kpi id="K11024" name="累计联通156新增用户数" kind="user" unit="(户)"
+			instruction="指每月一号累计到统计日产生每日第一次发现与移动用户进行语音通话、呼转和短信等业务的联通156号段用户数" />
+			
+		<kpi id="K10038" name="日联通156通话用户数" kind="user" unit="(户)"
+			instruction="指统计日内与GSM移动用户进行语音通话、呼转和短信等业务的联通156号段用户数" />
+			
+		<kpi id="K10039" name="累计联通156通话用户数" kind="user" unit="(户)"
+			instruction="指每月一号累计到统计日内与GSM移动用户进行语音通话、呼转和短信等业务的联通156号段用户数" />
+		
+		
+		<kpi id="B00090" name="日移动188新增用户数" kind="user" unit="(户)"
+			instruction="指当日新入网的188号段移动用户" />
+			
+		<kpi id="B00091" name="累计移动188新增用户数" kind="user" unit="(户)"
+			instruction="指每月一号累计到统计日产生每日新入网的188号段移动用户" />
+			
+		<kpi id="B00095" name="日移动188通话用户数" kind="user" unit="(户)"
+			instruction="指统计日内产生了语音通话的188号段用户数" />
+			
+		<kpi id="B00096" name="累计移动188通话用户数" kind="user" unit="(户)"
+			instruction="指每月一号累计到统计日产生过语音通话的188号段用户数" />
+			
+		
+		<kpi id="K10040" name="长途时长(非IP)" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="指统计日内产生的长途时长（非IP）" />
+			
+		<kpi id="K10041" name="长途时长(IP)" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="指统计日内产生的长途时长（IP）" />
+			
+		<kpi id="K10042" name="省内漫游通话时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="指统计日内产生的省内漫游通话时长" />
+			
+		<kpi id="K10043" name="省际漫游通话时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="指统计日内产生的省际漫游通话时长" />
+			
+		<kpi id="K10044" name="国际及港澳台漫游通话时长" kind="traffic" unit="(分钟)" 
+			instruction="指统计日内产生的国际及港澳台漫游通话时长" />
+			
+		<kpi id="K10045" name="来电提醒付费用户数" kind="user" unit="(户)"
+			instruction="指每月一号累计到统计日内来电提醒付费的用户数" />
+			
+		
+		<kpi id="B00003" name="累计本地通话收入" kind="income" unit="(万元)" division="10000"
+			instruction="指每月一号累计到统计日的本地通话出账收入" />
+			
+		<kpi id="B00004" name="累计长途通话收入" kind="income" unit="(万元)" division="10000"
+			instruction="指每月一号累计到统计日的长途通话出账收入" />
+			
+		<kpi id="B00005" name="累计漫游通话收入" kind="income" unit="(万元)" division="10000"
+			instruction="指每月一号累计到统计日的漫游通话出账收入" />
+			
+		<kpi id="B00006" name="累计IP长途收入" kind="income" unit="(万元)" division="10000"
+			instruction="指每月一号累计到统计日的IP长途出账收入" />
+			
+		<kpi id="B00007" name="累计月租收入" kind="income" unit="(万元)" division="10000"
+			instruction="指每月一号累计到统计日的月租出账收入" />
+			
+		<kpi id="B00008" name="累计增值业务收入" kind="income" unit="(万元)" division="10000"
+			instruction="指每月一号累计到统计日的增值业务出账收入" />
+			
+		<kpi id="B00009" name="累计数据业务收入" kind="income" unit="(万元)" division="10000"
+			instruction="指每月一号累计到统计日的数据业务出账收入" />
+			
+		<kpi id="B00010" name="累计其他收入" kind="income" unit="(万元)" division="10000"
+			instruction="指每月一号累计到统计日的除本地通话、长途通话、漫游通话、IP长途、月租、增值业务、数据业务以外的其他出账收入" />
+			
+		
+		<kpi id="B00011" name="累计点对点短信收入" kind="income" unit="(万元)" division="10000"
+			instruction="指每月一号累计到统计日的点对点短信收入" />
+			
+		<kpi id="B00012" name="累计彩铃收入" kind="income" unit="(万元)" division="10000"
+			instruction="指每月一号累计到统计日的彩铃收入" />
+			
+		<kpi id="B00013" name="累计WAP收入" kind="income" unit="(万元)" division="10000"
+			instruction="指每月一号累计到统计日的WAP收入" />
+			
+		<kpi id="B00014" name="累计彩信收入" kind="income" unit="(万元)" division="10000"
+			instruction="指每月一号累计到统计日的彩信收入" />
+			
+		<kpi id="B00015" name="累计手机报收入" kind="income" unit="(万元)" division="10000"
+			instruction="指每月一号累计到统计日的手机报收入" />
+			
+		
+		<kpi id="B00042" name="短信流量" kind="traffic" unit="(条)" 
+			instruction="包括点对点短消息计费量、移动气象站计费量、移动聊天计费量、梦网短信计费量、彩铃业务计费量、语音杂志计费量、手机邮箱计费量、移动秘书计费量、全球呼计费量、集团短信计费量、其他短信计费量。包括包月短信的所有条数,不含梦网下行" />
+			
+		<kpi id="B00043" name="彩信流量" kind="traffic" unit="(条)" 
+			instruction="指统计日内产生的点对点彩、梦网彩信、邮箱彩信计费量之和" />
+			
+	    <kpi id="B00057" name="累计省际漫游活动用户数" kind="user" unit="(户)"
+			instruction="指每月一号累计到统计日内省际漫游的用户数" />
+			
+		<kpi id="B00101" name="累计联通G网新增用户数" kind="user" unit="(户)"
+			instruction="指每月一号累计到统计日内新增联通G网" />
+			
+		<kpi id="B00121" name="累计电信C网新增用户数" kind="user" unit="(户)"
+			instruction="指每月一号累计到统计日内新增电信C网" />
+			
+		<kpi id="B00141" name="累计电信固话与小灵通新增用户数" kind="user" unit="(户)"
+			instruction="指每月一号累计到统计日内电信固话与小灵通新增用户数" />
+			
+		<kpi id="B00051" name="累计新增活动用户数" kind="user" unit="(户)"
+			instruction="指每月一号累计到统计日内新增活动用户数" />
+			
+		<kpi id="B00081" name="累计新增通话用户数" kind="user" unit="(户)"
+			instruction="指每月一号累计到统计日内新增通话用户数" />		
+
+		<kpi id="B00305" name="联通186日新增用户数" kind="user" unit="(户)"
+			instruction="指每日第一次发现与移动用户进行语音通话、呼转和短信等业务的联通186号段用户数" />
+			
+		<kpi id="B00300" name="累计联通186新增用户数" kind="user" unit="(户)"
+			instruction="指每月一号累计到统计日内联通186号段新增用户数" />
+			
+		<kpi id="B00306" name="联通186日通话用户数" kind="user" unit="(户)"
+			instruction="指统计日内与GSM移动用户进行语音通话、呼转和短信等业务的联通186号段用户数" />
+			
+		<kpi id="B00301" name="联通186累计通话用户数" kind="user" unit="(户)"
+			instruction="指每月一号累计到统计日产生过语音通话的186号段用户数。" />
+			
+		<kpi id="B00200" name="联通G网计费时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="指统计日产生月联通G网过往计费时长。" />
+		
+		<kpi id="B00201" name="累计联通G网计费时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="指每月一号累计到统计日产生月联通G网过往计费时长。" />
+			
+		<kpi id="B00205" name="联通156计费时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="指统计日产生月联通156过往计费时长。" />
+		
+		<kpi id="B00206" name="累计联通156计费时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="指每月一号累计到统计日产生月联通156过往计费时长。" />
+		
+		<kpi id="B00210" name="电信C网计费时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="指统计日产生月电信C网过往计费时长。" />
+		
+		<kpi id="B00211" name="累计电信C网计费时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="指每月一号累计到统计日产生月电信C网过往计费时长。" />
+			
+		<kpi id="B00215" name="电信189计费时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="指统计日产生月电信189过往计费时长。" />
+		
+		<kpi id="B00216" name="累计电信189计费时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="指每月一号累计到统计日产生月电信189过往计费时长。" />
+			
+		<kpi id="B00310" name="累计网内主叫时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="指每月一号累计到统计日产生网内主叫计费时长。" />
+			
+		<kpi id="B00311" name="累计网内被叫时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="指每月一号累计到统计日产生网内被叫计费时长。" />	
+				
+		<kpi id="B00312" name="累计网内呼转时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="指每月一号累计到统计日产生网内呼转计费时长。" />	
+			
+		<kpi id="B00313" name="累计与联通G网主叫时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="指每月一号累计到统计日产生与联通G网主叫计费时长。" />
+			
+		<kpi id="B00314" name="累计与联通G网被叫时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="指每月一号累计到统计日产生与联通G网被叫计费时长。" />	
+				
+		<kpi id="B00315" name="累计与联通G网呼转时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="指每月一号累计到统计日产生与联通G网呼转计费时长。" />	
+			
+		<kpi id="B00316" name="累计与电信c网主叫时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="指每月一号累计到统计日产生与电信c网主叫计费时长。" />
+			
+		<kpi id="B00317" name="累计与电信c网被叫时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="指每月一号累计到统计日产生与电信c网被叫计费时长。" />	
+				
+		<kpi id="B00318" name="累计与电信c网呼转时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="指每月一号累计到统计日产生与电信c网呼转计费时长。" />	
+			
+		<kpi id="B00319" name="累计与电信固话及其它主叫时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="指每月一号累计到统计日产生与电信固话及其它主叫计费时长。" />
+			
+		<kpi id="B00320" name="累计与电信固话及其它被叫时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="指每月一号累计到统计日产生与电信固话及其它被叫计费时长。" />	
+				
+		<kpi id="B00321" name="累计与电信固话及其它呼转时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="指每月一号累计到统计日产生与电信固话及其它呼转计费时长。" />	
+			
+		
+		<!-- 计算指标,依赖与原始指标 -->
+		<kpi 
+			id="K11001" name="两家日新增市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K10008/(K10008+K10015)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="移动日新增通话用户数/(移动日新增通话用户数＋联通日新增通话用户数)" 
+		/>
+		<kpi 
+			id="K11002" name="三家日新增市场占有率(移动)" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K10008/(K10008+K10015+K10023)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="移动日新增通话用户数/(移动日新增通话用户数＋联通日新增通话用户数＋电信C网日新增通话用户数)" 
+		/>
+		<kpi 
+			id="K11003" name="两家日市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K10003/(K10003+K10017)"
+			unit="" division="" formatType="percent" targetType="" targetValue="0.78"
+			instruction="移动日通话用户数/(移动日通话用户数＋联通日通话用户数)" 
+		/>
+		<kpi 
+			id="K11004" name="三家日市场占有率(移动)" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K10003/(K10003+K10017+K10024)"
+			unit="" division="" formatType="percent" targetType="" targetValue="0.62"
+			instruction="移动日通话用户数/(移动日通话用户数＋联通日通话用户数+电信C网日通话用户数)" 
+		/>
+		<kpi 
+			id="K11005" name="两家日累计市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K10005/(K10005+K10011)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="移动累计通话用户数/(移动累计通话用户数＋联通累计通话用户数)" 
+		/>
+		<kpi 
+			id="K11006" name="三家日累计市场占有率(移动)" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K10005/(K10005+K10011+K10022)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="移动累计通话用户数/(移动累计通话用户数＋联通累计通话用户数+电信C网累计通话用户数)" 
+		/>
+		<kpi 
+			id="K11007" name="本月MOU" kind="traffic" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K10007/K10005"
+			unit="(分钟/户)" division="0.0001" formatType="" targetType=""
+			instruction="累计计费时长/累计通话用户" 
+		/>
+		<kpi 
+			id="K11008" name="本月ARPU" kind="traffic" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K10001/K10019"
+			unit="(元/户)" division="0.0001" formatType="" targetType=""
+			instruction="累计收入/在网用户数" 
+		/>
+		<kpi 
+			id="K11025" name="三家日新增市场占有率(行业)" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K10008/(K10008+K10015+K10016+K10023)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="移动日新增通话用户数/(移动日新增通话用户数＋联通日新增通话用户数＋电信日新增通话用户数＋电信C网日新增通话用户数)" 
+		/>
+		<kpi 
+			id="K11026" name="三家日市场占有率(行业)" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K10003/(K10003+K10017+K10018+K10024)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="移动日通话用户数/(移动日通话用户数＋联通日通话用户数＋电信日通话用户数+电信C网日通话用户数)" 
+		/>
+		<kpi 
+			id="K11027" name="三家累计市场占有率(行业)" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K10005/(K10005+K10011+K10012+K10022)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="移动累计通话用户数/(移动累计通话用户数＋联通累计通话用户数＋电信累计通话用户数+电信C网累计通话用户" 
+		/>
+		<kpi 
+			id="K11010" name="日离网率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K11012/(K10019*$date)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="日累计离网客户数/到达客户数/本月天数" 
+		/>
+		<kpi 
+			id="K11014" name="日ARPM" kind="traffic" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K10002/K10006"
+			unit="(元/分钟)" division="" formatType="" targetType=""
+			instruction="日出账收入/日计费时长" 
+		/>
+		<kpi 
+			id="K11015" name="日累计ARPM" kind="traffic" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K10001/K10007"
+			unit="(元/分钟)" division="" formatType="" targetType=""
+			instruction="日累计出账收入/日累计计费时长" 
+		/>
+		
+		<kpi 
+			id="BC0001" name="净增通话用户数" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.NetIncrease"
+			originIds="K10005"
+			unit="(户)" division="" formatType="" targetType=""
+			instruction="日累计通话用户数-上月同期日累计通话用户数" 
+		/>
+		
+		<kpi 
+			id="BC0002" name="联通G网净增通话用户数" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.NetIncrease"
+			originIds="K10011"
+			unit="(户)" division="" formatType="" targetType=""
+			instruction="联通G网日累计通话用户数-上月同期日累计通话用户数" 
+		/>
+		
+		<kpi 
+			id="BC0003" name="电信C网净增通话用户数" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.NetIncrease"
+			originIds="K10022"
+			unit="(户)" division="" formatType="" targetType=""
+			instruction="电信C网日累计通话用户数-上月同期日累计通话用户数" 
+		/>
+		
+		<kpi 
+			id="BC0004" name="净增通话市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="BC0001/(BC0001+BC0002+BC0003)"
+			filterClassName="com.asiainfo.hbbass.kpiportal.valuefilter.PercentOverflowValueFilter"
+			unit="" division="" formatType="percent" targetType="" targetValue="0.65"
+			instruction="净增通话用户数/(净增通话用户数+电信C网净增通话用户数+联通G网净增通话用户数)" 
+		/>
+		
+		<kpi 
+			id="BC0005" name="存活率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="BC0001/K11011"
+			unit="" division="" formatType="percent" targetType="" targetValue="0.18"
+			instruction="净增通话用户数/累计新增用户数" 
+		/>
+		
+		<kpi 
+			id="BC0006" name="联通G网净增通话市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="BC0002/(BC0001+BC0002+BC0003)"
+			filterClassName="com.asiainfo.hbbass.kpiportal.valuefilter.PercentOverflowValueFilter"
+			unit="" division="" formatType="percent" targetType="" targetValue="0.65"
+			instruction="净增通话用户数/(净增通话用户数+电信C网净增通话用户数+联通G网净增通话用户数)" 
+		/>
+		
+		<kpi 
+			id="BC0007" name="电信C网净增通话市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="BC0003/(BC0001+BC0002+BC0003)"
+			filterClassName="com.asiainfo.hbbass.kpiportal.valuefilter.PercentOverflowValueFilter"
+			unit="" division="" formatType="percent" targetType="" targetValue="0.65"
+			instruction="净增通话用户数/(净增通话用户数+电信C网净增通话用户数+联通G网净增通话用户数)" 
+		/>
+		
+		<kpi 
+			id="BCT001" name="开门红累计收入" kind="income" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.SFMAccumulate"
+			originIds="K10001"
+			unit="(万元)" division="10000" formatType="" targetType="" targetValue="" 
+			instruction="2009年12月1日开始累计到目前的出帐收入" 
+		/>
+		
+		<kpi 
+			id="BCT002" name="开门红累计新增用户数" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.SFMAccumulate"
+			originIds="K11011"
+			unit="(户)" division="" formatType="" targetType="" targetValue="" 
+			instruction="2009年12月1日开始累计到目前的新增用户数" 
+		/>
+		
+		<kpi 
+			id="BCT003" name="开门红净增通话用户数" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.SFMNetIncrease"
+			originIds="K10005"
+			unit="(户)" division="" formatType="" targetType=""
+			instruction="目前的日累计通话用户数-2009年11月30日累计通话用户数" 
+		/>
+		
+		<kpi 
+			id="BCT004" name="开门红联通G网净增通话用户数" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.SFMNetIncrease"
+			originIds="K10011"
+			unit="(户)" division="" formatType="" targetType=""
+			instruction="目前的联通G网日累计通话用户数-2009年11月30日联通G网累计通话用户数" 
+		/>
+		
+		<kpi 
+			id="BCT005" name="开门红电信C网净增通话用户数" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.SFMNetIncrease"
+			originIds="K10022"
+			unit="(户)" division="" formatType="" targetType=""
+			instruction="目前的电信C网日累计通话用户数-2009年11月30日电信C网累计通话用户数" 
+		/>
+		
+		<kpi 
+			id="BCT006" name="开门红净增通话市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="BCT003/(BCT003+BCT004+BCT005)" 
+			filterClassName="com.asiainfo.hbbass.kpiportal.valuefilter.PercentOverflowValueFilter" 
+			unit="" division="" formatType="percent" targetType="" targetValue="0.65"
+			instruction="开门红净增通话用户数/(开门红净增通话用户数+开门红电信C网净增通话用户数+开门红联通G网净增通话用户数)" 
+		/>
+		
+		<kpi 
+			id="BCT007" name="开门红存活率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="BCT003/BCT002"
+			unit="" division="" formatType="percent" targetType="" targetValue="0.18"
+			instruction="开门红净增通话用户数/开门红累计新增用户数" 
+		/>
+		
+	</app>
+	
+<!--  **********************************************************************************      -->	
+	<app name="BureauM" type="monthly">
+		<!-- 原始指标 -->
+		<kpi id="BM0001" name="出账收入" kind="income" unit="(万元)" division="10000"
+			instruction="每月2日boss出账用户总收入" />
+			
+		<kpi id="BM0029" name="月缴费金额" kind="income" unit="(万元)" division="10000"
+			instruction="指当月缴费金额" />
+			
+		<kpi id="BM0030" name="计费时长" kind="traffic" unit="(万分钟)" division="10000" 
+			instruction="移动用户拨打基本话音业务、手机一次IP拨号业务、增值业务、传统数据业务产生的计费时长，基本通话时长按照60秒1分钟则算，最后再累加换算成分钟" />
+		
+		<kpi id="BM0050" name="新发展客户数" kind="user" unit="(户)"
+			instruction="指本月新入网的客户，包括本月开户、本月新激活的客户" />
+			
+		<kpi id="BM0051" name="月到达用户数" kind="user" unit="(户)"
+			instruction="截止月末的用户状态为正常、欠费预销号的GSM移动用户数" />
+			
+		<kpi id="BM0052" name="零次客户数" kind="user" unit="(户)"
+			instruction="指当月未发生话单的客户数" />
+			
+		<kpi id="BM0053" name="月离网用户数" kind="user" unit="(户)"
+			instruction="指本月离网的客户" />
+			
+		<kpi id="BM0061" name="通话客户数" kind="user" unit="(户)"
+			instruction="指本月有通话行为的客户数" />
+		<!-- 改为计算指标 20100222 MeiKefu
+		<kpi id="BM0062" name="净增通话客户数" kind="user" unit="(户)"
+			instruction="指本月末通话客户减去上月末通话客户" />
+		-->		
+		<kpi id="BM0065" name="全球通通话客户数" kind="user" unit="(户)"
+			instruction="指本月发生语音通话的全球通用户" />
+			
+		<kpi id="BM0060" name="新增通话用户数" kind="user" unit="(户)"
+			instruction="指本月第一次发生过语音通话的客户" />
+			
+		<kpi id="BM0054" name="全球通有价值客户数" kind="user" unit="(户)"
+			instruction="指截至月末总费用在100元以上（含100元）的全球通到达用户" />
+			
+		<kpi id="BM0070" name="10元以上新增通话用户数" kind="user" unit="(户)"
+			instruction="指新增通话用户在本月产生的总费用大于等于10元以上的客户数" />
+			
+		<kpi id="BM0071" name="10元以上通话用户数" kind="user" unit="(户)"
+			instruction="指语音通话用户在本月产生的总费用大于等于10元以上的客户数" />
+			
+		<kpi id="BM0005" name="回收当月欠费" kind="income" unit="(万元)" division="10000"
+			instruction="指当月回收的欠费总金额" />
+		
+		<kpi id="BM0080" name="月联通G网新增用户数" kind="user" unit="(户)"
+			instruction="本月内首次发现与移动互打的联通GSM用户数" />
+			
+		<kpi id="BM0081" name="月联通G网通话用户数" kind="user" unit="(户)"
+			instruction="本月内与移动用户发生语音通话及短信业务至少一次的联通GSM用户数" />
+			
+		<kpi id="BM0100" name="月电信C网新增用户数" kind="user" unit="(户)"
+			instruction="本月内首次发现与移动互打的电信CDMA用户数" />
+			
+		<kpi id="BM0101" name="月电信C网通话用户数" kind="user" unit="(户)"
+			instruction="本月内与移动用户发生语音通话及短信业务至少一次的电信CDMA用户数" />
+			
+		<kpi id="BM0120" name="月电信新增用户数" kind="user" unit="(户)"
+			instruction="本月内首次发现与移动互打的电信用户数，包含固话和小灵通用户数" />
+			
+		<kpi id="BM0121" name="月电信通话用户数" kind="user" unit="(户)"
+			instruction="本月内与移动用户发生语音通话及短信业务至少一次的电信用户数" />
+			
+		<kpi id="BM0059" name="拍照有价值客户累计流失数" kind="user" unit="(户)"
+			instruction="本年内累计6个月消费低于50元用户数，包含离网用户数" />
+			
+		<kpi id="BM0058" name="上年拍照有价值客户数" kind="user" unit="(户)"
+			instruction="指上年10、11、12三个月月每月消费超过100元的客户作为拍照客户，年底考核拍照有价值客户的保有率" />
+			
+		<kpi id="BM0056" name="省际漫游活动用户数" kind="user" unit="(户)"
+			instruction="指每月省际漫游的用户数" />
+
+		<kpi id="BM0072" name="月有价值客户数" kind="user" unit="(户)"
+			instruction="当月出帐收入>=80元的客户总数" />
+			
+		<kpi id="BM0073" name="全球通有价值客户数" kind="user" unit="(户)"
+			instruction="当月出帐收入>=80元，且品牌为全球通的客户总数" />
+			
+		<kpi id="BM0074" name="当月有价值客户捆绑数" kind="user" unit="(户)"
+			instruction="当月出帐收入>=80元，且为手机、业务、话费捆绑的客户数" />
+
+		<kpi id="BM0083" name="月联通186新增用户数" kind="user" unit="(户)"
+			instruction="当月第一次发现移动用户进行语音通话、呼转和短信等业务的电信186用户数" />
+			
+		<kpi id="BM0084" name="月联通186通话用户数" kind="user" unit="(户)"
+			instruction="指当月移动用户与电信用户发生语音通话、呼转、短信等业务的电信186用户数。" />
+		
+		<kpi id="BM0150" name="联通G网计费时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="与联通G网过往计费时长" />
+		
+		<kpi id="BM0155" name="联通156计费时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="与联通156过往计费时长" />
+		
+		<kpi id="BM0160" name="电信C网计费时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="与电信C网过往计费时长" />
+		
+		<kpi id="BM0165" name="电信189计费时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="与电信189过往计费时长" />
+					
+		<!-- 计算指标,依赖与原始指标 -->
+		<kpi 
+			id="BM0062" name="净增通话客户数" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.NetIncrease"
+			originIds="BM0061"
+			unit="(户)" division="" formatType="" targetType=""
+			instruction="指本月末通话客户减去上月末通话客户" 
+		/>
+		
+		<kpi 
+			id="BMC007" name="MOU" kind="traffic" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="BM0030/BM0061"
+			unit="(分钟/户)" division="0.0001"  formatType="" targetType=""
+			instruction="指每月省际漫游的用户数"
+		/>
+		<kpi 
+			id="BMC009" name="ARPU" kind="traffic" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="BM0001/BM0051"
+			unit="(元/户)" division="0.0001" formatType="" targetType=""
+			instruction="收入/到达数"
+		/>
+		<kpi 
+			id="BMC017" name="月零次客户占比" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="BM0052/BM0051"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="零次客户/月到达客户"
+		/>
+		<kpi 
+			id="BMC021" name="月全球通品牌纯度" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="BM0054/BM0065"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="全球通有价值客户数/全球通通话客户数"
+		/>
+		
+		<kpi 
+			id="BMC023" name="两家月新增市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="BM0060/(BM0060+BM0080)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="移动月新增通话用户数/(移动月新增通话用户数＋联通月新增通话用户数)"
+		/>
+		<kpi 
+			id="BMC025" name="两家用户市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="BM0061/(BM0061+BM0081)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="移动月通话用户数/(移动月通话用户数＋联通月通话用户数)" targetValue="0.78"
+		/>
+		<kpi 
+			id="BMC027" name="两家10元以上月新增市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="BM0070/(BM0070+BM0080)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="移动月新增10元以上通话用户数/(移动月新增10元以上通话用户数＋联通月新增通话用户数)"
+		/>
+		<kpi 
+			id="BMC029" name="两家10元以上用户市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="BM0071/(BM0071+BM0081)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="移动月10元以上通话用户数/(移动月新增10元以上通话用户数＋联通月通话用户数)"
+		/>
+		
+		<kpi 
+			id="BMC031" name="三家新增市场占有率(移动)" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="BM0060/(BM0060+BM0080+BM0100)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="移动新增通话用户数/(移动新增通话用户数+联通G网新增通话用户数+电信C网新增通话用户数)"
+		/>
+		<kpi 
+			id="BMC033" name="三家市场占有率(移动)" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="BM0061/(BM0061+BM0081+BM0101)"
+			unit="" division="" formatType="percent" targetType="" targetValue="0.62"
+			instruction="移动通话用户数/(移动通话用户数+联通G网通话用户数+电信C网通话用户数)"
+		/>
+		<kpi 
+			id="BMC035" name="三家新增市场占有率(行业)" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="BM0060/(BM0060+BM0080+BM0100+BM0120)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="移动新增通话用户数/(移动新增通话用户数+联通G网新增通话用户数+电信C网新增通话用户数+电信固话与小灵通新增通话用户数)"
+		/>
+		<kpi 
+			id="BMC037" name="三家市场占有率(行业)" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="BM0061/(BM0061+BM0081+BM0101+BM0121)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="移动通话用户数/(移动通话用户数+联通G网通话用户数+电信C网通话用户数+电信固话与小灵通通话用户数)"
+		/>
+		<!-- 计算指标,不依赖原始指标,使用SQL计算 -->
+		<kpi 
+			id="BMC001" name="出账收入增幅" kind="income" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.IncreasedLoad"
+			originIds="BM0001" formatType="percent" 
+			instruction="(当月出账收入-上月出账收入)/上月出账收入"
+		/>
+		
+		<kpi 
+			id="BMC005" name="计费时长增幅" kind="traffic" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.IncreasedLoad"
+			originIds="BM0030" formatType="percent" 
+			instruction="(当月计费时长-上月计费时长)/上月计费时长"
+		/>
+		<kpi 
+			id="BMC011" name="月离网率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.OffnetLoad"
+			originIds="BM0053,BM0051" formatType="percent" 
+			instruction="月离网用户数/((上月到达+本月到达)/2)	"
+		/>
+		<kpi 
+			id="BMC015" name="月欠费率" kind="income" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.DebtLoad"
+			originIds="BM0005,BM0001" formatType="percent" 
+			instruction="1-回收当月欠费/上月收入"
+		/>
+	</app>
+	
+	<app name="GroupcustD" type="daily">
+		<!-- 原始指标 -->
+		<kpi id="K1G001" name="集团到达数" kind="user" unit="(家)" 
+			instruction="集团到达数"/>
+		
+		<kpi id="K1G002" name="集团成员到达数" kind="user" unit="(户)" 
+			instruction="集团成员到达数"/>
+			
+		<kpi id="K1G003" name="集团成员累计出帐收入" kind="income" unit="(万元)" division="10000" 
+			instruction="集团成员累计出帐收入"/>
+		
+		<kpi id="K1G004" name="集团V网成员到达数" kind="user" unit="(户)" 
+			instruction="集团V网成员到达数"/>
+			
+		<kpi id="K1G005" name="VPMN集团客户到达数" kind="user" unit="(家)" 
+			instruction="VPMN集团客户到达数"/>	
+			
+		<kpi id="K1G006" name="集团成员V网套餐集团客户用户数" kind="user" unit="(户)" 
+			instruction="集团成员V网套餐集团客户用户数"/>	
+
+		<kpi id="K1G007" name="集团成员V网主叫用户数" kind="user" unit="(户)" 
+			instruction="集团成员V网主叫用户数"/>	
+
+		<kpi id="K1G008" name="集团客户成员新增用户数" kind="user" unit="(户)" 
+			instruction="集团客户成员新增用户数"/>	
+
+		<kpi id="K1G009" name="集团客户成员离网用户数" kind="user" unit="(户)" 
+			instruction="集团客户成员离网用户数"/>	
+		
+		<kpi id="K1G010" name="集团客户日计费时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="集团客户日计费时长"/>	
+			
+		<kpi id="K1G015" name="集团客户日累计计费时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="集团客户日累计计费时长"/>	
+			
+		<kpi id="K1G011" name="集团V网日计费时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="集团V网日计费时长"/>	
+			
+		<kpi id="K1G012" name="集团V网日累计出账收入" kind="income" unit="(万元)" division="10000" 
+			instruction="集团V网日累计出账收入"/>	
+			
+		<kpi id="K1G013" name="集团客户离网数" kind="user" unit="(户)" 
+			instruction="集团客户离网数"/>	
+			
+		<kpi id="K1G014" name="高危集团客户数" kind="user" unit="(户)" 
+			instruction="高危集团客户数"/>	
+			
+		<kpi id="K1G101" name="集团日净增成员数" kind="user" unit="(户)" 
+			instruction="集团日净增成员数"/>	
+			
+		<kpi id="K1G102" name="集团客户成员日出帐收入" kind="income" unit="(万元)" division="10000" 
+			instruction="集团客户成员日出帐收入"/>	
+			
+		<kpi id="K10006" name="计费时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="指统计日内产生的语音计费时长" />
+			
+		<kpi id="K10007" name="累计计费时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="指每月一号累计到统计日内产生的语音计费时长" />
+			
+		<kpi id="K10019" name="在网用户数" kind="user" unit="(户)"
+			instruction="截止日期范围内的用户状态为正常、欠费预销号的GSM移动用户数" />
+	<!-- 计算指标,依赖与原始指标 -->
+		
+		<kpi 
+			id="K1GC03" name="集团客户占比" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K1G002/K10019"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="集团客户成员到达数(日)/在网用户数" 
+		/>
+		
+		<kpi 
+			id="K1GC04" name="集团V网客户占比" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K1G004/K1G002"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="集团客户V网成员到达数(日)/集团客户成员到达数(日)" 
+		/>
+		
+		<kpi 
+			id="K1GC06" name="集团客户日计费时长占比" kind="traffic" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K1G010/K10006"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="集团客户日计费时长/计费时长" 
+		/>
+		
+		<kpi 
+			id="K1GC08" name="集团客户日累计计费时长占比" kind="traffic" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K1G015/K10007"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="集团客户日累计计费时长/日累计计费时长" 
+		/>
+		
+		<kpi 
+			id="K1GC09" name="集团V网日累计计费时长占比" kind="traffic" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K1G107/K1G015"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="集团V网日累计计费时长/集团客户日累计计费时长" 
+		/>
+		
+		<kpi 
+			id="K1GC12" name="集团客户日ARPU" kind="traffic" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K1G102/K1G002"
+			unit="(元/户)" division="0.0001" targetType=""
+			instruction="集团客户日出账收入/集团客户成员到达数(日)" 
+		/>
+		
+		<kpi 
+			id="K1GC13" name="集团客户日累计ARPU" kind="traffic" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K1G003/K1G002"
+			unit="(元/户)" division="0.0001" targetType=""
+			instruction="集团客户日累计出账收入/集团客户成员到达数(日)" 
+		/>
+		
+		<kpi 
+			id="K1GC14" name="集团客户日ARPM" kind="traffic" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K1G102/K1G010"
+			unit="(元/分钟)"  division=""  targetType=""
+			instruction="集团客户日出账收入/集团客户日计费时长" 
+		/>
+		
+		<kpi 
+			id="K1GC15" name="集团客户日累计ARPM" kind="traffic" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K1G003/K1G015"
+			unit="(元/分钟)"  division="" targetType=""
+			instruction="集团客户日累计出账收入/集团客户日累计计费时长" 
+		/>
+		
+		<kpi 
+			id="K1GC16" name="集团V网日MOU" kind="traffic" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K1G011/K1G004"
+			unit="(分钟/户)"  division="0.0001" targetType=""
+			instruction="集团V网日计费时长/集团V网成员到达数(日)" 
+		/>
+		
+		<kpi 
+			id="K1GC17" name="集团V网日累计MOU" kind="traffic" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K1GC07/K1G004"
+			unit="(分钟/户)" division="0.0001" targetType=""
+			instruction="集团V网日累计计费时长/集团V网成员到达数(日)" 
+		/>
+		
+		<kpi 
+			id="K1GC19" name="集团V网日累计ARPU" kind="traffic" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K1G012/K1G004"
+			unit="(元/户)" division="0.0001" targetType=""
+			instruction="集团V网日累计出账收入/集团V网成员到达数(日)" 
+		/>
+		
+		<kpi 
+			id="K1GC21" name="集团V网日累计ARPM" kind="traffic" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K1G012/K1G011"
+			unit="(元/分钟)" division="" targetType=""
+			instruction="集团V网日累计出账收入/集团V网日累计计费时长" 
+		/>
+		
+		<kpi 
+			id="K1GC22" name="集团成员日离网率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K1G009/K1G002"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="集团客户成员离网用户数/集团成员到达数" 
+		/>
+	
+	</app>
+	
+	
+	
+	<app name="GroupcustM" type="monthly">
+		<!-- 原始指标 -->
+		<kpi id="K2G001" name="集团到达数" kind="user" unit="(家)" 
+			instruction="集团到达数"/>
+		
+		<kpi id="K2G002" name="集团成员到达数" kind="user" unit="(户)" 
+			instruction="集团成员到达数"/>
+			
+		<kpi id="K2G003" name="集团成员通话用户数" kind="user" unit="(户)" 
+			instruction="集团成员通话用户数"/>
+		
+		<kpi id="K2G005" name="集团成员计费时长" kind="traffic" unit="(万分钟)" division="10000"
+			instruction="集团成员计费时长"/>
+			
+		<kpi id="K2G006" name="集团V网成员网内通话用户数" kind="user" unit="(户)" 
+			instruction="集团V网成员网内通话用户数"/>	
+			
+		<kpi id="K2G007" name="集团V网成员到达数" kind="user" unit="(户)" 
+			instruction="集团V网成员到达数"/>	
+
+		<kpi id="K2G008" name="集团V网成员网内收入" kind="income" unit="(万元)" division="10000"  
+			instruction="集团V网成员网内收入"/>	
+
+		<kpi id="K2G009" name="集团V网成员网内计费时长" kind="traffic" unit="(万分钟)" division="10000" 
+			instruction="集团V网成员网内计费时长"/>	
+
+		<kpi id="K2G012" name="集团信息化收入" kind="income" unit="(万元)" division="10000" 
+			instruction="集团信息化收入"/>	
+		
+		<kpi id="K2G013" name="集团成员离网数" kind="user" unit="(户)"
+			instruction="集团成员离网数"/>	
+			
+		<kpi id="K2G015" name="集团成员出帐收入" kind="income" unit="(万元)" division="10000"
+			instruction="集团成员出帐收入"/>	
+			
+		<kpi id="K2G016" name="重点关注集团成员收入" kind="income" unit="(万元)" division="10000" 
+			instruction="重点关注集团成员收入"/>	
+			
+		<kpi id="K2G017" name="重点集团关键人用户数" kind="user" unit="(户)" 
+			instruction="重点集团关键人用户数"/>	
+			
+		<kpi id="K2G018" name="重点集团关键人移动用户数" kind="user" unit="(户)" 
+			instruction="重点集团关键人移动用户数"/>	
+			
+		<kpi id="K2G019" name="重点集团关键人收大于50用数" kind="user" unit="(户)" 
+			instruction="重点集团关键人收大于50用数"/>	
+		
+		<kpi id="K2G020" name="VPMN集团客户到达数" kind="user" unit="(户)" 
+			instruction="VPMN集团客户到达数"/>	
+		
+		<kpi id="K2G021" name="V网套餐集团成员数" kind="user" unit="(户)" 
+			instruction="V网套餐集团成员数"/>	
+			
+		<kpi id="K2G022" name="V网集团成员数" kind="user" unit="(户)" 
+			instruction="V网集团成员数"/>	
+			
+		<kpi id="K2G023" name="集团客户成员新增用户数" kind="user" unit="(户)" 
+			instruction="集团客户成员新增用户数"/>	
+			
+		<kpi id="K2G024" name="集团关键人离网用户数" kind="user" unit="(户)" 
+			instruction="集团关键人离网用户数"/>	
+			
+		<kpi id="K2G025" name="集团关键人到达数" kind="user" unit="(户)" 
+			instruction="集团关键人到达数"/>	
+		
+		<kpi id="K2G027" name="标准化产品统付收入" kind="user" unit="(户)" 
+			instruction="标准化产品统付收入"/>	
+		
+		<kpi id="K2G029" name="MAS产品收入" kind="income" unit="(万元)" division="10000" 
+			instruction="MAS产品收入"/>	
+		
+		<kpi id="K2G030" name="ADC产品收入" kind="income" unit="(万元)" division="10000" 
+			instruction="ADC产品收入"/>	
+			
+		<kpi id="K2G031" name="集团信息化MAS到达数" kind="user" unit="(户)" 
+			instruction="集团信息化MAS到达数"/>	
+		
+		<kpi id="K2G033" name="行应用解决方案ADC到达数" kind="user" unit="(户)" 
+			instruction="行应用解决方案ADC到达数"/>	
+		
+		<kpi id="K2G035" name="集团客户成员联通G网通话时长" kind="traffic" unit="(万分钟)" division="10000" 
+			instruction="集团客户成员联通G网通话时长"/>	
+		
+		<kpi id="K2G036" name="集团客户成员电信C网通话时长" kind="traffic" unit="(万分钟)" division="10000" 
+			instruction="集团客户成员电信C网通话时长"/>	
+		
+		<kpi id="K2G037" name="集团客户成员小灵通通话时长" kind="traffic" unit="(万分钟)" division="10000" 
+			instruction="集团客户成员小灵通通话时长"/>
+		
+		<kpi id="K2G038" name="真实集团客户成员到达数" kind="user" unit="(户)" 
+			instruction="真实集团客户成员到达数"/>	
+		
+		<kpi id="K2G039" name="集团客户捆绑成员数" kind="user" unit="(户)" 
+			instruction="集团客户捆绑成员数"/>		
+			
+		<kpi id="K2G101" name="集团净增成员数" kind="user" unit="(户)" 
+			instruction="集团净增成员数"/>	
+			
+		<kpi id="K2G040" name="农信通用户数" kind="user" unit="(户)" 
+			instruction="农信通用户数"/>
+			
+		<kpi id="K2G041" name="农信通业务收入" kind="income" unit="(元)" 
+			instruction="农信通业务收入"/>
+			
+		<kpi id="K2G042" name="校信通用户数" kind="user" unit="(户)" 
+			instruction="校信通用户数"/>
+			
+		<kpi id="K2G043" name="校信通业务收入" kind="income" unit="(元)" 
+			instruction="校信通业务收入"/>
+			
+		<kpi id="K2G044" name="动力100产品订购集团数" kind="user" unit="(家)" 
+			instruction="动力100产品订购集团数"/>
+			
+		<kpi id="K2G045" name="动力100产品业务收入" kind="income" unit="(元)" 
+			instruction="动力100产品业务收入"/>
+		
+		<kpi id="K3G001" name="重点关注集团关键人移动用户数" kind="user" unit="(户)" 
+			instruction="重点关注集团关键人使用移动号码的用户数"/>
+		
+		<kpi id="K3G002" name="重点关注集团关键人总数" kind="user" unit="(户)"  
+			instruction="重点关注集团关键人总数，包含联通G网W网，电信C网，固话小灵通"/>
+		
+		<kpi id="K3G003" name="重点关注集团关键人手机使用数" kind="user" unit="(户)"  
+			instruction="重点关注集团关键人总数，包含联通G网W网，电信C网"/>
+			
+		<kpi id="K3G004" name="重点关注集团关键人捆绑到达数" kind="user" unit="(户)"  
+			instruction="重点关注集团关键人捆绑到达数"/>
+		
+		<kpi id="K3G005" name="重点关注集团关键人离网用户数" kind="user" unit="(户)"  
+			instruction="重点关注集团关键人离网用户数"/>
+			
+	<!-- 计算指标,依赖与原始指标 -->
+		<kpi 
+			id="K2GC01" name="集团成员MOU" kind="traffic" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K2G005/K2G002"
+			unit="(分钟/户)" division="0.0001" targetType=""
+			instruction="集团成员计费时长/集团客户成员通话用户数" 
+		/>
+		
+		<kpi 
+			id="K2GC02" name="集团成员ARPU" kind="traffic" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K2G015/K2G002"
+			unit="(元/户)" division="0.0001" targetType=""
+			instruction="集团成员出帐收入/集团成员到达数" 
+		/>
+		
+		<kpi 
+			id="K2GC03" name="集团成员V网网内MOU" kind="traffic" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K2G009/K2G007"
+			unit="(分钟/户)" division="0.0001" targetType=""
+			instruction="集团成员V网网内计费时长/集团成员V网网内成员通话用户数" 
+		/>
+		
+		<kpi 
+			id="K2GC04" name="集团成员V网网内ARPU" kind="traffic" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K2G008/K2G007"
+			unit="(元/户)" division="0.0001" targetType=""
+			instruction="集团成员V网网内出帐收入/集团成员V网网内到达数" 
+		/>
+		
+		<kpi 
+			id="K2GC05" name="集团成员月离网率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K2G013/K2G002"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="集团客户成员离网用户数/集团成员到达数" 
+		/>
+		
+		<kpi 
+			id="K2GC11" name="集团客户纯度" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K2G038/K2G002"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="真实集团客户成员到达数/集团成员到达数" 
+		/>
+		
+		<kpi 
+			id="K2GC12" name="集团客户成员捆绑率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K2G039/K2G002"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="集团客户捆绑成员数/集团成员到达数" 
+		/>
+			
+		<kpi 
+			id="K2GC13" name="重点关注集团市场普及率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K3G001/K3G002"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="重点关注集团关键人移动用户数/重点关注集团关键人总数" 
+		/>
+		
+		<kpi 
+			id="K2GC14" name="重点关注集团移动市场普及率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K3G001/K3G003"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="重点关注集团关键人移动用户数／重点关注集团关键人手机使用数" 
+		/>
+		
+		<kpi 
+			id="K2GC15" name="重点关注集团关键人捆绑率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K3G004/K3G001"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="重点关注集团关键人捆绑到达数／重点关注集团关键人移动用户数" 
+		/>
+		
+		<kpi 
+			id="K2GC16" name="关键人离网率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="K3G005/(K3G005+K3G001)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="重点关注集团关键人离网用户数／(重点关注集团关键人移动用户数+重点关注集团关键人离网用户数)" 
+		/>
+	</app>
+	
+	<app name="CollegeD" type="daily">
+		<!-- 原始指标 -->
+		<kpi id="C10001" name="新增移动客户数" kind="user" unit="(户)" 
+			instruction="当日移动通话激活用户数"/>
+			
+		<kpi id="C10002" name="新增移动188客户数" kind="user" unit="(户)" 
+			instruction="当日移动188号段通话激活的用户数"/>
+			
+		<kpi id="C10003" name="累计新增移动客户数" kind="user" unit="(户)" 
+			instruction="从本月1日至当日的新增移动客户数之和"/>
+			
+		<kpi id="C10004" name="累计新增移动188客户数" kind="user" unit="(户)" 
+			instruction="从本月1日至当日的新增移动188客户数之和"/>
+			
+		<kpi id="C10005" name="新增联通客户数" kind="user" unit="(户)" 
+			instruction="联通GSM用户首次与移动通话的用户数"/>
+			
+		<kpi id="C10006" name="新增联通156客户数" kind="user" unit="(户)" 
+			instruction="联通GSM且号段为156用户首次与移动通话的用户数"/>
+			
+		<kpi id="C10007" name="累计新增联通客户数" kind="user" unit="(户)" 
+			instruction="从本月1日至当日的新增联通客户数之和"/>
+			
+		<kpi id="C10008" name="累计新增联通156客户数" kind="user" unit="(户)" 
+			instruction="从本月1日至当日的新增联通156客户数之和"/>
+			
+		<kpi id="C10009" name="新增电信客户数" kind="user" unit="(户)" 
+			instruction="电信CDMA和电信小灵通用户首次与移动通话的用户数"/>
+			
+		<kpi id="C10010" name="新增电信189客户数" kind="user" unit="(户)" 
+			instruction="电信189用户首次与移动通话的用户数"/>
+			
+		<kpi id="C10011" name="累计新增电信客户数" kind="user" unit="(户)" 
+			instruction="从本月1日至当日的新增电信客户数之和"/>
+			
+		<kpi id="C10012" name="累计新增电信189客户数" kind="user" unit="(户)" 
+			instruction="从本月1日至当日的新增电信189客户数之和"/>
+		
+		<kpi id="C10013" name="移动客户到达数" kind="user" unit="(户)" 
+			instruction="当月1日至当日发生过通话的移动客户数"/>
+		
+		<kpi id="C10014" name="联通客户到达数" kind="user" unit="(户)" 
+			instruction="当月1日至当日发生过与移动用户通话的联通客户数"/>
+			
+		<kpi id="C10015" name="电信客户到达数" kind="user" unit="(户)" 
+			instruction="当月1日至当日发生过与移动用户通话的电信客户数"/>
+		
+		<kpi id="C10016" name="日出帐收入" kind="income" unit="(万元)" division="10000" targetType="increase" 
+			instruction="指统计日的实时出账收入"/>
+			
+		<kpi id="C10017" name="日累计收入" kind="income" unit="(万元)" division="10000" targetType="increase" 
+			instruction="指每月一号累计到统计日的实时出账收入"/>
+			
+		<kpi id="C10018" name="累计增值业务收入" kind="income" unit="(万元)" division="10000" targetType="increase" 
+			instruction="本月1日截至当日的累计boss增值业务出帐收入，增值业务口径同运营管理监控KPI，即标准帐目类型前两位17"/>
+			
+		<kpi id="C10019" name="累计数据业务收入" kind="income" unit="(万元)" division="10000" targetType="increase" 
+			instruction="本月1日截至当日的累计boss数据业务出帐收入，数据业务口径同运营管理监控KPI，即标准帐目类型前两位18"/>
+			
+		<kpi id="C10020" name="短信条数" kind="traffic" unit="(条)" 
+			instruction="当日短信话单次数，口径同运营管理监控" />
+			
+		<kpi id="C10021" name="彩信条数" kind="traffic" unit="(条)" 
+			instruction="当日彩信话单条数，口径同运营管理监控" />
+		
+		<kpi id="C10022" name="手机报用户到达数" kind="user" unit="(户)" 
+			instruction="截至当日的全网手机报用户到达数，同增值业务KPI中“日全网彩信手机报到达用户数”"/>
+			
+		<kpi id="C10023" name="飞信客户端活跃用户数" kind="user" unit="(户)" 
+			instruction="含手机客户端和PC客户端用户数，口径同增值业务KPI中“飞信客户端活跃用户数”"/>
+		
+		<kpi id="C10024" name="GPRS开通用户数" kind="user" unit="(户)" 
+			instruction="GPRS标准套餐开通用户数，口径同KPI增值业务中“GPRS标准套餐开通用户数”"/>
+		
+		<kpi id="C10025" name="移动净增用户数" kind="user" unit="(户)" 
+			instruction="当日移动客户到达数减去昨日移动客户到达数"/>
+		
+		<kpi id="C10026" name="联通净增用户数" kind="user" unit="(户)" 
+			instruction="当日联通客户到达数减去昨日联通客户到达数"/>
+		
+		<kpi id="C10027" name="电信净增用户数" kind="user" unit="(户)" 
+			instruction="当日电信客户到达数减去昨日电信客户到达数"/>
+		
+		<kpi id="C10028" name="移动累计净增用户数" kind="user" unit="(户)" 
+			instruction="当日移动客户到达数减去当月1日移动客户到达数"/>
+		
+		<kpi id="C10029" name="联通累计净增用户数" kind="user" unit="(户)" 
+			instruction="当日联通客户到达数减去当月1日联通客户到达数"/>
+		
+		<kpi id="C10030" name="电信累计净增用户数" kind="user" unit="(户)" 
+			instruction="当日电信客户到达数减去当月1日电信客户到达数"/>
+		
+		<kpi id="C10031" name="新增电信固话及其他客户数" kind="user" unit="(户)" 
+			instruction="今日累计新增电信固话及其他客户数－昨日累计新增电信固话及其他客户数"/>
+		
+		<kpi id="C10032" name="累计新增电信固话及其他客户数" kind="user" unit="(户)" 
+			instruction="从本月1日至当日的累计新增高校电信固话及其他客户数"/>
+		
+		<kpi id="C10033" name="新增电信小灵通客户数" kind="user" unit="(户)" 
+			instruction="今日累计新增电信小灵通客户数－昨日累计新增电信小灵通客户数"/>
+		
+		<kpi id="C10034" name="累计新增电信小灵通客户数" kind="user" unit="(户)" 
+			instruction="从本月1日至当日的累计新增高校电信小灵通客户数"/>
+		
+		<kpi id="C10035" name="电信固话及其他通话客户数" kind="user" unit="(户)" 
+			instruction="从本月1日至当日发生过与移动用户通话的高校电信固话及其他客户数"/>
+		
+		<kpi id="C10036" name="电信小灵通通话客户数" kind="user" unit="(户)" 
+			instruction="从本月1日至当日发生过与移动用户通话的高校电信小灵通客户数"/>			
+		
+		<kpi id="C10037" name="新增联通186客户数" kind="user" unit="(户)" 
+			instruction="今日累计新增联通186客户数－昨日累计新增联通186客户数"/>	
+		
+		<kpi id="C10038" name="累计新增联通186客户数" kind="user" unit="(户)" 
+			instruction="从本月1日至当日的累计新增高校联通186号段客户数"/>
+			
+		<kpi id="C10039" name="移动日离网用户数" kind="user" unit="(户)" 
+			instruction="当日状态为离网的高校移动用户数"/>
+				
+		<kpi id="C10040" name="联通日离网用户数" kind="user" unit="(户)" 
+			instruction="最后一次与移动用户通话时间距离当日达到2个月的高校联通用户"/>
+				
+		<kpi id="C10041" name="电信日离网用户数" kind="user" unit="(户)" 
+			instruction="最后一次与移动用户通话时间距离当日达到2个月的高校电信用户"/>
+				
+		<kpi id="C10042" name="移动日累计离网用户数" kind="user" unit="(户)" 
+			instruction="从本月1日至当日的累计离网的高校移动用户数"/>
+				
+		<kpi id="C10043" name="联通日累计离网用户数" kind="user" unit="(户)" 
+			instruction="从本月1日至当日的累计离网的高校联通用户数"/>
+				
+		<kpi id="C10044" name="电信日累计离网用户数" kind="user" unit="(户)" 
+			instruction="从本月1日至当日的累计离网的高校电信用户数"/>
+				
+		<kpi id="C10051" name="联通156通话用户数" kind="user" unit="(户)" 
+			instruction="从本月1日至当日发生过与移动用户通话的高校联通156客户数"/>
+				
+		<kpi id="C10052" name="联通186通话用户数" kind="user" unit="(户)" 
+			instruction="从本月1日至当日发生过与移动用户通话的高校联通186客户数"/>
+		<!-- 计算指标 -->
+		<kpi 
+			id="CC0001" name="三家新增市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="C10001/(C10001+C10005+C10009)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="新增[移动/联通/电信]用户数/(移动、电信、联通新增用户数之和)" 
+		/>
+		
+		<kpi 
+			id="CC0002" name="三家日累计新增市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="C10003/(C10003+C10007+C10011)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="日累计新增[移动/联通/电信]用户数/(移动、电信、联通日累计新增用户数之和)" 
+		/>
+		
+		<kpi 
+			id="CC0003" name="三家日净增市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="C10025/(C10025+C10026+C10027)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="日净增市场[移动/联通/电信]用户数/(移动、电信、联通日净增市场用户数之和)" 
+		/>
+		
+		<kpi 
+			id="CC0004" name="三家日累计净增市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="C10028/(C10028+C10029+C10030)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="日累计净增市场[移动/联通/电信]用户数/(移动、电信、联通日累计净增市场用户数之和)" 
+		/>
+		
+		<kpi 
+			id="CC0005" name="联通三家新增市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="C10005/(C10001+C10005+C10009)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="新增联通用户数/(移动、电信、联通新增用户数之和)" 
+		/>
+		
+		<kpi 
+			id="CC0006" name="电信三家新增市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="C10009/(C10001+C10005+C10009)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="新增电信用户数/(移动、电信、联通新增用户数之和)" 
+		/>
+		
+		<kpi 
+			id="CC0007" name="两家新增市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="C10005/(C10001+C10005)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="新增移动用户数/(移动、联通新增用户数之和)" 
+		/>
+		
+		<kpi 
+			id="CC0008" name="联通两家新增市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="C10001/(C10001+C10005)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="新增联通用户数/(移动、电信、联通新增用户数之和)" 
+		/>
+		
+		<kpi 
+			id="CC0009" name="联通日累计新增市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="C10007/(C10003+C10007+C10011)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="日累计新增联通用户数/(移动、电信、联通日累计新增用户数之和)" 
+		/>
+		
+		<kpi 
+			id="CC0010" name="电信日累计新增市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="C10011/(C10003+C10007+C10011)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="日累计新增电信用户数/(移动、电信、联通日累计新增用户数之和)" 
+		/> 
+		
+		<kpi 
+			id="CC0011" name="两家日累计新增市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="C10003/(C10003+C10007)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="日累计新增移动用户数/(移动、联通日累计新增用户数之和)" 
+		/>
+		
+		<kpi 
+			id="CC0012" name="联通两家日累计新增市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="C10011/(C10003+C10007)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="日累计新增联通用户数/(移动、联通日累计新增用户数之和)" 
+		/>
+	</app>
+	<app name="CollegeM" type="monthly">
+		<!-- 原始指标 -->
+		<kpi id="C20001" name="月新增移动客户数" kind="user" unit="(户)" 
+			instruction="当月新增通话高校移动用户数"/>
+		
+		<kpi id="C20002" name="新增移动188客户数" kind="user" unit="(户)" 
+			instruction="当月新增通话高校移动188号段用户数"/>
+		
+		<kpi id="C20003" name="新增联通客户数" kind="user" unit="(户)" 
+			instruction="当月新增通话高校联通用户数"/>
+		
+		<kpi id="C20004" name="新增联通156客户数" kind="user" unit="(户)" 
+			instruction="当月新增通话高校联通号段156用户数"/>
+		
+		<kpi id="C20005" name="新增电信C网客户数" kind="user" unit="(户)" 
+			instruction="当月新增通话高校电信用户数"/>
+		
+		<kpi id="C20006" name="新增电信189客户数" kind="user" unit="(户)" 
+			instruction="当月新增通话高校电信189用户数"/>
+		
+		<kpi id="C20007" name="移动通话客户数" kind="user" unit="(户)" 
+			instruction="当月发生过通话的高校移动客户数"/>
+		
+		<kpi id="C20008" name="联通通话客户数" kind="user" unit="(户)" 
+			instruction="当月发生过与移动用户通话的高校联通客户数"/>
+		
+		<kpi id="C20009" name="电信C网通话客户数" kind="user" unit="(户)" 
+			instruction="当月发生过与移动用户通话的高校电信客户数"/>
+		
+		<kpi id="C20010" name="出帐收入" kind="income" unit="(万元)" division="10000" targetType="increase" 
+			instruction="当月高校移动用户出帐收入"/>
+			
+		<kpi id="C20011" name="增值业务出帐收入" kind="income" unit="(万元)" division="10000" targetType="increase" 
+			instruction="当月高校移动用户增值业务出帐收入"/>
+			
+		<kpi id="C20012" name="数据业务出帐收入" kind="income" unit="(万元)" division="10000" targetType="increase" 
+			instruction="当月高校移动用户数据业务出帐收入"/>
+		
+		<kpi id="C20013" name="短信条数" kind="traffic" unit="(条)" 
+			instruction="当月短信话单次数，口径同运营管理监控" />
+			
+		<kpi id="C20014" name="彩信条数" kind="traffic" unit="(条)" 
+			instruction="当月彩信话单次数，口径同运营管理监控" />
+		
+		<kpi id="C20015" name="移动净增用户数" kind="user" unit="(户)" 
+			instruction="当月移动客户到达数减去上月移动客户到达数"/>
+		
+		<kpi id="C20016" name="联通净增用户数" kind="user" unit="(户)" 
+			instruction="当月联通客户到达数减去上月联通客户到达数"/>
+		
+		<kpi id="C20017" name="电信净增用户数" kind="user" unit="(户)" 
+			instruction="当月电信客户到达数减去上月电信客户到达数"/>
+			
+		<kpi id="C20018" name="新增联通186客户数" kind="user" unit="(户)" 
+			instruction="当月新增联通186客户数"/>
+			
+		<kpi id="C20019" name="新增电信小灵通客户数" kind="user" unit="(户)" 
+			instruction="当月新增电信小灵通客户数到达数"/>
+		
+		<kpi id="C20020" name="新增电信固话及其他客户数" kind="user" unit="(户)" 
+			instruction="当月新增电信固话及其他客户到达数"/>
+		
+		<kpi id="C20021" name="移动188通话客户数" kind="user" unit="(户)" 
+			instruction="当月移动188通话客户到达数"/>
+		
+		<kpi id="C20022" name="联通156通话客户数" kind="user" unit="(户)" 
+			instruction="当月联通156通话客户到达数"/>
+		
+		<kpi id="C20023" name="联通186通话客户数" kind="user" unit="(户)" 
+			instruction="当月联通186通话客户到达数"/>
+		
+		<kpi id="C20024" name="电信小灵通通话客户数" kind="user" unit="(户)" 
+			instruction="当月电信小灵通通话客户到达数"/>
+		
+		<kpi id="C20025" name="电信固话及其他通话客户数" kind="user" unit="(户)" 
+			instruction="当月电信固话及其他通话客户到达数"/>
+		
+		<kpi id="C20026" name="V网用户数" kind="user" unit="(户)" 
+			instruction="加入VPMN网络的用户数"/>
+		
+		<kpi id="C20027" name="飞信活跃用户数" kind="user" unit="(户)" 
+			instruction="定购飞信业务的用户数"/>
+		
+		<kpi id="C20028" name="GPRS开通用户数" kind="user" unit="(户)" 
+			instruction="使用GPRS业务的用户数"/>
+		
+		<kpi id="C20029" name="彩铃用户数" kind="user" unit="(户)" 
+			instruction="开通彩铃业务的用户数"/>
+		
+		<kpi id="C20030" name="手机报用户数" kind="user" unit="(户)" 
+			instruction="定购手机饱的用户数"/>
+		
+		<kpi id="C20031" name="139邮箱定购用户数" kind="user" unit="(户)" 
+			instruction="定购139邮箱的用户数"/>
+		
+		<kpi id="C20034" name="GPRS流量" kind="traffic" unit="(M)" 
+			instruction="使用GPRS业务的GPRS流量"/>
+		
+		<kpi id="C20035" name="计费时长" kind="traffic" unit="(万分钟)" 
+			instruction="移动高校用户的计费时长" division="10000" />
+		
+		<kpi id="C20036" name="市话主叫时长" kind="traffic" unit="(万分钟)" 
+			instruction="移动高校通话用户数本月主叫时长" division="10000" />
+		
+		<kpi id="C20037" name="市话被叫时长" kind="traffic" unit="(万分钟)" 
+			instruction="移动高校通话用户数本月被叫时长" division="10000" />
+		
+		<kpi id="C20038" name="长途主叫时长" kind="traffic" unit="(万分钟)" 
+			instruction="移动高校通话用户数本月长途主叫时长" division="10000" />
+		
+		<kpi id="C20039" name="长途被叫时长" kind="traffic" unit="(万分钟)" 
+			instruction="移动高校通话用户数本月长途被叫时长" division="10000" />
+		
+		<kpi id="C20040" name="省内漫游主叫时长" kind="traffic" unit="(万分钟)" 
+			instruction="移动高校通话用户数本月省内漫游主叫时长" division="10000" />
+		
+		<kpi id="C20041" name="省内漫游被叫时长" kind="traffic" unit="(万分钟)" 
+			instruction="移动高校通话用户数本月省内漫游被叫时长" division="10000" />
+		
+		<kpi id="C20042" name="省际漫游主叫时长" kind="traffic" unit="(万分钟)" 
+			instruction="移动高校通话用户数本月省际漫游主叫时长" division="10000" />
+		
+		<kpi id="C20043" name="省际漫游被叫时长" kind="traffic" unit="(万分钟)" 
+			instruction="移动高校通话用户数本月省际漫游被叫时长" division="10000" />
+		
+		<kpi id="C20044" name="电信C网189通话客户数" kind="user" unit="(户)" 
+			instruction="当月电信小灵通通话客户到达数" />
+			
+		<kpi id="C20058" name="移动人均ARPU" kind="user" unit="(元)" 
+			instruction="移动客户当月ARPU值"  />
+			
+		<kpi id="C20045" name="移动人均MOU" kind="user" unit="(分钟)" 
+			instruction="移动客户当月MOU值"  />
+			
+		<kpi id="C20046" name="大众市场人均ARPU" kind="user" unit="(元)" 
+			instruction="大众市场当月ARPU"  />
+			
+		<kpi id="C20047" name="大众市场人均MOU" kind="user" unit="(分钟)" 
+			instruction="大众市场当月MOU"  />
+			
+		<kpi id="C20048" name="人均主叫通话时长" kind="user" unit="(分钟)" 
+			instruction="当月高校用户人均主叫通话时长"  />
+	
+		<kpi id="C20049" name="人均被叫通话时长" kind="user" unit="(分钟)" 
+			instruction="当月高校用户人均被叫通话时长"  />
+			
+		<kpi id="C20050" name="人均长途通话时长" kind="user" unit="(分钟)" 
+			instruction="当月高校用户人均长途通话时长"  />
+		
+		<kpi id="C20051" name="人均漫游通话时长" kind="user" unit="(分钟)" 
+			instruction="当月高校用户人均漫游通话时长"  />
+			
+		<kpi id="C20052" name="V网订购用户数" kind="user" unit="(户)" 
+			instruction="当月高校用户中订购V网的用户数"  />
+			
+		<kpi id="C20053" name="GPRS订购用户数" kind="user" unit="(户)" 
+			instruction="当月高校用户中订购GPRS的用户数"  />
+			
+		<kpi id="C20054" name="飞信活跃用户数" kind="user" unit="(户)" 
+			instruction="当月高校用户中飞信活跃用户数"  />
+			
+		<kpi id="C20055" name="139邮箱活跃用户数" kind="user" unit="(户)" 
+			instruction="当月高校用户中使用139邮箱的用户数"  />
+		
+		<kpi id="C20056" name="V网用户计费时长" kind="traffic" unit="(万分钟)" 
+			instruction="当月高校V网用户计费时长"  division="10000" />
+				
+		<kpi id="C20057" name="V网网内用户计费时长" kind="traffic" unit="(万分钟)" 
+			instruction="当月高校V网用户网内计费时长"  division="10000" />
+			
+									
+		<!-- 计算指标 -->
+		<kpi 
+			id="CMC001" name="移动通话用户市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="C20007/(C20007+C20008+C20009)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="高校移动通话用户数/(移动+联通+电信C网通话用户数之和)" 
+		/>
+		
+		<kpi 
+			id="CMC002" name="联通通话用户市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="C20008/(C20007+C20008+C20009)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="高校联通通话用户数/(移动+联通+电信C网通话用户数之和)" 
+		/>
+		
+		<kpi 
+			id="CMC003" name="电信通话用户市场占有率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="C20009/(C20007+C20008+C20009)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="高校电信C网通话用户数/(移动+联通+电信C网通话用户数之和)" 
+		/>
+		
+		<kpi 
+			id="CMC004" name="移动通话用户市场占有率(两家)" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="C20007/(C20007+C20008)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="高校移动通话用户数/(移动+联通通话用户数之和)" 
+		/>
+		
+		<kpi 
+			id="CMC005" name="联通通话用户市场占有率(两家)" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="C20008/(C20007+C20008)"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="高校联通通话用户数/(移动+联通通话用户数之和)" 
+		/>
+		
+		<kpi 
+			id="CMC006" name="V网普及率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="C20026/C20007"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="高校V网用户数/高校用户数" 
+		/>
+		
+		<kpi 
+			id="CMC007" name="飞信普及率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="C20027/C20007"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="高校飞信用户数/高校用户数" 
+		/>
+		
+		<kpi 
+			id="CMC008" name="GPRS普及率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="C20028/C20007"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="高校GPRS用户数/高校用户数" 
+		/>
+		
+		<kpi 
+			id="CMC009" name="彩铃普及率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="C20029/C20007"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="高校彩铃用户数/高校用户数" 
+		/>
+		
+		<kpi 
+			id="CMC010" name="手机报普及率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="C20030/C20007"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="高校手机报用户数/高校用户数" 
+		/>
+		
+		<kpi 
+			id="CMC011" name="139邮箱普及率" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="C20031/C20007"
+			unit="" division="" formatType="percent" targetType=""
+			instruction="高校139邮箱用户数/高校用户数" 
+		/>
+		
+		<kpi 
+			id="CMC012" name="人均短信量" kind="user" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="C20013/C20007"
+			unit="" division="" formatType="" targetType=""
+			instruction="高校用户短信条数/高校用户数" 
+		/>
+		
+		<kpi 
+			id="CMC013" name="高校用户ARPU" kind="traffic" 
+			loadClassName="com.asiainfo.hbbass.kpiportal.load.PercentLoad"
+			arithmetic="C20010/C20007"
+			unit="(元/户)" division="0.0001" formatType="" targetType=""
+			instruction="高校用户出账收入/高校用户数" 
+		/>
+	</app>
+</kpiportal-app>

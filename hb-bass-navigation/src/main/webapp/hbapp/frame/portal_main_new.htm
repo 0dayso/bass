@@ -1,0 +1,1226 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:ai>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>�����ƶ�NGBASS�Ż�</title>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Cache-Control" content="no-cache"/>
+
+<link type="text/css" href="../resources/js/jquery/themes/cupertino/jquery.ui.css" rel="stylesheet" />
+<link type="text/css" href="../resources/css/default/default.css" rel="stylesheet" />
+<script type="text/javascript" src="../resources/js/jquery/jquery-1.6.1.min.js"></script>
+<script type="text/javascript" src="/mvc/resources/js/default/des.js" charset="utf-8"></script>
+<script type="text/javascript" src="../resources/js/default/grid.js"></script>
+<script type="text/javascript" src="../resources/js/default/tabext.js"></script>
+<script type="text/javascript" src="../resources/js/jquery/ui/jquery-ui-1.8.18.custom.min.js"></script>
+<script type="text/javascript" src='http://10.25.124.110:8080/pst/api/aiopen.js' charset="utf-8"></script>
+<!-- 
+<script type="text/javascript" src="../resources/js/jquery/ui/jquery-ui-1.8.18.custom.min.js"></script>
+<script type="text/javascript" src="../resources/js/jquery/ui/jquery.ui.js"></script>
+<link type="text/css" href="../resources/js/jquery/themes/cupertino/jquery.ui.css" rel="stylesheet" />
+ -->
+<script type="text/javascript" src="../resources/js/jqueryui/plugins/slides.min.jquery.js"></script>
+<script type="text/javascript" src="../resources/js/jquery/mask.js"></script>
+
+
+<style type="text/css">
+.column { float: left; width:100%; height:100%}
+.portlet-main { margin: 0 0 0 0;}
+.portlet-header {border:0px !important; margin: 0; padding-bottom: 0px; padding-left: 0.2em; }
+.portlet-header .ui-icon { float: right; }
+.portlet-content { padding: 0 0; height:100%;}
+
+.headerText{padding-left:8px;font-family:΢���ź� !important;font-size: 13px;}
+/**/
+li a, li a:link, li a:visited {color:#366388;/*color: #2779aa;color: #000!important;font-weight: normal !important;font-family: ����!important;*/ text-decoration: none;}
+.ui-accordion .ui-state-default {border:0px;background-image:none;background-color:#fff;}
+/*.ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited { color: #000!important;font-weight: normal !important; font-family: ����!important;}*/
+
+td{line-height: 24px !important;}
+
+/*slides*/
+#container{
+	width:590px;
+	padding:1px;
+	margin:0 auto;
+	position:relative;
+	z-index:0;
+}
+#example{
+	width:590px;
+	height:200px;
+	position:relative;
+}
+#ribbon{
+	position:absolute;
+	top:-2px;
+	left:0px;
+	z-index:500;
+}
+#frame{
+	position:absolute;
+	z-index:0;
+	width:730px;
+	height:341px;
+	top:-3px;
+	left:-68px;
+}
+#slides{
+	position:absolute;
+	top:15px;
+	left:18px;
+	z-index:100;
+}
+#slides .next,#slides .prev{
+	position:absolute;
+	top:107px;
+	left:-45px;
+	width:24px;
+	height:43px;
+	display:block;
+	z-index:101;
+}
+.slides_container{
+	width:570px;
+	height:270px;
+	overflow:hidden !important;
+	position:relative;
+}
+#slides .next{
+	left:580px;
+}
+ul.pagination{ /* ��������Slides��ť�ľ��� */
+position: relative;
+margin: 0 auto;
+width: 99%;
+z-index: 2;}
+
+ul.pagination li{ /* ��������Slides��ť��һ������ */
+float: center;
+display: inline;
+}
+
+ul.pagination li a
+{background:url(../resources/image/frame/slides_botton.gif) no-repeat; /* ��������Slides��ť��һ����ʽ */
+width: 18px; 
+height: 16px; 
+float: left;
+margin: 10px 5px;
+text-indent: -999px; /* ��ԭ����ʾ������ȥ�� */}
+
+ul.pagination li.current a {
+background:url(../resources/image/frame/slides_botton_hover.gif) no-repeat -2px 0px; /* ����������ʾ��Slides�İ�ť��ʽ */
+width: 18px;
+height: 16px;
+}
+
+a:link,a:visited{
+	color:#fff;
+	border:1px;
+	text-decoration:none;
+}
+a:hover,a:active{
+	color:#fff;
+	border:1px;
+	text-decoration:underline;
+}
+.title{
+	color:#434f81;
+	font-size:13px;
+}
+.title1{
+	color:#173362;
+	font-size:13px;
+	font-family:΢���ź� !important;
+}
+.kpicontentup{
+	color:#006600;
+	font-size:13px;
+	font-family:΢���ź� !important;
+	font-weight:bold;
+}
+.kpicontentdown{
+	color:#FF3333;
+	font-size:13px;
+	font-family:΢���ź� !important;
+	font-weight:bold;
+}
+.date-count{
+	color:#a4a4a4;
+	font-size:13px;
+}
+.none{
+	display:none;
+}
+.cursorhand{
+	cursor:hand;
+}
+.cursorhand2{
+	cursor:hand;
+}
+.holder{    
+  position:relative; 
+}
+
+.top{   
+  width: 178px;  
+  height:155px;
+  background:#fbfbfb;
+  border:#a2d1f1 solid 1px;
+  border-bottom:none;
+  position:relative;
+  z-index:4;
+  cursor:pointer;
+} 
+.top1{
+  width: 178px;  
+  height:140px;
+  background:#fbfbfb;
+  border:#a2d1f1 solid 1px;
+  position:relative;
+  z-index:4;
+  cursor:hand;
+  padding-left:1px;
+}
+.bottom{
+  z-index:2;
+  width: 548px;
+  height: 103px;
+  position:absolute;
+  top:158px;
+  left:2;
+  border: #a2d1f1 solid 1px;
+  background:#fbfbfb;
+  display:"none";
+  font-size:12px;
+  font-family:'΢���ź�' !important;
+  color:#666666;
+}
+.modal.fade.in {
+    top: 10%;
+}
+.modal.fade {
+    top: -25%;
+    transition: opacity 0.3s linear 0s, top 0.3s ease-out 0s;
+}
+.fade.in {
+    opacity: 1;
+}
+.hide {
+    display: none;
+}
+.modal {
+    background-clip: padding-box;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    left: 50%;
+    margin-left: -280px;
+    outline: 0 none;
+    position: fixed;
+    top: 10%;
+    width: 560px;
+    z-index: 1050;
+}
+.fade {
+    opacity: 0;
+    transition: opacity 0.15s linear 0s;
+}
+
+.modal-header {
+    border-bottom: 1px solid #eee;
+    padding: 9px 15px;
+}
+
+.modal-body {
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 15px;
+    position: relative;
+}
+.modal-footer:before, .modal-footer:after {
+    content: "";
+    display: table;
+    line-height: 0;
+}
+.modal-footer:after {
+    clear: both;
+}
+.modal-footer:before, .modal-footer:after {
+    content: "";
+    display: table;
+    line-height: 0;
+}
+.modal-footer {
+    background-color: #f5f5f5;
+    border-radius: 0 0 6px 6px;
+    border-top: 1px solid #ddd;
+    box-shadow: 0 1px 0 #fff inset;
+    margin-bottom: 0;
+    padding: 14px 15px 15px;
+    text-align: right;
+}
+.alert-info {
+    background-color: #f1fafa;
+    border-color: #bce8f1;
+    color: #000000;
+}
+
+.alert {
+    border-radius: 4px;
+    margin-bottom: 20px;
+    padding: 8px 35px 8px 14px;
+    line-height:20px;
+}
+.modal-header .close {
+    margin-top: 2px;
+}
+.close:hover, .close:focus {
+    color: #000;
+    cursor: pointer;
+    opacity: 0.4;
+    text-decoration: none;
+}
+button.close {
+    background: none repeat scroll 0 0 transparent;
+    border: 0 none;
+    cursor: pointer;
+    padding: 0;
+}
+.close {
+    color: #000;
+    float: right;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 20px;
+    opacity: 0.2;
+    text-shadow: 0 1px 0 #fff;
+}
+.btn {
+    background-image: linear-gradient(to bottom, #ffffff, #e6e6e6);
+    border-color: #c5c5c5;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
+    color: #333333;
+}
+.btn {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #f5f5f5;
+    background-image: linear-gradient(to bottom, #fff, #e6e6e6);
+    background-repeat: repeat-x;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) #b3b3b3;
+    border-image: none;
+    border-radius: 4px;
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
+    color: #333;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 14px;
+    line-height: 20px;
+    margin-bottom: 0;
+    padding: 4px 12px;
+    text-align: center;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+    vertical-align: middle;
+}
+h3 {
+    font-size: 24.5px;
+}
+h1, h2, h3, h4, h5, h6 {
+    color: inherit;
+    font-family: inherit;
+    font-weight: bold;
+    line-height: 20px;
+    margin: 10px 0;
+    text-rendering: optimizelegibility;
+}
+
+h6 {
+    font-size: 11.9px;
+}
+.modal-backdrop {
+    background-color: #000;
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 1040;
+    opacity: 0.2;
+    filter:alpha(opacity=20);
+}
+</style>
+
+</head>
+<body style="background:#eee;" oncopy="javascript:alert('��ֹ����!');return false;">
+
+<table width="100%" cellpadding=0 cellspacing=0 border=0>
+<tr valign="top" >
+<td>
+<div class="column" >
+	<div class="portlet-main">
+		
+		
+			<form name="f" action="">				
+				<div style="padding-top:1px;width:100%;height:200px;background:url('../resources/image/frame/bg_01.jpg') no-repeat;">
+				 <div style="z-index:10;width:100%;height:100%;background:url(' ../resources/image/frame/icon_D.png') no-repeat 150px 25px">
+				 
+				 	<div style="z-index:10;width:100%;height:100%;background:url(' ../resources/image/frame/search2.png') no-repeat 340px 40px">
+				 		<div style="z-index:10;width:100%;height:100%;background:url(' ../resources/image/frame/search4.png') no-repeat 330px 75px">
+				 			<div style="padding-top:80px;width:100%;z-index:13" align="left">
+				 				<table>
+				 					<tr>
+				 						<td style="padding-left:340px;padding-top:3px;"><input id="kw" style="width:600px;height:25px;font-size:18px;padding-left:-5px;color:#808080;" /></td>
+				 						<td style="padding-left:10px;"><img src="../resources/image/frame/search3.gif" style="cursor:hand;" onclick="_s()"/></td>
+				 					</tr>
+				 				</table>
+				 								 					
+				 			</div>
+				 				
+				 			<br />
+				 			<div style="padding-left:360px;" id="hot">
+				 				<font style="color:#173362;font-size:16px;font-family:΢���ź�;"><strong>��������: </strong></font>
+				 			</div>
+				 		</div>
+				 		
+				 	</div>
+				 	
+				 </div>
+				 
+				</div>
+			</form>
+		
+	</div>
+</div>
+</td>
+</tr>
+</table>
+<table width="100%">
+<tr valign="top">
+<td width="24.75%">
+<div class="column" >
+	<div class="portlet-main">
+		<div class="portlet-header">
+		<table width="100%" border=0 cellpadding=2>
+			<tr>
+			<td width="25%"><div class="cursorhand" href="#jfgg"><img src="../resources/image/frame/Tab_01a.png" /></div></td> 
+			<td><div class="cursorhand" href="#online"><img src="../resources/image/frame/Tab_02b.png" /></div></td> 	
+			</tr>
+			<tr id="dy1">
+				<td style="background:#f46d31;"></td>
+				<td style="background:#e0e0e0;"></td>
+			</tr>
+		</table>
+		</div>
+		<div class="portlet-content" style="position:relative;height:320px;overflow-y:auto !important;">
+			<div id="jfgg">
+			<table width="99%">
+				<tr>
+					<td>
+					<!-- 
+					<table id="news" style="padding-top:10px;height:240px;width:99%;line-height:10px;overflow:hidden;word-wrap:break-word;table-layout:fixed;" cellspacing="0" cellpadding="0">
+					</table>
+					 -->
+					 <div id="blackboard" style="height:100%;width:100%;"></div>
+					</td>
+				</tr>
+				<tr>
+					<td colspan=4 align="right" valign="bottom">
+						
+							<span style="background:#e4b997;color:#ffffff;font-size:12px;cursor:hand;" id="more">���>></span>
+						
+					</td>
+				</tr>
+		</table>
+		</div>
+			<div class="none" id="online">
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+</td>
+<td width="49.5%">
+
+<div class="column">
+	<div class="portlet-main">
+		<div class="portlet-header">
+		<table width="100%" border=0 cellpadding=2>
+			<tr>
+				<td width="12%"><span class="headerText" style="color:#009ad6;"><strong>�ȵ�Ӧ��</strong></span></td>
+				<td></td>
+			</tr>	
+			<tr>
+				<td style="background:#a2d1f1;"></td>
+				<td style="background:#e0e0e0;"></td>
+			</tr>
+		</table>
+		</div>
+		<div class="portlet-content" style="position:relative;height:320px;overflow:hidden !important;">
+			<div id="container"> 
+	<div id="example"> 
+		<img src="../resources/image/frame/new-ribbon.png" width="112" height="112" alt="New Ribbon" id="ribbon" /> 
+		<div id="slides"> 
+			<div class="slides_container"> 
+				<div class="holder">
+					<table>
+						<tr>
+						<td valign="top">
+						<div class="top"  href="#silde5" uri="/mvc/menu/609" title="��У�г����">
+							<table>
+									<tr>
+										<td align="center">
+										<img  src="../resources/image/frame/pic_A08.jpg" height="105px" width="170px"/>
+										</td>
+									</tr>
+									<tr>
+										<td align="center">
+										<span style="background:#fbfbfb;font-size:15px;color:#173362;"><strong>��У�г����</strong></span>
+										</td>
+									</tr>
+							</table>
+						</div>
+						</td>
+						<td valign="top">
+						<div class="top1" href="#silde1" uri="/mvc/terminal/index" title="�ն���������">
+							<table>
+									<tr>
+										<td align="center">
+										<img  src="../resources/image/frame/mobile.jpg" height="105px" width="170px"/>
+										</td>
+									</tr>
+									<tr>
+										<td align="center">
+										<span style="background:#fbfbfb;font-size:15px;color:#173362;"><strong>�ն���������</strong></span>
+										</td>
+									</tr>
+							</table>
+						</div>
+						</td>
+						<td valign="top">
+						<div class="top1"  href="#silde2" uri="/mvc/menu/1920" title="������Ӫר��">
+							<table>
+									<tr>
+										<td align="center">
+										<img  src="../resources/image/frame/pic_A04.jpg" height="105px" width="170px"/>
+										</td>
+									</tr>
+									<tr>
+										<td align="center">
+										<span style="background:#fbfbfb;font-size:15px;color:#173362;"><strong>������Ӫר��</strong></span>
+										</td>
+									</tr>
+							</table>
+						</div>
+						</td>
+						</tr>
+						<tr>
+							<td colspan=3>
+								 <div class="bottom"  id="silde1">
+								����Ŀ�ӹ��?Ӫ������������ն�Ӫ������������ڽ��й��?<br/>
+1��������棺����ǰ(������)������(�ն����ۼ��)���ۺ�(����������)���������м�ܣ�<br/>
+2��Ӫ����棺���û�ʹ���ն˵���������ӳ�䵽Ӫ����濪չӪ�����ǰ(Ǳ���û���ȡӪ��)������(�û���ֵ��������������)���ۺ�(�ͻ����м�����Ӫ��)������棬���ն˽���ȫ��������Ӫ����?
+								</div>
+								 <div class="bottom" id="silde5" style="display:none;">
+								 ��У�°�����
+								 ��У�ƶ�ͨ���г����������������������չǱ���޴󣬸��������Ӫ�̡����ѡ��Ѿá�
+								 ÿ��8��9�·ݸ���У�������Ǹ����ƶ���˾Ǳ�ڵ������г����������г�������г�ռ���ʵ���������
+								 Ϊ������ƶ��г�ռ���ʣ���ռѧ���û���Դ����ǿ��ѧ����ԴӪ��������Ҫ�ھ���ϵͳ������Уר�������У�û���չ��ҵ�����Լ�����仯�����
+								 </div>
+								 <div class="bottom" id="silde2" style="display:none;">
+								 ϸ�������ʷ�ר�⡢TDר�⡢WLANר�⡢���ר�⣬ʵ�ֶ������Ķ�Ƕȷ����� ͨ��2G������Ǩ�ơ������û����
+�ײͼ��������ֵ����ȳ�̬��Ӫ����ʵ�������ļ�����Ӫ.
+								</div>
+								 
+							</td>
+						</tr>
+					</table>
+					
+					
+				</div> 
+				 <div class="holder">
+					<table>
+						<tr>
+						<td valign="top">
+						<div class="top" href="#silde4" uri="/dispatch.jsp?targetUrl=http://10.25.125.12:808/db2app55/indexBi.jsp" title="ͳһӪ�����">
+							<table>
+									<tr>
+										<td align="center">
+										<img  src="../resources/image/frame/pic_A06.jpg" height="105px" width="170px"/>
+										</td>
+									</tr>
+									<tr>
+										<td align="center">
+										<span style="background:#fbfbfb;font-size:15px;color:#173362;"><strong>ͳһӪ�����</strong></span>
+										</td>
+									</tr>
+							</table>
+						</div>
+						</td>
+						<td valign="top">
+						<div class="top1"  href="#silde3" uri="http://10.25.124.110:8080/pst/salManager/saleMain.html" title="������Ӫר��">
+							<table>
+									<tr>
+										<td align="center">
+										<img  src="../resources/image/frame/pic_A09.jpg" height="105px" width="170px"/>
+										</td>
+									</tr>
+									<tr>
+										<td align="center">
+										<span style="background:#fbfbfb;font-size:15px;color:#173362;"><strong>������Ӫר��</strong></span>
+										</td>
+									</tr>
+							</table>
+						</div>
+						</td>
+						<td valign="top">
+						<div class="top1" href="#silde6" uri="/mvc/menu/891" title="����ͻ�ר��">
+							<table>
+									<tr>
+										<td align="center">
+										<img  src="../resources/image/frame/pic_A10.jpg" height="105px" width="170px"/>
+										</td>
+									</tr>
+									<tr>
+										<td align="center">
+										<span style="background:#fbfbfb;font-size:15px;color:#173362;"><strong>����ͻ�ר��</strong></span>
+										</td>
+									</tr>
+							</table>
+						</div>
+						</td>
+						</tr>
+						<tr>
+							<td colspan=3>
+								 <div class="bottom"  id="silde4">
+								 	ͳһӪ�����ƽ̨��λ��Ӫ����ϵͳ�ġ���ıָ�Ӳ��������ʷѺ�Ӫ���������������Ϊ���ģ�ͨ�����Ӫ����Ķ��ҵ��֧��ϵͳ�����Ӫ����Ϣ�Ŀ�ƽ̨�Զ���ת�����ٲ��𼰸����������Ӷ�ʵ���ʷѺ�Ӫ���ȫ�������ڹ���֧�š�
+								 </div>
+								 <div class="bottom" id="silde3" style="display:none;">
+								���������ͻ�ȫ��������ģ�ͣ��������ͻ���Ϊ���롢�ɳ������졢˥���ĸ��������ڣ�֧��ȫʡ�������ڣ�
+    ���ڡ�����ݡ��������˶��ڡ����ڡ����ڵ���Ԥ��ģ�ͣ�Ԥ����Ϣֱ��Ӫ��������֧�ŵ��ж˵��˵Ĵ����ͻ�������ϵ.
+								</div>
+								 <div class="bottom" id="silde6" style="display:none;">
+								 ����ר����Ҫ�������ſͻ�KPI,���ſͻ�����ָ��,�ͻ��������Ϣ����Ʒ����,����ר������ݡ�
+								 ���ſͻ�KPI��Ҫ�Ƕ��ص�ָ������ջ��ȡ���ͬ�ȡ���ͬ�ȵȷ���;���ſͻ�����ָ����Ҫ�Ƕ�һЩ�ؼ�ָ��Ļ���,����ʡ��˾���˵���;
+								 �ͻ����������������������ص��ע���š���꼯�ŵ���Ϣ;��Ϣ����Ʒ���������Ϣ��������ܱ?�ֲ�Ʒ��Ϣ��������ϸ���;
+								 ����ר�����ڸ��༯����ϸ�嵥����.
+								 </div>
+							</td>
+						</tr>
+					</table>
+					
+					
+				</div> 
+			</div> 
+			<a href="#" class="prev"><img src="../resources/image/frame/arrow-prev.png" width="19" height="43" alt="Arrow Prev" /></a> 
+			<a href="#" class="next"><img src="../resources/image/frame/arrow-next.png" width="19" height="43" alt="Arrow Next" /></a> 
+		</div> 
+		<img src="../resources/image/frame/example-frame.png" width="739" height="341" alt="Example Frame" id="frame" /> 
+	</div> 
+</div>
+		</div>
+	</div>
+</div>
+</td>
+<td width="24.75%">
+
+<div class="column" id="_mask">
+	<div class="portlet-main">
+		<div class="portlet-header">
+		<table width="100%" border=0 cellpadding=2>
+			<tr>
+				<td><div class="cursorhand2" href="#useful"><img src="../resources/image/frame/Tab_03a.png" /></div></td> 
+				<td><div class="cursorhand2" href="#kpi"><img src="../resources/image/frame/Tab_04b.png" /></div></td> 
+				<td><div class="cursorhand2" href="#report"><img src="../resources/image/frame/Tab_05b.png" /></div></td> 
+			</tr>
+			<tr id="dy2">
+				<td style="background:#434f81;"></td>
+				<td style="background:#e0e0e0;"></td>
+				<td style="background:#e0e0e0;"></td>
+			</tr>
+		</table>
+		</div>
+		<div class="portlet-content" style="position:relative;height:320px;overflow-y:auto !important;">
+			<div id="useful">
+				<table width="99%" style="padding-top:10px;padding-left:10px;">
+				</table>
+			</div>
+			<div class="none" id="kpi">
+				<table width="100%" style="padding-top:5px;padding-left:10px;">
+					<tr>
+						<td colspan="3">
+							<select id="groupName">
+								<option value="ChannelD" selected>������KPI</option>
+								<option value="ChannelM">������KPI</option>
+								<option value="BureauD">������KPI</option>
+								<option value="BureauM">������KPI</option>
+								<option value="GroupcustD">������KPI</option>
+								<option value="GroupcustM">������KPI</option>
+								<option value="FlowD">������KPI</option>
+								<option value="FlowM">������KPI</option>
+								<option value="CollegeD">��У��KPI</option>
+								<option value="CollegeM">��У��KPI</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td style="font-family:'΢���ź�';font-size:15px;color:#f46d31;font-weight: bold;">ָ�����</td>
+						<td style="font-family:'΢���ź�';font-size:15px;color:#f46d31;font-weight: bold;">��ǰ��ֵ</td>
+						<td align="right" style="font-family:'΢���ź�';font-size:15px;color:#f46d31;font-weight: bold;">��������</td>
+					</tr>
+				</table>
+			</div>
+			<div class="none" id="report">
+				
+			</div>
+		</div>
+	</div>
+</div>	
+</td>
+</tr>
+</table>
+<div class="modal-backdrop hide" onclick="javascript:closeNews();"></div>
+<div id="appDialog" class="modal hide fade in"   style="overflow:hidden">
+    <div class="modal-header">
+        <button type="button" class="close"  onclick="javascript:closeNews();">��</button> 
+        <h3 id="myModalLabel">���¹���</h3>
+    </div>
+    <div class="modal-body" id="appDialogbody">
+    </div>
+    <div class="modal-footer">
+        <button id="appDialog-cansel" class="btn"  onclick="javascript:closeNews();">ȡ��</button>
+        <button id="appDialog-ok" class="btn btn-primary"  onclick="javascript:closeNews();">ȷ��</button>
+    </div>
+</div>
+
+</body>
+<script type="text/javascript">
+//jQuery.noConflict();
+$(document).ready(function() {
+	AiOpen.init('http://10.25.124.110:8080/pst');
+	$(".portlet-main").addClass("ui-widget ui-widget-content ui-helper-clearfix ui-corner-all");
+
+	
+	$('#slides').slides({
+		preload: true,
+		preloadImage: '../resources/image/frame/loading.gif',
+		play: 3500,
+		pause: 2500,
+		start:1,
+		hoverPause: true,
+		animationStart: function(){
+			$(".bottom").hide();
+		},
+		animationComplete: function(current){
+			$(".top").removeClass("top").addClass("top1");
+			$(".top1").removeClass("top").addClass("top1");
+			if(current==1){
+				$("#silde1").show('slow');
+				$("div[href='#silde1']").removeClass("top1").addClass("top");
+			}else{
+				$("#silde4").show('slow');
+				$("div[href='#silde4']").removeClass("top1").addClass("top");
+			}
+		}
+		
+	});
+	
+	$("#kw").autocomplete({
+        	source:function(request,response){
+        					$.ajax({
+        						url:"/hbirs/action/bir?method=auto",
+        						dataType:'json',
+        						type:'post',
+        						contentType: "application/x-www-form-urlencoded; charset=utf-8",
+        						data:"term="+encodeURIComponent(request.term),
+        						success:function(data){
+        							response(data);
+        						}
+        					});
+        				},
+            delay:500,
+            autoFocus:true,
+            minLength:2,
+            select:function(event,ui){
+            	$(this).val(ui.item.value);
+            	return false;
+            }
+        });
+     $("#kw").css("font-style","italic").val("�����뱨����ƻ�ר���������..").focus(function(){
+     	if($(this).val()=='�����뱨����ƻ�ר���������..'){
+     		$(this).val('').css("font-style","normal");
+     	}
+     }).blur(function(){
+     	if($(this).val().length==0){
+     		$(this).css("font-style","italic").val("�����뱨����ƻ�ר���������..");
+     	}
+     }).keypress(function(e){
+     	var key = e.keyCode;
+     	var val=$(this).val();
+     	if(key==13){
+     		if(!val){
+     			alert("�������������ݺ��ٽ�������!");
+     			return false;
+     		}
+     		var _id=new Date();
+			tabAdd({url:"/hbapp/bir/search.htm?kw="+$(this).val(),title:'��������',id:_id.getTime()});
+     	}
+     });
+     
+     $(".cursorhand").click(function(){
+     	var obj=$(this).attr("href");
+     	var _src="";
+     	var _other="";
+     	var _tr=$("#dy1");
+     	if(obj=="#online"){
+     		_src="../resources/image/frame/Tab_02a.png";
+     		_other="../resources/image/frame/Tab_01b.png"
+     		$(".cursorhand[href=#jfgg]").children("img").attr("src",_other);
+     		$("#jfgg").addClass("none");
+     		_tr.empty().append($("<td/>",{"style":"background:#e0e0e0;"})).append($("<td/>",{"style":"background:#f46d31;"}));
+     	}else{
+     		_src="../resources/image/frame/Tab_01a.png";
+     		_other="../resources/image/frame/Tab_02b.png";
+     		$(".cursorhand[href=#online]").children("img").attr("src",_other);
+     		$("#online").addClass("none");
+     		_tr.empty().append($("<td/>",{"style":"background:#f46d31;"})).append($("<td/>",{"style":"background:#e0e0e0;"}));
+     	}
+     	
+     	$(this).children("img").attr("src",_src);
+     	$(obj).removeClass("none");
+     });
+     
+     $(".cursorhand2").click(function(){
+     	var obj=$(this).attr("href");
+     	var _kpi="";
+     	var _useful="";
+     	var _report="";
+     	var _tr=$("#dy2");
+     	if(obj=="#kpi"){
+     		_kpi="../resources/image/frame/Tab_04a.png";
+     		_useful="../resources/image/frame/Tab_03b.png";
+     		_report="../resources/image/frame/Tab_05b.png";
+     		$("#useful").addClass("none");
+     		$("#report").addClass("none");
+     		$(".cursorhand2[href=#useful]").children("img").attr("src",_useful);
+     		$(".cursorhand2[href=#report]").children("img").attr("src",_report);
+     		$(this).children("img").attr("src",_kpi);
+     		_tr.empty().append($("<td/>",{"style":"background:#e0e0e0"})).append($("<td/>",{"style":"background:#434f81"}))
+     		.append($("<td/>",{"style":"background:#e0e0e0"}));
+     	}else if(obj=="#report"){
+     		_report="../resources/image/frame/Tab_05a.png";
+     		_useful="../resources/image/frame/Tab_03b.png";
+     		_kpi="../resources/image/frame/Tab_04b.png";
+     		$("#useful").addClass("none");
+     		$("#kpi").addClass("none");
+     		$(".cursorhand2[href=#useful]").children("img").attr("src",_useful);
+     		$(".cursorhand2[href=#kpi]").children("img").attr("src",_kpi);
+     		$(this).children("img").attr("src",_report);
+     		_tr.empty().append($("<td/>",{"style":"background:#e0e0e0"})).append($("<td/>",{"style":"background:#e0e0e0"}))
+     		.append($("<td/>",{"style":"background:#434f81"}));
+     	}else{
+     		//useful
+     		_report="../resources/image/frame/Tab_05b.png";
+     		_useful="../resources/image/frame/Tab_03a.png";
+     		_kpi="../resources/image/frame/Tab_04b.png";
+     		$("#report").addClass("none");
+     		$("#kpi").addClass("none");
+     		$(".cursorhand2[href=#report]").children("img").attr("src",_report);
+     		$(".cursorhand2[href=#kpi]").children("img").attr("src",_kpi);
+     		$(this).children("img").attr("src",_useful);
+     		_tr.empty().append($("<td/>",{"style":"background:#434f81"})).append($("<td/>",{"style":"background:#e0e0e0"}))
+     		.append($("<td/>",{"style":"background:#e0e0e0"}));
+     	}
+     	$(obj).removeClass("none");
+     });
+     
+     $(".top1").mouseover(function(){
+     	var obj=$(this).attr("href");
+     	$(".top").removeClass("top").addClass("top1");
+     	$(this).removeClass("top1").addClass("top");
+     	$(".bottom").hide();
+     	$(obj).show('slow');
+     });
+     $(".top").mouseover(function(){
+     	var obj=$(this).attr("href");
+     	$(".top1").removeClass("top").addClass("top1");
+     	$(".top").removeClass("top").addClass("top1");
+     	$(this).removeClass("top1").addClass("top");
+     	$(".bottom").hide();
+     	$(obj).show('slow');
+     });
+     
+     $("#groupName").change(function(){
+     	var _val=$(this).val();
+     	$("#_mask").mask();
+     	var up="/hbapp/resources/image/default/up.gif";
+		var down="/hbapp/resources/image/default/down.gif";
+     	$.ajax({
+			url:"/hbirs/action/kpi?method=customizeKpisNew&isLog=false"
+			,dataType:"json"
+			,data:"groupName="+_val
+			,type:"post"
+			,success:function(datas){
+				var _cont=$("#kpi >table");
+				$("#kpi >table tr:gt(1)").remove();
+				if(!datas||!datas[0]){
+					_cont.append($("<tr/>").append($("<td/>").text("��δ���Ƹ����͵�kpiָ��!")));
+					$("#_mask").mask('hide');
+					return false;
+				}
+				for(var i=0;i<datas.length;i++){
+					var _id=datas[i].id;
+					AiOpen.kpi({id:_id},function(_kpi){
+						if(_kpi){
+							var _tr=$("<tr/>",{"title":_kpi.instruction});
+							var _td1=$("<td/>",{"width":"50%","align":"left"}).text(_kpi.name+"("+_kpi.unit+")");
+							var _td2=$("<td/>",{"width":"20%","align":"right"}).text(_kpi.current);
+							var _tongbi=_val.indexOf("M")>-1?_kpi.monthOnMonth:_kpi.todayOnYesterday;
+							
+							var _td3=$("<td/>",{"width":"30%","align":"right"}).text(_tongbi);
+							if(_tongbi.indexOf("-")>-1){
+								_td1.addClass("kpicontentdown");
+								_td2.addClass("kpicontentdown");
+								_td3.addClass("kpicontentdown");
+								_td3.append($("<img/>",{"src":down}));
+							}else{
+								_td1.addClass("kpicontentup");
+								_td2.addClass("kpicontentup");
+								_td3.addClass("kpicontentup");
+								_td3.append($("<img/>",{"src":up}));
+							}
+							_tr.append(_td1).append(_td2).append(_td3);
+							
+							_cont.append(_tr);
+						}
+						
+					});
+				}
+				
+			}
+		});
+		$("#_mask").mask('hide');
+     });
+
+	$("#more").click(function(){
+		var d=new Date();
+		tabAdd({url:"/newsshow.jsp",id:d.getTime(),title:'���ֹ���'});
+	});
+	
+	$(".top,.top1").click(function(){
+		var _title=$(this).attr("title");
+		var d=new Date();
+		var _url=$(this).attr("uri");
+		if(_url=="/mvc/menu/609"){
+			var url="/dispatch.jsp?targetUrl=http://10.25.124.110:8080/pst/minderapp/college/index.html";
+			var title1="�°��У��ͼ";
+			tabAdd({url:url,id:d.getTime(),title:title1});
+		}else{
+			tabAdd({url:_url,id:d.getTime(),title:_title});
+		}
+		
+	});
+	
+});
+
+function _gaoxiao(){
+	var d=new Date();
+	var url="/dispatch.jsp?targetUrl=http://10.25.124.110:8080/pst/minderapp/college/index.html";
+	var title1="�°��У��ͼ";
+	tabAdd({url:url,id:d.getTime(),title:title1});
+}
+
+function _s(){
+	var val=$("#kw").val();
+	if(!val||"�����뱨����ƻ�ר���������.."==val){
+		alert("�������������ݺ��ٽ�������!");
+		return false;
+	}
+	var _id=new Date();
+	tabAdd({url:"/hbapp/bir/search.htm?kw="+$("#kw").val(),title:'��������',id:_id.getTime()});
+}
+</script>
+<script type="text/javascript">
+	function setCookie(key, value,day) {
+	    var expires = new Date();
+	    expires.setTime(expires.getTime() + (day * 24 * 60 * 60 * 1000));
+	    document.cookie = key + '=' + value + ';expires=' + expires.toUTCString()+";path=/";
+	}
+	function getCookie(key) {
+	    var keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
+	    return keyValue ? keyValue[2] : null;
+	}
+	function closeNews(){
+		$("#appDialog").addClass("hide");
+		$(".modal-backdrop").addClass("hide");
+	}
+	function news(){		
+		$.ajax({
+			url:"/hbirs/action/portalMain?method=queryNews"
+			,data:"ds=web"
+			,dataType:"json"
+			,type:"post"
+			,success:function(datas){
+				/**
+				*
+				*<tr>
+				*			<td width="35%" align="center" height="10px"><span class="date-count">2013/03/14</span></td>
+				*			<td width="65%"><span class="title1">���ֹ���</span></td>
+				*		</tr>
+				**/
+				
+				if(!datas){
+					$("#blackboard").append($("<span/>",{"class":"title1"}).text("��ʱû�������ʾ! :("));
+					return false;
+				}
+				var _new = datas[0];
+				if(_new.id != getCookie("lastNewId")){
+					var _newTmp = "<div class='page-tables'><div class='table-responsive'><table cellpadding='0' cellspacing='0' border='0' id='data-table' width='100%'>";
+					_newTmp += "<tbody>";
+					for(var i =0;i<datas.length;i++){
+						var _data = datas[i];
+						_newTmp +="<h6>"+_data.title+"<span style='margin-left: 50px;'>ʱ��:"+_data.newsdate+"</span></h6><div class='alert alert-info' role='alert'>"+_data.content+"</div>";
+					}
+					_newTmp += "</tbody></table></div></div>";
+					$("#appDialog #appDialogbody").empty().append(_newTmp);
+					$("#appDialog").removeClass("hide");
+					$(".modal-backdrop").removeClass("hide");
+					setCookie("lastNewId",_new.id,1);
+				}
+				for(var i=0;i<datas.length;i++){
+					var data=datas[i];
+					var _title=data.title;
+					if(_title.length>16){
+						_title=_title.substring(0,16)+"...";
+					}
+					var _hr=$("<h5/>",{"class":"title1","title":data.title,"style":"padding-left:20px;padding-top:7px;height:19px;font-size:12px;"}).text(data.date+" "+_title);
+					var _div=$("<div/>").append($("<p/>",{"class":"title1"}).text(data.content));
+					if(i==0){
+						_hr.attr("id","hr1");
+					}
+					$("#blackboard").append(_hr).append(_div);
+				}
+				$("#blackboard").accordion({
+					autoHeight: false
+					,collapsible: true
+					,heightStyle:"content"
+				});
+				$("#hr1").click();
+			}
+		});
+	}
+	news();
+	//select track_mid,track,uri,count(1) from (select distinct track_mid,track,uri from FPF_VISITLIST) group by track_mid,track,uri having track_mid!='' order by 4 desc;
+	function newline(){
+		$.ajax({
+			url:"/hbirs/action/portalMain?method=quertNewLine"
+			,data:"ds=web"
+			,dataType:"json"
+			,type:"post"
+			,success:function(datas){
+				if(!datas){
+					$("#online").append($("<ul/>",{"style":"list-style:none;margin:0px;padding:0px;width:95%;font-size: 1em;font-weight: bold;"}).append($("<li/>").text("��û�������ʾ :( !")));
+					return false;
+				}
+				
+				$("#online").append($("<ul/>",{"style":"list-style:none;margin:0px;padding:0px;width:95%;font-size: 1em;font-weight: bold;"}));
+				for(var i=0;i<datas.length;i++){
+					var data=datas[i];
+					var _title=data.date+" "+data.name;
+					if(_title.length>29){
+						_title=_title.substring(0,29)+"...";
+					}
+					var _a=$("<a/>",{"href":"javascript:void(0)","id":data.id,"style":"color:#173362;font-family:'΢���ź�';font-size:12px;","title":data.name}).text(_title);
+					//#009ad6
+					if("����"==data.kind){
+						_a.attr("uri","/mvc/report/"+data.id);
+					}else{
+						_a.attr("uri","/hbirs/action/dynamicrpt?method=render&sid="+data.id);
+					}
+					_a.click(function(){
+						tabAdd({id:this.id,title:$(this).text(),url:this.uri});
+					});
+					var _img=$("<img/>",{"src":"../resources/image/tabs/tab_scroll_right.gif"})
+					var _li=$("<li/>",{"style":"border-bottom:1px solid #ccc;line-height:19px;padding-left:10px;padding-top:5px;"}).append(_img).append(_a);
+					$("#online >ul").append(_li);
+				}
+			}
+		});
+	}
+	newline();
+	
+	function pv(){
+	
+		//<tr>
+		//				<td width="10%">
+		//				<div style="background:url('../resources/image/frame/sort.gif') no-repeat">
+		//				<span style="color:#fff;font-size:13px;padding-left:6px;"><strong>1</strong></span>
+		//				</div>
+		//				</td>
+		//				<td width="70%"><span class="title">aaaaaaaaaaaaaaaaaa</span></td>
+		//				<td width="20%"><span class="date-count">2312</span></td>
+		//</tr>
+		$.ajax({
+			url:"/hbirs/action/portalMain?method=querypv"
+			,data:"ds=web" 
+			,dataType:"json"
+			,type:"post"
+			,success:function(datas){
+				
+				var _cont=$("#useful >table");
+				if(!datas){
+					_cont.append($("<p/>").text("��û�������ʾ :( !"));
+					return false;
+				}
+				for(var i=0;i<datas.length;i++){
+					var data=datas[i];
+					
+					var _tr=$("<tr/>");
+					var _td1=$("<td/>",{"width":"10%"});
+					if(i!=9){
+						_td1.append(
+							$("<div/>",{"style":"background:url('../resources/image/frame/sort.gif') no-repeat"})
+							.append($("<span/>",{"style":"color:#fff;font-size:13px;padding-left:6px;"}).append($("<strong/>").text(i+1)))
+						);
+					}else{
+						_td1.append(
+							$("<div/>",{"style":"background:url('../resources/image/frame/sort.gif') no-repeat"})
+							.append($("<span/>",{"style":"color:#fff;font-size:13px;padding-left:1px;"}).append($("<strong/>").text(i+1)))
+						);
+					}
+					_tr.append(_td1);
+					
+					var _td2=$("<td/>",{"width":"70%"});
+					_td2.append($("<span/>").addClass("title").text(data.name));
+					
+					_tr.append(_td2);
+					
+					var _td3=$("<td/>",{"width":"20%"});
+					_td3.append($("<span/>").addClass("date-count").text(data.cnt));
+					
+					_tr.append(_td3);
+					
+					_cont.append(_tr);
+				}
+			}
+		});
+	}
+	pv();
+	
+	function kpi(){
+		var _groupName=$("#groupName").val();
+		$("#_mask").mask();
+		var up="/hbapp/resources/image/default/up.gif";
+		var down="/hbapp/resources/image/default/down.gif";
+		$.ajax({
+			url:"/hbirs/action/kpi?method=customizeKpisNew&isLog=false"
+			,dataType:"json"
+			,data:"groupName="+_groupName
+			,type:"post"
+			,success:function(datas){
+				var _cont=$("#kpi >table");
+				if(!datas||!datas[0]){
+					_cont.append($("<tr/>").append($("<td/>").text("��δ���Ƹ����͵�kpiָ��!")));
+					return false;
+				}
+				for(var i=0;i<datas.length;i++){
+					var _id=datas[i].id;
+					AiOpen.kpi({id:_id},function(_kpi){
+						if(_kpi){
+							var _tr=$("<tr/>",{"title":_kpi.instruction});
+							var _td1=$("<td/>",{"width":"50%","align":"left"}).text(_kpi.name+"("+_kpi.unit+")");
+							var _td2=$("<td/>",{"width":"20%","align":"right"}).text(_kpi.current);
+							var _tongbi=_groupName.indexOf("M")>-1?_kpi.monthOnMonth:_kpi.todayOnYesterday;
+							
+							var _td3=$("<td/>",{"width":"30%","align":"right"}).text(_tongbi);
+							if(_tongbi.indexOf("-")>-1){
+								_td1.addClass("kpicontentdown");
+								_td2.addClass("kpicontentdown");
+								_td3.addClass("kpicontentdown");
+								_td3.append($("<img/>",{"src":down}));
+							}else{
+								_td1.addClass("kpicontentup");
+								_td2.addClass("kpicontentup");
+								_td3.addClass("kpicontentup");
+								_td3.append($("<img/>",{"src":up}));
+							}
+							_tr.append(_td1).append(_td2).append(_td3);
+							
+							_cont.append(_tr);
+						}
+						
+					});
+				}
+			}
+		});
+		$("#_mask").mask('hide');
+	}
+	kpi();
+	
+	function custRpt(){
+		$.ajax({
+			url:"/hbirs/action/rptNavi?method=init&isLog=false"
+			,dataType:"json"
+			,type:"post"
+			,success:function(datas){
+				if(!datas||!datas[0]){
+					$("#report").append($("<ul/>",{"style":"list-style:none;margin:0px;padding:0px;width:95%;font-size: 1em;font-weight: bold;"}).append($("<li/>").text("��û�������ʾ :( !")));
+					return false;
+				}
+				$("#report").append($("<ul/>",{"style":"list-style:none;margin:0px;padding:0px;width:95%;font-size: 1em;font-weight: bold;"}));
+				for(var i=0;i<datas.length;i++){
+					var data=datas[i];
+					var _a=$("<a/>",{"href":"javascript:void(0)","id":data.id,"style":"color:#173362;font-family:'΢���ź�';font-size:12px;"}).text(data.name);
+					
+					if("����"==data.kind){
+						_a.attr("uri","/mvc/report/"+data.id);
+					}else{
+						//_a.attr("uri","/hbirs/action/dynamicrpt?method=render&sid="+data.id);
+						_a.attr("uri","http://10.25.124.110:8080/pst/kpi/report/"+data.id);
+					}
+					_a.click(function(){
+						tabAdd({id:this.id,title:$(this).text(),url:this.uri});
+					});
+					var _img=$("<img/>",{"src":"../resources/image/tabs/tab_scroll_right.gif"})
+					var _li=$("<li/>",{"style":"border-bottom:1px solid #ccc;line-height:19px;padding-left:10px;padding-top:5px;"}).append(_img).append(_a);
+					$("#report >ul").append(_li);
+					
+				}
+			}
+		});
+	}
+	custRpt();
+	
+	function hotSearch(){
+		var cont=$("#hot");
+     	//<span style="color:#173362;font-size:12px;cursor:hand;">11111</span>
+     	$.ajax({
+     		url:"/hbirs/action/bir?method=hotSearch"
+     		,dataType:"json"
+     		,type:"post"
+     		,success:function(datas){
+     			for(var i=0;i<datas.length;i++){
+     				var data=datas[i];
+     				
+     				var _span=$("<span/>",{"style":"color:#173362;font-size:14px;cursor:hand;padding-right:35px;"});
+     				
+     				_span.text(data.indicator).click(function(){
+     					var _id=new Date();
+						tabAdd({url:"/hbapp/bir/search.htm?kw="+$(this).text(),title:'��������',id:_id.getTime()});
+     				});
+     				
+     				cont.append(_span).append();
+     			}
+     		}
+     	});
+	}
+	hotSearch();
+</script>
+</html>

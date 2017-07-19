@@ -1,0 +1,282 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>湖北移动经营分析系统</title>
+		<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/default/default.js"></script>
+		<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/default/tabext.js"></script>
+		<script type="text/javascript" src="/hb-bass-navigation/hbapp/kpiportal/localres/kpi.js"></script>
+		<script type="text/javascript" src="grid.js" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="/hb-bass-navigation/hbapp/resources/css/default/default.css" />
+		<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/chart/FusionCharts.js"></script>
+		<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/jquery/jquery.js"></script>
+		<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/jquery/ui/jquery.ui.js"></script>
+		<link type="text/css" href="/hb-bass-navigation/hbapp/resources/js/jquery/themes/redmond/jquery.ui.css" rel="stylesheet" />
+		<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/old/basscommon.js" charset="utf-8"></script>
+		<style>
+			.grid_row_blue {
+				padding: 0 px,3 px;
+				/**/background-color: #FFFFFF;
+				height:28px;
+			}
+			/* 查询结果输出行样式2 用于隔行效果*/
+			.grid_row_alt_blue {
+				padding: 0 px,3 px;
+				/**/background-color: #EFF5FB;
+				height:28px;
+			}
+			/* 查询结果输出行样式3  选中该行时 高亮显示 #A6C5FD*/
+			.grid_row_over_blue {
+				padding: 0 px,3 px;
+				/**/background-color: #D9ECF6;
+				height:28px;
+			}
+		</style>
+		<script type="text/javascript">
+			jQuery.noConflict();
+			var _params = aihb.Util.paramsObj();
+			var cityCode = _params.cityId=="0"?"HB":aihb.Constants.getArea(_params.cityId).cityCode;
+			var cityName = _params.cityId=="0"?"湖北":aihb.Constants.getArea(_params.cityId).cityName;
+			var appName="EntGridD";
+			var area=cityCode;
+			var zbcodes = "all";
+			var curDate="";
+			var threshold = new Threshold();
+			threshold.path="/hbapp/resources/image/default/";
+			function fThreshold(val,options){
+				var str=aihb.Util.percentFormat(val);
+				//str+=threshold.getTongbiImg(val,datas[9],datas[0],"tongbi");
+				str+=threshold.getTongbiImg(val);
+				return str;
+			}
+			var _header=[
+			{"name":["指标名称"],"dataIndex":"name","cellStyle":"grid_row_cell_text"
+				,cellFunc: function(val,options){
+					var _a=$C("a");
+					_a.onclick=function(){
+						chartTrend(options.record.id);
+						chartView(options.record.id);
+					}
+					_a.title="点击查看图形展示";
+					_a.href="javascript:void(0)";
+					_a.appendChild($CT(val));
+					return _a;
+				}
+			}
+			,{"name":["当前数值"],"dataIndex":"current","cellStyle":"grid_row_cell_number",cellFunc:cellFormat}
+			,{"name":["前日数值"],"dataIndex":"pre","cellStyle":"grid_row_cell_number",cellFunc:cellFormat}
+			,{"name":["上月同期"],"dataIndex":"before","cellStyle":"grid_row_cell_number",cellFunc:cellFormat}
+			,{"name":["去年同期"],"dataIndex":"year","cellStyle":"grid_row_cell_number",cellFunc:cellFormat}
+			,{"name":["日环比增幅"],"dataIndex":"huanbi",cellFunc: fThreshold,"cellStyle":"grid_row_cell_number"}
+			,{"name":["环比增幅"],"dataIndex":"tongbi",cellFunc: fThreshold,"cellStyle":"grid_row_cell_number"}
+			,{"name":["同比增幅"],"dataIndex":"yeartongbi",cellFunc: fThreshold,"cellStyle":"grid_row_cell_number"}
+			,{"name":["完成情况"],"dataIndex":"progress","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":""}
+			,{"name":["深度分析"],"dataIndex":"target","cellFunc":sdfx,"cellStyle":"grid_row_cell"}
+			];
+			function progress(sZbname,sZbcode,sPercentType){
+				var sArea = area;
+				var brand = "";
+				var url = "/hbapp/kpiportal/kpiview/kpiviewDetail.jsp?appName="+appName+"&zbcode="+sZbcode+"&date=20110416&zbname="+sZbname+"&area="+sArea+"&percentType="+sPercentType+"&brand="+brand;
+				//var url = "/hbapp/app/ent/grid/grid_kpiviewDetail.jsp?appName="+appName+"&zbcode="+sZbcode+"&date=20110416&zbname="+sZbname+"&area="+sArea+"&percentType="+sPercentType+"&brand="+brand;
+				//alert(url);
+				//var url = "/hbapp/kpiportal/kpiview/kpiviewDetail.jsp?appName=ChannelD&zbcode=K10001&date=20110420&zbname=日累计收入(万元)&area=0&percentType=&brand=";
+				tabAdd({title: sZbname+"深度分析" ,url: url})
+			}
+			function sdfx(datas,options){
+				var sZbname = options.data[options.rowIndex].name;
+				var sZbcode = options.data[options.rowIndex].id;
+				return "<a href='#' onclick='progress(\""+sZbname+"\",\""+sZbcode+"\",\""+""+"\");'><img src='/hbapp/resources/image/default/topmenu_icon02.gif' border='0' title='深度分析'></img></a>";
+			}
+			function _click(_area,_zbcodes){
+				area=_area||area;
+				zbcodes = _zbcodes||zbcodes;
+				var ajax = new aihb.Ajax({
+					url : "/hbirs/action/kpi?method=getKpisUseAppName"
+					,parameters : "appName="+appName+"&area="+ area+"&zbcode="+zbcodes
+					,loadmask : true
+					,callback : function(xmlrequest){
+						//alert(xmlrequest.responseText);
+						$("grid").style.display="";
+						$("trend").style.display="";
+						$("compare").style.display="";
+						var res = {}
+						try{
+							eval("res="+xmlrequest.responseText);
+						}catch(e){debugger;}
+							var _grid = new aihb.Grid({
+								container : $("grid")
+								,data : res.data || res
+								,limit : (res.data || res).length
+								,header : _header
+								,pageSize : (res.data || res).length
+							});
+							_grid.render();
+							//alert('gr');
+							jQuery(function($){
+								//alert($("THEAD + TR")[0]);
+								//$("thread + tr").style="position:relative;top:expression(this.offsetParent.scrollTop);";
+							})
+							zbCode=(res.data || res)[0].id
+							//alert(zbCode);
+							chartView(zbCode);
+							if(curDate==""){
+								var _ajax = new aihb.Ajax({
+									url : "/hbirs/action/kpi?method=currentDate"
+									,parameters : "appName="+appName
+									,loadmask : false
+									,callback : function(xmlrequest){
+										curDate=xmlrequest.responseText;
+										parent.$("curDateDiv").innerHTML="数据更新："+curDate
+										chartTrend(zbCode);
+									}
+								});
+								_ajax.request();
+							}else{
+								chartTrend(zbCode);
+							}
+						}
+					});
+					ajax.request();
+				}
+				function chartView(zbCode){
+					var brand = ""//(document.forms[0].brands)?document.forms[0].brands.value:"";
+					var valuetype=""
+					chartWrapper({
+						url: "/hbirs/action/kpi?method=chartView"
+						,loadmask : true
+						,param: "appName="+appName+"&brand="+brand+"&area="+area+"&zbcode="+zbCode+"&valuetype="+(valuetype||"")
+						,chartid:"compare"
+						,chartSWF:"/hbapp/resources/chart/Charts/FCF_MSColumn3D.swf"
+						,width:(document.body.scrollWidth-190)/2
+						,height:240
+						,dataFilter:function(chartData){
+							return chartData.replace("showNames='1'","showNames='0'");
+						}
+					});
+				}
+				window.onload=function(){
+					//_click();
+					$("tab1").click();
+				}
+				jQuery(function($) {
+					$( "#tabs" ).tabs();
+				});
+				function changetab(appName,id){
+					var obj=event.srcElement;
+					//alert(obj.tagName);
+					while(obj.tagName!="TD")
+					obj=obj.parentElement;
+					var cellindex=obj.cellIndex;
+					//alert(cellindex);
+					while(obj.tagName!="TABLE")
+					obj=obj.parentElement;
+					if(obj.lastcell) {
+						obj.rows[0].cells[obj.lastcell].style.backgroundImage="url(/hbapp/resources/image/default/tab2.png)";
+					}
+					else{
+						obj.rows[0].cells[0].style.backgroundImage="url(/hbapp/resources/image/default/tab2.png)";
+					}
+					obj.lastcell=cellindex;
+					obj.rows[0].cells[cellindex].style.backgroundImage="url(/hbapp/resources/image/default/tab1.png)";
+					var _sql = "select id from FPF_IRS_INDICATOR where appname='"+appName+"' and kind='"+id+"'";
+					var _ajax = new aihb.Ajax({
+						url : "/hbirs/action/jsondata?method=query"
+						,parameters : "sql="+encodeURIComponent(_sql)+"&ds=web&isCached=false"
+						,loadmask : true
+						,callback : function(xmlrequest){
+							try{
+								var result = xmlrequest.responseText;
+								result = eval(result);
+								var zb = "";
+								//alert(result.length);
+								for(var i=0;result.length !=0 && i<result.length;i++){
+									if(zb == ""){
+										zb += result[i].id;
+									}else{
+										zb += ","+result[i].id;
+									}
+								}
+								//alert(zb);
+								if(zb != null && zb != ""){
+									_click(null,zb);
+								}else{
+									//_click(null,"NULL");
+									$("grid").style.display="";
+									$("grid").innerHTML="<br><div><font size=2px>&nbsp;&nbsp;无数据</font></div>";
+									/**
+									$("grid").style.display="none";
+									**/
+									$("trend").style.display="none";
+									$("compare").style.display="none";
+								}
+							}catch(e){
+							}
+						}
+					})
+					_ajax.request();
+				}
+			</script>
+		</head>
+		<body stype="margin:0px;">
+			<div style="margin-left: 0px; padding-left: 0px;float: left;width: 100%;height: 300 px;overflow-y:scroll;word-break:break-all;">
+				<div id="tabs" style="margin: 1px; border: 0px; padding: 1px;">
+					<ul>
+						<li><a href="#tabs-1"><label id="tab1">日指标</label></a></li>
+						<li><a href="#tabs-2"><label id="tab2">月指标</label></a></li>
+					</ul>
+					<div id="tabs-1" style="border: 0px; width =100%; padding: 1px 1px 1px 1px;">
+						<table style="margin-left: 4px; border-collapse: collapse; border-color: #9AADBE; BACKGROUND-COLOR: #ffffff; border-top: 0px; border-bottom: 0px;" border="1">
+							<tr height="21px" valign="top" style="padding-bottom: 0px; padding-top: 3px; WIDTH: 100%; border-collapse: collapse; border-color: #9AADBE; BACKGROUND-COLOR: 81A3F5">
+								<td  id="d1" class="tab" background="/hbapp/resources/image/default/tab2.png" onclick='changetab("EntGridD","income");'>收入类</td>
+								<td  class="tab" background="/hbapp/resources/image/default/tab2.png" onclick='changetab("EntGridD","user");'>客户类</td>
+								<td  class="tab" background="/hbapp/resources/image/default/tab2.png" onclick='changetab("EntGridD","traffic");'>业务量类</td>
+								<td  class="tab" background="/hbapp/resources/image/default/tab2.png" onclick='changetab("EntGridD","vas");'>信息化产品类</td>
+								<td  class="tab" background="/hbapp/resources/image/default/tab2.png" onclick='changetab("EntGridD","vas");'>预警类</td>
+							</tr>
+						</table>
+					</div>
+					<div id="tabs-2" style="border: 0px; width =100%; padding: 1px 1px 1px 1px;">
+						<table style="margin-left: 4px; border-collapse: collapse; border-color: #9AADBE; BACKGROUND-COLOR: #ffffff; border-top: 0px; border-bottom: 0px;" border="1">
+							<tr height="21px" valign="top" style="padding-bottom: 0px; padding-top: 3px; WIDTH: 100%; border-collapse: collapse; border-color: #9AADBE; BACKGROUND-COLOR: 81A3F5">
+								<td  id="m1" class="tab" background="/hbapp/resources/image/default/tab2.png" onclick='changetab("EntGridM","income");'>收入类</td>
+								<td  class="tab" background="/hbapp/resources/image/default/tab2.png" onclick='changetab("EntGridM","user");'>客户类</td>
+								<td  class="tab" background="/hbapp/resources/image/default/tab2.png" onclick='changetab("EntGridM","traffic");'>业务量类</td>
+								<td  class="tab" background="/hbapp/resources/image/default/tab2.png" onclick='changetab("EntGridM","vas");'>信息化产品类</td>
+								<td  class="tab" background="/hbapp/resources/image/default/tab2.png" onclick='changetab("EntGridM","vas");'>预警类</td>
+							</tr>
+						</table>
+					</div>
+					<div id="grid" style="display:none"></div>
+				</div>
+			</div>
+			<div>
+				<table>
+					<tr width="100%">
+						<td width="50%"><div id="trend"></div></td>
+						<td><div id="compare"></div></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div id="title_div"></div>
+		<div id="showResult"></div>
+		<form>
+			<input type="hidden" id="city">
+			<input type="hidden" id="brand">
+			<input type="hidden" id="date">
+		</form>
+	</body>
+</html>
+<script>
+	$("tab1").onclick=function(){
+		$("grid").style.display="none";
+		$("trend").style.display="none";
+		$("compare").style.display="none";
+		$("d1").click();
+	}
+	$("tab2").onclick=function(){
+		$("grid").style.display="none";
+		$("trend").style.display="none";
+		$("compare").style.display="none";
+		$("m1").click();
+	}
+</script>

@@ -1,0 +1,50 @@
+@charset "utf-8";
+.panel-primary {
+  border: none;
+}
+.bulletin-simple{
+  width:210px;
+}
+.bulletin-simple-title{
+  @include setRadius(top);
+  .bulletin-simple-title-text{
+    font-size: $font-m1;
+    color: $color-white;
+  }
+  .bulletin-simple-title-func{
+    float:right;
+    font-size: $font-s;
+    color: $color-white;
+    @include textLimit(18%);
+    display: table-cell;
+    text-decoration: none;
+    @include setPadding(top,5px);
+    &:hover{
+      cursor:pointer;
+      }
+  }
+}
+
+.bulletin-simple-context{
+  @include setBorder(notop);
+  background-color: $bgColor-blue2;
+}
+.bulletin-simple-context ul{
+  @include setPadding(left,26px);
+  @include setPadding(column,6px);
+  &:hover{
+    cursor:pointer;
+    background-color: $borderColor1;
+  }
+}
+.bulletin-simple-li-icon{
+    @include setPadding(top,3px);
+    @include setPadding(right,6px);
+    color: green;
+}
+.bulletin-simple-li-text{
+  color:$color-normal;
+  font-size: $font-s;
+  @include textLimit(60%);
+  display: table-cell;
+}

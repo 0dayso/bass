@@ -1,0 +1,121 @@
+BODY {
+
+}
+
+TABLE {
+
+	COLOR: #000033; FONT-FAMILY: "Verdana", "Arial", "Helvetica", "sans-serif"; FONT-SIZE: 11px
+
+}
+
+TD {
+
+	COLOR: #666666; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; FONT-SIZE: 11px
+
+}
+
+A:link {
+
+	COLOR: #000066; TEXT-DECORATION: none
+
+}
+
+A:visited {
+
+	COLOR: #333333; TEXT-DECORATION: none
+
+}
+
+A:active {
+
+	COLOR: #666666; TEXT-DECORATION: none
+
+}
+
+A:hover {
+
+	COLOR: #ff6600; TEXT-DECORATION: underline
+
+}
+
+A.line {
+
+	COLOR: #000066; FONT: bold 12px "宋体"; TEXT-DECORATION: underline
+
+}
+
+A.line:link {
+
+	COLOR: #666; FONT: bold 12px 宋体; TEXT-DECORATION: underline
+
+}
+
+A.line:visited {
+
+	COLOR: #333333; FONT: bold 12px "宋体"; TEXT-DECORATION: underline
+
+}
+
+A.line:hover {
+
+	COLOR: #f60; FONT: bold 12px 宋体; TEXT-DECORATION: none
+
+}
+
+.td {
+
+	FONT-FAMILY: "宋体"; FONT-SIZE: 9pt; LINE-HEIGHT: 150%
+
+}
+
+.big {
+
+	FONT: 14px "宋体"
+
+}
+
+.input1 {
+
+	BACKGROUND-COLOR: #ffffff; BORDER-BOTTOM: #cccccc 1px solid; BORDER-LEFT: #000000 1px solid; BORDER-RIGHT: #cccccc 1px solid; BORDER-TOP: #000000 1px solid; FONT-FAMILY: 宋体; FONT-SIZE: 9pt
+
+}
+
+.button {
+
+	BACKGROUND-COLOR: #00CCFF;
+
+	BORDER-BOTTOM: #000000 1px ridge;
+
+	BORDER-LEFT: #000000 1px ridge;
+
+	BORDER-RIGHT:#000000 1px ridge;
+
+	BORDER-TOP: #000000 1px ridge;
+
+	FONT: 11px "宋体";
+
+	width:35px;
+
+	HEIGHT: 20px;
+
+	cursor: auto;
+
+}
+
+.bg {
+
+	BACKGROUND-COLOR: #eeeeee
+
+}
+
+.bg1 {
+
+	background-image: url(img/bj.jpg);
+
+	background-repeat: repeat;
+
+
+
+	
+
+}

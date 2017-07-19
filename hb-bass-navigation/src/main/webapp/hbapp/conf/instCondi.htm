@@ -1,0 +1,300 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<title>湖北经分</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<script type="text/javascript" src="../resources/js/default/default.js"></script>
+		<link rel="stylesheet" type="text/css" href="../resources/css/default/default.css" />
+<script type="text/javascript">
+var _params = aihb.Util.paramsObj();
+function render(){
+	var sql = "select label,name,dbname,opertype,value(defval,'') defval,datasource,seq from fpf_irs_subject_dim where sid="+_params.id+" order by seq";
+	
+	var grid = new aihb.SimpleGrid({
+		header:[
+			{"name":"维度名称","dataIndex":"label","cellStyle":"grid_row_cell_text"}
+			,{"name":"维度ID","dataIndex":"name","cellStyle":"grid_row_cell_text"}
+			,{"name":"数据库字段","dataIndex":"dbname","cellStyle":"grid_row_cell_text"}
+			,{"name":"数据库类型","dataIndex":"opertype","cellStyle":"grid_row_cell_text"}
+			,{"name":"数据源","dataIndex":"datasource","cellStyle":"grid_row_cell_text"}
+			,{"name":"排序","dataIndex":"seq"}
+			,{"name":"操作","dataIndex":"defval","cellStyle":"grid_row_cell","cellFunc":"oper"}
+		]
+		,sql: sql
+		,ds:"web"
+		,isCached : false
+	});
+	grid.run();
+}
+function oper(val,options){
+	var _obj=$C("div");
+	var _aEdit=$C("a");
+	_aEdit.href="javascript:void(0)";
+	_aEdit.appendChild($CT("编辑"));
+	_aEdit.record=options.record
+	_aEdit.onclick=function(){
+		add(this.record)
+	};
+	_obj.appendChild(_aEdit);
+	_obj.appendChild($CT(" "));
+	
+	_aEdit=$C("a");
+	_aEdit.href="javascript:void(0)";
+	_aEdit.appendChild($CT("删除"));
+	_aEdit.record=options.record
+	_aEdit.onclick=function(){
+		var ajax = new aihb.Ajax({
+			url: "/hbirs/action/confReport?method=deleteDim"
+			,parameters : "sid="+_params.id+"&name="+encodeURIComponent(this.record.name)
+			,callback : function(xmlrequest){
+				alert(xmlrequest.responseText);
+				location.reload();
+			}
+		});
+		ajax.request();
+	};
+	_obj.appendChild(_aEdit);
+	return _obj;
+	//return "<a href='javascript:void(0)' onclick='edit(val,options)'>编辑</a> <a href='javascript:void(0)' onclick='del()'>删除</a>"
+}
+
+var _cont = $C("div");
+var _mask = aihb.Util.windowMask({content:_cont});
+
+function initComp(defVal){
+	if($("ipt_name_select").length==0){
+		var ajax = new aihb.Ajax({
+			url: "/hbirs/action/confReport?method=dim"
+			,sync : true
+			,callback : function(xmlrequest){
+				var _sel=$("ipt_name_select");
+				var result=[];
+				eval("result="+xmlrequest.responseText);
+				for(var k=0;k<result.length;k++){
+					_sel[k+1]=new Option(result[k].name,result[k].tagname);
+					if(defVal&&defVal==_sel[k+1].value){
+						_sel[k+1].selected=true;
+					}
+				}
+				_sel[0]=new Option("请选择","");
+				_sel.style.display="";
+			}
+		});
+		ajax.request();
+	}else{
+		$("ipt_name_select").style.display="";
+		if(defVal && defVal.length>0){
+			var _sel=$("ipt_name_select");
+			for(var k=0;k<_sel.length;k++){
+			//var _sel1=_sel[k];
+				if(defVal==_sel[k].value){
+					_sel[k].selected=true;
+					break;
+				}
+			}
+		}
+	}
+}
+
+function add(options){
+	if(_cont.innerHTML.length==0){
+		
+		var _iPut={};
+		
+		_iPut=$C("select");
+		_iPut.id="datasourceType";
+		_cont.appendChild($CT("数据源类型："));
+		_cont.appendChild(_iPut);
+		
+		_iPut.onchange=function(){
+			$("ipt_name_select").style.display="none";
+			if(this.value=="date"){
+				$("ipt_label").value="统计周期";
+				$("ipt_name").value="time";
+				$("ipt_datasource").value="comp:date";
+			}else if(this.value=="month"){
+				$("ipt_label").value="统计周期";
+				$("ipt_name").value="time";
+				$("ipt_datasource").value="comp:month";
+			}else if(this.value=="city"){
+				$("ipt_label").value="地市";
+				$("ipt_name").value=this.value;
+				$("ipt_datasource").value="comp:"+this.value;
+			}else if(this.value=="county"){
+				$("ipt_label").value="县市";
+				$("ipt_name").value=this.value;
+				$("ipt_datasource").value="comp:"+this.value;
+			}else if(this.value=="county_bureau"){
+				$("ipt_label").value="县市";
+				$("ipt_name").value=this.value;
+				$("ipt_datasource").value="comp:"+this.value;
+			}else if(this.value=="marketing_center"){
+				$("ipt_label").value="营销中心";
+				$("ipt_name").value=this.value;
+				$("ipt_datasource").value="comp:"+this.value;
+			}else if(this.value=="town"){
+				$("ipt_label").value="乡镇";
+				$("ipt_name").value=this.value;
+				$("ipt_datasource").value="comp:"+this.value;
+			}else if(this.value=="cell"){
+				$("ipt_label").value="基站";
+				$("ipt_name").value=this.value;
+				$("ipt_datasource").value="comp:"+this.value;
+			}else if(this.value=="college"){
+				$("ipt_label").value="高校";
+				$("ipt_name").value=this.value;
+				$("ipt_datasource").value="comp:"+this.value;
+			}else if(this.value=="entCounty"){
+				$("ipt_label").value="县市";
+				$("ipt_name").value=this.value;
+				$("ipt_datasource").value="comp:"+this.value;
+			}else if(this.value=="custmgr"){
+				$("ipt_label").value="客户经理";
+				$("ipt_name").value=this.value;
+				$("ipt_datasource").value="comp:"+this.value;
+			}else if(this.value=="select"||this.value=="input"){
+				$("ipt_label").value="";
+				$("ipt_name").value="";
+				$("ipt_datasource").value=this.value+":";
+			}else if(this.value=="comp"){
+				initComp();
+			}
+		}
+		var opts=[new Option("自定义输入框","input")
+			,new Option("维表选择框","comp")
+			,new Option("时间(日)","date")
+			,new Option("时间(月)","month")
+			,new Option("地市","city")
+			,new Option("县市","county")
+			,new Option("高校","college")
+			,new Option("县市集团","entCounty")
+			,new Option("客户经理","custmgr")
+			,new Option("县市区域化","county_bureau")
+			,new Option("营销中心","marketing_center")
+			,new Option("乡镇","town")
+			,new Option("基站","cell")
+			,new Option("自定义选择框","select")
+		];
+		
+		for(var i=0;i<opts.length;i++){
+			_iPut[i]=opts[i];
+		}
+		
+		_cont.appendChild($CT(" "));
+		//维度选择框
+		_iPut=$C("select");
+		_iPut.id="ipt_name_select";
+		_iPut.style.display="none";
+		_iPut.onchange=function(){
+			$("ipt_label").value=this.options[this.selectedIndex].text;
+			$("ipt_name").value=this.value;
+			$("ipt_datasource").value="comp:"+this.value;
+		}
+		_cont.appendChild(_iPut);
+		_cont.appendChild($C("BR"));
+
+		_iPut=$C("input");
+		_iPut.id="ipt_label";
+		_iPut.type="text";
+		_cont.appendChild($CT("维度名称："));
+		_cont.appendChild(_iPut);
+		_cont.appendChild($C("BR"));
+		
+		
+		_iPut=$C("input");
+		_iPut.id="ipt_name";
+		_iPut.type="text";
+		_cont.appendChild($CT("维度ID："));
+		_cont.appendChild(_iPut);
+		_cont.appendChild($C("BR"));
+		
+		_iPut=$C("textarea");
+		_iPut.id="ipt_datasource";
+		_iPut.cols=50;
+		_iPut.rows=3;
+		_cont.appendChild($CT("数据源："));
+		_cont.appendChild(_iPut);
+		_cont.appendChild($C("BR"));
+		
+		_iPut=$C("textarea");
+		_iPut.id="ipt_dbname";
+		_iPut.cols=40;
+		_iPut.rows=2;
+		_cont.appendChild($CT("数据库字段："));
+		_cont.appendChild(_iPut);
+		_cont.appendChild($C("BR"));
+		
+		
+		_iPut=$C("select");
+		_iPut.id="ipt_opertype";
+		_cont.appendChild($CT("数据库类型："));
+		_cont.appendChild(_iPut);
+		_cont.appendChild($C("BR"));
+		_iPut[0]=new Option("字符(varchar)","varchar");
+		_iPut[1]=new Option("数字(int)","int");
+		_iPut[2]=new Option("匹配(like)","like");
+		_iPut[3]=new Option("区间(between)","between");
+		_iPut[4]=new Option("区间(in)","in");
+		_iPut[5]=new Option("范围(range)","range");
+		_iPut[6]=new Option("分隔(split)","split");
+		
+		_iPut=$C("input");
+		_iPut.id="ipt_seq";
+		_iPut.type="text";
+		_cont.appendChild($CT("排序："));
+		_cont.appendChild(_iPut);
+		_cont.appendChild($C("BR"));
+		
+		
+		var iBtn=$C("input");
+		iBtn.type="button";
+		iBtn.className="form_button_short";
+		iBtn.value="确定";
+		
+		iBtn.onclick=function(){
+			var ajax = new aihb.Ajax({
+				url : "/hbirs/action/confReport?method=saveDim"
+				,parameters : "sid="+_params.id+"&name="+encodeURIComponent($("ipt_name").value)+"&label="+encodeURIComponent($("ipt_label").value)+"&dbname="+$("ipt_dbname").value+"&datasource="+encodeURIComponent($("ipt_datasource").value)+"&seq="+$("ipt_seq").value+"&opertype="+$("ipt_opertype").value
+				,callback : function(xmlrequest){
+					alert(xmlrequest.responseText);
+					location.reload();
+				}
+			});
+			ajax.request();
+		}
+		_cont.appendChild(iBtn);
+	}
+	if(options){
+		$("ipt_label").value=options.label||"";
+		$("ipt_name").value=options.name||"";
+		$("ipt_dbname").value=options.dbname||"";
+		$("ipt_opertype").value=options.opertype||"";
+		$("ipt_datasource").value=options.datasource||"";
+		$("ipt_seq").value=options.seq||"";
+		var arr=options.datasource.split(":");
+		var arr1=arr[1];
+		var arr0=arr[0];
+		$("ipt_name_select").style.display="none";
+		if(arr0=="select"||arr0=="input"){
+			$("datasourceType").value=arr0;
+		}else if(arr1=="city"||arr1=="county"||arr1=="date"||arr1=="month"){
+			$("datasourceType").value=arr1;
+		}else if(arr0=="comp"){
+			$("datasourceType").value=arr0;
+			initComp(arr1);
+		}
+	}
+	_mask.style.display="";
+}
+
+window.onload=function(){
+	render();
+}
+</script>
+</head>
+<body>
+<div style="text-align: right;padding: 3px 10px 5px 0px;">
+<input type="button" class="form_button_short" value="新增" onClick="add()"></div>
+<div id="grid" style="display:none;"></div>
+</body>
+</html>

@@ -1,0 +1,59 @@
+@charset "utf-8";
+.panel-primary {
+  border: none;
+}
+.label-default{
+  background-color: $color-bulletin-num;
+}
+.bulletin-normal{
+  width:276px;
+  @include setMargin(row,6px);
+}
+.bulletin-normal-title{
+  @include setRadius(top);
+  .bulletin-normal-title-text{
+    font-size: $font-m1;
+    color: $color-white;
+  }
+  .bulletin-normal-title-func{
+    float:right;
+    font-size: $font-s;
+    color: $color-white;
+    @include textLimit(20%);
+    display: table-cell;
+    text-decoration: none;
+    @include setPadding(top,5px);
+    &:hover{
+      cursor:pointer;
+      }
+  }
+}
+.bulletin-normal-context{
+  @include setBorder(notop);
+  min-height: 150px;
+  background-color: $bgColor-blue2;
+}
+
+.bulletin-normal-context ul{
+  @include setPadding(column,6px);
+  &:hover{
+    cursor:pointer;
+    background-color: $borderColor1;
+  }
+}
+.bulletin-normal-li-rownum{
+  @include setPadding(row,15px);
+}
+.bulletin-normal-li-text{
+  color: $color-bulletin-text;
+  font-size: $font-s;
+  @include textLimit(50%);
+  display: table-cell;
+}
+.bulletin-normal-li-remark{
+  color: $color-bulletin;
+  font-size: $font-s;
+  @include textLimit(25%);
+  display: table-cell;
+  text-align:center;
+}

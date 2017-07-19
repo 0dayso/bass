@@ -1,0 +1,29 @@
+#toolTip{
+   border:1px solid #81BEF5;
+   background-color:#EFEFEF;
+   width:220px;
+   position:absolute;
+   visibility: hidden;
+   overflow: hidden;
+   font-family: Tahoma,"ËÎÌו";
+	 font-size: 12px;
+	 font-weight: normal;
+   color:#333;
+   filter:alpha(opacity=90);
+}
+
+#toolTip h1{
+   display:block;
+   font-family: Tahoma,"ËÎÌו";
+	 font-size: 12px;
+	 font-weight: bold;
+   margin:1px;
+   padding:1px 1px;  
+   height:22; 
+   color:#1B85B8;
+}
+
+#toolTip p {
+   margin:0px;
+   padding:2px 2px;   
+}

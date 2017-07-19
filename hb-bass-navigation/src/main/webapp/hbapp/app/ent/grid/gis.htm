@@ -1,0 +1,162 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>湖北移动经营分析系统</title>
+<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/default/default.js"></script>
+<link rel="stylesheet" type="text/css" href="/hb-bass-navigation/hbapp/resources/css/default/default.css" />
+<script type="text/javascript" src="http://api.map.baidu.com/api?key=9e62ccb3e5cf42f31598904c01abae5b&v=1.0&services=false" ></script>
+<script type="text/javascript">
+var map = undefined;
+var GLEV=3;
+var polygonIdx={};
+var curPolygon=undefined;
+window.onload=function(){
+	map = new BMap.Map("gis");
+	map.enableScrollWheelZoom();
+	map.centerAndZoom(new BMap.Point(114.312, 30.598), 12);
+	map.addControl(new BMap.NavigationControl());
+	map.addControl(new BMap.ScaleControl());
+	map.addControl(new BMap.OverviewMapControl());
+	
+	/*map.addEventListener("zoomend",function(){
+		map.clearOverlays();
+		polygonIdx={};
+		if(map.getZoom()>13){
+			renderAllGridOfLevel(5);
+			renderAllGridOfLevel(6);
+		}else if(map.getZoom()>12){
+			renderAllGridOfLevel(4);
+		}else {
+			renderAllGridOfLevel(3);
+		}
+	});*/
+	
+	initMap();
+}
+
+function initMap(){
+	map.clearOverlays();
+	polygonIdx={};
+	renderAllGridOfLevel(3);
+	//renderAllGridOfLevel(4);
+}
+
+function renderChildGrid(gid,point){
+	try{
+		if(!point){
+			point=polygonIdx[gid].getPoints()[0];
+		}
+		map.centerAndZoom(point, map.getZoom());
+		map.clearOverlays();
+		//map.addOverlay(curPolygon)
+		//return tip(this.gridId,this.gridName,e.point);
+		renderAllGridOfLevel(undefined,gid);
+	}catch(e){debugger;}
+}
+
+function renderAllGridOfLevel(level,gid){
+	var param="";
+	if(gid){
+		param="gid="+gid;
+	}else{
+		param="glev="+level;
+	}
+	var ajax = new aihb.Ajax({
+		url : "/hbirs/action/entGrid?method=getChildGrid&nologin=true"
+		,parameters : param
+		,loadmask : true
+		,callback : function(xmlrequest){
+			var data=undefined;
+			try{
+				eval("data="+xmlrequest.responseText);
+			}catch(e){}
+			if(data && data.length>0){
+				for(var j=0;j<data.length;j++){
+					var pots=[];
+					for(var i=0;i<data[j].points.length;i++){
+						var pot=data[j].points[i];
+						pots[i]=new BMap.Point(pot.lng,pot.lat);
+					}
+					var color="#FFFFFF";
+					//debugger;
+					if (data[j].id.split(".").length>3){
+						color="#"+aihb.FusionChartHelper.COLOR_STYLE["default"][j%14];
+					//}else if(map.getZoom()<=13 && data[j].id.split(".").length==4){
+						//color="#"+aihb.FusionChartHelper.COLOR_STYLE["default"][j%14];
+					}
+					
+					if(pots.length>1){
+						var polygon = new BMap.Polygon (pots,{strokeWeight:2,fillColor:color,fillOpacity:0.7,strokeColor:"#888888"});
+						polygon.gridName=data[j].name;
+						polygon.gridId=data[j].id;
+						polygon.addEventListener("dblclick",function(e){
+							renderChildGrid(this.gridId,e.point);
+						});
+						
+						polygon.addEventListener("mouseover",function(e){
+							_click(this.gridId);
+							return tip(this.gridId,this.gridName,e.point);
+						});
+						
+						/*polygon.addEventListener("click",function(e){
+							
+						});*/
+						map.addOverlay(polygon);
+						polygonIdx[data[j].id]=polygon;
+					}else if(pots.length>0){
+						var marker = new BMap.Marker(pots[0]);
+						marker.gridName=data[j].name;
+						marker.gridId=data[j].id;
+						marker.addEventListener("mouseover",function(e){
+							map.openInfoWindow(
+								new BMap.InfoWindow("<a href='#'>点击详细</a>",{title: this.gridName})
+								,this.getPoint());
+						});
+						map.addOverlay(marker);   
+					}
+				}
+				
+			}
+		}
+	});
+	ajax.request();
+}
+
+function _click(id){
+	if(curPolygon){
+		curPolygon.setStrokeColor("#888888");
+		curPolygon.setFillOpacity(0.7);
+	}
+	
+	var ori = polygonIdx[id];
+	if(ori){
+	ori.setStrokeColor("blue");
+	ori.setFillOpacity(0.9);
+	curPolygon=ori;
+	}
+	/*map.removeOverlay(ori);
+	
+	var polygon = new BMap.Polygon (ori.getPoints(),{strokeWeight:2,fillColor:color});
+	polygon.gridName=data[j].name;
+	polygon.gridId=data[j].id;
+	polygon.addEventListener("mouseover",function(e){
+		return tip(this.gridId,this.gridName,e.point);
+	});
+	map.addOverlay(polygon);*/
+}
+
+function tip(id,name,point){
+	var html='<div><SPAN>集团到达数</SPAN><span> 完成：59.56%<IMG src="/hb-bass-navigation/hbapp/resources/image/default/down.gif" width=16 height=16></span></div><div><SPAN>集团信息化收入</SPAN><span> 完成：85.21%<IMG src="/hb-bass-navigation/hbapp/resources/image/default/right.gif" width=16 height=16></span></DIV><div><SPAN>重点集团覆盖率</SPAN><span> 完成：92.34%<IMG src="/hb-bass-navigation/hbapp/resources/image/default/up.gif" width=16 height=16></span></DIV>';
+	html=" ";
+	map.openInfoWindow(
+		new BMap.InfoWindow(html,{title:name})
+		,point);
+}
+</script>
+
+</head>
+<body stype="margin:0px;">
+<div id="gis" style="width:100%;height:100%;">
+</div>
+</body>
+</html>

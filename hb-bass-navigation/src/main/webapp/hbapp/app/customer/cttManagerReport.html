@@ -1,0 +1,119 @@
+<html xmlns:ai>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<title>待分配客户经理报表</title>
+	<script type="text/javascript" src="../../resources/js/default/default.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../../resources/js/default/tabext.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../../resources/js/datepicker/WdatePicker.js"></script>
+	<link rel="stylesheet" type="text/css" href="../../resources/css/default/default.css" />
+	<script type="text/javascript">
+	var _params = aihb.Util.paramsObj();	
+	var _header=[
+		{"name":"地区","dataIndex":"area_id"}
+		,{"name":"客户经理ID","dataIndex":"manager_id"}
+		,{"name":"客户经理名称","dataIndex":"manager_name"}
+		//,{"name":"登陆名","dataIndex":"login_name"}
+		//,{"name":"手机号","dataIndex":"mobilephone"}
+		//,{"name":"高级客户经理ID","dataIndex":"vip_manager_id"}
+		,{"name":"本月维系用户个数","dataIndex":"user_num"}
+		,{"name":"本月维系新用户个数","dataIndex":"user_new_num"}
+	];
+function genSQL(){
+	var condition = "";
+		var areaColName = "area_name";
+	if(document.forms[0].county.value) {
+		condition += " and a.area_id='" + document.forms[0].county.value + "'";
+		areaColName = "county_name";
+	}
+	else if(document.forms[0].city.value  && document.forms[0].city.value != "0") {
+		condition += " and substr(a.area_id,1,5)='" + document.forms[0].city.value + "'";
+	}
+		
+	var sql = "select (select " + areaColName + " from MK.BT_AREA_ALL where county_code=a.AREA_ID) as area_id,MANAGER_ID,MANAGER_NAME" + 
+	//",LOGIN_NAME,MOBILEPHONE,VIP_MANAGER_ID," + 
+	",USER_NUM,USER_NEW_NUM from NWH.CTT_MANAGER a where 1=1 " + condition;
+	return sql;
+}
+function query(){
+	
+	var grid = new aihb.AjaxGrid({
+		header:_header
+		,sql: genSQL()
+		,callback:function(){
+			aihb.Util.watermark();
+		}
+		,isCached : false
+	});
+	grid.run();
+}
+
+function down(){
+	aihb.AjaxHelper.down({
+		sql : genSQL()
+		,header : _header
+	});
+}
+
+window.onload=function(){
+	var _d=new Date();
+	_d.setDate(_d.getDate()-3);
+	_d.setMonth(_d.getMonth()-1);
+	$("date1").value=_d.format("yyyymm");
+	
+	aihb.Util.loadmask();
+	aihb.Util.watermark();
+	var cityStr = aihb.BassDimHelper.areaCodeHtml("city",_params.cityId,"areacombo(1)");
+	$("cityTd").innerHTML = cityStr;
+}
+	</script>
+</head>
+
+<body>
+<form method="post" action="">
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'dim_div')" title="点击隐藏"><img flag='1' src="../../resources/image/default/ns-expand.gif"></img>&nbsp;查询条件区域：</td>
+	</tr></table></legend>
+	<div id="dim_div">
+	<table align='center' width='99%' class='grid-tab-blue' cellspacing='1' cellpadding='0' border='0'>
+			<tr class='dim_row'>
+				<td class='dim_cell_title'>选择月份 </td>
+				<td class='dim_cell_content'>
+					<input align="right" type="text" id="date1" name="date1" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyyMM'})" class="Wdate"/>
+				</td>
+				<td class='dim_cell_title'>地市</td>
+				<td class='dim_cell_content' id="cityTd">
+				
+				</td>
+				
+				<td class='dim_cell_title'>县市 
+				</td>
+				<td class='dim_cell_content'><ai:dim id='aidim_county' name='county' dbName='county_id' operType='varchar'><select name='county' class='form_select'><option value=''>全部</option></select></ai:dim></td>
+
+			</tr>
+		</table>
+		
+	<table align="center" width="99%">
+		<tr class="dim_row_submit">
+			<td align="right" bgcolor="">
+				<input type="button" class="form_button" value="查询" onClick="query()">&nbsp;
+				<input type="button" class="form_button" value="下载" onclick="down()">&nbsp;
+			</td>
+		</tr>
+	</table>
+	</div>
+</fieldset>
+</div><br>
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'show_div')" title="点击隐藏"><img flag='1' src="../../resources/image/default/ns-expand.gif"></img>&nbsp;数据展现区域：</td>
+		<td></td>
+	</tr></table></legend>
+	<div id="grid" style="display:none;"></div>
+</fieldset>
+</div><br>
+</form>
+</body>
+</html>

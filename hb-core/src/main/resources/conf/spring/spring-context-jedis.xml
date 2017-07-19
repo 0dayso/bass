@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context.xsd"
+	default-lazy-init="true">
+
+	<description>Jedis Configuration</description>
+
+    <!-- 加载配置属性文件 -->
+	<context:property-placeholder ignore-unresolvable="true" location="classpath:conf/pst.properties" />
+
+	<bean id="jedisCluster" class="redis.clients.jedis.JedisCluster">
+		<constructor-arg index="0">
+			<set>
+				<bean id="hostAndPort" class="redis.clients.jedis.HostAndPort">
+					<constructor-arg index="0" value="${com.asiainfo.hb.redis.server.ip}" />
+					<constructor-arg index="1" value="${com.asiainfo.hb.redis.server.port}" />
+				</bean>
+			</set>
+		</constructor-arg>
+	</bean>
+
+	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<property name="maxIdle" value="300" /> <!-- 最大能够保持idel状态的对象数  -->
+		<property name="maxTotal" value="60000" /> <!-- 最大分配的对象数 -->
+		<property name="maxWaitMillis" value="2000" /> <!-- 最大等待时长-->
+		<property name="testOnBorrow" value="true" /> <!-- 当调用borrow Object方法时，是否进行有效性检查 -->
+	</bean>
+	<bean id="jedisPool" class="redis.clients.jedis.JedisPool">
+		<constructor-arg index="0" ref="jedisPoolConfig" />
+		<constructor-arg index="1" value="${com.asiainfo.hb.redis.server.ip}" />
+		<constructor-arg index="2" value="${com.asiainfo.hb.redis.server.port}" type="int" />
+		<constructor-arg index="3" value="${com.asiainfo.hb.redis.server.timeout}"  type="int"/>
+		<constructor-arg index="4" value="${com.asiainfo.hb.redis.server.auth}" />
+	</bean>
+	<!--<bean id="jedisSentinelPool" class="redis.clients.jedis.JedisSentinelPool">
+		<constructor-arg index="0" value="${redis.masterName}"/>
+		<constructor-arg index="1">
+			<set>
+				<value>${redis.sentinel_1}</value>
+				<value>${redis.sentinel_2}</value>
+				<value>${redis.sentinel_3}</value>
+			</set>
+		</constructor-arg>
+		<constructor-arg index="2" ref="jedisPoolConfig"/>
+	</bean>-->
+	<!--<bean id="shardedJedisPool" class="redis.clients.jedis.ShardedJedisPool">
+		<constructor-arg index="0" ref="jedisPoolConfig"/>
+		<constructor-arg index="1">
+			<list>
+				<bean name="slaver" class="redis.clients.jedis.JedisShardInfo">
+					<constructor-arg index="0" value="${redis.slaver.host}"/>
+					<constructor-arg index="1" value="${redis.slaver.port}" type="int"/>
+				</bean>
+				<bean name="master" class="redis.clients.jedis.JedisShardInfo">
+					<constructor-arg index="0" value="${redis.master.host}"/>
+					<constructor-arg index="1" value="${redis.master.port}" type="int"/>
+				</bean>
+			</list>
+		</constructor-arg>
+	</bean>-->
+
+</beans>

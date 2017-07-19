@@ -1,0 +1,38 @@
+<%@ page contentType="text/html; charset=utf-8"%>
+<style type="text/css">
+	/*html, body {
+        margin:0;
+        padding:0;
+        border:0 none;
+        overflow:hidden;
+        height:100%;
+    }*/
+  #loading{
+		position:absolute;
+		left:40%;
+		top:35%;
+		border:1px solid #6593cf;
+		padding:2px;
+		background:#c3daf9;
+		width:200px;
+		text-align:center;
+		z-index:20001;
+	}
+	#loading .loading-indicator{
+		border:1px solid #a3bad9;
+		background:white url(${mvcPath}/hbbass/common2/image/block-bg.gif) repeat-x;
+		color:#003366;
+		font:bold 13px tahoma,arial,helvetica;
+		padding:10px;
+		margin:0;
+	}
+</style>
+<div id="loadmask" style="display:none">
+	<div id="loadingmask" style="width:100%;height:200%;background:#c3daf9;position:absolute;z-index:20000;left:0;top:0;">&#160;</div>
+	<div id="loading">
+			<div class="loading-indicator">
+				<img src="${mvcPath}/hbbass/common2/image/grid-loading.gif" style="width:16px;height:16px;" align="absmiddle">
+				&#160;加载中请稍候.....
+			</div>
+	</div>
+</div>

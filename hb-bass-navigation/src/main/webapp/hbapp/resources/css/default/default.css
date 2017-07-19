@@ -1,0 +1,370 @@
+/*####### Begin:表格属性   ###########*/
+/* #ebf3fd #D9ECF6*/
+.grid-tab-blue{
+	/**/background-color:#c3daf9;
+}
+
+/*####### Begin:表格行属性   ###########*/
+/* 查询结果的表头 */
+.grid_title_blue {
+	background:#ebf3fd url(../../image/default/grid3-hrow-over.gif) repeat-x left bottom;
+}
+
+.grid_title_blue_noimage {
+	background-color: #ebf3fd;
+	text-align: center;
+}
+
+/* 查询结果输出行样式1  用于隔行效果 #D9ECF6*/
+.grid_row_blue {
+	/**/background-color: #FFFFFF;
+}
+/* 查询结果输出行样式2 用于隔行效果*/
+.grid_row_alt_blue {
+	/**/background-color: #EFF5FB;
+}
+/* 查询结果输出行样式3  选中该行时 高亮显示 #A6C5FD*/
+.grid_row_over_blue {
+	/**/background-color: #D9ECF6;
+}
+
+
+/*####### Begin:表格列属性   ###########*/
+.grid_title_cell {
+	color: #000000;
+	font-family: "宋体";
+	font-size: 12px;
+	line-height: 25px;
+	height:25px;
+	text-align: center;
+	font-weight : normal;
+	font-variant: normal;
+}
+/*文字居中*/
+.grid_row_cell {
+	font-family: "宋体";
+	font-size: 12px;
+	line-height: 20px;
+	font-weight: normal;
+	font-variant: normal;
+	color: #000000;
+	text-align: center;
+	padding: 0 px 3 px 0px 3px;
+}
+/*文字居右*/
+.grid_row_cell_number {
+	font-family: "宋体";
+	font-size: 12px;
+	line-height: 20px;
+	font-weight: normal;
+	font-variant: normal;
+	color: #000000;
+	text-align: right;
+	padding: 0 px 3 px 0px 3px;
+}
+/*文字居左*/
+.grid_row_cell_text {
+	font-family: "宋体";
+	font-size: 12px;
+	line-height: 20px;
+	font-weight: normal;
+	font-variant: normal;
+	color: #000000;
+	text-align: left;
+	padding: 0 px 3 px 0px 3px;
+}
+
+/*####### Begin:维度表格行属性   ###########*/
+.dim_row{
+	padding-left: 3 px;
+	height:23px;
+}
+.dim_row_submit{
+	height:20px;
+}
+
+/*####### Begin:维度表格列属性   ###########*/
+.dim_cell_title {
+	padding-left: 3 px;
+	font-family: "宋体";
+	font-size: 12px;
+	line-height: 20px;
+	font-weight: normal;
+	font-variant: normal;
+	color: #000000;
+	width: 10%;
+	background-color: #D9ECF6;
+}
+/* 查询条件值  */
+.dim_cell_content {
+	padding-left: 3 px;
+	font-family: "宋体";
+	font-size: 12px;
+	line-height: 20px;
+	color: #000000;
+	width: 23%;
+	background-color:#EFF5FB;
+}
+
+.dim_cell_title4 {
+	font-family: "宋体";
+	font-size: 12px;
+	line-height: 20px;
+	font-weight: normal;
+	font-variant: normal;
+	color: #000000;
+	width: 10%;
+	background-color: #D9ECF6;
+}
+/* 查询条件值  */
+.dim_cell_content4 {
+	font-family: "宋体";
+	font-size: 12px;
+	line-height: 20px;
+	color: #000000;
+	width: 15%;
+	background-color:#EFF5FB;
+}
+
+/*####### Begin:KPI的样式导入   ###########*/
+.portlet{
+  	margin: 3px;
+	border: 1px solid #c3daf9;
+	filter:alpha(opacity=90);
+}
+.portlet.title {
+ 	padding: 3px 5px 1px 8px;
+ 	font-size: 13px;
+ 	height: 20px;
+ 	border-bottom: 1px solid #c3daf9;
+	background-color: #EFF5FB;
+}
+.portlet.content{
+	padding: 3px;
+}
+
+.feedback {
+	position:absolute;
+	left:20%;top:20%;
+	width:600px;
+	padding: 1 px 3 px 10 px 10 px;
+	z-index:100;background-color: #EFF5FB;
+	border:1px solid #c3daf9;
+}
+
+.feedback_re {
+	width:600px;
+	padding: 1 px 3 px 10 px 10 px;
+	background-color: #EFF5FB;
+	border:1px solid #c3daf9;
+}
+/*####### End:KPI的样式导入   ###########*/
+
+
+/*####### Begin:维度表格表单属性   ###########*/
+.form_select{
+	width:160px;
+}
+.form_input_between{
+	width:70px;
+}
+.form_input{
+	width:160px;
+}
+.form_button{
+	BORDER-RIGHT: #7b9ebd 1px solid; 
+	BORDER-TOP: #7b9ebd 1px solid; 
+	BORDER-LEFT: #7b9ebd 1px solid;
+	BORDER-BOTTOM: #7b9ebd 1px solid;
+	PADDING: 2px ,2px; 
+	FONT-SIZE: 12px; 
+	FILTER: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr=#ffffff, EndColorStr=#cecfde); 
+	CURSOR: hand; 
+	COLOR: black;
+ 	width:80px;
+ 	height:20px;
+ 	margin-left:5px;
+}
+
+.form_button_short{
+	BORDER-RIGHT: #7b9ebd 1px solid; 
+	BORDER-TOP: #7b9ebd 1px solid; 
+	BORDER-LEFT: #7b9ebd 1px solid;
+	BORDER-BOTTOM: #7b9ebd 1px solid;
+	PADDING: 2px ,2px; 
+	FONT-SIZE: 12px; 
+	FILTER: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr=#ffffff, EndColorStr=#EFF5FB); 
+	CURSOR: hand; 
+	COLOR: black;
+ 	width:40px;
+ 	height:20px;
+}
+
+/*####### Begin:其他一些div的属性   ###########*/
+.divinnerfieldset{
+	padding:3px,6px;
+}	
+.selectarea {
+	position:absolute;
+	left:20%;top:30%;
+	width:200px;
+	padding: 10 px,10 px;
+	z-index:30;background-color: #EFF5FB;
+	border:1px solid #c3daf9;
+	filter:alpha(opacity=80);
+}
+.selectarea .close{
+	position:absolute ;
+	top:1px;right : 1px;
+	cursor : hand;
+	font:bold 10px tahoma,arial,helvetica;
+}
+
+/*####### Begin:分页样式   ###########*/
+.pagination {
+    padding: 5px;
+    float: left;
+}
+
+.pagination a, .pagination a:link, .pagination a:visited {
+    padding: 2px 5px 2px 5px;
+    margin: 2px;
+    border: 1px solid #aaaadd;
+    text-decoration: none;
+    color: #006699;
+}
+
+.pagination a:hover, .pagination a:active {
+    border: 1px solid #006699;
+    color: #000;
+    text-decoration: none;
+}
+
+.pagination span.current {
+    padding: 2px 5px 2px 5px;
+    margin: 2px;
+    border: 1px solid #006699;
+    font-weight: bold;
+    background-color: #006699;
+    color: #FFF;
+}
+
+.pagination span.disabled {
+    padding: 2px 5px 2px 5px;
+    margin: 2px;
+    border: 1px solid #eee;
+    color: #ddd;
+}
+/*####### End:分页样式   ###########*/
+
+
+
+
+
+/*####### Begin:继承Bass1.5样式   ###########*/
+BODY {
+	FONT-FAMILY: "宋体"; 
+	FONT-SIZE: 12px;
+	margin:3px 0px 0px 0px;
+	/*background-image:url(/hb-bass-navigation/hbbass/images/bg.gif);*/
+}
+
+.tab{
+	font:12px;border-bottom:0px;border-top:0px;height:20;cursor:hand;border-color:#9AADBE;text-align:center;PADDING-TOP:6px;padding-left:6px;padding-right:6px;
+}
+
+/* loadmask */
+.loadingmask{
+	width:1366px;
+	height:100%;
+	background:#c3daf9;
+	position:absolute;
+	z-index:20000;
+	left:0;
+	top:0;
+}
+.loading{
+	position:absolute;
+	left:40%;
+	top:35%;
+	border:1px solid #6593cf;
+	padding:2px;
+	background:#c3daf9;
+	width:200px;
+	text-align:center;
+	z-index:20001;
+}
+.loading .loading-indicator{
+	border:1px solid #a3bad9;
+	background: white url(../../image/default/block-bg.gif) repeat-x;
+	color:#003366;
+	font:bold 13px tahoma,arial,helvetica;
+	padding:10px;
+	margin:0;
+}
+.loading .loading-indicator .image{
+	width : 16px;
+	height : 16px;
+	background : url(../../image/default/grid-loading.gif) repeat-x ;
+	left:24px;
+	POSITION: absolute;
+}
+
+.calendarimage{
+	cursor : hand;
+	width : 16px;
+	height : 16px;
+	background : url(../../image/default/calendar.gif) repeat-x ;
+}
+/* 连接样式表 */
+A:link {
+	COLOR: #000066; TEXT-DECORATION: none
+}
+A:visited {
+	COLOR: #333333; TEXT-DECORATION: none
+}
+A:active {
+	COLOR: #666666; TEXT-DECORATION: none
+}
+A:hover {
+	COLOR: #ff6600; TEXT-DECORATION: underline
+}
+A.line {
+	COLOR: #000066; FONT: bold 12px "宋体"; TEXT-DECORATION: underline
+}
+A.line:link {
+	COLOR: #666; FONT: bold 12px 宋体; TEXT-DECORATION: underline
+}
+A.line:visited {
+	COLOR: #333333; FONT: bold 12px "宋体"; TEXT-DECORATION: underline
+}
+A.line:hover {
+	COLOR: #f60; FONT: bold 12px 宋体; TEXT-DECORATION: none
+}
+td{
+ 	FONT-FAMILY: "宋体"; 
+	FONT-SIZE: 12px;
+	LINE-HEIGHT: 18px;
+	/*TABLE-LAYOUT: fixed;WORD-BREAK: break-all;*/
+}
+
+/*frame的导航*/
+#navigation {position: relative;z-index: 2;font-size:12px;}
+/*#navigation .primary {border-bottom: 1px solid #d8d8dc;background: #366388 url(../../image/default/map1.v19.png) 0 -250px repeat-x;}*/
+
+#navigation .primary {border-bottom: 1px solid #d8d8dc;background: #d8d8dc url(../../image/default/nav_icon.png) 0 -490px repeat-x;width : 100%; }
+
+#navigation .primary li {float: left;}
+#navigation .primary a {position: relative;	float: left;margin-right: 0px;padding: 6px 8px 6px 7px;color: #366388/*#fff*/;font-weight: bold;}
+#navigation .primary li.active a {padding: 5px 8px 7px 8px;	margin-bottom: -1px;border: 1px solid #d8d8dc;border-width: 1px 1px 0 1px;color: #314251;background: #fff}
+#navigation .secondary {border: 1px solid #dcdcdc;border-width: 0 1px 1px 1px;background: #fefefe}
+#navigation .secondary li {float: left;padding: 0 11px;}
+#navigation .secondary a {float: left;padding: 5px 0;margin:0px;font-weight: bold;color:#0058A6}
+#navigation .secondary li.active a {color: #314251}
+#navigation .primary:after,#navigation .secondary:after {content: ".";display: block;height: 0;	clear: both;visibility: hidden}
+#navigation .primary,#navigation .secondary {zoom: 1}
+
+.tl_banner{background-color:#C9261C;color:#fff;border: 1px solid #990D1B;} 
+.tl_banner_color{color:#fff;}
+//.tl_banner{background-color:#eee;color:#666;border-color:#B6BAC0} 
+//.tl_banner_color{color:#FF5500}

@@ -1,0 +1,10 @@
+@charset "utf-8";
+.page{
+    @include setPadding(top,8px);
+    span{
+        @include setPadding(row,5px);
+    }
+    .page-btn{
+        cursor:pointer;
+    }
+}

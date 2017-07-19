@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<title>湖北经分</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<script type="text/javascript" src="../resources/js/default/default.js"></script>
+		<link rel="stylesheet" type="text/css" href="../resources/css/default/default.css" />
+<script type="text/javascript">
+var _params = aihb.Util.paramsObj();
+function save(){
+	if($("sqlText").value.length>0){
+		var ajax = new aihb.Ajax({
+			url: "/hbirs/action/confReport?method=saveSQL"
+			,parameters : ("sid="+_params.id
+						+"&sql="+encodeURIComponent($("sqlText").value)
+						+"&grid="+encodeURIComponent($("gridText").value)
+						+"&maxTime="+encodeURIComponent($("maxTime").value)
+						+"&ds="+encodeURIComponent($("ds").value)
+						+"&cache="+encodeURIComponent($("cache").value)
+						+"&excel="+encodeURIComponent($("excel").value)
+						+"&chart="+encodeURIComponent($("chart").value)
+						+"&areaAll="+encodeURIComponent($("areaAll").value)
+			)
+			,callback : function(xmlrequest){
+				alert(xmlrequest.responseText);
+			}
+		});
+		ajax.request();
+	}else{
+		alert("请填入SQL");
+	}
+}
+
+window.onload=function(){
+	var ajax = new aihb.Ajax({
+		url: "/hbirs/action/confReport?method=getSQL"
+		,parameters : "sid="+_params.id
+		,callback : function(xmlrequest){
+			var res={};
+			eval("res="+xmlrequest.responseText);
+			$("sqlText").value=res.sql;
+			$("maxTime").value=res.maxTime||"";
+			$("gridText").value=res.grid||"SimpleGrid";
+			$("cache").value=res.cache||"";
+			$("ds").value=res.ds||"";
+			$("excel").value=res.excel||"";
+			$("chart").value=res.chart||"";
+			$("areaAll").value=res.areaAll||"";
+		}
+	});
+	ajax.request();
+}
+</script>
+</head>
+<body>
+<div style="text-align: right;padding-right:15px;">使用Excel下载：<select id=excel><option value="true">是</option><option value="">否</option></select> 开启图形：<select id=chart><option value="true">是</option><option value="">否</option></select> 全省权限：<select id=areaAll><option value="true">是</option><option value="">否</option></select> 使用缓存(强烈建议开启)：<select id=cache><option value="">是</option><option value="false">否</option></select> 数据源：<select id=ds><option value="">仓库</option><option value="web">web库</option></select> 数据量：<select id=gridText><option value="SimpleGrid">很小(小于1k条)</option><option value="AjaxGrid">普通(小于6w条)</option><option value="PieceGrid">很大(大于6w条)</option></select>(必填重要)  <input type="button" class="form_button_short" value="保存" onClick="save()"></div>
+<div style="padding: 5px 15px 5px 10px;">
+<TABLE class=grid-tab-blue cellSpacing=1 cellPadding=0 width="97%" align=right border=0>
+	<TR class=grid_title_blue>
+		<TD class=grid_title_cell width="80">配置项</TD>
+		<TD class=grid_title_cell>值</TD>
+	</TR>
+	<TR class=grid_row_blue>
+		<TD class=grid_row_cell>默认时间</TD>
+		<TD class="grid_row_cell_text" style="padding:5px;"><TEXTAREA id="maxTime" rows=3 cols=120></TEXTAREA></TD>
+	</TR>
+	<TR class=grid_row_blue>
+		<TD class=grid_row_cell>SQL</TD>
+		<TD class="grid_row_cell_text" style="padding:5px;"><TEXTAREA id="sqlText" rows=23 cols=120></TEXTAREA></TD>
+	</TR>
+</TABLE>
+</div>
+</body>
+</html>

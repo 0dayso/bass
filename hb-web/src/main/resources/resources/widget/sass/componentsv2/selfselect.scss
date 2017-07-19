@@ -1,0 +1,10 @@
+@charset "utf-8";
+.SelfSelect{
+	@include setPadding(top,9px);
+	@include setPadding(left,3px);
+	.SelfSelect-name{
+	}
+	.SelfSelect-select{
+		@include setBorder(null);
+	}
+}

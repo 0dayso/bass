@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>�����ҳ</title>
+<link type="text/css" href="/hb-bass-navigation/hbapp/resources/js/jquery/themes/redmond/jquery.ui.css" rel="stylesheet" />
+<link type="text/css" href="/hb-bass-navigation/hbapp/resources/css/default/default.css" rel="stylesheet" />
+<script type="text/javascript" src="../../../resources/js/default/default.js" charset="utf-8"></script>
+<script type="text/javascript" src="../../../resources/js/default/tabext.js" charset="utf-8"></script>
+<script type="text/javascript" src="/hb-bass-navigation/hbapp/kpiportal/localres/kpi.js"></script>
+<script type="text/javascript" src="grid.js" charset="utf-8"></script>
+<script type="text/javascript" src="../../../resources/js/jquery/jquery.js"></script>
+<script type="text/javascript" src="../../../resources/js/jquery/ui/jquery.ui.js"></script>
+<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/chart/FusionCharts.js"></script>
+<link rel="stylesheet" type="text/css" href="/hb-bass-navigation/hbapp/resources/css/default/default.css" />
+<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/default/timeline.js"></script>
+<style>
+.title2 {background:url(img/banner.png) repeat-x; background-attachment:scroll; background-position:right center; color : #FFFFFF; font-size : 14px; font-weight : bold; line-height : 30px;}
+.porlet {width : 98% ; height : 95%; margin-bottom : 3px; border : 1px solid #aabbf9;}
+</style>
+
+<script type="text/javascript"><!--
+aihb.Util.addEventListener(window,"load",function(){
+		timelineTip({responsible:"�պ���",timeline:"ÿ��16��",contact:"13871272007"});
+	});
+jQuery.noConflict();
+var appName="EntGridD";
+var area="";
+var cityCode="";
+var curDate="";
+var _params = aihb.Util.paramsObj();
+var cityId = _params.cityId;
+var selCityId = _params.selCityId;
+if(!selCityId){
+	selCityId = cityId;
+}
+jQuery(function($) {
+	//alert(cityId);
+	//alert(selCityId);
+	cityCode = selCityId=="0"?"HB.WH":aihb.Constants.getArea(selCityId).cityCode;
+	//alert(cityCode);
+	$("select option[value="+cityCode+"]").attr("selected", true);
+	if(_params.cityId != 0) $("select option[value!="+cityCode+"]").remove();//attr("hidden", true);
+	function getArea(){
+		area = $("#areaSel")[0].value;
+		selCityId = aihb.Constants.getArea(area).cityId;
+	}
+	getArea();
+	$("#queryByArea")[0].onclick=function(){
+		getArea();
+		initGrid();
+		aihb.Util.loadmask();
+		window.location.href="/hb-bass-navigation/hbapp/app/ent/grid/grid_main.htm?cityId="+cityId+"&selCityId="+selCityId;
+	}
+})
+
+function initGrid() {
+	var sql = " select p.grid_id||p.grid_name name"
++" ,a1,a2"
++" ,b1,b2"
++" ,c1,c2"
++" ,d1,d2"
++" ,value(q.value,0) ent_cnt from "
++" (select a.grid_id,a.grid_name,"
++" count(distinct case when b.type='ADMIN' then b.grid_id end ) a1,count(distinct case when b.type='ADMIN' then c.grid_id end) a2,"
++" count(distinct case when b.type='SA' then b.grid_id end ) b1,count(distinct case when b.type='SA' then c.grid_id end) b2,"
++" count(distinct case when b.type='SPE' then b.grid_id end) c1,count(distinct case when b.type='SPE' then c.grid_id end) c2,"
++" count(distinct b.grid_id) d1,count(distinct c.grid_id) d2 from "
++" (select grid_id,grid_name from nmk.grid_tree_info where level=3 and parentgrid_id='"+area+"') a "
++" left join (select grid_id,grid_name,parentgrid_id,type from nmk.grid_tree_info where level=4) b on a.grid_id=b.parentgrid_id"
++" left join (select grid_id,grid_name,parentgrid_id,type from nmk.grid_tree_info where level=5) c on b.grid_id=c.parentgrid_id"
++" group by a.grid_id,a.grid_name) p  "
++" left join (select grid_id,value from nmk.grid_kpi_dayly  where zb_code='G00010' and time_id='"+curDate+"' and level=3) q on p.grid_id=q.grid_id"
++" order by 1 with ur"
+//alert(sql);
+	var grid = new aihb.SimpleGrid({
+		header:[
+			{"name":["�����","#rspan"],"dataIndex":"name","cellStyle":"grid_row_cell_text"
+				,cellFunc:function(val){
+					if(val.length>8){
+						return val.substring(8,val.length);
+					}
+					return val;
+			}}
+			,{"name":["�������","������"],"dataIndex":"a1","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+			,{"name":["#cspan","΢����"],"dataIndex":"a2","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+			,{"name":["SA","������"],"dataIndex":"b1","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+			,{"name":["#cspan","΢����"],"dataIndex":"b2","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+			,{"name":["�������","������"],"dataIndex":"c1","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+			,{"name":["#cspan","΢����"],"dataIndex":"c2","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+			,{"name":["�ϼ�","������"],"dataIndex":"d1","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+			,{"name":["#cspan","΢����"],"dataIndex":"d2","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+			,{"name":["���ſͻ�","#rspan"],"dataIndex":"ent_cnt","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+		]
+		,sql: sql
+		,isCached : "false"
+	});
+	grid.run();
+};
+
+window.onload = function(){
+	_foo();
+	
+	//��ҪĬ��ʱ��
+	var _ajax = new aihb.Ajax({
+		url : "/hbirs/action/kpi?method=currentDate"
+		,parameters : "appName="+appName
+		,loadmask : false
+		,callback : function(xmlrequest){
+			if(curDate=="")
+				curDate=xmlrequest.responseText;
+			$("curDateDiv").innerHTML="��ݸ��£�"+curDate
+			$("trendDiv").innerHTML += " ��ݸ��£�"+curDate.substr(0,6)
+			jQuery("#tabs").tabs();
+			
+			initGrid();
+			
+			//��ʼ���ͻ�����
+			getJson(/* ���� G00054*/
+				" select 'Top' || char( int ( rownumber() over() )) topn,grid_name, value val from nmk.grid_kpi_dayly where level=5 and time_id='" + curDate + "' and grid_id not like '%UNKNOWN%' and zb_code = 'G00054' and upper(staff_id) not like '%SA%' and substr(grid_id,1,5)='"+cityCode+"' order by value desc fetch first 10 rows only " ,
+				// old " select 'Top' || char( int ( rownumber() over() )) topn,(select staff_name from nmk.dim_grid_staff b where b.staff_id=a.staff_id)staff_id, sum(value)val from NMK.GRID_KPI_DAYLY a where staff_id is not null and time_id='" + curDate + "' and zb_code = 'G00054' group by staff_id  order by val desc fetch first 10 rows only",
+				function(xhr){
+					var obj1;
+					eval("obj1 = (" + xhr.responseText + ")");
+					//genRows($("table1"),obj,[{dataIndex:"topn"},{dataIndex:"staff_id",cellStyle:"grid_row_cell_text"},{dataIndex:"val",cellStyle:"grid_row_cell_number"}]);			
+					genRows($("table1"),obj1,["topn","grid_name","val"]);
+				}
+			);
+			getJson(/*�û���  'G00010' */
+				" select 'Top' || char( int ( rownumber() over() )) topn,grid_name, value val from nmk.grid_kpi_dayly where level=5 and time_id='" + curDate + "' and grid_id not like '%UNKNOWN%' and zb_code = 'G00010' and upper(staff_id) not like '%SA%' and substr(grid_id,1,5)='"+cityCode+"' order by value desc fetch first 10 rows only " ,
+				// old " select 'Top' || char( int ( rownumber() over())) topn, (select staff_name from nmk.dim_grid_staff b where b.staff_id=a.staff_id)staff_id, sum(value)val from NMK.GRID_KPI_DAYLY a where staff_id is not null and time_id='" + curDate + "' and zb_code='G00010' group by staff_id  order by val desc fetch first 10 rows only",
+				function(xhr){
+					var obj2;
+					eval("obj2 = (" + xhr.responseText + ")");
+					genRows($("table2"),obj2,["topn","grid_name","val"]);
+				}
+			);
+			getJson(/* ��Ϣ������ 'G00005'*/
+				" select 'Top' || char( int ( rownumber() over() )) topn,grid_name, value val from nmk.grid_kpi_dayly where level=5 and time_id='" + curDate + "' and grid_id not like '%UNKNOWN%' and zb_code = 'G00005' and upper(staff_id) not like '%SA%' and substr(grid_id,1,5)='"+cityCode+"' order by value desc fetch first 10 rows only " ,
+				// old " select 'Top' || char( int (rownumber() over())) topn,(select staff_name from nmk.dim_grid_staff b where b.staff_id=a.staff_id)staff_id, sum(value)val from NMK.GRID_KPI_DAYLY a where staff_id is not null and time_id='" + curDate + "' and zb_code = 'G00005' group by staff_id  order by val desc fetch first 10 rows only",
+				function(xhr){
+					var obj3;
+					eval("obj3 = (" + xhr.responseText + ")");
+					genRows($("table3"),obj3,["topn","grid_name","val"]);
+				}
+			);
+			
+			getJson(
+				"select count(*) manager_cnt,sum(num) group_cnt from (select staff_id,count(groupcode) num from nwh.ent_info_"+curDate+" a where g_state in (0,1) and substr(ownerareaid,1,5) = '"+area+"' group by staff_id ) a left join (select staff_id from  nmk.grid_tree_info where level=5) b on a.staff_id=b.staff_id where b.staff_id is null",
+				function(xhr){
+					var obj=null;
+					eval("obj = (" + xhr.responseText + ")");
+					
+					if(obj && obj.length>0 && obj[0].manager_cnt>0)
+						$("ent_hint").innerHTML = '��ʾ������<span style="color: red;font-weight:bold;"><a id=downStaff href=javascript:void(0) title="�������δ�����ͻ�������ϸ"><u>'+obj[0]["manager_cnt"]+'</u></a></span>λ�ͻ�����δ���������<span style="color: red;font-weight:bold;"><a id=downGroup href=# title="�������δ����������ϸ"><u>'+obj[0]["group_cnt"]+'</u></a></span>�Ҽ���δ���������';
+					//����δ�����ͻ�������ϸ
+					jQuery("#downStaff")[0].onclick=function(){
+						var title = "δ�����ͻ�������ϸ";
+						var sql = "select a.staff_id,staff_name from ( select distinct staff_id,staff_name  from nwh.ent_info_"+curDate+" a  where g_state in (0,1) and substr(ownerareaid,1,5) = '"+area+"' ) a  left join (select staff_id from  nmk.grid_tree_info where level=5) b on a.staff_id=b.staff_id where b.staff_id is null";
+						aihb.AjaxHelper.down({
+							sql : sql
+							,fileName : title
+							,header : '{"staff_id":"�ͻ��������","staff_name":"�ͻ��������"}'
+						});
+					};
+					//����δ����������ϸ
+					jQuery("#downGroup")[0].onclick=function(){
+								var title = "δ����������ϸ";
+								var sql = "select a.groupcode,a.groupname from ( select distinct staff_id,groupcode,groupname  from nwh.ent_info_"+curDate+" a  where g_state in (0,1) and substr(ownerareaid,1,5) = '"+area+"' ) a  left join (select staff_id from  nmk.grid_tree_info where level=5) b on a.staff_id=b.staff_id where b.staff_id is null";
+								aihb.AjaxHelper.down({
+									sql : sql
+									,fileName : title
+									,header : '{"groupcode":"���ű���","groupname":"�������"}'
+								});
+					};
+				}
+			);
+			
+			//������ͼ
+			chartTrend();
+			
+		}
+	});
+
+	_ajax.request();
+	
+	
+	//jQuery(".column").sortable({connectWith: '.column'});
+	//jQuery(".column").disableSelection();
+	
+	$("map_view").onclick=function(){
+		//parent.addTab(this.value,"grid_view.htm");
+		tabAdd({title:this.value,url:"/hbapp/app/ent/grid/grid_view.htm?cityId="+_params.cityId});
+	}
+	
+	$("grid_edit").onclick=function(){
+		tabAdd({title:this.value,url:"/hbapp/app/ent/grid/grid_edit.htm?cityId="+_params.cityId});
+		//parent.addTab(this.value,"grid_edit.htm");
+	}
+	
+	$("grid_dispatch").onclick=function(){
+		tabAdd({title:this.value,url:"/hbapp/app/ent/grid/grid_dispatch.htm"});
+		//parent.addTab(this.value,"grid_dispatch.htm");	
+	}
+	
+	$("grid_kpi").onclick=function(){
+		tabAdd({title:this.value,url:"/hbapp/app/ent/grid/grid_kpi.htm?cityId="+_params.cityId});
+		//parent.addTab(this.value,"grid_kpi.htm");	
+	}
+	
+	$("grid_appraisal").onclick=function(){
+		tabAdd({title:this.value,url:"http://10.25.124.46/ldc_new/hra/hraMainInBass.html?SIMPLENAME="+area.substring(3,5)+"&"+_params._oriUri});
+		//parent.addTab(this.value,"http://10.25.124.46/ldc_new/hra/hraMainInBass.html?SIMPLENAME="+area.substring(3,5)+"&"+_params._oriUri);	
+	}
+			
+	$("ent_view").onclick=function(){
+		tabAdd({title:this.value,url:"/hbirs/action/confReport?method=render&sid=5145"});
+		//parent.addTab(this.value,"/hbbass/groupcust/20/index.jsp");	
+	}
+	
+};
+var threshold = new Threshold();
+threshold.path="/hbapp/resources/image/default/";
+
+function fThreshold(val,options){
+	var str=aihb.Util.percentFormat(val);
+	//str+=threshold.getTongbiImg(val,datas[9],datas[0],"tongbi");
+	str+=threshold.getTongbiImg(val);
+	return str;
+}
+function _foo(){
+	
+	var _header=[
+	{"name":["ָ�����"],"dataIndex":"name","cellStyle":"grid_row_cell_text"
+		,cellFunc: function(val,options){
+			var _a=$C("a");
+			_a.onclick=function(){
+				chartTrend(options.record.id);
+				chartView(options.record.id);
+			}
+			_a.title="����鿴ͼ��չʾ";
+			_a.href="javascript:void(0)";
+			_a.appendChild($CT(val))
+			return _a;
+		}
+	}
+	,{"name":["��ǰ��ֵ"],"dataIndex":"current","cellStyle":"grid_row_cell_number",cellFunc:cellFormat}
+	,{"name":["�ջ�������"],"dataIndex":"huanbi",cellFunc: fThreshold,"cellStyle":"grid_row_cell_number"}
+	,{"name":["��������"],"dataIndex":"tongbi",cellFunc: fThreshold,"cellStyle":"grid_row_cell_number"}
+];
+	
+	var zbCode="G00005,G00006,G00007,G00011,G00030,GC0002";
+	var ajax = new aihb.Ajax({
+		url : "/hbirs/action/kpi?method=getKpisUseAppName"
+		,parameters : "appName="+appName+"&area="+ area +"&zbcode="+zbCode
+		,callback : function(xmlrequest){
+			$("kpi_view").style.display="";
+			var res = null;
+			try{
+				eval("res="+xmlrequest.responseText);
+			}catch(e){
+				res = null;
+			}
+			
+			if(res!=null){
+				var _grid = new aihb.Grid({
+					container : $("kpi_view")
+					,data : res.data || res
+					,limit : (res.data || res).length
+					,header : _header
+					,pageSize : (res.data || res).length
+				});
+				$("kpi_view").parentNode.style.height=document.body.offsetHeight-350
+				_grid.render();
+			}else {
+				$("kpi_view").appendChild($CT("û�����"))
+			}
+		}
+	});
+	ajax.request();
+}
+
+function getJson(sql,callback) {				
+	var ajax = new aihb.Ajax({
+		url : "/hbirs/action/jsondata"
+		,parameters : "sql=" + encodeURIComponent(sql)
+		,callback : callback	
+	});
+	ajax.request();
+}
+
+function genRows(targetTable,arr,dataIndexes) {
+	var even = false,record,row,cell;
+	for(var i = 0 ; i < arr.length ; i ++) {
+		record = arr[i];
+		row = targetTable.insertRow();
+		row.className = even ? "grid_row_alt_blue" : "grid_row_blue";
+		for(var j = 0 ; j < dataIndexes.length ; j ++) {
+			cell = row.insertCell();
+			
+			/*cell.innerHTML = "<b>Top" + (i + 1) + "</b>";
+			cell = row.insertCell();
+			cell.appendChild($CT(record["staff_id"]));
+			cell = row.insertCell();
+			cell.appendChild($CT(record["val"]));
+			*/
+			
+			if(i<5 && j==0){
+				var _img=$C("img");
+				_img.src="img/a0"+(i+1)+".gif";
+				cell.appendChild($CT("TOP "));
+				cell.appendChild(_img);
+			}else if(j==0){
+				cell.appendChild($CT("TOP "+(((i+1)+"").length==1?"0":"")+(i+1)));
+			}else{
+				cell.appendChild($CT(record[dataIndexes[j]]));
+			}
+		}
+		even = !even;
+	}
+}
+--></script>
+</head>
+<body style="margin: 0px;padding-left: 5px;padding-top: 1px;">
+<form></form>
+<table width="98%" border="0" cellpadding="0" cellspacing="0">
+	<tr valign="top">
+		<td width="50%">
+			<div class="porlet" >
+				<div class="title2">��Դ����  </div>
+				<div style="font-size: 12px;padding-left: 8px;" id="ent_hint"></div>
+				<div style="margin: 3px;overflow: auto;height: 214px;">
+				<div style="font-size: 12px;padding-left: 5px;">���У�
+				<select id="areaSel" ><option value='HB.WH'>�人</option><option value='HB.HS'>��ʯ</option><option value='HB.EZ'>����</option><option value='HB.YC'>�˲�</option><option value='HB.ES'>��ʩ</option><option value='HB.SY'>ʮ��</option><option value='HB.XF'>����</option><option value='HB.JH'>����</option><option value='HB.XN'>����</option><option value='HB.JZ'>����</option><option value='HB.JM'>����</option><option value='HB.SZ'>����</option><option value='HB.HG'>�Ƹ�</option><option value='HB.XG'>Т��</option><option value='HB.TM'>����</option><option value='HB.QJ'>Ǳ��</option></select>
+				<input id="queryByArea" type="button" class="form_button_short" style="width: 40px;display: ''" value="��ѯ"/>
+				</div>
+				<div id="grid" style="width: 95%;padding-top: 2px;">
+				</div>
+				</div>
+				<div>
+				
+				<table width="100%">
+				<tr>
+					<td align="center"> 	
+						<input id="map_view" type="button" class="form_button_short" style="width: 70px;" value="��ͼȫ��"/>
+						<input id="grid_edit" type="button" class="form_button_short" style="width: 100px;"  value="���滮��ά��" />
+						<input id="grid_dispatch" type="button" class="form_button_short" style="width: 90px;" value="Ŀ�꼯��ָ��"/>
+						<input id="ent_view" type="button" class="form_button_short" style="width: 110px;" value="���ſͻ�ͳһ��ͼ"/>
+					</td>
+				</tr>
+				</table>
+				
+				</div>
+			</div>
+			
+		</td>
+		<td>
+			<div class="porlet" >
+				<div class="title2">΢������а� <span id="curDateDiv"></span></div>
+					<div id="tabs" style="margin: 3px;border:0px;padding:0px;height: 233px;">
+						<ul style="height: 24px;">
+							<li style="height: 22px;"><a href="#tabs-1">�������루Ԫ��</a></li>
+							<li style="height: 22px;"><a href="#tabs-2">��Ͻ�ͻ���ң�</a></li>
+							<li style="height: 22px;"><a href="#tabs-3">��Ϣ�����루Ԫ��</a></li>
+						</ul>
+						<div id="tabs-1" style="padding: 1px 0px 0px 0px;">
+							<table id="table1" class="grid-tab-blue" border=0 cellSpacing=1 cellPadding=0 width="100%" >
+							</table>
+						</div>
+						<div id="tabs-2" style="padding: 1px 0px 0px 0px;">
+							<table id="table2" class="grid-tab-blue" border=0 cellSpacing=1 cellPadding=0 width="100%">
+							</table>
+						</div>
+						<div id="tabs-3" style="padding: 1px 0px 0px 0px;">
+							<table id="table3" class="grid-tab-blue" border=0 cellSpacing=1 cellPadding=0 width="100%">
+							</table>
+						</div>
+					</div>
+				
+				<table width="100%" >
+				<tr>
+					<td style="padding-bottom: 1px;" align="right"> 	
+						<input id="grid_appraisal" type="button" class="form_button_short" style="width: 110px;" value="��񻯿��˹���"/>
+					</td>
+				</tr>
+				</table>
+			</div>
+		</td>
+	</tr>
+	
+	<tr height="45%" valign="top">
+	
+	<td>
+	<div class="porlet" >
+				<div class="title2">
+					<table width="100%">
+						<tr>
+						<td>ҵ����չ���</td>
+						<td align="right"><a id="grid_kpi" href="#" value="ҵ��չ���">���...</a></td>	
+						</tr>
+					</table>
+					</div>
+				<div id="kpi_view" style="height:267px;margin:3px;"></div>
+				<div style="text-align: right;"></div>
+			</div>
+			
+	</td>
+	
+	<td>
+	<div class="porlet">
+				<div class="title2" id="trendDiv">ָ�귢չ����</div>
+				<div id="trend"></div>
+			</div>
+	</td>
+	
+	</tr>
+</table>
+</body>
+</html>

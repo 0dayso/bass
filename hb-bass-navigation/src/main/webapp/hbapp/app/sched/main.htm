@@ -1,0 +1,97 @@
+<html xmlns:ai>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<title>经分前台调度</title>
+	<script type="text/javascript" src="../../../hbapp/resources/js/default/default.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../../../hbapp/resources/js/default/scheduler.js" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="../../../hbapp/resources/css/default/default.css" />
+	<script type="text/javascript">
+aihb.Util.loadmask();
+var _container=$C("div");
+aihb.Util.windowMask({content:_container})
+var wMask=_container.parentMask;
+window.onload=function(){
+	$("newBtn").onclick=function(){
+		var sched = new aihb.Scheduler({container:_container});
+		sched.render();
+		wMask.style.display="";
+	}
+	var ajax = new aihb.Ajax({
+		url : "/hbirs/action/scheduler?method=show"
+		//,parameters : "triGroup=smsTri&jobGroup=smsJob&jobClassName=com.asiainfo.hbbass.common.scheduler.job.SMSNgJob&jsonStr="+jsonStr+"&cronExpress="+sched.cronExpress()
+		,loadmask : false
+		,callback : function(xmlrequest){
+			var res = {};
+			eval("res="+xmlrequest.responseText);
+			var _grid = new aihb.Grid({
+				container : $("jobs")
+				,data : res.data || res
+				,dataAmount : res.dataAmount
+				,total :  res.total
+				,start :  res.start
+				,header : [
+					{"name":["触发组"],"dataIndex":"triGroup","cellStyle":"grid_row_cell_text","cellFunc":"textFilter"}
+					,{"name":["任务名称"],"dataIndex":"jobName","cellStyle":"grid_row_cell_text","cellFunc":"textFilter"}
+					,{"name":["任务Class"],"dataIndex":"jobClass","cellStyle":"grid_row_cell_text","cellFunc":"oper"}
+					,{"name":["执行时间"],"dataIndex":"cronExpress","cellStyle":"grid_row_cell_text"}
+					,{"name":["上次执行时间"],"dataIndex":"PreviousFireTime"}
+					,{"name":["下次执行时间"],"dataIndex":"NextFireTime"}
+					,{"name":["状态"],"dataIndex":"triState"}
+					//,{"name":["数据"],"dataIndex":"jsonObject","cellStyle":"grid_row_cell_text"}
+				]
+				,pageSize : 30
+			});
+			_grid.render();
+		}
+	});
+	ajax.request();
+}
+function textFilter(val,options){
+	var obj=$C("span");
+	obj.innerText=val.substring(0,9)+(val.length>10?"..":"");
+	obj.title=val;
+	return obj;
+}
+
+function oper(val,options){
+	var obj=$C("a");
+	obj.innerText=val;
+	obj.title="点击编辑";
+	obj.href="javascript:void(0)";
+	obj.onclick=function(record){
+		return function(){
+			_container.innerHTML="";
+			var _div=$C("div");
+			_div.innerHTML=record.jsonObject.replace(/\r\n/gi,"<br>");
+			_container.appendChild(_div);
+			
+			var btnDel=$C("input");
+			btnDel.type="button";
+			btnDel.value="删除"
+			btnDel.onclick=function(){
+				var ajax = new aihb.Ajax({
+					url : "/hbirs/action/scheduler?method=remove"
+					,parameters : "triGroup="+record.triGroup+"&triName="+record.triName
+					,loadmask : false
+					,callback : function(xmlrequest){
+						alert(xmlrequest.responseText);
+						location.reload();
+					}
+				});
+				//alert( "triGroup="+record.triGroup+"&triName="+record.triName)
+				if(confirm("确认？"))
+					ajax.request();
+			}
+			_container.appendChild(btnDel);
+			wMask.style.display="";
+		};
+	}(options.record);
+	return obj;
+}
+	</script>
+</head>
+<body>
+<input type="button" id="newBtn" value="新建">
+<div id="jobs"></div>
+</body>
+</html>

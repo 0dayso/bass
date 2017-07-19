@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html xmlns:ai>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>湖北移动NGBASS存活率专题</title>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Cache-Control" content="no-cache"/>
+
+<script type="text/javascript" src="../../../resources/js/default/default.js"></script>
+<script type="text/javascript" src="../../../resources/js/default/tabext.js"></script>
+<script type="text/javascript" src="../../../app/rptNavigation/rpt_display.js"></script>
+<script type="text/javascript" src="../../../resources/chart/FusionCharts.js"></script>
+<link type="text/css" href="../../../resources/css/default/default.css" rel="stylesheet" />
+<style type="text/css">
+
+
+.headerImg{vertical-align:bottom; padding-right: 5px; width: 22px;height: 22px;background:url('../resources/image/frame/rounds.png') no-repeat;}
+.headerText{padding-left:8px;position:relative;top:2px;font-family:华文细黑;font-size: 16px;color:#366388/*#810A87*/;}
+
+.ui-tabs  { border:0px!important;}
+.tabPiece{margin: 0px !important;padding: 0 !important;background-color: #fff!important;}
+/**/
+li a, li a:link, li a:visited {color:#366388;/*color: #2779aa;color: #000!important;font-weight: normal !important;font-family: 宋体!important;*/ text-decoration: none;}
+.ui-accordion .ui-state-default {border:0px;background-image:none;background-color:#fff;}
+/*.ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited { color: #000!important;font-weight: normal !important; font-family: 宋体!important;}*/
+
+td{line-height: 24px !important;}
+
+.ui-progressbar-value { background: red }
+
+.img1{padding-left:10px;}
+</style>
+<script type="text/javascript">
+var _params=aihb.Util.paramsObj();
+function abc(){
+	var ajax = new aihb.Ajax({
+		url : "/hbapp/kpiportal/action.jsp?method=chartkpiview"
+		,parameters : "appName=ChannelD&area=HB&zbcode=KC0005&percentType=percent&brand=&valuetype="
+		,callback : function(xmlrequest){
+			var fChartData=xmlrequest.responseText;
+			var chart = new FusionCharts("../../../resources/chart/Charts/FCF_MSColumn2DLineDY.swf", "ChartId", "860", "280");
+			chart.setDataXML(encodeURIComponent(fChartData.replace("%25","%")));
+			chart.addParam("wmode","transparent");
+			chart.render("chartrender");
+		}
+	});
+	ajax.request();
+}
+
+function _render(){
+	var ajax = new aihb.Ajax({
+		url : "/hbirs/action/rptNavi?method=init"
+		,parameters : _params._encoderOriUri
+		,callback : function(xmlrequest){
+			var res =null;
+			try{
+				eval("res="+xmlrequest.responseText);
+			}catch(e){
+				debugger;
+			}
+			if(res!=null){
+				naviFlat($("t1"),res.elements);
+			}
+		}
+	});
+	ajax.request();
+}
+window.onload=function(){
+	_render();
+	abc();
+}
+</script>
+</head>
+<body>
+<table>
+<tr>
+	<td width="50%">
+		<div id="chartrender"></div>
+	</td>
+	<td width="50%">
+		
+	</td>
+</tr>
+</table>
+
+<table id="t1"></table>
+</body>
+</html>

@@ -1,0 +1,41 @@
+.form_button{
+	BORDER-RIGHT: #7b9ebd 1px solid; 
+	BORDER-TOP: #7b9ebd 1px solid; 
+	BORDER-LEFT: #7b9ebd 1px solid;
+	BORDER-BOTTOM: #7b9ebd 1px solid;
+	PADDING: 2px ,2px; 
+	FONT-SIZE: 12px; 
+	FILTER: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr=#ffffff, EndColorStr=#cecfde); 
+	CURSOR: hand; 
+	COLOR: black;
+ 	width:50px;
+ 	height:20px;
+}
+.form_button2{
+	BORDER-RIGHT: #7b9ebd 1px solid; 
+	BORDER-TOP: #7b9ebd 1px solid; 
+	BORDER-LEFT: #7b9ebd 1px solid;
+	BORDER-BOTTOM: #7b9ebd 1px solid;
+	PADDING: 2px ,2px; 
+	FONT-SIZE: 12px; 
+	FILTER: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr=#ffffff, EndColorStr=#cecfde); 
+	CURSOR: hand; 
+	COLOR: black;
+ 	width:70px;
+ 	height:20px;
+}
+.form_button3{
+	BORDER-RIGHT: #7b9ebd 1px solid; 
+	BORDER-TOP: #7b9ebd 1px solid; 
+	BORDER-LEFT: #7b9ebd 1px solid;
+	BORDER-BOTTOM: #7b9ebd 1px solid;
+	PADDING: 2px ,2px; 
+	FONT-SIZE: 12px; 
+	FILTER: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr=#ffffff, EndColorStr=#cecfde); 
+	CURSOR: hand; 
+	COLOR: black;
+ 	width:90;
+ 	height:20px;
+}
+.selectCss{background:#BDF7EB;}
+.unselectCss{background:#FFFFFF;}

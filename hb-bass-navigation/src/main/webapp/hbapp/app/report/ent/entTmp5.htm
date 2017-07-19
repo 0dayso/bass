@@ -1,0 +1,121 @@
+<html xmlns:ai>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<title>重点产品发展情况</title>
+	<script type="text/javascript" src="../../../resources/js/default/default.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../../../resources/js/datepicker/WdatePicker.js"></script>
+	<link rel="stylesheet" type="text/css" href="../../../resources/css/default/default.css" />
+	<script type="text/javascript">
+/**/var _header=[
+	{"name":["地市","#rspan"],"dataIndex":"city"}
+	,{"name":["用户规模第一产品分析","产品名称"],"dataIndex":"zbcode1"}
+	,{"name":["#cspan","集团客户数（家）"],"dataIndex":"zbcode2","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+	,{"name":["#cspan","占C类集团数比例"],"dataIndex":"zbcode3","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number"}
+	
+	,{"name":["用户规模第二产品分析","产品名称"],"dataIndex":"zbcode4"}
+	,{"name":["#cspan","集团客户数（家）"],"dataIndex":"zbcode5","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+	,{"name":["#cspan","占C类集团数比例"],"dataIndex":"zbcode6","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number"}
+	
+	,{"name":["收入贡献第一产品分析","产品名称"],"dataIndex":"zbcode7"}
+	,{"name":["#cspan","集团客户数（家）"],"dataIndex":"zbcode8","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+	,{"name":["#cspan","占C类集团数比例"],"dataIndex":"zbcode9","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number"}
+	
+	,{"name":["收入贡献第二产品分析","产品名称"],"dataIndex":"zbcode10"}
+	,{"name":["#cspan","集团客户数（家）"],"dataIndex":"zbcode11","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number"}
+	,{"name":["#cspan","占C类集团数比例"],"dataIndex":"zbcode12","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number"}
+	
+];
+
+function genSQL(){
+	var orderPiece = " order by number ";
+	var sql="select area_name city,"
+		+" ZBCODE1, ZBCODE2, ZBCODE3/100 ZBCODE3, ZBCODE4, ZBCODE5, ZBCODE6/100 ZBCODE6, ZBCODE7, "
+		+" ZBCODE8, ZBCODE9/100 ZBCODE9, ZBCODE10, ZBCODE11, ZBCODE12/100 ZBCODE12"
+		+" from NMK.SG_REPORT_PROD"
+		+" where MONTH= "+$("date").value
+		+ orderPiece
+		+" with ur";
+	
+	return sql;
+}
+function query(){
+	
+	var grid = new aihb.SimpleGrid({
+		header:_header
+		,sql: genSQL()
+		,pageSize : 31
+		,callback:function(){
+			aihb.Util.watermark();
+		}
+	});
+	grid.run();
+}
+
+function down(){
+	aihb.AjaxHelper.down({
+		sql : genSQL()
+		,header : _header
+	});
+}
+
+window.onload=function(){
+	var _d=new Date();
+	_d.setDate(_d.getDate()-3);
+	_d.setMonth(_d.getMonth()-1);
+	$("date").value=_d.format("yyyymm");
+	
+	aihb.Util.loadmask();
+	aihb.Util.watermark();
+	
+	$("date").onfocus=function(){
+		WdatePicker({dateFmt:'yyyyMM'});
+	}
+}
+	</script>
+</head>
+<body>
+<form method="post" action="">
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'dim_div')" title="点击隐藏"><img flag='1' src="../../../resources/image/default/ns-expand.gif"></img>&nbsp;查询条件区域：</td>
+	</tr></table></legend>
+	<div id="dim_div">
+	<table align='center' width='99%' class='grid-tab-blue' cellspacing='1' cellpadding='0' border='0'>
+	<tr class='dim_row'>
+		<td class='dim_cell_title' onclick="swichDate()">统计周期</td>
+		<td class='dim_cell_content'>
+			<ai:dim name='date' dbName="op_time" operType="int" >
+				<span id="point">
+				<input type="text" style="width:160px;" class="Wdate" id="date" name="date" />
+				</span>
+				
+			</ai:dim>
+		</td>
+		<td class='dim_cell_title'></td><td class='dim_cell_content'></td>
+		<td class='dim_cell_title'></td><td class='dim_cell_content'></td>
+	</tr>
+	</table>
+	<table align="center" width="99%">
+		<tr class="dim_row_submit">
+			<td align="right" bgcolor="">
+				<input type="button" class="form_button" value="查询" onClick="query()">&nbsp;
+				<input type="button" class="form_button" value="下载" onclick="down()">&nbsp;
+			</td>
+		</tr>
+	</table>
+	</div>
+</fieldset>
+</div><br>
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'show_div')" title="点击隐藏"><img flag='1' src="../../../resources/image/default/ns-expand.gif"></img>&nbsp;数据展现区域：</td>
+		<td></td>
+	</tr></table></legend>
+	<div id="grid" style="display:none;"></div>
+</fieldset>
+</div><br>
+</form>
+</body>
+</html>

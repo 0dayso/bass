@@ -1,0 +1,96 @@
+.bule {
+	font-family: "宋体";
+	font-size: 9pt;
+	line-height: 18pt;	
+	color: #2650A6;
+}
+.list {
+	font-family: "宋体";
+	font-size: 9pt;
+	line-height: 18pt 
+}
+A.topmenufe:hover {
+	position: relative; top: 1px; left: 1px;
+}.bules {
+	font-family: "宋体";
+	font-size: 10pt;
+	color: #2650A6;
+}
+
+body {
+	SCROLLBAR-FACE-COLOR: #B9D3FF;
+	SCROLLBAR-HIGHLIGHT-COLOR: #FFFFFF;
+	SCROLLBAR-SHADOW-COLOR:#184AD7;
+	SCROLLBAR-3DLIGHT-COLOR: #E6EEFC;
+	SCROLLBAR-ARROW-COLOR:#000000;
+	SCROLLBAR-TRACK-COLOR: #e6e6e6;
+}
+
+.bulex {
+	font-size: 9pt;
+	color: #2650A6;
+}
+
+
+.bluebold{
+	font-size:12px; 
+	color:#3E4EB0; 
+	font-family:'宋体'; 
+	font-weight:bold;
+	}
+
+.black{
+	color:#000000; 
+    font-size:12px; 
+	font-family:'宋体'; 
+	}
+	
+.body {
+	margin-left: 0px;
+}
+
+.think
+{
+    BACKGROUND-COLOR: #ffffff;
+    BORDER-BOTTOM: #000000 1px solid;
+    BORDER-LEFT: #000000 1px solid;
+    BORDER-RIGHT: #000000 1px solid;
+    BORDER-TOP: #000000 1px solid
+}
+
+.list1 {
+	font-family: "宋体";
+	font-size: 9pt;
+}
+.comtable {  font-family: "宋体"; font-size: 12px; background-color: #FFFFFF}
+
+.comhead {  font-family: "宋体"; font-size: 13px; background-color: #A6C5FD; color: #2650A6; font-weight: bold}
+
+
+.comtd {  font-family: "宋体"; font-size: 12px; color: #000000; background-color: #D5E7FB}
+
+.comtdhighlight {  font-family: "宋体"; font-size: 12px; color: #0000FF; background-color: #D5E7FB; font-weight: bold}
+
+.clickhighlight {  font-family: "宋体"; font-size: 12px; background-color: #C0D6FE}
+
+
+.css1 {
+	font-family: "宋体";
+	font-size: 12px;
+	font-style: normal;
+	line-height: 28px;
+	color: #000000;
+	cursor:hand;
+}
+
+.bule1	 {
+	font-family: "宋体";
+	font-size: 9pt;
+	line-height: 15pt;	
+	color: #2650A6;
+}
+.list2 {
+	font-family: "宋体";
+	font-size: 9pt;
+	line-height: 15pt 
+}

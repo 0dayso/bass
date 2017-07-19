@@ -1,0 +1,21 @@
+/* CSS Document */
+
+.ntree .exprline1 { 
+ background:#0A246A; 
+ } 
+ 
+ /*
+ .ntree .infoField {  
+ background:#EEEEEE;  
+ font-size:10.5pt;  
+ margin:2px 2px 2px 2px;  
+
+ } 
+ */
+ .ntree.expandObj {  
+ cursor:pointer; 
+ } 
+ 
+ .ntree.afterLineTd {  
+ cursor:pointer; 
+ } 

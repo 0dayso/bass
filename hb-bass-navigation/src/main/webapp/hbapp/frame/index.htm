@@ -1,0 +1,433 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html xmlns:ai>
+<head>
+<title>湖北移动经营分析系统</title>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Cache-Control" content="no-cache"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="text/javascript" src="../resources/js/ext/ext-base.js"></script>
+<script type="text/javascript" src="../resources/js/ext/ext-all.js"></script>
+<script type="text/javascript" src="../resources/js/default/default.js"></script>
+<link rel="stylesheet" type="text/css" href="../resources/js/ext/resources/css/ext-all.css" />
+<link rel="stylesheet" type="text/css" href="../resources/css/default/default.css" />
+<style>
+#BkgTop {
+height: 46;
+width: 333;
+position:absolute;
+left:0 px;top:0 px;
+background:url("../resources/image/frame/BkgTop.png")!important;
+background:none;
+filter:none!important;
+filter:progid:DXImageTransform.Microsoft.AlphaImageLoader (src="../resources/image/frame/BkgTop.png");  
+}
+#cmlogo {
+height: 36;
+width: 125;
+position:absolute;
+left:15 px;top:7 px;
+background:url("../resources/image/frame/logos.png")!important;  
+background:none;  
+filter:none!important;  
+filter:progid:DXImageTransform.Microsoft.AlphaImageLoader (src="../resources/image/frame/logos.png");  
+}
+#cmtext {
+height: 21;
+width: 182;
+position:absolute;
+left:430 px;top:15 px;
+background:url("../resources/image/frame/cb.png")!important;
+background:none;
+filter:none!important;
+filter:progid:DXImageTransform.Microsoft.AlphaImageLoader (src="../resources/image/frame/cb.png");  
+}
+#text {
+height: 29;
+width: 294;
+position:absolute;
+left:150 px;top:10 px;
+background:url("../resources/image/frame/text.png")!important;  
+background:none;
+filter:none!important; 
+filter:progid:DXImageTransform.Microsoft.AlphaImageLoader (src="../resources/image/frame/text.png");  
+}
+#ailogo {
+height: 8;
+width: 35;
+position:absolute;
+right: 1 px;top:0 px;
+background:url("../resources/image/frame/ailogo.png") no-repeat!important;  
+background:none;
+filter:none!important;
+filter:progid:DXImageTransform.Microsoft.AlphaImageLoader (src="../resources/image/frame/ailogo.png"); 
+}
+
+td div a,td div a:link,td div a:visited{color:#fff;}
+</style>
+<script type="text/javascript">
+Ext.onReady(function(){
+
+var viewport = new Ext.Viewport({
+     layout:'border',
+     items:[
+      	new Ext.BoxComponent({
+                region:'north',
+                el: 'north'
+            }),
+        new Ext.BoxComponent({
+                region:'center',
+                el: 'ifra_container'
+            })
+      ]
+ });
+
+var topMenuOffset={
+		"i经分":0
+		,"市场运营分析":-41
+		,"市场营销":-82
+		,"重点业务运营":-123
+		,"收入风险管控":-164
+		,"渠道运营":-205
+		,"客户服务":-246
+		,"质量管控":-287
+		,"自助分析":-328
+		,"报表展示":-369
+		,"系统功能":-410
+		,"地市集市":-451
+		,"政企客户（待下线）":-492
+};
+
+//var _items = [{title:"运营监控",src:"container.htm?id=966&text=运营监控",children:[{title:"运营监控",src:"container.htm?id=966&text=运营监控"},{title:"省内报表",src:"container.htm?id=2&text=省内报表"},{title:"数据业务",src:"container.htm?id=4&text=数据业务"}]},{title:"省内报表",src:"container.htm?id=2&text=省内报表"},{title:"数据业务",src:"container.htm?id=4&text=数据业务"}];
+
+//生成菜单的html和iframe的容器
+function genMenuItem(el,items,child){
+	var _navi=null;
+	if(child!=undefined){//二级菜单
+		_navi=$C("ul");
+		_navi.className="ult-section secondary";
+		_navi.style.cssText="height:12px;line-height:14px;left:0px;position: absolute;width:2000px;"//TODO有个小bug宽度被写死
+		_navi.style.display="none";
+		_navi.id="child_"+child;
+		$(el).appendChild(_navi);
+	}else{
+		_navi=$(el);//顶级菜单
+	}
+	
+	for(var i=0;i<items.length;i++){
+		var _li=$C("li");
+		_navi.appendChild(_li);
+		_li.className="ult-position";
+		var _a=$C("a");
+		_a.href="javascript:void(0)";
+		//_a.src="container.htm?id="+items[i].id+"&text="+items[i].title;
+		
+		_li.appendChild(_a);
+		_a.id="item_"+items[i].id;
+		_a.onclick=swichTab;
+		if(child==undefined){//顶层菜单需要切换
+			_li.id="parent_"+items[i].id;
+			
+			var _icon =$C("span");
+			_icon.style.cssText="margin:0px;cursor:hand;background-image: url(../resources/image/default/nav_icon.png);background-position: 0px "+topMenuOffset[items[i].title]+"px ;width:20px;height:14px;";
+			_a.appendChild(_icon);
+		}else{
+			if(items[i].src && items[i].src.length>0){
+				_a.src=items[i].src;
+			}else{
+				_a.src="container.htm?id="+items[i].id+"&text="+items[i].title+"&"+items[i].suffix;
+			}
+		}
+		
+		_a.appendChild($CT(items[i].title));//因为要加Icon
+		
+		if(items[i].children){
+			//debugger;
+			arguments.callee("navigation-secondary",items[i].children,items[i].id);
+		}
+		
+		if(child==undefined && i==0 ){//第一个菜单加载
+			_li.className="ult-position active";
+			if(child==undefined){
+				var _item=$("navigation-secondary").childNodes[0].childNodes[0].childNodes[0];
+				$("navigation-secondary").childNodes[0].style.display="";
+				oriAddIframe(_item)
+			}
+		}
+		
+		//createIframe(i+1).src=_a.src;
+	}
+}
+
+var _uriParams=aihb.Util.paramsObj();
+var ajax = new aihb.Ajax({
+	url : "/hbirs/action/frame?method=topNodes"
+	,callback : function(xmlrequest){
+		var items=null;
+		
+		try{
+			eval("items="+xmlrequest.responseText);
+		}catch(e){debugger;}
+		
+		if(items!=null){
+			//生成一级菜单与二级菜单
+			genMenuItem("navigation-primary",items);
+			
+			//系统功能菜单快速通道
+			var sysNodes = $("child_1").childNodes;//TODO 写死了系统功能菜单的ID
+			var _sysFunc=$("sysFunc");
+			for(var i=0;i<sysNodes.length;i++){
+				var item=sysNodes[i].childNodes[0];
+				var _nVal=item.childNodes[0].nodeValue;
+				if(_nVal=="系统管理"||_nVal=="问题申告"||_nVal=="需求管理"||_nVal=="工号管理"){
+					var _a=$C("a");
+					_a.mid=item.id;
+					_a.onclick=function(){
+						swichTab($(this.mid));
+					}
+					_a.href="javascript:void(0)";
+					_a.appendChild($CT(_nVal));
+					if(_sysFunc.childNodes.length>0){
+						_sysFunc.appendChild($CT(" | "));
+					}
+					_sysFunc.appendChild(_a);
+				}
+			}
+			
+			$("userTip").appendChild($CT("欢迎您，"+_uriParams.userName+"!"));
+		}
+	}
+});
+ajax.request();
+
+
+$("aaa").onmouseover=function(){
+	this.isMove=true;
+	this.style.backgroundImage="url(../resources/js/jquery/themes/flick/images/ui-icons_ff0084_256x240.png)"
+	tabMove({el:this,pos:"right"});
+}
+
+$("aaa").onmousedown=function(){
+	this.isMove=true;
+	tabMove({el:this,pos:"right",speed:3});
+}
+
+$("aaa").onmouseout=function(){
+	this.style.backgroundImage="url(../resources/js/jquery/themes/flick/images/ui-icons_666666_256x240.png)"
+	this.isMove=false;
+}
+
+$("bbb").onmouseover=function(){
+	this.isMove=true;
+	this.style.backgroundImage="url(../resources/js/jquery/themes/flick/images/ui-icons_ff0084_256x240.png)"
+	tabMove({el:this,pos:"left"});
+}
+
+$("bbb").onmousedown=function(){
+	this.isMove=true;
+	tabMove({el:this,pos:"left",speed:3});
+}
+
+$("bbb").onmouseout=function(){
+	this.isMove=false;
+	this.style.backgroundImage="url(../resources/js/jquery/themes/flick/images/ui-icons_666666_256x240.png)"
+}
+
+
+});
+
+//{el:操作的元素,speed:速度,pos:左右}
+function tabMove(options){
+	if(options.el.isMove){
+		var target=null;
+		var pels=$("navigation-primary").childNodes;
+		for(var i=0;i<pels.length;i++){
+			if(pels[i].className=="ult-position active"){
+				target=$("child_"+pels[i].id.split("_")[1]);
+				break;
+			}
+		}
+		
+		var leftOffset = String(target.style.left);
+		leftOffset=parseInt( leftOffset.substring(0,leftOffset.length-2),10);
+		
+		var speed=options.speed||1;
+		
+		if(options.pos=="right" && leftOffset<0){
+			target.style.left=(leftOffset+speed);
+		}else if(options.pos=="left" && target.realWidth-(document.body.clientWidth-30)>Math.abs(leftOffset)){//30为scroll的占位符
+			target.style.left=(leftOffset-speed);
+		}else{
+			target.isMove=false;
+		}
+		
+		setTimeout(function(_callee,options){
+			return (function(){
+				_callee(options);
+			});
+		}(arguments.callee,options),1)
+	}
+}
+
+
+//切换菜单
+function swichTab(){
+	var srcObj=arguments[0]||event.srcElement;//可能是传入的item<a>
+	
+	if(srcObj.tagName=="SPAN"){//可能点击图片
+		srcObj=srcObj.parentElement;
+	}
+	if(srcObj.parentElement.parentElement.className=="ult-section secondary" && srcObj.parentElement.parentElement.style.display!="none"){//二级菜单
+		oriAddIframe(srcObj);
+	}else{//定位到一级菜单
+		//顶级菜单的切换，换样式
+		var _spans=$("navigation-primary").getElementsByTagName("li");
+		for(var _i=0;_i<_spans.length;_i++){
+			var _span=_spans[_i];
+			_span.className="ult-position";
+			$("child_"+_span.id.split("_")[1]).style.display="none";
+		}
+		var children=null;
+		if(srcObj.parentElement.parentElement.id=="navigation-primary"){
+			children=$("child_"+srcObj.parentElement.id.split("_")[1]);
+			children.style.display="";//必须放在oriAddIframe前，要不然不能使用offsetWidth来计算真实的宽度来操作显示scroll键
+			oriAddIframe(children.childNodes[0].childNodes[0]);
+		}else if(srcObj.parentElement.parentElement.className=="ult-section secondary"){
+			children=srcObj.parentElement.parentElement;
+			children.style.display="";
+			oriAddIframe(srcObj);
+		}
+		$("parent_"+children.id.split("_")[1]).className="ult-position active";
+		//$("navigation-primary").childNodes[_sysFuncSeq].style.display="none";//把系统功能管理隐藏掉
+	}
+}
+
+//为一个二级菜单新建一个iframe，如果存在就显示（缓存每个二级菜单的iframe）
+function oriAddIframe(item){
+	var _cont=$("ifra_container");
+	var ifra=null;
+	for(var i=0;i<_cont.childNodes.length;i++){//隐藏其他的iframe
+		if(_cont.childNodes[i].mid==item.id.split("_")[1]){
+			ifra=_cont.childNodes[i];
+		}else{
+			_cont.childNodes[i].style.display="none";
+		}
+	}
+	var ul=item.parentNode.parentNode;
+	var realWidth=0;//计算二级菜单真是的宽度
+	for(var i=0;i<ul.childNodes.length;i++){//修改二级菜单的样式
+		ul.childNodes[i].className="ult-position";
+		realWidth+=ul.childNodes[i].offsetWidth;
+	}
+	ul.realWidth=realWidth;
+	if(realWidth>document.body.clientWidth){
+		$("tabScroll").style.display='';
+	}else{
+		$("tabScroll").style.display='none';
+	}
+	var leftOffset = String(ul.style.left);
+	leftOffset=Math.abs(parseInt( leftOffset.substring(0,leftOffset.length-2),10));
+	if(document.body.clientWidth+leftOffset<item.parentNode.offsetLeft+item.parentNode.offsetWidth){
+		ul.style.left=-(item.parentNode.offsetWidth+(realWidth>document.body.clientWidth?realWidth-document.body.clientWidth:0))+"px";
+	}
+	
+	item.parentNode.className="ult-position active";
+	if(ifra==null){
+		ifra=$C('<IFRAME id=itab_'+item.id.split("_")[1]+' border=0 frameBorder=0 width="100%" scrolling=auto height="100%">');
+		ifra.mid=item.id.split("_")[1];
+		$("ifra_container").appendChild(ifra);
+		ifra.src=item.src;
+	}
+	ifra.style.display="";
+}
+
+/*
+在二级菜单上面增加标签
+给子集iframe来调用
+
+?新建一个tab时没有滚动到那个tab标签;相同的页面可以打开多次
+*/
+function addTabMainFrame(options){
+
+	if(options.url){
+		var primary=$("navigation-primary");
+		var _container=null;
+		for(var i=0;i<primary.childNodes.length;i++){
+			if(primary.childNodes[i].className=="ult-position active"){
+				_container=$("child_"+primary.childNodes[i].id.split("_")[1]);
+				break;
+			}
+		}
+		_container=_container||$("child_1000");
+
+		var _a=$C("a");
+		_a.href="javascript:void(0)";
+		_a.src=options.url;
+		_a.appendChild($CT(options.title.length>8?options.title.substring(0,6)+"...":options.title));
+		_a.title=options.title;
+		_a.id="item_"+options.id||options.title
+		
+		_a.onclick=swichTab;
+		var _li=$C("li");
+		_li.appendChild(_a);
+		
+		var colseIcon=$C("span");
+		colseIcon.style.cssText="margin:0px;cursor:hand;background-image: url(/hbapp/resources/js/jquery/themes/cupertino/images/ui-icons_3d80b3_256x240.png);background-position: -85px 110px ;width:10px;height:10px;";
+		colseIcon.mid=_a.id;
+		colseIcon.onclick=function(){
+			var target=this.parentNode;
+			//显示前一个Tab
+			var previous=target.previousSibling;
+			swichTab(previous.childNodes[0]);
+			target.parentNode.removeChild(target);
+			target=null;
+			var ifrTar=$("itab_"+this.mid.split("_")[1]);
+			ifrTar.parentNode.removeChild(ifrTar);
+			ifrTar=null;
+			
+		}
+		_li.appendChild(colseIcon);
+		
+		//显示新打开的页面
+		_li.className="ult-position active";
+		
+		_container.appendChild(_li);
+		
+		oriAddIframe(_a);
+	}
+}
+</script>
+</head>
+<body style="margin:0px;">
+<div id="north">
+	<div id="banner" style="background:#ebf3fd url(../resources/image/default/nav_icon.png) 0 -612px repeat-x left bottom;height: 46 px;width : 100%;">
+	<div id="BkgTop"></div>
+	<div id="cmlogo"></div>
+	<div id="cmtext"></div>
+	<div id="text"></div>
+	<div id="ailogo"></div>
+	<div style="padding-right: 6px;margin:0px;position: absolute;top: 10px;">
+			<table align="right"  height="90%" cellspacing=0 cellpadding=0 border=0>
+				<tr valign="bottom">
+					<td style="font-size: 12px;">
+						<div id="sysFunc" style="text-align:right;color:#fff;"></div>
+						<div id="userTip" style="text-align:right;margin-top: 2px;color:#fff;"><a href="/login.jsp">注销</a> <img src="../resources/image/frame/user.png">  </div>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+
+	<DIV id=navigation role="navigation" style="height:52px;">
+		<ul class="ult-section primary" id=navigation-primary></ul><!-- end: .primary -->
+		<div id=navigation-secondary></div>
+		<div id=tabScroll style="display:none;position: absolute;z-index: 10000;background: #fff;right: 0px;bottom: 1px;height: 24px;width:30px;padding:2px 0 0 6px; ">
+			<span id="aaa" style="cursor:hand;background: url('../resources/js/jquery/themes/flick/images/ui-icons_666666_256x240.png') -99px -15px no-repeat ;width: 12px;height: 12px;"></span>
+			<span id="bbb" style="cursor:hand;background: url('../resources/js/jquery/themes/flick/images/ui-icons_666666_256x240.png') -38px -15px no-repeat ;width: 12px;height: 12px;"></span>
+		</div>
+	</DIV><!-- end: #navigation -->
+</div>
+
+<div id="ifra_container"></div>
+
+</body>
+</html>

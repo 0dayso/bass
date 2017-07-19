@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	
+<style type="text/css">
+	body {
+	font-size: 62.5%;
+}
+</style>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+			<script type="text/javascript" src="../../resources/js/default/default.js" charset="utf-8"></script>	
+		<!-- jquery edition
+			<link type="text/css" href="jqueryui1.8.2/css/redmond/jquery-ui.css" rel="Stylesheet" />	
+			<link type="text/css" href="../../../tests/jqueryui/demos.css" rel="stylesheet" />
+			<script type="text/javascript" src="jqueryui1.8.2/js/jquery-1.4.2.min.js"></script>
+			<script type="text/javascript" src="jqueryui1.8.2/js/jquery-ui-1.8.2.custom.min.js"></script>
+		-->
+		<link rel="stylesheet" type="text/css" href="../../resources/js/ext/resources/css/ext-all.css"/>
+		<script type="text/javascript" src="../../resources/js/ext/ext-base.js"></script>
+		<script type="text/javascript" src="../../resources/js/ext/ext-all.js"></script>
+		
+	
+		<script type="text/javascript">
+		/*	*/	 
+		 Ext.BLANK_IMAGE_URL = '../../resources/js/ext/resources/images/default/s.gif';
+			var _params = aihb.Util.paramsObj();		
+		Ext.onReady(function(){
+			Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+			var viewport = new Ext.Viewport({
+				 layout:'border'
+				 ,items:[_tabPanel]
+			 });
+			});
+	
+		var _tabPanel =new Ext.TabPanel({
+		   region:'center',
+		   deferredRender:true,
+		   enableTabScroll:true,
+		   activeTab:0,
+		   items:[{
+			id:'index0',
+			title: "客户详细信息",
+			closable:false,
+			autoScroll:true,
+			html:'<iframe id="indexFrame" scrolling="auto" frameborder="0" width="100%" height="100%" src="custbase.html?reportType=detail&' + _params._oriUri + '"></iframe>',       
+			border:true
+		   },
+		   {
+			id:'index1',
+			title: "客户集团信息",
+			closable:false,
+			autoScroll:true,
+			html:'<iframe id="indexFrame" scrolling="auto" frameborder="0" width="100%" height="100%" src="custbase.html?reportType=group&' + _params._oriUri + '"></iframe>',       
+			border:true
+		   }
+	   ]
+		});
+		/*	jquery edition
+		jQuery.noConflict();
+		
+		window.onload = function() {
+			$("custbase").src = "custbase.html?" + _params._oriUri;
+		}
+		jQuery(function() {
+			jQuery("#tabs1").tabs();
+		});
+		*/
+		
+	</script>
+		<title>客户统一视图</title>
+	</head>
+	<body>
+	<!-- jquery editon
+	<div id="test1">
+	<div id="tabs1">
+		<ul>
+			<li><a href="#tabs-1">Nunc tincidunt</a></li>
+			<li><a href="#tabs-2">Proin dolor</a></li>
+			<li><a href="#tabs-3">Aenean lacinia</a></li>
+		</ul>
+		
+		<div id="tabs-1">
+			<iframe id="custbase" style="width : 100%; height : 100%"></iframe>
+		</div>
+		
+		<div id="tabs-2">
+			<p>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse sed ligula in ligula suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing. Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla. Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et purus.</p>
+		</div>
+		<div id="tabs-3">
+			<p>Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem. Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Quisque eu urna vel enim commodo pellentesque. Praesent eu risus hendrerit ligula tempus pretium. Curabitur lorem enim, pretium nec, feugiat nec, luctus a, lacus.</p>
+			<p>Duis cursus. Maecenas ligula eros, blandit nec, pharetra at, semper at, magna. Nullam ac lacus. Nulla facilisi. Praesent viverra justo vitae neque. Praesent blandit adipiscing velit. Suspendisse potenti. Donec mattis, pede vel pharetra blandit, magna ligula faucibus eros, id euismod lacus dolor eget odio. Nam scelerisque. Donec non libero sed nulla mattis commodo. Ut sagittis. Donec nisi lectus, feugiat porttitor, tempor ac, tempor vitae, pede. Aenean vehicula velit eu tellus interdum rutrum. Maecenas commodo. Pellentesque nec elit. Fusce in lacus. Vivamus a libero vitae lectus hendrerit hendrerit.</p>
+		</div>
+	</div>
+	</div>
+	-->
+	
+	
+	</body>
+
+</html>

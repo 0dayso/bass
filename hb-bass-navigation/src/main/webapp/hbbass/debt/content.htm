@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>欠费分析平台</title>
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">
+	<script language="javascript" src="debt.js"></script>
+	<link rel="stylesheet" type="text/css" href="../css/bass21.css" />
+  </head>
+  <body>
+  	<div style="margin: 20 px;text-align: center;font-size: 22px;font-weight: bold;font-family: 黑体">欠费分析报表</div>
+  	<table align="center" width="90%" class="grid-tab-blue" cellspacing="1" cellpadding="0" border="0">
+	  <tr class="grid_title_blue" height="26">
+	    <td width="5%" class="grid_title_cell">序号</td>
+	    <td colspan="2" class="grid_title_cell">分析报表名称</td>
+	    <td width="55%" class="grid_title_cell">描述</td>
+	  </tr>
+	 
+	  <tr class="grid_row_alt_blue" height="26">
+	    <td class="grid_row_cell"><strong>1</strong></td>
+	    <td colspan="3" class="grid_row_cell_text"><strong>欠费数据分析</strong></td>
+      </tr>
+      <tr class="grid_row_alt_blue" height="26">
+	   <td height="20" rowspan="13" class="grid_row_cell">&nbsp;</td>
+	   <td width="4%" class="grid_row_cell_text"><div align="center"><img src="../images/join.gif" width="18" height="18"></div></td>
+	   <td width="30%" class="grid_row_cell_text"><a href="#" onclick="add('debtIncreased','欠费增幅分析','debtIncreased.jsp')">欠费增幅分析</a></td>
+	   <td height="20" class="grid_row_cell_text"></td>
+      </tr>
+       <tr class="grid_row_alt_blue" height="26">
+	   <td class="grid_row_cell_text"><div align="center"><img src="../images/join.gif" width="18" height="18"></div></td>
+	   <td height="20" class="grid_row_cell_text"><a href="#" onclick="add('debtNetage','欠费用户网龄构成','debtNetage.htm')">欠费用户网龄构成</a></td>
+	   <td height="20" class="grid_row_cell_text"></td>
+      </tr>
+	 <tr class="grid_row_alt_blue" height="26">
+	   <td class="grid_row_cell_text"><div align="center"><img src="../images/join.gif" width="18" height="18"></div></td>
+	   <td height="20" class="grid_row_cell_text"><a href="#" onclick="add('debtBillcycle','欠费用户帐期构成','debtBillcycle.jsp')">欠费用户帐期构成</a></td>
+	   <td height="20" class="grid_row_cell_text"></td>
+      </tr>
+      <tr class="grid_row_alt_blue" height="26">
+	   <td class="grid_row_cell_text"><div align="center"><img src="../images/join.gif" width="18" height="18"></div></td>
+	   <td height="20" class="grid_row_cell_text"><a href="#" onclick="add('debtCallback','欠费回收情况','debtCallback.htm')">欠费回收情况</a></td>
+	   <td height="20" class="grid_row_cell_text"></td>
+      </tr>
+      <tr class="grid_row_alt_blue" height="26">
+	   <td class="grid_row_cell_text"><div align="center"><img src="../images/join.gif" width="18" height="18"></div></td>
+	   <td height="20" class="grid_row_cell_text"><a href="#" onclick="add('debtBusistruct','欠费业务结构分析','debtBusistruct.jsp')">欠费业务结构分析</a></td>
+	   <td height="20" class="grid_row_cell_text"></td>
+      </tr>
+      <tr class="grid_row_alt_blue" height="26">
+	   <td class="grid_row_cell_text"><div align="center"><img src="../images/join.gif" width="18" height="18"></div></td>
+	   <td height="20" class="grid_row_cell_text"><a href="#" onclick="add('debtUserstruct','欠费用户结构分析','debtUserstruct.jsp')">欠费用户结构分析</a></td>
+	   <td height="20" class="grid_row_cell_text"></td>
+      </tr>
+      <tr class="grid_row_alt_blue" height="26">
+	   <td class="grid_row_cell_text"><div align="center"><img src="../images/join.gif" width="18" height="18"></div></td>
+	   <td height="20" class="grid_row_cell_text"><a href="#" onclick="add('debtZero','零次用户欠费专题分析','debtZero.jsp')">零次用户欠费专题分析</a></td>
+	   <td height="20" class="grid_row_cell_text"></td>
+      </tr>
+	 <tr class="grid_row_alt_blue" height="26">
+	   <td class="grid_row_cell_text"><div align="center"><img src="../images/joinbottom.gif" width="18" height="18"></div></td>
+	   <td height="20" class="grid_row_cell_text"><a href="#" onclick="add('debtFee','欠费资费分布专题分析','debtFee.htm')">欠费资费分布专题分析</a></td>
+	   <td height="20" class="grid_row_cell_text"></td>
+      </tr>
+        <tr class="grid_row_alt_blue" height="26">
+	   <td class="grid_row_cell_text"><div align="center"><img src="../images/joinbottom.gif" width="18" height="18"></div></td>
+	   <td height="20" class="grid_row_cell_text"><a href="#" onclick="add('debtTop10','欠费前10产品报表','../../mvc/report/9760')">欠费前10产品报表</a></td>
+	   <td height="20" class="grid_row_cell_text"></td>
+      </tr>
+      <tr class="grid_row_alt_blue" height="26">
+	   <td class="grid_row_cell_text"><div align="center"><img src="../images/joinbottom.gif" width="18" height="18"></div></td>
+	   <td height="20" class="grid_row_cell_text"><a href="#" onclick="add('debtCustBasic','基于客户基础资料的欠费分析','../../mvc/report/9735')">基于客户基础资料的欠费分析</a></td>
+	   <td height="20" class="grid_row_cell_text"></td>
+      </tr>
+      <tr class="grid_row_alt_blue" height="26">
+	   <td class="grid_row_cell_text"><div align="center"><img src="../images/joinbottom.gif" width="18" height="18"></div></td>
+	   <td height="20" class="grid_row_cell_text"><a href="#" onclick="add('debtTypeSummmary','欠费大类总表','../../mvc/report/9732')">欠费大类总表</a></td>
+	   <td height="20" class="grid_row_cell_text"></td>
+      </tr>
+      <tr class="grid_row_alt_blue" height="26">
+	   <td class="grid_row_cell_text"><div align="center"><img src="../images/joinbottom.gif" width="18" height="18"></div></td>
+	   <td height="20" class="grid_row_cell_text"><a href="#" onclick="add('debtFeeAnalysis','欠费对应的资费分析','../../mvc/report/9734')">欠费对应的资费分析</a></td>
+	   <td height="20" class="grid_row_cell_text"></td>
+      </tr> 
+       <tr class="grid_row_alt_blue" height="26">
+	   <td class="grid_row_cell_text"><div align="center"><img src="../images/joinbottom.gif" width="18" height="18"></div></td>
+	   <td height="20" class="grid_row_cell_text"><a href="#" onclick="add('debtExceptionDailySummary','异常欠费日报汇总表','../../mvc/report/9821')">异常欠费日报汇总表</a></td>
+	   <td height="20" class="grid_row_cell_text"></td>
+      </tr> 	
+      
+	 <tr class="grid_row_alt_blue" height="26">
+	    <td class="grid_row_cell"><strong>2</strong></td>
+	    <td colspan="3" class="grid_row_cell_text"><strong>欠费异常监控</strong></td>
+      </tr>
+      
+     <tr class="grid_row_alt_blue" height="26">
+	   <td height="20" rowspan="4" class="grid_row_cell">&nbsp;</td>
+	   <td width="4%" class="grid_row_cell_text"><div align="center"><img src="../images/join.gif" width="18" height="18"></div></td>
+	   <td width="30%" class="grid_row_cell_text"><a href="#" onclick="add('debtBalance','欠费且有余额用户情况分析','debtBalance.jsp')">欠费且有余额用户情况分析</a></td>
+	   <td height="20" class="grid_row_cell_text"></td>
+      </tr>
+       <tr class="grid_row_alt_blue" height="26">
+	   <td class="grid_row_cell_text"><div align="center"><img src="../images/join.gif" width="18" height="18"></div></td>
+	   <td height="20" class="grid_row_cell_text"><a href="#" onclick="add('debtOwecycle','用户欠费帐龄情况分析','debtOwecycle.jsp')">用户欠费帐龄情况分析</a></td>
+	   <td height="20" class="grid_row_cell_text"></td>
+      </tr>
+      <tr class="grid_row_alt_blue" height="26">
+	   <td class="grid_row_cell_text"><div align="center"><img src="../images/joinbottom.gif" width="18" height="18"></div></td>
+	   <td height="20" class="grid_row_cell_text"><a href="#" onclick="add('debtHigh','高额欠费用户分析','debtHigh.htm')">高额欠费用户分析</a></td>
+	   <td height="20" class="grid_row_cell_text"></td>
+      </tr>
+      <tr class="grid_row_alt_blue" height="26">
+	   <td class="grid_row_cell_text"><div align="center"><img src="../images/joinbottom.gif" width="18" height="18"></div></td>
+	   <td height="20" class="grid_row_cell_text"><a href="#" onclick="add('userArrearsMonitoring','用户欠费监控','../ngbass/queryMain.jsp')">用户欠费监控</a></td>
+	   <td height="20" class="grid_row_cell_text"></td>
+      </tr>
+      
+      <tr class="grid_row_alt_blue" height="26">
+	    <td class="grid_row_cell"><strong>3</strong></td>
+	    <td colspan="3" class="grid_row_cell_text"><strong>SOX个人客户欠费分析</strong></td>
+      </tr>
+      <tr class="grid_row_alt_blue" height="26">
+	   <td height="20" rowspan="5" class="grid_row_cell">&nbsp;</td>
+	   <td width="4%" class="grid_row_cell_text"><div align="center"><img src="../images/join.gif" width="18" height="18"></div></td>
+	   <td width="30%" class="grid_row_cell_text"><a href="#" onclick="add('SOX','SOX个人客户欠费分析','../../mvc/report/9181')">SOX个人客户欠费分析</a></td>
+	   <td height="20" class="grid_row_cell_text"></td>
+      </tr>
+      <tr class="grid_row_alt_blue" height="26">
+	   <td class="grid_row_cell_text"><div align="center"><img src="../images/joinbottom.gif" width="18" height="18"></div></td>
+	   <td height="20" class="grid_row_cell_text"><a href="#" onclick="add('SOX2','SOX个人客户欠费分析2','../../mvc/report/9182')">SOX个人客户欠费分析2</a></td>
+	   <td height="20" class="grid_row_cell_text"></td>
+      </tr>
+      <tr class="grid_row_alt_blue" height="26">
+	   <td class="grid_row_cell_text"><div align="center"><img src="../images/joinbottom.gif" width="18" height="18"></div></td>
+	   <td height="20" class="grid_row_cell_text"><a href="#" onclick="add('SOX3','SOX个人客户欠费分析3','../../mvc/report/9183')">SOX个人客户欠费分析3</a></td>
+	   <td height="20" class="grid_row_cell_text"></td>
+      </tr>
+      <tr class="grid_row_alt_blue" height="26">
+	   <td class="grid_row_cell_text"><div align="center"><img src="../images/joinbottom.gif" width="18" height="18"></div></td>
+	   <td height="20" class="grid_row_cell_text"><a href="#" onclick="add('SOX4','SOX个人客户欠费分析4','../../mvc/report/9184')">SOX个人客户欠费分析4</a></td>
+	   <td height="20" class="grid_row_cell_text"></td>
+      </tr>
+      <tr class="grid_row_alt_blue" height="26">
+	   <td class="grid_row_cell_text"><div align="center"><img src="../images/joinbottom.gif" width="18" height="18"></div></td>
+	   <td height="20" class="grid_row_cell_text"><a href="#" onclick="add('SOX5','SOX个人客户欠费分析5','../../mvc/report/9185')">SOX个人客户欠费分析5</a></td>
+	   <td height="20" class="grid_row_cell_text"></td>
+      </tr> 	
+     
+	</table>
+  </body>
+</html>

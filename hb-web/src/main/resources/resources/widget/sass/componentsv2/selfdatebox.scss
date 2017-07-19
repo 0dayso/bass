@@ -1,0 +1,27 @@
+@charset "utf-8";
+.SelfDateBox{
+	@include setPadding(top,7px);
+	@include setPadding(left,3px);
+	.SelfDateBox-name{
+		float:left;
+		@include setPadding(top,3px);
+		@include setPadding(right,3px);
+	}
+	.SelfDateBox-split{
+		float:left;
+		@include setPadding(top,3px);
+		@include setPadding(row,3px);
+	}
+	.SelfDateBox-start-div{
+		@include setBorder(null);
+		float:left;
+		@include setPadding(row,3px);
+		@include setPadding(top,3px);
+	}
+	.SelfDateBox-end-div{
+		@include setBorder(null);
+		float:left;
+		@include setPadding(row,3px);
+		@include setPadding(top,3px);
+	}
+}

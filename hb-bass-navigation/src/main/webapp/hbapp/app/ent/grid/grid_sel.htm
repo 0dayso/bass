@@ -1,0 +1,111 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>湖北移动经营分析系统</title>
+<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/ext/ext-base.js"></script>
+<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/ext/ext-all.js"></script>
+<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/ext/ext-ext.js"></script>
+<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/default/default.js"></script>
+<link rel="stylesheet" type="text/css" href="/hb-bass-navigation/hbapp/resources/js/ext/resources/css/ext-all.css" />
+<style>
+.tabs {
+    background-image:url( /hbapp/resources/image/default/tabs.gif ) !important;
+}
+.x-panel-header  {
+	background-image:url(img/banner.png) ! important;
+	background-repeat:repeat-x ! important;
+	background-attachment:scroll ! important;
+	background-position:right ! important;
+}
+.bannerTitle{
+	position:relative;height:15px;
+	color: #ffffff;
+}
+.x-border-layout-ct{background:#ffffff ! important;}
+</style>
+<script type="text/javascript">
+Ext.BLANK_IMAGE_URL = '/hb-bass-navigation/hbapp/resources/js/ext/resources/images/default/s.gif';
+//var _uriParams=aihb.Util.paramsObj();
+var _params = aihb.Util.paramsObj();
+var cityId = _params.cityId;
+if(cityId && cityId.length>5){
+	cityId = cityId.substr(0,5);
+}
+//alert(cityId);
+var cityCode = _params.cityId=="0"?"HB":aihb.Constants.getArea(cityId).cityCode;
+var cityName = _params.cityId=="0"?"湖北":aihb.Constants.getArea(cityId).cityName;
+//alert(cityCode);
+Ext.onReady(function(){
+	Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+    var tree = new Ext.tree.TreePanel({
+        el:'west',
+        //useArrows:true,
+       	border : false,
+       	loader: new Ext.tree.TreeLoader({
+            dataUrl:'/hb-bass-navigation/hbirs/action/entGrid?method=gridNodes&nologin=true&condi='+cityCode
+            ,listeners : {
+            	load : function(t,node){
+					node.eachChild(function(_node){
+       					_node.getUI().getIconEl().src = "/hbapp/resources/image/default/tabs.gif";
+					});
+            	}
+            }
+        })
+        ,root : new Ext.tree.AsyncTreeNode({
+	       	text: '湖北',
+	        draggable:false,
+	        iconCls :'tabs',
+	        expanded:true,
+	        id:'HB'
+	        ,listeners: { 
+				click: function(node,event){
+				}
+			}
+	    })
+	    ,listeners: { 
+	    	click: function(node,event){
+			}
+			,expandnode : function(node){
+           		if(node.id.length>=2){
+           			node.eachChild(function(_node){
+       					_node.addListener("dblclick",function(){
+       						window.returnValue=_node.id+"@"+_node.text;
+       						window.close();
+       					})
+					});
+           		}
+           	}
+       	}
+    });
+    tree.render();
+    var viewport = new Ext.Viewport({
+	    layout:'border',
+	    items:[{
+			region:'center',
+			title:'<div class="bannerTitle"><div style="position:absolute; bottom:-2;"><img src="img/chatroom.gif" />&nbsp;网格层次</div></div>',
+			split:true,
+			width: 200,
+			minSize: 175,
+			maxSize: 400,
+			//collapsed : true,
+			collapsible: true,
+			collapseMode:'mini',
+			autoScroll : true,
+			margins:'1 0 0 3',
+			layoutConfig:{
+			    animate:true
+			},
+			items: [tree]
+        }]
+	});
+});
+</script>
+</head>
+<body>
+	<div id="west"></div>
+	<div id="center">
+    </div>
+    <div id="east">
+    </div>
+</body>
+</html>

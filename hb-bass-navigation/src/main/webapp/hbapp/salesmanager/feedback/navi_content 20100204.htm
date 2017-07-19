@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>������������ר��</title>
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">  	
+	<link rel="stylesheet" type="text/css" href="/hb-bass-navigation/hbbass/css/bass21.css" />
+	<style>
+	.feedback {
+		position:absolute;
+		left:20%;top:20%;
+		width:600px;
+		padding: 1 px 3 px 10 px 10 px;
+		z-index:100;background-color: #EFF5FB;
+		border:1px solid #c3daf9;
+	}
+	.form_button_short{
+		BORDER-RIGHT: #7b9ebd 1px solid; 
+		BORDER-TOP: #7b9ebd 1px solid; 
+		BORDER-LEFT: #7b9ebd 1px solid;
+		BORDER-BOTTOM: #7b9ebd 1px solid;
+		PADDING: 2px ,2px; 
+		FONT-SIZE: 12px; 
+		FILTER: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr=#ffffff, EndColorStr=#EFF5FB); 
+		CURSOR: hand; 
+		COLOR: black;
+	 	width:40px;
+	 	height:20px;
+	}
+	#loading{
+		position:absolute;
+		left:40%;
+		top:35%;
+		border:1px solid #6593cf;
+		padding:2px;
+		background:#c3daf9;
+		width:200px;
+		text-align:center;
+		z-index:20001;
+	}
+	#loading .loading-indicator{
+		border:1px solid #a3bad9;
+		background:white url(/hb-bass-navigation/hbbass/common2/image/block-bg.gif) repeat-x;
+		color:#003366;
+		font:bold 13px tahoma,arial,helvetica;
+		padding:10px;
+		margin:0;
+	}
+	</style>	
+	<script type="text/javascript" src="/hb-bass-navigation/hbbass/portal/portal_hb.js"></script>
+	<SCRIPT language=javascript>
+	function check()
+	{		
+		if(document.forms[0].fileName.value=="")
+		{
+			alert("��ѡ���ϴ��ļ�");
+			return false;
+		}
+		document.all.btn1.disabled=true;
+	}
+	</script>
+  </head>
+  <body>
+  	<div style="margin: 20 px;text-align: center;font-size: 22px;font-weight: bold;font-family: ����">������������ר��</div>
+
+  	<table align="center" width="83%" class="grid-tab-blue" cellspacing="1" cellpadding="0" border="0">
+	  <tr class="grid_title_blue" height="26">
+	    <td width="10%" class="grid_title_cell">���</td>
+	    <td width="18%" class="grid_title_cell">�������</td>
+	    <td width="62%" class="grid_title_cell">����</td>
+	  </tr>
+	 <tr class="grid_row_alt_blue" height="26">
+	    <td class="grid_row_cell">1</td>
+	    <td class="grid_row_cell_text"><a href='#' onclick="openhtml_p('singleadd','���������������¼��','singleAdd.jsp')">���������������¼��</a></td>
+	    <td class="grid_row_cell_text">�ֶ�����¼������������</td>
+	  </tr>
+	  <tr class="grid_row_alt_blue" height="26">
+	    <td class="grid_row_cell">2</td>
+	    <td class="grid_row_cell_text"><a href='#' onclick='{document.getElementById("feedback_div").style.display="";}'>��������������ݵ���</a></td>
+	    <td class="grid_row_cell_text">������������������&nbsp;<a style="text-decoration: underline;" href="/hb-bass-navigation/hbbass/common/FileDown.jsp?filename=sample.xls&filepath=/hbbass/salesmanager/feedback/"><font color=blue><b>excel�������ģ��</b></font></a>&nbsp;<font color=red>(�ļ��в������ظ���¼����д�����в��ܺ��е���ţ�ÿ�м�¼�뾡��������д���ͻ����������������д����������)</font></td>
+	  </tr>
+	  <tr class="grid_row_alt_blue" height="26">
+	    <td class="grid_row_cell">3</td>
+	    <td class="grid_row_cell_text"><a href="#" onclick="openhtml_p('feedbackmain','�������������ѯ','feedbackMain.jsp')">�������������ѯ</a></td>
+	    <td class="grid_row_cell_text">��¼�����������Ļ�������������в�ѯ���޸ġ�ɾ���ά������</td>
+	  </tr>
+	  <!--
+	  <tr class="grid_row_alt_blue" height="26">
+	    <td class="grid_row_cell">4</td>
+	    <td class="grid_row_cell_text"><a href="#" onclick="openhtml_p('feedbacktrack','������������','reflowingtrack.jsp')">������������</a></td>
+	    <td class="grid_row_cell_text">�Ի��������������Ч�����</td>
+	  </tr>
+	  -->
+	</table>
+  </body>
+  <div id="feedback_div" style="display:none;">
+	<div style="width:100%;height:200%;background:#dddddd;position:absolute;z-index:99;left:0;top:0;filter:alpha(opacity=80);">&#160;</div>
+	<div class="feedback">
+		<div style="text-align: right"><img src='/hbbass/js/ext202/resources/images/default/qtip/close.gif' style="cursor: hand;" onclick="{this.parentNode.parentNode.parentNode.style.display='none';}"></img></div>
+		<form action="importAction.jsp" method="post" enctype="multipart/form-data" onsubmit="return check();">
+		<table width="99%">
+			<tr>
+	 		<td style="font-size:13;" width="150px">�ϴ��ļ�(excel�ļ�)��</td>
+	 		<td height="30 px"><input type="file" name="fileName" size="30" id="t">
+  			</td>
+	 		<td align="right"><input id="btn1" type="submit" class="form_button" value="�ύ"></td>
+	 		</tr>
+	 		<tr>
+	 			<td colspan="3" height="30px"></td>
+	 		</tr>
+	 	</table>
+	 	</form>
+	</div>
+	</div>
+</html>

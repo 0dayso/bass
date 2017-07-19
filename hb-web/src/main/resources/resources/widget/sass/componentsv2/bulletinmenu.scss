@@ -1,0 +1,54 @@
+@charset "utf-8";
+.panel-primary {
+  border: none;
+}
+.bulletin-menu{
+  width:210px;
+  @include setMargin(row,6px);
+}
+.bulletin-menu-title{
+  @include setRadius(top);
+  .bulletin-menu-title-text{
+    font-size: $font-m1;
+    color: $color-white;
+  }
+  .bulletin-menu-title-func{
+    float:right;
+    font-size: $font-s;
+    color: $color-white;
+    @include textLimit(18%);
+    display: table-cell;
+    text-decoration: none;
+    @include setPadding(top,5px);
+    &:hover{
+      cursor:pointer;
+      }
+  }
+}
+
+.bulletin-menu-context{
+  @include setBorder(notop);
+  background-color: $bgColor-blue2;
+}
+.bulletin-menu-context ul{
+  @include setPadding(left,26px);
+  @include setPadding(column,6px);
+  i{
+  	 font-weight:bolder;
+	 color: #337ab7;
+  }
+  &:hover{
+    cursor:pointer;
+    background-color: $borderColor1;
+  }
+}
+.bulletin-menu-li-text{
+  color:$color-normal;
+  font-size: $font-s;
+  @include textLimit(60%);
+  display: table-cell;
+}
+
+.bulletin-menu-ul-background-color{
+	 background-color: $borderColor1;
+}

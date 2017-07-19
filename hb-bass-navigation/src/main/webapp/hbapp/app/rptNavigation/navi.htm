@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html xmlns:ai>
+  <head>
+    <title>湖北移动经营分析系统</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">
+	<script type="text/javascript" src="../../resources/js/default/default.js"></script>
+	<script type="text/javascript" src="../../resources/js/default/tabext.js"></script>
+	<script type="text/javascript" src="rpt_display.js"></script>
+	<link rel="stylesheet" type="text/css" href="../../resources/css/default/default.css" />
+	<style>
+	.selectarea {
+	position:absolute;
+	width:130px;
+	padding: 3 px;
+	z-index:30;background-color: #FFFFB5;
+	border:1px solid #B3A894;
+}
+	</style>
+	<script type="text/javascript">
+//aihb.URL="/hbapp";
+window.onload=function(){
+	_render();
+}
+
+function logStat(){
+	//alert("/hbirs/action/rptNavi?method=logStat&"+_params._oriUri);
+	var ajax = new aihb.Ajax({
+		url : "/hbirs/action/rptNavi?method=logStat"
+		,parameters : _params._encoderOriUri
+		,callback : function(xmlrequest){
+			//alert(xmlrequest.responseText);
+			var datas = eval(xmlrequest.responseText);
+			for(var i=0;i<datas.length;i++){
+				if(!$("te_"+datas[i].id))continue;
+				var _td4=$("td_"+datas[i].id);
+				$("te_"+datas[i].id).innerText=datas[i].qu;
+				
+				var _table=$C("table");
+				_table.width="99%";
+				var _thead=$C("thead");
+				_table.appendChild(_thead);
+				var _tr=$C("tr");
+				_tr.align="center";
+				_thead.appendChild(_tr);
+				
+				var _td1=$C("td");
+				_tr.appendChild(_td1);
+				
+				var _td2=$C("td");
+				_tr.appendChild(_td2);
+				_td2.innerText="本月";
+				
+				var _td3=$C("td");
+				_tr.appendChild(_td3);
+				_td3.innerText="累计";
+				
+				var _tbody=$C("tbody");
+				_table.appendChild(_tbody);
+				
+				var _tr1=$C("tr");
+				_tr1.align="center";
+				_tbody.appendChild(_tr1);
+				
+				var _tr2=$C("tr");
+				_tr2.align="center";
+				_tbody.appendChild(_tr2);
+				
+				var _tr3=$C("tr");
+				_tr3.align="center";
+				_tbody.appendChild(_tr3);
+				
+				var _td11=$C("td");
+				_tr1.appendChild(_td11);
+				_td11.innerText="访问次数";
+				
+				var _td12=$C("td");
+				_tr1.appendChild(_td12);
+				_td12.innerText=datas[i].qum;
+				
+				var _td13=$C("td");
+				_tr1.appendChild(_td13);
+				_td13.innerText=datas[i].qu;
+				
+				var _td21=$C("td");
+				_tr2.appendChild(_td21);
+				_td21.innerText="下载次数";
+				
+				var _td22=$C("td");
+				_tr2.appendChild(_td22);
+				_td22.innerText=datas[i].dwm;
+				
+				var _td23=$C("td");
+				_tr2.appendChild(_td23);
+				_td23.innerText=datas[i].dw;
+				
+				var _td31=$C("td");
+				_tr3.appendChild(_td31);
+				_td31.innerText="访问人次";
+				
+				var _td32=$C("td");
+				_tr3.appendChild(_td32);
+				_td32.innerText=datas[i].lgm;
+				
+				var _td33=$C("td");
+				_tr3.appendChild(_td33);
+				_td33.innerText=datas[i].lg;
+				
+				var _hiddenDiv=$("hd_"+datas[i].id);
+				
+				_hiddenDiv.appendChild(_table);
+				
+				_hiddenDiv.onmouseover=function(){this.style.display="";}
+				_hiddenDiv.onmouseout=function(){this.style.display="none";}
+				
+				_td4.onmouseover=function(){
+					var _hiddenDiv=$(this.id.replace("t","h"));
+					if(_hiddenDiv.style.display=="none"){
+						_hiddenDiv.style.left=event.clientX+document.body.scrollLeft- document.body.clientLeft - 130;
+						
+						var _newtop=event.clientY+document.body.scrollTop- document.body.clientTop;
+						if(_newtop+200>document.body.scrollHeight)_newtop-=60;
+						_hiddenDiv.style.top =_newtop;
+						_hiddenDiv.style.display="";
+					}
+				}
+				_td4.onmouseout=function(){
+					var _hiddenDiv=$(this.id.replace("t","h"));
+					_hiddenDiv.style.display="none";
+				}
+			}
+			
+		}
+	});
+	ajax.request();
+}
+
+function _render(){
+	var ajax = new aihb.Ajax({
+		url : "/hbirs/action/rptNavi?method=init"
+		,parameters : _params._encoderOriUri
+		,callback : function(xmlrequest){
+			var res =null;
+			try{ 
+				eval("res="+xmlrequest.responseText);
+			}catch(e){debugger;}
+			
+			if(res!=null){
+				$("title").innerText=res.packageName;
+				naviTree($("t1"),res.elements);
+				logStat();
+			}
+		}
+	});
+	ajax.request();
+}
+	</script>
+  </head>
+  <body>
+  	<div id="title" style="margin: 10px;text-align: center;font-size: 22px;font-weight: bold;font-family: 黑体"></div> 
+  	<table id="t1" align="center" width="96%" class="grid-tab-blue" cellspacing="1" cellpadding="0" border="0" style="margin-bottom:5px;"></table>
+  </body>
+</html>

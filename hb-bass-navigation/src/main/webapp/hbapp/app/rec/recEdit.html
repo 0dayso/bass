@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:ai>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+		<title>业务属性参数编辑</title>
+		<link rel="stylesheet" type="text/css" href="../../resources/css/default/default.css" />
+		<link rel="stylesheet" type="text/css" href="../../resources/js/tooltip/style.css" />
+		<link type="text/css" href="../../resources/js/jquery/themes/redmond/jquery.ui.css" rel="stylesheet" />
+		<style type="text/css">
+/* 顺序很重要，这样才能覆盖 */
+body {
+	font-size: 66.5%;
+}
+
+/* row class */
+.fmRow {
+	
+}
+
+/* label class */
+.fmLabel {
+	color: #3182be;
+	font-weight: bold;
+}
+
+/* fel class*/
+.fmEl {
+	
+}
+</style>
+	</head>
+	<body>
+		<form method="post" action="">
+			<div class="divinnerfieldset">
+				<fieldset>
+					<legend>
+						<table>
+							<tr>
+								<td onclick="hideTitle(this.childNodes[0],'dim_div')" title="点击隐藏">
+									<img flag='1' src="../../resources/image/default/ns-expand.gif"></img>
+									&nbsp;查询条件区域：
+								</td>
+							</tr>
+						</table>
+					</legend>
+					<div id="dim_div">
+						<table align="center" width="99%">
+							<tr class="dim_row_submit">
+								<td align="right" bgcolor="">
+									<input id="addBtn" type="button" class="form_button" value="新增">
+									&nbsp;
+									<input id="editBtn" type="button" class="form_button" value="修改">
+									&nbsp;
+									<input id="queryBtn" type="button" class="form_button" value="查询">
+									&nbsp;
+									<input id="downBtn" type="button" class="form_button" value="下载">
+									&nbsp;
+								</td>
+							</tr>
+						</table>
+					</div>
+				</fieldset>
+			</div>
+			<br>
+			<div style="text-align: center">
+				<span style="color: red; font-size: 12px" id="infomation"></span>
+			</div>
+			<div class="divinnerfieldset">
+				<fieldset>
+					<legend>
+						<table>
+							<tr>
+								<td onclick="hideTitle(this.childNodes[0],'show_div')" title="点击隐藏">
+									<img flag='1' src="../../resources/image/default/ns-expand.gif"></img>
+									&nbsp;数据展现区域：
+								</td>
+								<td></td>
+							</tr>
+						</table>
+					</legend>
+					<div id="grid" style="display: none;"></div>
+				</fieldset>
+			</div>
+			<br>
+		</form>
+		<DIV style="display: none" id=loadmask2>
+			<DIV style="Z-INDEX: 20000; POSITION: absolute; WIDTH: 100%; BACKGROUND: #c3daf9; HEIGHT: 120%; TOP: 0px; LEFT: 0px; FILTER: alpha(opacity =     60)" id=loadingmask>
+				&nbsp;
+			</DIV>
+		</DIV>
+		<div id="edit" style="display: block; background-color: DDEEEE">
+		</div>
+		<input type="hidden" name="ids" />
+		<!-- lots of scripts start! -->
+		<script type="text/javascript" src="../../resources/js/default/default.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../../resources/js/default/json2.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../../resources/js/default/util.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../../resources/js/datepicker/WdatePicker.js"></script>
+		<script type="text/javascript" src="../../resources/js/jquery/jquery.js"></script>
+		<script type="text/javascript" src="../../resources/js/jquery/ui/jquery.ui.js"></script>
+		<script type="text/javascript" src="recEdit.js"></script>
+	</body>
+</html>

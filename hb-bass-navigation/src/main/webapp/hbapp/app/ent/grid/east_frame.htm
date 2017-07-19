@@ -1,0 +1,212 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>湖北移动经营分析系统</title>
+<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/ext/ext-base.js"></script>
+<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/ext/ext-all.js"></script>
+<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/default/default.js"></script>
+<link rel="stylesheet" type="text/css" href="/hb-bass-navigation/hbapp/resources/js/ext/resources/css/ext-all.css" />
+<link rel="stylesheet" type="text/css" href="/hb-bass-navigation/hbapp/resources/css/default/default.css" />
+<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/chart/FusionCharts.js"></script>
+<style>
+.x-panel-header  {
+	background-image:url(img/banner.png) ! important;
+	background-repeat:repeat-x ! important;
+	background-attachment:scroll ! important;
+	background-position:right ! important;
+}
+.bannerTitle{
+	position:relative;height:15px;
+	color: #ffffff;
+}
+.x-border-layout-ct{background:#ffffff ! important;}
+</style>
+<script type="text/javascript">
+Ext.onReady(function(){
+	Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+	var viewport = new Ext.Viewport({
+	    layout:'border',
+	    items:[
+        {
+        	region:'center',
+            split:true,
+            title:'<div class="bannerTitle"><div style="position:absolute; bottom:-2;"><img src="img/ic_36.gif" /> 业绩发展</div></div>',
+            margins:'1 1 0 0',
+            
+            items: [
+            	new Ext.BoxComponent({
+                	region:'center',
+                	el: "center"
+            	})
+            ]
+        }
+        ]
+	});
+	
+	initMsg("HB.WH")
+
+query();
+
+	/*var _data=[
+		{city:"集团到达数",dura:0.5956}
+		,{city:"集团信息化收入",dura:0.8521}
+		,{city:"重点集团覆盖率",dura:0.9234}
+		,{city:"集团信息化收入",dura:0.8521}
+		,{city:"重要集团覆盖率",dura:0.9234}
+		,{city:"集团信息化收入",dura:0.8521}
+		,{city:"重要集团覆盖率",dura:0.9234}
+		,{city:"集团信息化收入",dura:0.8521}
+		,{city:"重要集团覆盖率",dura:0.9234}
+	];
+	
+	var _grid = new aihb.Grid({
+		container : $("grid")
+		,data : _data
+		,header : _header
+	});
+	
+	_grid.render();*/
+	
+$("moreList").onclick=function(){
+		parent.parent.addTab("重要集团客户覆盖率清单","/hbirs/action/confReport?method=render&sid=3572");	
+	}
+	
+
+$("grid_kpi").onclick=function(){
+		parent.parent.addTab(this.value,"grid_kpi.htm");	
+	}
+
+
+	pieChart("HB.WH");
+
+});
+
+function pieChart(area){
+	var charStr="<graph showNames='1'  decimalPrecision='0' baseFontSize='12' formatNumberScale='0' >"
+	+"   <set name='已发展' value='7039' color='F984A1'/>             "
+	+"	<set name='未发展' value='13589' color='AFD8F8' />           "
+	+"</graph>    ";
+	
+	renderChart({
+	chartid:"pie"
+	,chartSWF:"/hbapp/resources/chart/Charts/FCF_Pie2D.swf"
+	,width:240
+	,height: 140
+	,chartData:charStr
+	});
+}
+
+var _header=[
+	{name:["指标名称"],dataIndex:"name",cellStyle:"grid_row_cell_text"
+		,cellFunc:function(val){
+			if(val.length>10){
+				var _span=$C("span");
+				_span.title=val;
+				_span.appendChild(($CT(val.substring(0,9)+"..")));
+				return _span;
+			}else{
+				return val;
+			}
+		}
+	}
+	,{name:["当前值 "],dataIndex:"current",cellStyle:"grid_row_cell_number"
+		,cellFunc:function(val,options){
+			var img=$C("img");
+			if(options.record.huanbi>0.05)
+				img.src="/hb-bass-navigation/hbapp/resources/image/default/up.gif"
+			else if (options.record.huanbi<-0.05)
+				img.src="/hb-bass-navigation/hbapp/resources/image/default/down.gif"
+			else
+				img.src="/hb-bass-navigation/hbapp/resources/image/default/right.gif"
+			
+			var div=$C("div");
+			
+			div.appendChild($CT(cellFormat(val,options)));
+			div.appendChild(img);
+			return div;
+		}
+	}
+];
+
+function query(sArea,text){
+	var area=sArea||"HB.WH";
+	var zbCode="G00005,G00006,G00007,G00011,G00030,GC0002";
+	var ajax = new aihb.Ajax({
+		url : "/hbirs/action/kpi?method=getKpisUseAppName"
+		,parameters : "appName="+"EntGridD"+"&area="+ area +"&zbcode="+zbCode
+		,loadmask : true
+		,callback : function(xmlrequest){
+			$("grid").style.display="";
+			var res = null;
+			try{
+				eval("res="+xmlrequest.responseText);
+				var _grid = new aihb.Grid({
+				container : $("grid")
+				,data : res.data || res
+				,limit : (res.data || res).length
+				,header : _header
+				,pageSize : (res.data || res).length
+			});
+			_grid.render();
+			
+			$("grid").parentNode.style.height=document.body.offsetHeight-350
+			}catch(e){
+				debugger;
+				$("grid").appendChild($CT("没有数据"))
+			}
+		}
+	});
+	
+	ajax.request();
+}
+
+var MSG={
+	"HB.WH":{label:"武汉市",text:"湖北省省会。华中地区最大都市及中心城市，中国长江中下游特大城市。世界第三大河长江及其最长支流汉江横贯市区，将武汉一分为三，形成了武昌、汉口、汉阳三镇隔江鼎立的格局，唐朝诗人李白在此写下“黄鹤楼中吹玉笛，江城五月落梅花”，因此武汉自古又称“江城”。"}
+	,"HB.WH.01":{label:"蔡甸区",text:"位于武汉市西郊；跨东经113°41′-114°13 ′，北纬30°15′-30°41′之间；现辖蔡甸、张湾、侏儒、永安、大集、奓山、军山、沌口8个街道办事处，索河、玉贤2个镇和消泗乡、桐湖办事处及洪北农业示范区管委会"}
+	,"HB.WH.02":{label:"东湖高新",text:"国家批准的国家级高新技术开发区，中国光谷核心地带，规划面积224平方公里，已建成约90平方公里。园区集聚了各类高等院校42所、56个国家级科研院所、20多万各类专业技术人员和70多万在校大学生、51名两院院士。建有关东科技园、关南科技园、大学科技园、光谷软件园、富士康武汉科技园，以及汽车电子、金融后台、武钢、武重、武锅等产业园。目前拥有华工科技、武汉凡谷、烽火通信、凯迪电力、东湖高新、人福科技、长江通信、光迅科技、精伦电子、三特索道等21家在国内外资本市场上市的上市公司，上市公司数占湖北省的三分之一"}
+	,"HB.WH.03":{label:"东西湖区",text:"东西湖区地处长江左岸，武汉市的西北近郊；位于北纬30°34′--30°47′，东经113°53′--114°30′之间，全境东西长38公里，南北宽22.5公里。总面积499.71平方公里；下辖8个行政街道和3个农场办事处。全区共有社区居民委员会83个，村民委员会60；2008年度国民生产总值：134.49亿元"}
+	,"HB.WH.04":{label:"汉南区",text:"位于武汉市西南部，东经 113°45′0〞-114°06′15〞，北纬30°11′03〞-30°11′20〞，与仙桃、洪湖市接壤，面积288平方公里，人口约13万"}
+	,"HB.WH.05":{label:"汉阳区",text:"汉阳区地处武汉市西南部；全区辖月湖、晴川、建桥、鹦鹉、洲头、翠微、五里墩、琴断口、江汉二桥、永丰、江堤等11个街道办事处，四新管委会和一个经济开发区，总面积108平方公里，常住人口51万；2010年经济发展指标：全区地区生产总值达到150亿元，年均递增15%"}
+	,"HB.WH.06":{label:"洪山区",text:"洪山与武昌、青山两区相邻，北与黄陂区、新洲区隔江相望，是武汉的东大门；东经114°7′-114°38′，北纬30°28′-30°42′；全区版图面积570平方公里，户籍人口82.6万，常住人口超过100万，辖8个街道6个乡镇"}
+	,"HB.WH.07":{label:"黄陂区",text:"黄陂区位于湖北省东部偏北，武汉市以北，地跨东经114°09′—114°37′，北纬30°40′—31°22′。区域面积2261平方公里，耕地面积80.5万亩；人口120万，是武汉面积最大、人口最多的新城区。黄陂区现辖11个街道、3个镇、2个乡：前川街道、祁家湾街道、横店街道、罗汉寺街道、滠口街道、六指街道、天河街道、武湖街道、王家河街道、长轩岭街道、李家集街道、姚家集镇、蔡家榨镇、三里镇、蔡店乡、木兰乡；611个村（队）、45个社区。"}
+	,"HB.WH.08":{label:"江岸区",text:"东邻黄陂区，西与江汉区接壤，南濒长江与武昌区和洪山区隔江相望，北接东西湖区。全区土地面积64.24平方公里，农村面积33.54平方公里；总人口72.3万人；辖16个行政街道和1个乡，158个社区居委会和28个村委会。武汉市人民政府机关、市人大、市政协机关及大部分市级行政职能部门均设在区内；是武汉市的政治、经济、文化、金融和信息中心"}
+	,"HB.WH.09":{label:"江汉区",text:"江汉区国土面积仅33.43平方公里；全区下辖13条行政街道，114个社区居委会，5个村委会。全区总人口按第五次人口普查统计为59.70万人，实有人口65万人，其中户籍在册人口43.28万人"}
+	,"HB.WH.10":{label:"江夏区",text:"1+8城市圈的重要节点；共辖6个街道、5个镇、2个乡，1农场；纸坊、流芳、金口、郑店、乌龙泉、五里界6个街道办事处，豹澥、安山、法泗、湖泗4个镇，山坡、舒安2个乡，及金水农场；人口68万人"}
+	,"HB.WH.11":{label:"硚口区",text:"硚口区总面积为41.92平方公里，常住人口68万人，区内6座桥梁横跨汉江，分别连通京广铁路、武汉内环线和中环线，辖区内5条主干道和轻轨1号线贯通全区；区辖10个行政街道，1个乡；130个社区居民委员会，13 个村民委员会"}
+	,"HB.WH.12":{label:"青山区",text:"全区面积47.39平方公里，常住人口45.27万，下辖10个街道办事处和钢都花园管理委员会。境内驻有武汉科技大学、武汉钢铁公司、中国第一冶金建设公司、武汉石油化工厂、中冶集团武汉钢铁设计研究总院等10多个大型企业和科研机构"}
+	,"HB.WH.13":{label:"武昌区",text:"地处武汉市城区东南部，与汉口、汉阳隔江相望，北至余家头罗家港与青山区毗邻；东、南与洪山区洪山乡、青菱乡交错接壤，西临长江。在全市七个中心城区中地域最大、人口最多，辖区面积82.4平方公里，人口100.34万，辖14个街道，191个社区居委会。武昌始建于1800年前的战国时期，现为湖北省委、省政府所在地，是全省的政治、文化、信息中心，200多家外地驻汉机构和众多金融机构、商贸企业、大公司总部汇集在此，形成武汉市的江南核心区"}
+	,"HB.WH.14":{label:"新洲区",text:"位于北纬28度42分24秒，东经112度33分11秒；全区面积1500平方公里；全区版图面积1500.66平方公里，其中陆地占82%，水域占18%；总人口98.57万，辖10街3镇1个经济开发区1个风景旅游区"}
+	,"HB.WH.15":{label:"集团客户中心",text:"2009年成立，主要负责省直集团单位以及政府行业等集团客户的维系与保有"}
+}
+
+function initMsg(id){
+	$("gridText").innerHTML=MSG[id].label;
+	msg=MSG[id].text;
+	if(msg.length>90){
+		msg=msg.substring(0,90);
+	}
+	
+	$("gridMsg").innerHTML=msg+"...";
+}
+</script>
+<script type="text/javascript" src="grid.js"></script>
+<style>
+li{margin:7px 0px;}
+</style>
+</head>
+<body>
+<div id="north" style="padding:8 px 3px;">
+<div id="pie"></div>
+<div style="text-align: right"><a href="#" id="moreList">查看详情</></div>
+</div>
+<div id="east" style="padding:5px 10px;">
+	<div id="gridText"></div>
+	<hr>
+	<div id="gridMsg"></div>
+</div>
+<div id="center" style="padding:5px 1px 3px 1px;overflow:auto;">
+	<div id="grid"></div>
+	<div style="text-align: right;" ><a href="#" id="grid_kpi" value="业务发展监控">更多详情</a></div>
+</div>
+</body>
+</html>

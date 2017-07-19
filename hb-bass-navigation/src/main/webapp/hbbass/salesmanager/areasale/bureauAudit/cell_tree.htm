@@ -1,0 +1,106 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>基站地区</title>
+		<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/ext/ext-base.js"></script>
+		<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/ext/ext-all.js"></script>
+		<script type="text/javascript" src="/hb-bass-navigation/hbapp/resources/js/default/default.js"></script>
+		<link rel="stylesheet" type="text/css" href="/hb-bass-navigation/hbapp/resources/js/ext/resources/css/ext-all.css" />
+		<script type="text/javascript">
+Ext.BLANK_IMAGE_URL = '/hb-bass-navigation/hbapp/resources/js/ext/resources/images/default/s.gif';
+Ext.onReady(function(){
+	Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+	
+	var viewport = new Ext.Viewport({
+	    layout:'border',
+	    items:[{
+			region:'west',
+			id:'west-panel',
+			title:'地区',
+			split:true,
+			width: 200,
+			minSize: 175,
+			maxSize: 400,
+			collapsible: true,
+			autoScroll : true,
+			margins:'3 0 0 5',
+			layoutConfig:{
+			    animate:true
+			},
+			items: [{
+			    contentEl: 'west',
+			    border:false,
+			    iconCls:'nav'
+			}]
+        },
+        {
+            region:'center',
+            split:true,
+            //title:'Navigation',
+            autoScroll : true,
+            //width: 200,
+            //minSize: 175,
+            //maxSize: 400,
+            //collapsible: true,
+            margins:'3 3 0 0',
+            items: [{
+                contentEl: 'center',
+                border:false,
+                iconCls:'nav'
+            }]
+        }]
+	});
+	
+		
+	var Tree = Ext.tree;
+    
+    var tree = new Tree.TreePanel({
+        el:'tree-div',
+        useArrows:true,
+        autoScroll:true,
+        animate:true,
+        //enableDD:true,
+        border:false,
+        containerScroll: true, 
+        loader: new Tree.TreeLoader({
+            dataUrl:'/hb-bass-navigation/hbirs/action/areaSaleManage?method=nodes'
+        })
+    });
+	
+	var _uriParams=aihb.Util.paramsObj();
+    var root = new Tree.AsyncTreeNode({
+        text: '湖北 [双击查看明细]',
+        draggable:false,
+        iconCls:'x-tree-node-icon3',
+        id:'-1'
+    });
+    tree.setRootNode(root);
+
+    // render the tree
+    tree.render();
+    root.expand();
+	
+	tree.on("click",function(node,event){
+		//if(node.leaf)
+		//alert(node.attributes.url);
+		var whereContent = node.attributes.url;
+		if(whereContent){
+			var url = "/hb-bass-navigation/hbbass/salesmanager/areasale/bureauAudit/cell_tree_detail.jsp?whereContent="+whereContent;
+			document.getElementById("detailframe").src = url;		
+		}
+		//window.open(url,'_detail','');
+	});
+	
+});
+
+</script>
+	</head>
+	<body>
+		<div id="west">
+			<div id="tree-div" style="height: 100%; width: 100%;"></div>
+		</div>
+		<div id="center">
+			<iframe name="detailframe" id="detailframe" src="" width="100%" height="600"></iframe>
+		</div>
+	</body>
+</html>

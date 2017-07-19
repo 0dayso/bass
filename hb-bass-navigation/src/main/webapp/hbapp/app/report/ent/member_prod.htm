@@ -1,0 +1,103 @@
+<html xmlns:ai>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<TITLE>集团产品成员明细</TITLE>
+	<script type="text/javascript" src="../../../resources/js/default/default.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../../../resources/js/default/tabext.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../../../resources/js/datepicker/WdatePicker.js"></script>
+	<link rel="stylesheet" type="text/css" href="../../../resources/css/default/default.css" />
+	<script type="text/javascript">
+var _header=[
+	{"name":["地市"],"dataIndex":"city"}
+	,{"name":["县市"],"dataIndex":"county","cellStyle":"grid_row_cell_text"}
+	,{"name":["客户经理"],"dataIndex":"mgr","cellStyle":"grid_row_cell_text"}
+	,{"name":["集团名称"],"dataIndex":"groupname","cellStyle":"grid_row_cell_text"}
+	,{"name":["产品名称"],"dataIndex":"prod_name","cellStyle":"grid_row_cell_text"}
+	,{"name":["用户号码"],"dataIndex":"acc_nbr","cellStyle":"grid_row_cell_text"}
+	
+	,{"name":["开通时间"],"dataIndex":"start"}
+	,{"name":["变更时间"],"dataIndex":"change"}
+	,{"name":["产品状态"],"dataIndex":"pstatus"}
+	,{"name":["用户状态"],"dataIndex":"status"}
+];
+var _params = aihb.Util.paramsObj();
+function genSQL(){
+	var sql="select * from (select substr(staff_org_id,1,8) county,groupcode||groupname groupname,staff_id mgr,acc_nbr,'智能网VPMN' prod_name,char(date(v_startdate)) start,case when v_mstate!=0 then '取消' when replace(substr(char(v_startdate),1,7),'-','')=substr('@date',1,6) then '新增' else '在用' end pstatus,char(date(v_statedate)) change,case when state_tid='US10' then '在网' else '离网' end status from NMK.VPMN_ENTMEMBER_@date where groupcode='@groupcode'"
+		+" union all"
+		+" select substr(staff_org_id,1,8) county,groupcode groupname,staff_id||staff_name mgr,acc_nbr,prod_name,char(date(pstartdate)) start,case when pstatus='stcmInv' then '取消' when replace(substr(char(pstartdate),1,7),'-','')=substr('@date',1,6) then '新增' else '在用' end pstatus,char(date(pstatusdate)) change,case when status='US10' then '在网' else '离网' end status from nmk.ent_prodmember_order_@date where (prod_code is not null and prod_code!='WXWZ') and groupcode='@groupcode'"
+		+" union all"
+		+" select substr(staff_org_id,1,8) county,groupcode groupname,staff_id||staff_name mgr,acc_nbr,prod_name,'' start,'在用' pstatus,'' change,'在网' status from nmk.ent_prodmember_@date where prod_code is not null and groupcode='@groupcode') t"
+		+" where 1=1 "+ aihb.AjaxHelper.parseCondition() 
+		+" with ur";
+	return sql.replace(/@groupcode/g,_params.groupcode).replace(/@date/g,$("date").value);
+}
+
+var grid = {};
+function query(){
+	grid = new aihb.AjaxGrid({
+		header:_header
+		,sql: genSQL()
+		,callback:function(){
+			aihb.Util.watermark();
+		}
+	});
+	grid.run();
+}
+
+function down(){
+	aihb.AjaxHelper.down({
+		sql : genSQL()
+		,header : _header
+	});
+}
+
+window.onload=function(){
+	aihb.Util.loadmask();
+	aihb.Util.watermark();
+	$("date").value=_params.date;
+	query();
+}
+	</script>
+<HEAD>
+<body>
+<form method="post" action="">
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'dim_div')" title="点击隐藏"><img flag='1' src="../../../resources/image/default/ns-expand.gif"></img>&nbsp;查询条件区域：</td>
+	</tr></table></legend>
+	<div id="dim_div">
+		<table align="center" width="99%" class="grid-tab-blue" cellspacing="1" cellpadding="0" border="0">
+			<tr class='dim_row'>
+				<td class='dim_cell_title'>统计周期</td>
+				<td class='dim_cell_content'>
+					<input type="text" style="width:160px;" class="Wdate" id="date" name="date" onfocus="WdatePicker()"/>
+				</td>
+				<td class='dim_cell_title'>产品状态</td><td class='dim_cell_content'><ai:dim name='pstatus' dbName="pstatus"><select name='pstatus' class='form_select'><option value=''>全部</option><option value='新增'>本月新增</option><option value='取消'>本月取消</option><option value='在用'>在用</option></select></ai:dim></td>
+				<td class='dim_cell_title'>用户状态</td><td class='dim_cell_content'><ai:dim name='status' dbName="status"><select name='status' class='form_select'><option value=''>全部</option><option value='在网'>在网</option><option value='离网'>离网</option></select></ai:dim></td>
+			</tr>
+		</table>
+		<table align="center" width="99%">
+			<tr class="dim_row_submit" >
+				<td align="right">
+					<input type="button" class="form_button" value="查询" onClick="query()">&nbsp;
+					<input type="button" class="form_button" value="下载" onclick="down()">&nbsp;
+				</td>
+			</tr>
+		</table>
+	</div>
+</fieldset>
+</div><br>
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'show_div')" title="点击隐藏"><img flag='1' src="../../../resources/image/default/ns-expand.gif"></img>&nbsp;数据展现区域：</td>
+		<td></td>
+	</tr></table></legend>
+	<div id="grid" style="display:none;"></div>
+</fieldset>
+</div><br>
+</form>
+
+</body>
+</html>

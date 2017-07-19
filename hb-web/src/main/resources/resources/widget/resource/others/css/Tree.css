@@ -1,0 +1,67 @@
+ body{
+	font-size:14px;
+    margin:0;
+ }
+ 
+ div{
+	width:auto;
+    height:auto;
+    line-height:150%;
+ }
+ 
+ ul{
+    padding:0 18px; 
+    margin:0; 
+ }
+
+ ul li input:hover{
+    background-color:#DDDDDD;
+    color:#FF0000;
+    cursor:pointer;
+ }
+
+ ul li label:hover{
+    background-color:#DDDDDD;
+    color:#FF0000;
+    cursor:pointer;
+ }
+
+ input{
+    border-left:0px;
+    border-top:0px;
+    border-right:0px;
+    border-bottom:1px;
+ }
+
+ /* 菜单项 */
+#container ul li{ 
+    font-size:13px;  
+    line-height:18px; 
+    cursor:pointer;
+    list-style:none; 
+    background:url(../image/node.gif); 
+    background-repeat:no-repeat; 
+    padding:0 0 3px 20px;
+}
+
+/* 子菜单 */
+#container ul li ul{}
+
+/* 子菜单项 */
+#container ul li ul li{}
+
+/* 展开的父节点 */
+#container .open{ 
+    list-style-image:url(/resource/image/icon_open.png); 
+    background:url(/resource/image/folder_open.gif); 
+    background-repeat:no-repeat; 
+    padding:0 0 0 20px; 
+}
+
+ /* 子菜单的父节点 */
+#container .folder{ 
+    list-style-image:url(/resource/image/icon.png); 
+    background:url(/resource/image/folder.gif); 
+    background-repeat:no-repeat; 
+    padding:0 0 0 20px; 
+}

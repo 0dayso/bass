@@ -1,0 +1,206 @@
+//body{position:absolute;z-index:3;filter:Gray();}
+
+.query_submit{
+	text-align: right; 
+}
+/* 查询条件  */
+.query_title {
+	font-family: "宋体";
+	font-size: 12px;
+	line-height: 20px;
+	font-weight: normal;
+	font-variant: normal;
+	text-align: right;
+	color: #000000;
+	width: 8%;
+	background-color: #B6CEE7;
+}
+
+/* 查询条件值  */
+.query_content {
+	font-family: "宋体";
+	font-size: 12px;
+	line-height: 20px;
+	color: #000000;
+	width: 17%;
+	background-color: #CCDDEE;
+}
+
+/* 查询条件  */
+.query_title3 {
+	font-family: "宋体";
+	font-size: 12px;
+	line-height: 20px;
+	font-weight: normal;
+	font-variant: normal;
+	color: #000000;
+	width: 13%;
+	background-color: #B6CEE7;
+}
+
+/* 查询条件值  */
+.query_content3 {
+	font-family: "宋体";
+	font-size: 12px;
+	line-height: 20px;
+	color: #000000;
+	width: 20%;
+	background-color: #CCDDEE;
+}
+.query_tr{
+	height:23px;
+}
+.query_tr_submit{
+	height:30px;
+}
+.select{
+	width:100px;
+}
+.select_long{
+	width:160px;
+}
+
+/* 查询结果的表头 */
+.grid_title_blue {
+	background:#ebf3fd url(/hbbass/common2/image/grid3-hrow-over.gif) repeat-x left bottom;
+}
+.grid_title_gray {
+	background:#fcfcfc url(/hbbass/common2/image/grid3-hrow.gif) repeat-x left bottom;
+}
+
+.grid_title_cell {
+	color: #000000;
+	font-family: "宋体";
+	font-size: 12px;
+	line-height: 25px;
+	text-align: center;
+	font-weight : normal;
+	font-variant: normal;
+}
+
+.grid_row_cell_number {
+	font-family: "宋体";
+	font-size: 12px;
+	line-height: 20px;
+	font-weight: normal;
+	font-variant: normal;
+	color: #000000;
+	text-align: right;
+}
+
+.grid_row_cell_text {
+	font-family: "宋体";
+	font-size: 12px;
+	line-height: 20px;
+	font-weight: normal;
+	font-variant: normal;
+	color: #000000;
+	text-align: left;
+}
+
+.grid_row_cell {
+	font-family: "宋体";
+	font-size: 12px;
+	line-height: 20px;
+	font-weight: normal;
+	font-variant: normal;
+	color: #000000;
+	text-align: center;
+}
+
+.grid_row_cell_content {
+	font-family: "宋体";
+	font-size: 12px;
+	line-height: 20px;
+	font-weight: normal;
+	font-variant: normal;
+	color: #000000;
+	text-align: left;
+}
+
+.grid_row_cell_header {
+	font-family: "宋体";
+	font-size: 12px;
+	line-height: 20px;
+	font-weight: normal;
+	font-variant: normal;
+	color: #000000;
+	text-align: left;
+	background-color: #D9ECF6;
+}
+
+/* 查询结果输出行样式1  用于隔行效果 #D9ECF6*/
+.grid_row_blue {
+	padding: 0 px,3 px;
+	background-color: #FFFFFF;
+}
+
+/* 查询结果输出行样式2 用于隔行效果*/
+.grid_row_alt_blue {
+	padding: 0 px,3 px;
+	background-color: #EFF5FB;
+}
+
+/* 查询结果输出行样式3  选中该行时 高亮显示 #A6C5FD*/
+.grid_row_over_blue {
+	padding: 0 px,3 px;
+	background-color: #D9ECF6;
+}
+
+/* 查询结果输出行样式1  用于隔行效果*/
+.grid_row_gray {
+	padding-left: 3 px;
+	background-color: #FFFFFF;
+}
+
+/* 查询结果输出行样式2 用于隔行效果*/
+.grid_row_alt_gray {
+	padding-left: 3px;
+	background-color: #fafafa;
+}
+
+/* 查询结果输出行样式3  选中该行时 高亮显示 */
+.grid_row_over_gray {
+	padding-left: 3 px;
+	background-color: #efefef;
+}
+/* #ebf3fd #D9ECF6*/
+.grid-tab-blue{
+	background-color:#c3daf9;
+}
+
+.grid-tab-gray{
+	background-color: #eeeeee;
+}
+
+.query_title3 {
+	font-family: "宋体";
+	font-size: 12px;
+	line-height: 20px;
+	font-weight: normal;
+	font-variant: normal;
+	text-align: right;
+	color: #000000;
+	width: 13%;
+	background-color: #D9ECF6;
+}
+
+/* 查询条件值  */
+.query_content3 {
+	font-family: "宋体";
+	font-size: 12px;
+	line-height: 20px;
+	color: #000000;
+	width: 20%;
+	background-color: #EFF5FB;
+}
+
+.query_tr{
+	padding: 1 px 3 px;
+	height:23px;
+}
+.query_tr_submit{
+	height:20px;
+}
+
+.grid-

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<title>阀值配置</title>
+    <script type="text/javascript" src="../../resources/js/ext/ext-base.js"></script>
+    <script type="text/javascript" src="../../resources/js/ext/ext-all.js"></script>
+	<script type="text/javascript" src="../../resources/js/default/default.js" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../resources/js/ext/resources/css/ext-all.css" />
+
+<script type="text/javascript">
+	Ext.onReady(function(){
+		Ext.BLANK_IMAGE_URL = '../../resources/js/ext/resources/images/default/s.gif';//防止从网上加载,我的理解
+    	Ext.QuickTips.init();
+   		var fm = Ext.form;
+		var cm = new Ext.grid.ColumnModel([
+		{
+           id: 'WARN_TYPE_ID',
+           header: '预警类型ID',
+           dataIndex: 'warn_type_id',
+           width: 100
+        },{
+           header: '预警类型名称',
+           dataIndex: 'warn_type_name',
+           width: 170
+        },{
+           header: '预警周期',
+           dataIndex: 'warn_type_cycle',
+           width: 100
+        },{
+           header: '默认预警级别',
+           dataIndex: 'default_warn_level',
+           width: 100
+        },
+        {
+           header: '<span style="color : eedd00">黄色</span>预警阀值',
+           dataIndex: 'first_warn_value',
+           width: 100,
+			editor: new fm.NumberField({
+			   allowBlank: false,
+			   allowNegative: false,
+			   maxValue: 100,
+			   minValue: 0
+		   })
+        },
+        {
+           header: '<span style="color : orange">橙色</span>预警阀值',
+           dataIndex: 'sec_warn_value',
+           width: 100,
+		    editor: new fm.NumberField({
+               allowBlank: false,
+               allowNegative: false,
+               maxValue: 100,
+               minValue: 0
+           })
+        },
+        {
+           header: '<span style="color : red">红色</span>预警阀值',
+           dataIndex: 'third_warn_value',
+           width: 100,
+		    editor: new fm.NumberField({
+               allowBlank: false,
+               allowNegative: false,
+               maxValue: 100,
+               minValue: 0
+           })
+        }
+    ]);
+    	cm.defaultSortable = true;
+    	
+   	   var sql = "select WARN_TYPE_ID,WARN_TYPE_NAME,WARN_TYPE_CYCLE,DEFAULT_WARN_LEVEL,FIRST_WARN_VALUE,SEC_WARN_VALUE,THIRD_WARN_VALUE from NMK.DIM_CTT_WARNRULE order by 1 asc ";
+       var store = new Ext.data.Store({
+        url: 'coreCustAction.jsp?action=query&sql=' + encodeURIComponent(sql),
+        reader: new Ext.data.JsonReader(
+            {
+                root: 'records'
+            },
+            [
+                {name: 'warn_type_id', type: 'string'},
+                {name: 'warn_type_name', type: 'string'},
+                {name: 'warn_type_cycle', type: 'string'},
+                {name: 'default_warn_level', type: 'string'},
+                {name: 'first_warn_value', type: 'string'},
+                {name: 'sec_warn_value', type: 'string'},
+                {name: 'third_warn_value', type: 'string'}             
+            ]
+        )
+    });
+    	 var grid = new Ext.grid.EditorGridPanel({
+    	//added mask
+    	loadMask:{
+    		msg:'数据加载中，请稍后...',
+    		removeMask:true
+    	},
+        store: store,
+        cm: cm,
+        renderTo: 'editableGrid',
+        width: 800,
+        height: 121,
+        title: '修改预警级别',
+        frame: true,
+        clicksToEdit: 1,
+        tbar: [{
+            text: '保存',
+            disabled:true,
+            handler : function(){
+       
+            	var newRecords = store.getModifiedRecords();
+            	 if(newRecords.length==0){  // 确认修改记录数量
+			       alert("没有修改数据！");
+       				return false;
+     			}
+     			var ids = "",firsts = "",seconds = "",thirds="";
+     			for(var i = 0 ; i< newRecords.length; i++) {
+     				var dataObj = newRecords[i].data;
+     				ids += dataObj['warn_type_id'];
+     				firsts += dataObj['first_warn_value'];
+     				seconds += dataObj['sec_warn_value'];
+     				thirds += dataObj['third_warn_value'];
+     				/**/
+     				if(i<newRecords.length -1) {
+	     				ids += ",";
+	     				firsts += ",";
+	     				seconds += ",";
+	     				thirds += ",";
+     				}
+     			}
+				//alert(ids);
+				//alert(firsts);
+				//alert(seconds);
+				//alert(thirds);
+     			newRecords.length = 0; //试图清空
+     			Ext.Ajax.request({
+					url: 'coreCustAction.jsp',
+					params: {
+						action : 'modify',
+						ids : ids,
+						firsts : firsts,
+						seconds : seconds,
+						thirds : thirds
+					},
+					success: function(response, options) {
+				            var respObj;
+				            try{
+				            	respObj = eval("(" + response.responseText + ")"); 
+				            } catch(e) {
+				            	respObj = {success : false, errorInfo : '数据库原因'};
+				            	debugger;
+				            }
+				            if (respObj.success == true) {
+				           		alert("设置成功");
+				           		store.reload();
+				            } 
+				            else {
+				            	 alert("设置不成功，原因如下：" +respObj.errorInfo);
+				            	 store.reload();
+				            }
+					},
+					failure: function() {
+						alert("设置失败！请联系管理员.");
+						store.reload();
+					}
+				});
+     			//ajax request end
+            }
+        },
+        {
+        //新加
+        text: '取消',
+        handler : function() {
+        	parent.window.$("loadmask").style.display = "none";
+        	parent.window.$("cfgMenu").style.display = "none";
+			editable.style.display = "none";
+        }
+        }
+        ]
+    });
+    store.load();
+    })
+</script>
+</head>
+<body>
+	<div id="editable" style="display : none ;Z-INDEX: 20001;POSITION: absolute;top: 0px; left : 0px">
+		<div id="editableGrid">
+		</div>
+	</div>
+
+</body>
+</html>

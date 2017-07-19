@@ -1,0 +1,240 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html xmlns:ai>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>湖北移动五节营销专题</title>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Cache-Control" content="no-cache"/>
+
+<script type="text/javascript" src="../../../resources/js/default/default.js"></script>
+<script type="text/javascript" src="../../../resources/js/default/tabext.js"></script>
+<script type="text/javascript" src="../../../app/rptNavigation/rpt_display.js"></script>
+<script type="text/javascript" src="../../../resources/chart/FusionCharts.js"></script>
+<link type="text/css" href="../../../resources/css/default/default.css" rel="stylesheet" />
+<script type="text/javascript" src="../../../resources/js/jquery/jquery.js"></script>
+<script type="text/javascript" src="../../../resources/js/jquery/ui/jquery.ui.js"></script>
+<link type="text/css" href="../../../resources/js/jquery/themes/cupertino/jquery.ui.css" rel="stylesheet" />
+<style type="text/css">
+#bkg_head {
+height: 46;
+width: 333;
+position:absolute;
+left:0 px;top:-15 px;
+background:url("head.png")!important;
+background:none;
+filter:none!important;
+filter:progid:DXImageTransform.Microsoft.AlphaImageLoader (src="head.png");  
+}
+#bkg_text {
+height: 46;
+width: 333;
+position:absolute;
+right:300 px;top:5 px;
+background:url("text.png")!important;
+background:none;
+filter:none!important;
+filter:progid:DXImageTransform.Microsoft.AlphaImageLoader (src="text.png");  
+}
+
+#bkg_rabbit {
+height: 46;
+width: 333;
+position:absolute;
+right:10 px;bottom:15 px;
+background:url("rabbit.png")!important;
+background:none;
+filter:none!important;
+filter:progid:DXImageTransform.Microsoft.AlphaImageLoader (src="rabbit.png");  
+}
+
+#bkg_gift {
+height: 100;
+width: 110;
+position:absolute;z-index:-1;
+right:0 px;top:-10 px;
+background:url("gift1.png")!important;
+background:none;
+filter:none!important;
+filter:progid:DXImageTransform.Microsoft.AlphaImageLoader (src="gift1.png");  
+}
+
+.headerImg{vertical-align:bottom; padding-right: 5px; width: 22px;height: 22px;background:url('../resources/image/frame/rounds.png') no-repeat;}
+.headerText{padding-left:8px;position:relative;top:2px;font-family:华文细黑;font-size: 16px;color:#366388/*#810A87*/;}
+
+.ui-tabs  { border:0px!important;}
+.tabPiece{margin: 0px !important;padding: 0 !important;background-color: #fff!important;}
+/**/
+li a, li a:link, li a:visited {color:#366388;/*color: #2779aa;color: #000!important;font-weight: normal !important;font-family: 宋体!important;*/ text-decoration: none;}
+.ui-accordion .ui-state-default {border:0px;background-image:none;background-color:#fff;}
+/*.ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited { color: #000!important;font-weight: normal !important; font-family: 宋体!important;}*/
+
+td{line-height: 24px !important;}
+
+.ui-progressbar-value { background: /*#F78F1E*/#25b6e4 }
+
+.img1{padding-left:10px;}
+</style>
+<script type="text/javascript">
+
+jQuery.noConflict();
+
+var _params=aihb.Util.paramsObj();
+
+function _render(){
+	var ajax = new aihb.Ajax({
+		url : "/hbirs/action/rptNavi?method=init"
+		,parameters : _params._encoderOriUri
+		,callback : function(xmlrequest){
+			var res =null;
+			try{
+				eval("res="+xmlrequest.responseText);
+			}catch(e){
+				debugger;
+			}
+			if(res!=null){
+				naviFlat($("t1"),res.elements);
+			}
+		}
+	});
+	ajax.request();
+}
+
+function chart(){
+	//var fChartData=xmlrequest.responseText;
+			var chart = new FusionCharts("../../../resources/chart/Charts/FCF_MSColumn2DLineDY.swf", "ChartId", "560", "230");
+			//chart.setDataXML(encodeURIComponent(fChartData.replace("%25","%")));
+			
+			var b="<graph baseFontSize='12' caption='存活率' formatNumberScale='0' showSecondaryLimits='0' showLegend='0' showDivLineSecondaryValue='0'  numdivlines='3' showNames='1' rotateNames='0' showValues='0' numberSuffix='%' decimalPrecision='2' PYAxisMaxValue='160' SYAxisMaxValue='160'  PYAxisMinValue='-9' SYAxisMinValue='-9' ><categories><category name='孝感'/><category name='荆州'/><category name='宜昌'/><category name='荆门'/><category name='恩施'/><category name='十堰'/><category name='襄樊'/><category name='随州'/><category name='黄石'/><category name='黄冈'/><category name='江汉'/><category name='咸宁'/><category name='鄂州'/><category name='天门'/><category name='潜江'/><category name='武汉'/></categories><dataset  showValues='0'><set value='155.41' color='AFD8F8'/><set value='146.68' color='F6BD0F'/><set value='135.5' color='8BBA00'/><set value='133.94' color='FF8E46'/><set value='125.85' color='008E8E'/><set value='125.74000000000001' color='D64646'/><set value='108.55' color='8E468E'/><set value='98.83' color='588526'/><set value='96.15' color='B3AA00'/><set value='81.27' color='008ED6'/><set value='65.11' color='DDDDDD'/><set value='64.75999999999999' color='9D080D'/><set value='52.49' color='F6BD0F'/><set value='-8.870000000000001' color='C9198D'/></dataset><dataset seriesName='目标' parentYAxis='S'  showValues='0'><set value='18.0'/><set value='18.0'/><set value='18.0'/><set value='18.0'/><set value='18.0'/><set value='18.0'/><set value='18.0'/><set value='18.0'/><set value='18.0'/><set value='18.0'/><set value='18.0'/><set value='18.0'/><set value='18.0'/><set value='18.0'/></dataset></graph>";
+			chart.setDataXML(encodeURIComponent(b));
+			chart.addParam("wmode","transparent");
+			chart.render("chartrender");
+}
+
+var time="20110107";
+function chart(data){
+	var ajax = new aihb.Ajax({
+		url : "/hbirs/action/jsondata"
+		,parameters : "sql="+encodeURIComponent(data.sql.replace(/@time/g,time))
+		,callback : function(xhr){
+			var list=null;
+			eval("list="+xhr.responseText);
+			var chart = new FusionCharts("../../../resources/chart/Charts/FCF_Column3D.swf", "ChartId", "560", "230");
+			var opt = {caption:data.label};
+			if(!data.isPercent){
+				opt.decimalPrecision=2;
+				opt.valueType="percent";
+			}
+			chart.setDataXML(aihb.FusionChartHelper.chartNormal(aihb.FusionChartHelper.dataTransfer(list,["city","ind"]),opt));
+			chart.addParam("wmode","transparent");
+			chart.render("chartrender");
+		}
+	});
+	ajax.request();
+}
+
+window.onload=function(){
+	_render();
+	var sql="select max(time_id) t from REPORT_TOTAL where REPORT_CODE='Five_Day_Dura' with ur"
+	var ajax = new aihb.Ajax({
+		url : "/hbirs/action/jsondata"
+		,parameters : "sql="+sql
+		,callback : function(xhr){
+			var list=null;
+			eval("list="+xhr.responseText);
+			time=String(list[0].t);
+			chart(CONT_IND[0]);
+			main();
+			
+			var d1 = new Date();
+			d1.setMonth(parseInt(time.substring(4,6),10)-1);
+			d1.setDate(parseInt(time.substring(6,8),10));
+			d1.setYear(parseInt(time.substring(0,4),10))
+			
+			var d2 = new Date();
+			d2.setMonth(11);
+			d2.setDate(20);
+			d2.setYear(2010)
+			var rq = d1-d2;
+			var s1 = Math.ceil(rq/(24*60*60*1000)/1.02);
+			
+			
+			
+			jQuery("#progressbar").progressbar({
+				value: s1
+			});	
+			$("barText").appendChild($CT(time+"  "+s1+"% "));	
+		}
+	});
+	ajax.request();
+}
+var CONT_IND = [
+	{label:"日均净增通信用户数",sid:5182,isPercent:"1",sql:"select (select area_name from mk.bt_area where area_code=substr(dim1,1,5)) city ,int(sum(ind1/ind3)) ind  from REPORT_TOTAL  where REPORT_CODE='Five_Day_Cust' and time_id=@time group by substr(dim1,1,5) order by 1 with ur"}
+	,{label:"“五节营销”累计本地话务量同比增幅",sid:5183,sql:"select (select area_name from mk.bt_area where area_code=substr(a.dim1,1,5)) city ,decimal(sum(a.ind1))/sum(b.ind1)-1 ind from  (select dim1,sum(ind1) ind1 from REPORT_TOTAL where REPORT_CODE='Five_Day_Dura' and time_id between 20101220 and @time group by dim1 ) a  left join  (select dim1,sum(ind1) ind1 from REPORT_TOTAL where REPORT_CODE='Five_Day_Dura' and time_id between 20091220 and int(replace(char(date(insert(insert('@time',5,0,'-'),8,0,'-'))-1 year),'-',''))  group by dim1 ) b  on a.dim1=b.dim1 group by substr(a.dim1,1,5) order by 1 with ur"}
+	,{label:"“五节营销”累计长途话务量同比增幅",sid:5184,sql:"select (select area_name from mk.bt_area where area_code=substr(a.dim1,1,5)) city ,decimal(sum(a.ind1))/sum(b.ind1)-1 ind from  (select dim1,sum(ind2) ind1 from REPORT_TOTAL where REPORT_CODE='Five_Day_Dura' and time_id between 20101220 and @time group by dim1 ) a  left join  (select dim1,sum(ind2) ind1 from REPORT_TOTAL where REPORT_CODE='Five_Day_Dura' and time_id between 20091220 and int(replace(char(date(insert(insert('@time',5,0,'-'),8,0,'-'))-1 year),'-',''))  group by dim1 ) b  on a.dim1=b.dim1 group by substr(a.dim1,1,5) order by 1 with ur"}
+	,{label:"“五节营销”累计漫游话务量同比增幅",sid:5185,sql:"select (select area_name from mk.bt_area where area_code=substr(a.dim1,1,5)) city ,decimal(sum(a.ind1))/sum(b.ind1)-1 ind from  (select dim1,sum(ind3) ind1 from REPORT_TOTAL where REPORT_CODE='Five_Day_Dura' and time_id between 20101220 and @time group by dim1 ) a  left join  (select dim1,sum(ind3) ind1 from REPORT_TOTAL where REPORT_CODE='Five_Day_Dura' and time_id between 20091220 and int(replace(char(date(insert(insert('@time',5,0,'-'),8,0,'-'))-1 year),'-',''))  group by dim1 ) b  on a.dim1=b.dim1 group by substr(a.dim1,1,5) order by 1 with ur"}
+];
+function main(){
+	var cont = $("main");
+	for( var  i= 0; i < CONT_IND.length; i++) {
+		var div=$C("div");
+		div.appendChild($CT(CONT_IND[i].label));
+		
+		div.onclick=function(){
+			tabAdd({title:CONT_IND[this.seq].label,url:"/hbirs/action/confReport?method=render&sid="+CONT_IND[this.seq].sid});
+		}
+		div.title="点击打开详细";
+		div.seq=i;
+		div.onmouseover=function(){
+			this.style.color="red";
+			chart(CONT_IND[this.seq]);
+		}
+		div.onmouseout=function(){
+			this.style.color="";
+		}
+		div.style.cursor='hand';
+		cont.appendChild(div);			
+	}
+}
+/*#E0350B*/
+</script>
+</head>
+<body style="margin:0px;background-color: /*#25b6e4*/#FCC400">
+<table style="margin:0 5px;" cellspacing="0" width="98%" border=0 cellpadding="0" >
+<tr>
+	<td colspan="2">
+	<table style="margin:0 5px;" width="100%" background="cloud1.png" >
+		<tr><td colspan="3" height="39"></tr>
+		<tr>
+			<td width="310" rowspan="2" ></td>
+			<td width="83" rowspan="2" ><span id="barText" >时间进度：</span></td>
+			<td style="LINE-HEIGHT: 12px!important;">2010-12-20</td>
+			<td style="LINE-HEIGHT: 12px!important;padding-right: 15px;" align="right">2011-3-31</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<span id="progressbar" style="height: 26px;width: 90%"></span>
+			</td>
+		</tr>
+	</table>
+	</td>
+</tr>
+<tr style="background-color: #fff;" valign="top">
+	<td style="font-size: 14px;padding: 10px 5px;" id="main">
+		<div><b>总体指标</b></div>
+	</td>
+	<td width="60% style="padding: 5px 0;background-color: #fff;" >
+		<div id="chartrender"></div>
+	</td>
+</tr>
+<tr >
+	<td colspan="2" style="background-color: #fff;padding-left: 10px;">
+		<table id="t1"></table>
+	</td>
+</tr>
+</table>
+<div id="bkg_text"></div>
+<div id="bkg_gift"></div>
+<div id="bkg_rabbit"></div>
+<div id="bkg_head"></div>
+</body>
+</html>

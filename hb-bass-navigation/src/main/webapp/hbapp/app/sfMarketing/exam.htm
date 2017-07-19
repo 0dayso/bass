@@ -1,0 +1,97 @@
+<html xmlns:ai>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<meta http-equiv="cache-control" content="no-cache">
+	<title>开门红考核指标</title>
+	<script type="text/javascript" src="../../../hbapp/resources/js/default/default.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../../../hbapp/resources/js/default/calendar.js"></script>
+	<script type="text/javascript" src="../../../hbapp/resources/js/default/tabext.js"></script>
+	<link rel="stylesheet" type="text/css" href="../../../hbapp/resources/css/default/default.css" />
+	<script type="text/javascript">
+	//aihb.URL="/hbapp";
+	aihb.Grid.prototype.headerIntetceptor=function(elementTd,headData){
+		if(headData.appName && headData.appName.length>0){
+			var _img = $C("img");
+			_img.src="../../../hbapp/resources/image/default/preview.gif";
+			_img.title=headData.name+"深度分析";
+			_img.style.cursor="hand";
+			_img.bordor=0;
+			var percentFormat="";
+			_img.onclick=function(){
+				if(headData.cellFunc.toLowerCase().indexOf("percent")>0)
+					percentFormat="percent";
+				tabAdd({id:headData.key,title:headData.name,url:"../../../hbapp/kpiportal/kpiview/kpiviewDetail.jsp?appName="+headData.appName+"&zbcode="+headData.key+"&zbname="+headData.name+"&area="+"&date="+"&percentType="+percentFormat+"&brand="});
+			}
+			elementTd.appendChild(_img);
+		}
+	}
+	
+function query(){
+aihb.AjaxHelper.request({header: [{"name":"排名","cellFunc":"rankText",display:"show"}
+,{"key":"","name":"地市","dataIndex":"city","cellFunc":"","cellStyle":"","title":"","appName":""}
+,{"key":"","name":"县市","dataIndex":"county","cellFunc":"","cellStyle":"grid_row_cell_text","title":"","appName":""}
+,{"key":"KCT001","name":"开门红累计收入","dataIndex":"KCT001","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":"2009年12月1日开始累计到目前的出帐收入","appName":"ChannelD"}
+,{"key":"","name":"年同比增长","dataIndex":"yearKCT001","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number","title":"","appName":""}
+,{"key":"","name":"完成进度","dataIndex":"progressKCT001","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number","title":"","appName":""}
+,{"key":"K10007","name":"累计计费时长","dataIndex":"K10007","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":"指每月一号累计到统计日内产生的语音计费时长","appName":"ChannelD"}
+,{"key":"","name":"年同比增长","dataIndex":"yearK10007","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number","title":"","appName":""}
+,{"key":"KCT006","name":"开门红净增通话市场占有率","dataIndex":"KCT006","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number","title":"开门红净增通话用户数/(开门红净增通话用户数+开门红电信C网净增通话用户数+开门红联通G网净增通话用户数)","appName":"ChannelD"}
+,{"key":"KCT007","name":"开门红存活率","dataIndex":"KCT007","cellFunc":"aihb.Util.percentFormat","cellStyle":"grid_row_cell_number","title":"开门红净增通话用户数/开门红累计新增用户数","appName":"ChannelD"}
+,{"key":"KCT003","name":"开门红净增通话用户数","dataIndex":"KCT003","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":"目前的日累计通话用户数-2009年11月30日累计通话用户数","appName":"ChannelD"}
+,{"key":"KCT004","name":"开门红联通G网净增通话用户数","dataIndex":"KCT004","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":"目前的联通G网日累计通话用户数-2009年11月30日累计通话用户数","appName":"ChannelD"}
+,{"key":"KCT005","name":"开门红电信C网净增通话用户数","dataIndex":"KCT005","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":"目前的电信C网日累计通话用户数-2009年11月30日累计通话用户数","appName":"ChannelD"}
+,{"key":"KCT002","name":"开门红累计新增用户数","dataIndex":"KCT002","cellFunc":"aihb.Util.numberFormat","cellStyle":"grid_row_cell_number","title":"2009年12月1日开始累计到目前的新增用户数","appName":"ChannelD"}
+], url: "/hbirs/action/dynamicrpt?method=query&sid=1348"});
+	}
+	
+	function rankText(value,options){
+		return options.rowIndex+1;
+	}
+	function down(){
+		aihb.AjaxHelper.down({url: "/hbirs/action/dynamicrpt?method=down&sid=1348"});
+	}
+	aihb.Util.loadmask();
+	window.onload=function(){
+		var _d=new Date();
+		_d.setDate(_d.getDate()-1);
+		$("date").value=_d.format("yyyymmdd");
+	}
+	</script>
+</head>
+<body>
+<form method="post" action="">
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'dim_div')" title="点击隐藏"><img flag='1' src="../../../hbapp/resources/image/default/ns-expand.gif"></img>&nbsp;查询条件区域：</td>
+	</tr></table></legend>
+	<div id="dim_div">
+		<table align='center' width='99%' class='grid-tab-blue' cellspacing='1' cellpadding='0' border='0'><tr class='dim_row'><td class='dim_cell_title'>统计周期</td><td class='dim_cell_content'><ai:dim name='date'><script type='text/javascript'>var calendar_date=new Calendar('calendar_date');document.write(calendar_date);</script><table cellspacing='0' cellpadding='0' style='width: 120px;height: 22px;border:1px solid #999999;background-color:#FFFFFF;'><tr><td><input type='text' name='date' id='date' value='' onchange="if(calendar_date.callback)calendar_date.callback(this.value)" style='border:0 none;padding:1px 0 0 3px;width:76px'/><td align='right' style='padding-right : 2 px;'><span class='calendarimage' onclick="calendar_date.showMoreDay = true;calendar_date.show($('date'),this)" ></span></td></tr></table></ai:dim></td><td class='dim_cell_title'>地市</td><td class='dim_cell_content'><ai:dim name='city'><select name='city' class='form_select' onchange="areacombo('1')"><option value='0' selected='selected'>全省</option><option value='HB.WH'>武汉</option><option value='HB.HS'>黄石</option><option value='HB.EZ'>鄂州</option><option value='HB.YC'>宜昌</option><option value='HB.ES'>恩施</option><option value='HB.SY'>十堰</option><option value='HB.XF'>襄樊</option><option value='HB.JH'>江汉</option><option value='HB.XN'>咸宁</option><option value='HB.JZ'>荆州</option><option value='HB.JM'>荆门</option><option value='HB.SZ'>随州</option><option value='HB.HG'>黄冈</option><option value='HB.XG'>孝感</option><option value='HB.TM'>天门</option><option value='HB.QJ'>潜江</option></select></ai:dim></td><td class='dim_cell_title'>县市<ai:dim name='detailCounty'><input type=checkbox name=detailCounty value=1>细分</ai:dim></td><td class='dim_cell_content'><ai:dim name='county'><select name='county' class='form_select'><option value=''>全部</option></select></ai:dim></td></tr></table>
+		
+		<table align="center" width="99%">
+			<tr class="dim_row_submit">
+				<td>
+				<ai:dim name='isYear'><input type="hidden" name="isYear" checked value="1" ></ai:dim>
+				<ai:dim name='isProgress'><input type="hidden" name="isProgress" checked value="1" ></ai:dim>
+				</td>
+				<td align="right">
+					<input type="button" class="form_button" value="查询" onClick="query()">&nbsp;
+					<input type="button" class="form_button" value="下载" onclick="down()">&nbsp;
+				</td>
+			</tr>
+		</table>
+	</div>
+</fieldset>
+</div><br>
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'show_div')" title="点击隐藏"><img flag='1' src="../../../hbapp/resources/image/default/ns-expand.gif"></img>&nbsp;数据展现区域：</td>
+		<td></td>
+	</tr></table></legend>
+	<div id="grid" style="display:none;"></div>
+</fieldset>
+</div><br>
+</form>
+</body>
+</html>

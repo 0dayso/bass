@@ -1,0 +1,9 @@
+@charset "utf-8";
+
+.DateBoxLabel{
+	@include text(12px,#626e7b);
+	@include edgeDistance(10px);
+	line-height:10px;
+	float:left;
+	cursor:hand;
+}

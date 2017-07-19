@@ -1,0 +1,82 @@
+@charset "utf-8";
+.ComboBox{
+	max-width: 65px;
+	.headCls {
+		@include setPadding(top,10px);
+		@include setPadding(row,6px);
+		&:hover{ 
+	       cursor:pointer; 
+	    }
+	    .icon-caret-down{
+	        float: left;
+	        @include setMargin(top,3px);
+			@include setPadding(left,6px);
+			width:10%;
+	    }
+	    .headCls-text{
+	        float: left; 
+		    @include textLimit(82%);
+	    }
+	}
+
+	.selectPosition{
+			display: inline-flex;
+			display:none;
+			position: absolute;
+			@include setPadding(bottom,3px);
+			@include setPadding(row,5px);
+			@include setMargin(row,3px);
+			z-index:1;
+			.selectPosition-block{
+				float:left;
+				background-color:$bgColor-white;
+				@include setBorder(null);
+				width: 125px;
+    			border-radius: 5px;
+    			@include setPadding(null,3px);
+    			@include setMargin(right,5px);
+			}
+			.selectPosition-search{
+				@include setBorder(bottom);
+				.selectPosition-search-input{
+					border:none;
+					background-color:$bgColor-white;
+					width: 85%;
+				}
+				.selectPosition-search-btn{
+					float: right;
+					@include setPadding(top,3px);
+					&:hover{ 
+			       		cursor:pointer;
+			    	}
+				}
+			}
+			.selectPosition-item{
+				&:hover{ 
+			       cursor:pointer; 
+			       background-color: $borderColor1;
+			    }
+				.selectPosition-item-text{
+					@include setPadding(column,3px);
+					@include setPadding(left,3px);
+					@include textLimit(95%);
+			    }
+			}
+			.selectPosition-overflow{
+		    	@include setPadding(left,6px);
+		    	@include setMargin(top,-6px);
+		    	&:hover{
+		    		cursor:pointer;
+			       	background-color: $borderColor1;
+		    	}
+			}
+		    .clickCls{
+		    	background-color: $borderColor1;
+		    }
+	}
+	
+}
+.noresult{
+	font-size: 10px;
+    color: gray;
+}

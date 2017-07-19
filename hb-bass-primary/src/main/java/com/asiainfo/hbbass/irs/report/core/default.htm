@@ -1,0 +1,121 @@
+<html xmlns:ai>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<title>${title}</title>
+	<script type="text/javascript" src="../../../hbapp/resources/js/default/default.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../../../hbapp/resources/js/default/tabext.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../../../hbapp/resources/js/default/conf_rpt_common.js" charset="utf-8"></script>	
+	<script type="text/javascript" src="../../../hbapp/resources/js/datepicker/WdatePicker.js"></script>
+	<script type="text/javascript" src="../../../hbapp/resources/chart/FusionCharts.js"></script>
+	<script type="text/javascript" src="../../../hbapp/resources/js/jquery/jquery.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../../../hbapp/resources/js/default/timeline.js" charset="utf-8"></script>	
+	<link rel="stylesheet" type="text/css" href="../../../hbapp/resources/css/default/default.css" />
+	<script type="text/javascript">
+	//aihb.URL="/hbapp";
+var $j=jQuery.noConflict();
+var _header= ${header};
+var grid=null;
+/*
+编程中重载的col与groupby，来生成SQL 等等操作
+*/
+function sqlInterceptor(sql){
+	return genSqlPieces(sql);
+}
+/*
+编程中重载条件生成，必须要sql之前条用
+*/
+function condiInterceptor(){
+}
+
+function genSQL(){
+	condiInterceptor();
+	var sql="${sql}";
+	sql=sqlInterceptor(sql);
+	sql=sqlReplace(sql);
+	return sql;
+}
+
+function query(){
+	grid = new aihb.${grid}({
+		header:_header
+		,sql: genSQL()
+		,isCached : "${cache}"
+		,ds : "${ds}"
+		,callback:function(){
+			if("${useChart}"=="true"){
+				$("chartMain").style.display="";
+				chartIndicator();
+			}
+		}
+	});
+	grid.run();
+}
+
+function down(){
+	aihb.AjaxHelper.down({
+		sql : genSQL()
+		,header : _header
+		,ds : "${ds}"
+		,useExcel : "${useExcel}"
+	});
+}
+
+${code}
+
+aihb.Util.loadmask();
+aihb.Util.watermark();
+
+aihb.Util.addEventListener(window,"load",function(){
+	timelineTip(${timeline});
+});
+
+//aihb.BassDimHelper.renderArea({el:"aidim_city"});
+</script>
+</head>
+<body>
+<form method="post" action="">
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'dim_div')" title="点击隐藏"><img flag='1' src="../../../hbapp/resources/image/default/ns-expand.gif"></img>&nbsp;查询条件区域：</td>
+	</tr></table></legend>
+	<div id="dim_div">
+		${dimension}
+	<table align="center" width="99%">
+		<tr class="dim_row_submit">
+			<td><span id="tipDiv"></span></td>
+			<td align="right">
+				<div id="Btn"><input id="btn_query" type="button" class="form_button" value="查询" onClick="query()"><input id="btn_down" type="button" class="form_button" value="下载" onclick="down()"></div>
+			</td>
+		</tr>
+	</table>
+	</div>
+</fieldset>
+</div>
+<div class="divinnerfieldset">
+<fieldset>
+	<legend><table><tr>
+		<td onclick="hideTitle(this.childNodes[0],'show_div')" title="点击隐藏"><img flag='1' src="../../../hbapp/resources/image/default/ns-expand.gif"></img>&nbsp;数据展现区域：</td>
+		<td></td>
+	</tr></table></legend>
+	<div id="gridBtn" style="display:none;"></div>
+	<div id="grid" style="display:none;"></div>
+</fieldset>
+</div>
+<div class="divinnerfieldset" id="chartMain" style="display:none;">
+<fieldset>
+	<legend><table><tr>
+		<td title="点击隐藏" onclick="hideTitle(document.getElementById('chart_div_img'),'chart_div')"><img id="chart_div_img" flag='1' src="../../../hbapp/resources/image/default/ns-expand.gif"></img>&nbsp;图形展现区域：</td>
+		<td></td>
+	</tr></table></legend>
+	
+	<div id="chart_div" style="display: none;">
+	<div style="float: left;margin: 5px;"><select id="chart_oper" multiple="multiple" size="11" style="width:160px;"></select></div>
+	<div style="float: left;" id="chart"></div>
+	</div>
+	
+</fieldset>
+</div>
+</form>
+</body>
+</html>

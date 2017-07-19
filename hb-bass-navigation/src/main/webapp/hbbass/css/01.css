@@ -1,0 +1,96 @@
+BODY {
+	FONT-FAMILY: "宋体"; FONT-SIZE: 12px; SCROLLBAR-ARROW-COLOR: #ffffff;
+SCROLLBAR-BASE-COLOR: #0044a2;}
+
+P {
+	FONT-FAMILY: "宋体"; FONT-SIZE: 12px; LINE-HEIGHT: 20px
+}
+INPUT {
+	FONT-FAMILY: "宋体"; FONT-SIZE: 12px; LINE-HEIGHT: 20px
+}
+FONT {
+	FONT-FAMILY: "宋体"; FONT-SIZE: 12px; LINE-HEIGHT: 20px
+}
+SELECT {
+	FONT-FAMILY: "宋体"; FONT-SIZE: 12px; LINE-HEIGHT: 20px
+}
+OPTION {
+	FONT-FAMILY: "宋体"; FONT-SIZE: 12px; LINE-HEIGHT: 20px
+}
+TEXTAREA {
+	FONT-FAMILY: "宋体"; FONT-SIZE: 12px; LINE-HEIGHT: 20px
+}
+FORM {
+	FONT-FAMILY: "宋体"; FONT-SIZE: 12px; LINE-HEIGHT: 20px
+}
+TD {
+	FONT-FAMILY: "宋体"; FONT-SIZE: 12px; LINE-HEIGHT: 20px; TABLE-LAYOUT: fixed; WORD-BREAK: break-all
+}
+.shadow1 {
+	COLOR: #ffffff; FILTER: dropshadow(color=#000000,offx=1,offy=1); FONT-SIZE: 14px
+}
+.shadow2 {
+	COLOR: #000000; FILTER: dropshadow(color=#d5d5d5,offx=1,offy=1); FONT-SIZE: 12px
+}
+.14p {
+	FONT-SIZE: 14px; LINE-HEIGHT: 25px
+}
+.form {
+	FONT-FAMILY: "宋体", "Arial"; FONT-SIZE: 9pt; HEIGHT: 12pt
+}
+.unnamed1 {
+	COLOR: #ffffff; FILTER: dropshadow(color=#000000,offx=1,offy=1); FONT-SIZE: 12px; HEIGHT: 1px; TEXT-DECORATION: none
+}
+.unnamed2 {
+	COLOR: #dde8ff; FONT-SIZE: 12px; TEXT-DECORATION: none
+}
+.unnamed3 {
+	COLOR: #003366; FONT-SIZE: 12px; LINE-HEIGHT: 20px
+}
+.unnamed4 {
+	COLOR: #ff6600; FONT-SIZE: 12px
+}
+.unnamed5 {
+	COLOR: #000000; FONT-SIZE: 14px
+}
+.unnamed7 {
+	COLOR: #000000; FONT-SIZE: 13px
+}
+.unnamed6 {
+	COLOR: #0033ff; FONT-SIZE: 12px
+}
+A {
+	COLOR: #003366; FONT-SIZE: 12px; LINE-HEIGHT: 23px; TEXT-DECORATION: none
+}
+A:hover {
+	COLOR: #FF6600; TEXT-DECORATION: underline
+}
+A.lm {
+	COLOR: #000000; FONT-SIZE: 12px; TEXT-DECORATION: none
+}
+A.lm:hover {
+	COLOR: #FFFFFF; TEXT-DECORATION: none
+}
+A.unnamed5:hover {
+	COLOR: #ff9900; TEXT-DECORATION: none
+}
+A.unnamed2:hover {
+	COLOR: #ff9900; TEXT-DECORATION: none
+}
+A.unnamed1:hover {
+	COLOR: #ff9900; TEXT-DECORATION: none
+}
+DIV.tm {
+	BACKGROUND-COLOR: #a3cefe; FILTER: alpha(opacity=80)
+}
+.tdhk {
+	BORDER-BOTTOM: #000000 1px solid; BORDER-LEFT: #000000 1px solid; BORDER-RIGHT: #000000 1px solid; BORDER-TOP: #000000 1px solid
+}
+.smallinput {
+	BORDER-BOTTOM: #000000 1px solid; BORDER-LEFT: #000000 1px solid; BORDER-RIGHT: #000000 1px solid; BORDER-TOP: #000000 1px solid
+}
+font2 {
+	font-size: 14px;
+	color: #000000;
+	font-weight: bold;
+}
