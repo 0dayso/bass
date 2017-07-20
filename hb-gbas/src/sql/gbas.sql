@@ -1,36 +1,49 @@
 set schema=gbas;
 --指标定义表
-create table if not exists zb_def
+create table if not exists gbas.zb_def
 (
-zb_code     varchar(32),
-zb_name    varchar(512),
-zb_def        varchar(2048),      /*sql配置*/
-status         varchar(4),             /*上线状态,0开发,1上线,可能与流程相关,数值待定*/
-cycle          varchar(8),             /*周期daily,monthly*/
-online_date  date,                   /*上线时间*/
-offline_date  date,                   /*下线时间,默认2999-12-31*/
-developer    varchar(128),     /*开发人*/
-)
+zb_code      varchar(32),
+zb_name      varchar(512),
+zb_type      varchar(64),        /*筛选框:一经,省内等*/
+zb_def       varchar(2048),      /*sql配置*/
+depends      varchar(1024),      /*依赖程序*/
+status       varchar(4),         /*上线状态,0开发,1上线,默认0,与流程相关,数值待定*/
+cycle        varchar(8),         /*周期daily,monthly*/
+online_date  date,               /*上线时间*/
+offline_date date,               /*下线时间,默认2999-12-31*/
+remark       varchar(1024),      /*指标描述*/
+creater      varchar(64),        /*创建人*/
+developer    varchar(64),        /*开发人*/
+creater      varchar(64),        /*创建人*/
+manager      varchar(64)         /*局方负责人*/
+);
 
 
 --指标规则定义表
-create table if not exists rule_def
+create table if not exists gbas.rule_def
 (
-rule_code     varchar(32),
+rule_code    varchar(32),
 rule_name    varchar(512),
-rule_def        varchar(2048),      /*配置*/
-comp_oper  varchar(32),          /*比较运算符,如==,>=等*/
-val              decimal(20,2),         /*阈值*/
-status         varchar(4),             /*上线状态,0开发,1上线,可能与流程相关,数值待定*/
-cycle          varchar(8),             /*周期daily,monthly*/
-online_date  date,                   /*上线时间*/
-offline_date  date,                   /*下线时间,默认2999-12-31*/
-developer    varchar(128),     /*开发人*/
-)
+depends     varchar(1024),       /*依赖程序*/
+rule_type    varchar(4),         /*筛选框:1强规则,0弱规则等,默认0*/
+rule_def     varchar(2048),      /*配置*/
+comp_oper    varchar(32),        /*比较运算符,如==,>=等*/
+val          decimal(20,2),      /*阈值*/
+depends      varchar(1024),      /*依赖程序*/
+status       varchar(4),         /*上线状态,0开发,1上线,默认0,与流程相关,数值待定*/
+cycle        varchar(8),         /*周期daily,monthly*/
+online_date  date,               /*上线时间*/
+offline_date date,               /*下线时间,默认2999-12-31*/
+remark       varchar(1024),      /*指标描述*/
+creater      varchar(64),        /*创建人*/
+developer    varchar(64),        /*开发人*/
+creater      varchar(64),        /*创建人*/
+manager      varchar(64)         /*局方负责人*/
+);
 
 
 --调度表
-create table if not exists run_dispatch
+create table if not exists gbas.run_dispatch
 (
 id                 bigint,                  /*主键*/
 type            varchar(32),         /*zb,rule,export*/
