@@ -8,7 +8,7 @@ user = getpass.getuser()
 def update (commit=''):
     """fab update:提交注释"""
     local('git pull')
-    local('git add .')
+    local('git add ../.')
 
     if commit:
         local('git commit -a -m "%s"' % commit)
