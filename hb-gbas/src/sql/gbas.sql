@@ -1,6 +1,6 @@
-set schema=boi;
+set schema=gbas;
 --指标定义表
-create table if not exists boi_zb_def
+create table if not exists zb_def
 (
 zb_code     varchar(32),
 zb_name    varchar(512),
@@ -14,7 +14,7 @@ developer    varchar(128),     /*开发人*/
 
 
 --指标规则定义表
-create table if not exists boi_rule_def
+create table if not exists rule_def
 (
 rule_code     varchar(32),
 rule_name    varchar(512),
@@ -30,11 +30,11 @@ developer    varchar(128),     /*开发人*/
 
 
 --调度表
-create table if not exists boi_run_dispatch
+create table if not exists run_dispatch
 (
 id                 bigint,                  /*主键*/
 type            varchar(32),         /*zb,rule,export*/
-boi_code   varchar(32),         /*zb_code,rule_code,ex_code*/
+gbas_code   varchar(32),         /*zb_code,rule_code,ex_code*/
 cycle          varchar(8),             /*周期daily,monthly*/
 etl_cycle_id  varchar(8),         /*例如:20170718*/
 etl_status  varchar(4),            /*执行状态*/
