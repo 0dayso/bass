@@ -209,10 +209,10 @@ text-align: center;
 									class="span1 span1_right" id="monthBtn">月</span><span class="span2">日</span>
 							</div>
 							<input type="text" id="datepickerD" readonly
-								class="arrow-control" style="height: 25px;" value="${lastDay}">
+								class="arrow-control" style="height: 25px;" value="${lastDay!}">
 							<input type="text" id="datepickerM" readonly
 								class="arrow-control" style="height: 25px; display: none"
-								value="${lastDay}"> <select class="play1" id="selCity">
+								value="${lastDay!}"> <select class="play1" id="selCity">
                                                                  <option value='HB'>湖北</option>
 								
 							</select>
@@ -253,13 +253,13 @@ text-align: center;
 								    <span class="span1 span6_right" id="monthBtnm">月</span><span class="span6">日</span>
 								</div>
 								<input type="text" id="datepickerDd" readonly
-									class="arrow-control" style="height: 25px;text-align: center" value="${lastDay}">&nbsp
+									class="arrow-control" style="height: 25px;text-align: center" value="${lastDay!}">&nbsp
 								<input type="text" id="datepickerMm" readonly
-									class="arrow-control" style="height: 25px;display:none;text-align: center" value="${lastDay}">&nbsp
+									class="arrow-control" style="height: 25px;display:none;text-align: center" value="${lastDay!}">&nbsp
 								<input type="text" id="datepickerDd_1" readonly
-									class="arrow-control" style="height: 25px;display:none;text-align: center" value="${lastDay}">&nbsp
+									class="arrow-control" style="height: 25px;display:none;text-align: center" value="${lastDay!}">&nbsp
 								<input type="text" id="datepickerMm_1" readonly
-									class="arrow-control" style="height: 25px;display:none;text-align: center" value="${lastDay}">
+									class="arrow-control" style="height: 25px;display:none;text-align: center" value="${lastDay!}">
 							
 							<button type="text" class='btn_search' id="queryBtn1">查询</button>
 							<div id="chart" style="height: 300px; border: 1px solid #ccc;margin-top:1%; padding: 10px;"></div>
@@ -277,7 +277,7 @@ text-align: center;
 								<div style="float:left;"><img
 									src="${mvcPath}/hb-bass-frame/views/ftl/index2/img/index/u116.png"
 									class="u116_img" style="cursor:pointer;margin-left:0;"
-									onclick="window.parent.addTab('reportCenter','报表中心','../reportCenter/index/${menu_id?trim}')" ;/>
+									onclick="window.parent.addTab('reportCenter','报表中心','../reportCenter/index/${menu_id!?trim}')" ;/>
 								</div>
 							</div>
 							<div id="relaReports" class="r1073">
@@ -293,7 +293,7 @@ text-align: center;
 								<div style="float:left;"><img
 									src="${mvcPath}/hb-bass-frame/views/ftl/index2/img/index/u116.png"
 									class="u116_img" style="cursor:pointer;margin-left:0;"
-									onclick="window.parent.addTab('appCenter','应用中心','../appCenter/index/${menu_id?trim}')" />
+									onclick="window.parent.addTab('appCenter','应用中心','../appCenter/index/${menu_id!?trim}')" />
 								</div>
 							</div>
 							<div id="relaApps" class="r1073 ">
@@ -308,7 +308,7 @@ text-align: center;
 								<div><img
 									src="${mvcPath}/hb-bass-frame/views/ftl/index2/img/index/u116.png"
 									class="u116_img" style="cursor:pointer;margin-left:0;"
-									onclick="window.parent.addTab('myCollect','我的收藏','../myCollect/index/${menu_id?trim}')" /></div>
+									onclick="window.parent.addTab('myCollect','我的收藏','../myCollect/index/${menu_id!?trim}')" /></div>
 							</div>
 							<div id="relaColls" class="r1073">
 								
@@ -325,6 +325,7 @@ text-align: center;
 
 						</div>
 					
+						<#if lastestOnlineReport?exists && lastestOnlineReport.size != 0 >
 						<#list lastestOnlineReport as online>
 						    <div class="r1082">
 						    <a href="#"
@@ -337,6 +338,7 @@ text-align: center;
 						     </a>
 						     </div>
 						</#list>
+						</#if>
 					</div>
 				</div>
 			</div>
@@ -778,7 +780,7 @@ function appendNextLevelData(menuid,dimCode,dimValue,th){
        dataType: 'json',
        data: {
         rid: data,
-        menuId: ${menu_id}
+        menuId: ${menu_id!}
       },
       success: function(data, textStatus) {
        if (data.flag) {
@@ -1187,7 +1189,7 @@ function showAre(num){
  });
  if(num==1){
   $("#datepickerDd").show();
-   document.getElementById("datepickerDd").value="${lastDay}";
+   document.getElementById("datepickerDd").value="${lastDay!}";
    time = $.trim($("#datepickerDd").val());
   $("#datepickerDd_1").hide();
   $("#datepickerMm").hide();
@@ -1371,9 +1373,9 @@ function showTime(num){
   var starTime,endTime,dateType;
   if(num==1){
     $("#datepickerDd").show();
-    document.getElementById("datepickerDd").value="${lastDay}";
+    document.getElementById("datepickerDd").value="${lastDay!}";
     $("#datepickerDd_1").show();
-    document.getElementById("datepickerDd_1").value="${lastDay}";
+    document.getElementById("datepickerDd_1").value="${lastDay!}";
     $("#datepickerMm").hide();
     $("#datepickerMm_1").hide();
  //   $("#dayBtnd").addClass("span2").siblings().removeClass("span2");
@@ -1534,7 +1536,7 @@ $('.u995_img').eq(4).addClass("icon-api2");
     url:'${mvcPath}/roleAdapt/roleAdaptParam/',
     async: false,
     data:{
-     menuId: ${menu_id}
+     menuId: ${menu_id!}
    },
    dataType:'json',
    success:function(data){
