@@ -39,3 +39,59 @@ CREATE TABLE "ST"."USER_VALUE_FINANCE_IMP_TMP"
 alter table st.fpf_irs_twitter add column end_time varchar(40);
 alter table st.fpf_irs_twitter add column bomc_id varchar(100);
 create sequence st.fpf_irs_twitter_id as int start WITH 1 INCREMENT BY 1 MINVALUE 1 NO MAXVALUE NO CYCLE NO CACHE ORDER;
+
+
+/*drop TABLE if exists st.fpf_irs_cusmtom_report;
+drop TABLE if exists st.fpf_irs_cusmtom_report_map;*/
+CREATE TABLE st.fpf_irs_cusmtom_report
+ (
+ 	report_id  varchar(32) not null primary key,
+ 	report_name varchar(50) not null,
+ 	report_desc varchar(1000),
+ 	user_id varchar(32)
+ 	
+ )
+  DATA CAPTURE NONE  IN "USERSPACE1";
+  
+ALTER TABLE st.fpf_irs_cusmtom_report
+  LOCKSIZE ROW
+  APPEND OFF
+  NOT VOLATILE;
+  
+  
+COMMENT on table st.fpf_irs_cusmtom_report is '自定义报表配置表';
+
+COMMENT on column st.fpf_irs_cusmtom_report.report_id IS '自定义报表id';
+
+COMMENT on column st.fpf_irs_cusmtom_report.report_name IS '自定义报表名称';
+
+COMMENT on column st.fpf_irs_cusmtom_report.report_desc IS '自定义报表描述';
+
+COMMENT on column st.fpf_irs_cusmtom_report.user_id IS '用户id';
+
+
+
+
+CREATE TABLE st.fpf_irs_cusmtom_report_map
+ (
+ 	id  varchar(32) not null primary key,
+ 	report_id integer not null,
+	indicator_menu_id integer not null,
+ 	kpi_code varchar(16)	
+ )
+  DATA CAPTURE NONE  IN "USERSPACE1";
+  
+ALTER TABLE st.fpf_irs_cusmtom_report_map
+  LOCKSIZE ROW
+  APPEND OFF
+  NOT VOLATILE;
+  
+COMMENT on table st.fpf_irs_cusmtom_report_map is '自定义报表配置指标关联表';
+
+COMMENT on column st.fpf_irs_cusmtom_report_map.id IS '指标关联id';
+
+COMMENT on column st.fpf_irs_cusmtom_report_map.report_id IS '自定义报表配置id';
+
+COMMENT on column st.fpf_irs_cusmtom_report_map.indicator_menu_id IS '指标菜单id';
+
+COMMENT on column st.fpf_irs_cusmtom_report_map.kpi_code IS '指标编码';
