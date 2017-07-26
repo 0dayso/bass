@@ -191,12 +191,12 @@ window.deleteById=deleteById;
 		<li class="control">
 			<table>
 				<tr valign="top">
-				<#if myt.user?? && myt.user.id=userId && myt.pid==0>
+				<#if myt.user?? && myt.user.id=userId && myt.pid==0 && myt.replyType!="已回复">
 					<td>
 						<input type=button name="updateBtn"	id="updateBtn" value="修改" onclick="update('${myt.id}')">	
 					</td>
 				</#if>
-				<#if userId=='hujuan7' && myt.pid==0 && myt.replyType!="已回复">
+				<#if userId=='hujuan7' && myt.pid==0>
 					<td>
 						<input type=button name="deleteBtn"	id="deleteBtn" value="删除" onclick="deleteById('${myt.id}')">	
 					</td>
