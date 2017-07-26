@@ -1,0 +1,11 @@
+#! /bin/sh
+. $HOME/.profile
+
+PYTHON=$(which python 2>/dev/null)
+if [ ! -x "$PYTHON" ] ; then
+    echo "python executable not found - cannot continue!"
+    exit 1
+fi
+exec $PYTHON - $0 $@ << EOF
+
+EOF

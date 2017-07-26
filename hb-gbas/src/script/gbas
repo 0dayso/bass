@@ -1,0 +1,881 @@
+#! /bin/sh
+. $HOME/.profile
+
+PYTHON=$(which python 2>/dev/null)
+if [ ! -x "$PYTHON" ] ; then
+    echo "python executable not found - cannot continue!"
+    exit 1
+fi
+exec $PYTHON - $0 $@ << EOF
+# -*- coding: utf-8 -*-
+import sys
+version = sys.version_info[:2]
+if version < (2, 3):
+    print 'Sorry, need Python 2.3 or better; %s.%s is too old!' % version
+    exit(1)
+sys.path.insert(0, sys.argv[1])
+
+import datetime
+from time import sleep
+import os
+import DB2
+import itertools
+import fcntl
+import optparse
+from math import ceil
+from commands import getstatusoutput
+import re
+
+###################################全局参数#################################################
+if os.uname()[1] in ('hbngdb1','hbdwdb2'):#仓库
+    DB_CFG ={
+        'MetaDB':{"db":"DWDB","uid":"ipd","pwd":"mmxg!0103",'tbs':'bas_mk'}
+       ,'DataDB':{"db":"DWDB","uid":"ipd","pwd":"mmxg!0103",'tbs':'bas_mk'}
+       ,'MoveDB':{"db":"WBDB217","uid":"ipd","pwd":"Ipdmm17*",'tbs':'webtbs2'}
+        }
+    ProcCfg = {"LogDir":"/expmonth/log/ipd/log/"
+              ,"DataDir":"/exphisdb/hbngdb1_kpi_tmp/"
+              ,"Run_Sleep":300
+              ,"Load_Sleep":300
+              ,"Move_Sleep":300
+              ,"DB2_STATUS":(0,256,512,768)}
+    MetaTab = {'TaskTab':'nwh.global_val'
+              ,'ZbTab':'nwh.KPI_ZB_DEF'
+              ,'ScopeTab':'nwh.kpi_scope_def'
+              ,'DispatchTab':'nwh.kpi_run_dispatch'
+              ,'EtlTab':'nwh.dp_etl_com'
+              ,'AppTab':'nwh.kpi_calc_def'}
+elif os.uname()[1]=='hbdwdb3':#近线库
+    DB_CFG ={
+        'MetaDB':{"db":"hisdb","uid":"asiainfo","pwd":"Jyhl729%",'tbs':'bas_meta'}
+       ,'DataDB':{"db":"hisdb","uid":"asiainfo","pwd":"Jyhl729%",'tbs':'bas_meta'}
+       ,'MoveDB':{"db":"hisdb","uid":"asiainfo","pwd":"Jyhl729%",'tbs':'bas_meta'}
+        }
+    ProcCfg = {"LogDir":"/expmonth/log/ipd/hislog/"
+              ,"DataDir":"/exphisdb/hbdwdb3_kpi_tmp/"
+              ,"Run_Sleep":300
+              ,"Load_Sleep":300
+              ,"Move_Sleep":300
+              ,"DB2_STATUS":(0,256,512,768)}
+    MetaTab = {'TaskTab':'nwh.global_val'
+              ,'ZbTab':'nwh.KPI_ZB_DEF'
+              ,'ScopeTab':'nwh.kpi_scope_def'
+              ,'DispatchTab':'nwh.kpi_run_dispatch'
+              ,'EtlTab':'nwh.dp_etl_com'
+              ,'AppTab':'nwh.kpi_calc_def'}
+else:#开发环境 linux mint 13 64bit db2exc_975_LNX_x86_64 Python 2.7.3
+    DB_CFG ={
+        'MetaDB':{"db":"test","uid":"db2inst1","pwd":"123123",'tbs':'USERSPACE2'}
+       ,'DataDB':{"db":"test","uid":"db2inst1","pwd":"123123",'tbs':'USERSPACE1'}
+       ,'MoveDB':{"db":"test","uid":"db2inst1","pwd":"123123",'tbs':'USERSPACE2'}
+        }
+    ProcCfg = {"LogDir":"/home/liurui/Desktop/"
+              ,"DataDir":"/home/liurui/Desktop/"
+              ,"Run_Sleep":10
+              ,"Load_Sleep":10
+              ,"Move_Sleep":10
+              ,"DB2_STATUS":(0,256,512)}
+    MetaTab = {'TaskTab':'nwh.global_val'
+              ,'ZbTab':'nwh.KPI_ZB_DEF'
+              ,'ScopeTab':'nwh.KPI_SCOPE_DEF'
+              ,'DispatchTab':'nwh.KPI_RUN_DISPATCH'
+              ,'EtlTab':'nwh.DP_ETL_COM'
+              ,'AppTab':'nwh.KPI_CALC_DEF'}
+#######################################################################################
+
+class Row(dict):
+    def __getattr__(self, name):
+        try:
+            return self[name]
+        except KeyError:
+            raise AttributeError(name)
+
+class Connection(object):
+    def __init__ (self,dsn,uid,pwd):
+        self._dsn = dsn
+        self._uid = uid
+        self._pwd = pwd
+        self._db = None
+        self.reconnect()
+
+    def __del__(self):
+        self.close()
+
+    def close(self):
+        if getattr(self, "_db", None) is not None:
+            self._db.close()
+            self._db = None
+
+    def reconnect(self):
+        self.close()
+        self._db = DB2.connect(dsn=self._dsn, uid=self._uid, pwd=self._pwd)
+
+    def query(self, query, *parameters):
+        cursor = self._cursor()
+        try:
+            self._execute(cursor, query, parameters)
+            column_names = [d[0] for d in cursor.description]
+            return [Row(itertools.izip(column_names, row)) for row in cursor.fetchall()]
+        finally:
+            cursor.close()
+
+    def ExecCnt(self, query, *parameters):
+        cursor = self._cursor()
+        try:
+            self._execute(cursor, query, parameters)
+            self._db.commit()
+            return cursor.rowcount
+        finally:
+            cursor.close()
+
+    def _cursor(self):
+        return self._db.cursor()
+
+    def _execute(self, cursor, query, parameters):
+        if parameters == ():
+            return cursor.execute(query, parameters)
+        else:
+            return cursor.execute(query, parameters[0])
+
+class WriteLog(object):
+    TaskName=None
+    def __init__ (self,LogDir,debugger=False):
+        self._LogDir=LogDir
+        self._LogTaskId = None
+        self._debugger = debugger
+
+    def Info(self,Text):
+        self._LogTaskId = datetime.datetime.now().strftime('%Y%m%d')
+        with open(("%sKpiGather_%s.log" % (self._LogDir,self._LogTaskId)),"a+",0) as f:
+            fcntl.flock(f, fcntl.LOCK_EX)
+            if self.TaskName==None:
+                _msg = (datetime.datetime.now().strftime('Info [%Y-%m-%d %H:%M:%S] :') + Text).replace(os.linesep,'  ')
+            else:
+                _msg = (datetime.datetime.now().strftime('Info [%Y-%m-%d %H:%M:%S]') + ' %s:' % self.TaskName + Text).replace(os.linesep,'  ')
+            print(_msg)
+            f.write(_msg + os.linesep)
+
+    def Debug(self,Text,is_horizontal=True):
+        if self._debugger == False: pass
+        else:
+            self._LogTaskId = datetime.datetime.now().strftime('%Y%m%d')
+            with open(("%sKpiGather_%s.log" % (self._LogDir,self._LogTaskId)),"a+",0) as f:
+                fcntl.flock(f, fcntl.LOCK_EX)
+                if is_horizontal==True:
+                    if self.TaskName==None:
+                        _msg = (datetime.datetime.now().strftime('Debug[%Y-%m-%d %H:%M:%S] :') + Text).replace(os.linesep,'  ')
+                    else:
+                        _msg = (datetime.datetime.now().strftime('Debug[%Y-%m-%d %H:%M:%S]') + ' %s:' % self.TaskName + Text).replace(os.linesep,'  ')
+                else:
+                    if self.TaskName==None:
+                        _msg = (datetime.datetime.now().strftime('Debug[%Y-%m-%d %H:%M:%S] :') + Text)
+                    else:
+                        _msg = (datetime.datetime.now().strftime('Debug[%Y-%m-%d %H:%M:%S]') + ' %s:' % self.TaskName + Text)
+                print(_msg)
+                f.write(_msg + os.linesep)
+
+    def Alarm(self,Text):
+        self._LogTaskId = datetime.datetime.now().strftime('%Y%m%d')
+        with open(("%sKpiGather_%s.log" % (self._LogDir,self._LogTaskId)),"a+",0) as f:
+            fcntl.flock(f, fcntl.LOCK_EX)
+            if self.TaskName==None:
+                _msg = (datetime.datetime.now().strftime('Alarm[%Y-%m-%d %H:%M:%S] :') + Text).replace(os.linesep,'  ')
+            else:
+                _msg = (datetime.datetime.now().strftime('Alarm[%Y-%m-%d %H:%M:%S]') + ' %s:' % self.TaskName + Text).replace(os.linesep,'  ')
+            print(_msg)
+            f.write(_msg + os.linesep)
+
+def ChkExistsTab(Connection,tab):
+    _TABLE_SCHEMA=tab.split(".")[0].upper().strip()
+    _TABLE_NAME=tab.split(".")[1].upper().strip()
+    _row=Connection.query("select count(1) CNT from sysibm.tables a where a.TABLE_SCHEMA=? and a.TABLE_NAME=? with ur",(_TABLE_SCHEMA,_TABLE_NAME))
+    if _row[0]['CNT'] == 1:
+        return True
+    else:
+        return False
+
+def ParaReplace(d,s):
+    _value=s
+    for i in d.iteritems():
+        if type(i[1])==type(''):
+            _value = _value.replace(i[0],i[1])
+    for i in d.iteritems():
+        if type(i[1])==type(''):
+            _value = _value.replace(i[0],i[1])
+    return _value.replace('\n',' ').replace('\r',' ').strip()
+
+def GetTaskID(Connection,TaskId):
+    _d = {}
+    for i in Connection.query("SELECT VAR_NAME,SQL_DEF FROM %s where VAR_TYPE='SQL' with ur" % MetaTab['TaskTab']):
+        _d[i['VAR_NAME']]=Connection.query(ParaReplace({'&TASK_ID':TaskId},i['SQL_DEF']))[0].values()[0]
+    return _d
+
+class KpiGather(object):
+
+    def __init__ (self,**kwargs):
+        self.MetaDB = Connection(DB_CFG['MetaDB']["db"],DB_CFG['MetaDB']["uid"],DB_CFG['MetaDB']["pwd"])
+        if DB_CFG['MetaDB']==DB_CFG['DataDB']:
+            self.DataDB = self.MetaDB
+        else:
+            self.DataDB = Connection(DB_CFG['DataDB']["db"],DB_CFG['DataDB']["uid"],DB_CFG['DataDB']["pwd"])
+
+        #初始化参数
+        self._RunType = None
+        self._ScopeCode = None
+        self._ZbCode = None
+        self._TaskId = None
+        self._debugger = False
+        for i in kwargs.keys():
+            if i=='s':self._ScopeCode = None if not kwargs['s'] else kwargs['s'].strip()
+            elif i=='z':self._ZbCode = None if not kwargs['z'] else kwargs['z'].strip()
+            elif i=='t':self._TaskId= None if not kwargs['t'] else kwargs['t'].strip()
+            elif i=='RunType':self._RunType = None if not kwargs['RunType'] else kwargs['RunType'].strip()
+            elif i=='debugger':self._debugger = True if kwargs['debugger']==True else False
+
+        self._pid = os.getpid()
+        self._host = os.uname()[1]
+        self._Log = WriteLog(ProcCfg['LogDir'],self._debugger)
+        self._DataDir = ProcCfg['DataDir']
+        self.RUN = self.init_run()
+
+    def init_run(self):
+        self._Log.Info("运行初始化程序参数")
+        dct = self.MetaDB.query("select distinct APPNAME,APPTYPE,PARANAME from %s with ur" % MetaTab['AppTab'])
+        _run = {}
+        for i in set([a['APPNAME'] for a in dct]):
+            _run[i]={}
+            for j in set([a['APPTYPE'] for a in dct if a['APPNAME']==i]):
+                _run[i][j]={}
+                for k in set([a['PARANAME'] for a in dct if a['APPNAME']==i and a['APPTYPE']==j]):
+                    d = self.MetaDB.query("select sequence,value from %s where APPNAME=? and APPTYPE=? and PARANAME=? order by 1 with ur" % MetaTab['AppTab'],(i,j,k))
+                    if len(d)==1:
+                        _run[i][j][k]=d[0]['VALUE']
+                    else:
+                        _run[i][j][k]=[c['VALUE'] for c in d]
+        self._Log.Debug("初始化程序参数 %s" % _run)
+        return _run
+
+    def ChkTaskId(self):
+        try:
+            if len(self._TaskId) == 6: datetime.datetime.strptime(self._TaskId,'%Y%m')
+            elif len(self._TaskId) == 8: datetime.datetime.strptime(self._TaskId,'%Y%m%d')
+        except ValueError, ex:
+            print "时间参数值%s,批次异常" % self._TaskId
+            exit(1)
+
+    def ParsFormula (self,zb_code,Formula):
+        if Formula==None or zb_code==None:return {'status':-1,'ZB_CODE':zb_code,'FORMULA':Formula}
+        _formula=Formula.replace('\r','').replace('\n','').replace(' ','').strip()
+        _zb_code=zb_code.replace('\r','').replace('\n','').replace(' ','').strip()
+        _p = re.compile('[\+\-\*\/\(\)]')
+        _lst = _p.split(_formula)
+        _uni_lst = [i for i in set(_lst) if i<>'' and self.ChkZbExist(i)]
+        _divisor=[]
+        if len([i for i in _lst if i<>''])==1 \
+                and _formula.startswith('--') \
+                and _zb_code not in _lst: #竞争指标首日不减,例如收入
+            return {'status':0,'ZB_CODE':[i for i in _lst if i<>''][0],'TAG_ZB_CODE':_zb_code,'FORMULA':_formula}
+        elif len([i for i in _lst if i<>''])==1 \
+                and _formula.startswith('-') \
+                and _zb_code not in _lst: #竞争指标首日减,例如用户数
+            return {'status':1,'ZB_CODE':[i for i in _lst if i<>''][0],'TAG_ZB_CODE':_zb_code,'FORMULA':_formula}
+        elif _zb_code not in _uni_lst:
+            if "/" in _formula:
+                for i in _formula.split('/')[1:]:
+                    if i[0:1]<>"(": _divisor.append(_p.split(i)[0])
+                    elif i[0:1]=="(":
+                        _c = 0; _d = 0; _s = ''
+                        for j in i:
+                            if j=="(": _c += 1;_s += j
+                            elif j==")": _d += 1;_s += j
+                            else: _s += j
+                            if _c==_d: _divisor.append(_s);break
+                return {'status':3,'ZB_CODE':_uni_lst,'DIVISOR':_divisor,'TAG_ZB_CODE':_zb_code,'FORMULA':_formula} #有除数
+            else:
+                return {'status':2,'ZB_CODE':_uni_lst,'TAG_ZB_CODE':_zb_code,'FORMULA':_formula} #无除数
+        else:
+            return {'status':-1,'ZB_CODE':_zb_code,'TAG_ZB_CODE':_zb_code,'FORMULA':_formula} #解析异常
+
+    def GetTask (self):
+        """获取SCOPE任务"""
+        self._Log.TaskName = None
+        if self._RunType == 'run':
+            self._Log.Debug("执行计算任务获取 select * from %s where etl_status=0 and calc_type=0 order by priority,etl_cycle_id with ur" % MetaTab['DispatchTab'])
+            for i in self.MetaDB.query("select * from %s where etl_status=0 and calc_type=0 order by priority,etl_cycle_id with ur" % MetaTab['DispatchTab']):
+                self._Log.Debug("获取任务id:%s;任务组名称:%s;任务批次%s;任务依赖程序:%s;任务依赖组:%s" % (i['ID'],i['SCOPE_CODE'],i['ETL_CYCLE_ID'],i['PROC_DEPEND'],i['SCOPE_DEPEND']))
+                if self.CheckProcDepend(i['ETL_CYCLE_ID'],i['PROC_DEPEND']) and self.CheckScopeDepend(i['ETL_CYCLE_ID'],i['SCOPE_DEPEND']):
+                    if self.MetaDB.ExecCnt("update %s set etl_status=1,PID=?,hostname=?,calc_start_time=current timestamp where id=? and etl_status=0" % MetaTab['DispatchTab'],(self._pid,self._host,i['ID']))==1:
+                        self._Log.Info("run模式获取指标组计算任务ID %s" % int(i['ID']))
+                        return i['ID']
+                self._Log.Debug("获取任务id:%s;任务组名称:%s;任务批次%s;任务依赖程序:%s;任务依赖组:%s 验证失败" % (i['ID'],i['SCOPE_CODE'],i['ETL_CYCLE_ID'],i['PROC_DEPEND'],i['SCOPE_DEPEND']))
+            return None
+        elif self._RunType == 'load':
+            self._Log.Debug("执行加载任务获取 select * from %s where (etl_status=2 and calc_type=0) or (etl_status=0 and calc_type=1) order by priority,etl_cycle_id with ur" % MetaTab['DispatchTab'])
+            for i in self.MetaDB.query("select * from %s where (etl_status=2 and calc_type=0) or (etl_status=0 and calc_type=1) order by priority,etl_cycle_id with ur" % MetaTab['DispatchTab']):
+                if i['CALC_TYPE']==0:
+                    self._Log.Debug("获取任务id:%s;任务批次%s;指标组id:%s;指标id:%s" % (i['ID'],i['ETL_CYCLE_ID'],i['SCOPE_CODE'],i['ZB_CODE']))
+                    if self.MetaDB.ExecCnt("update %s set etl_status=3,PID=?,load_start_time=current timestamp where id=? and etl_status=2" % MetaTab['DispatchTab'],(self._pid,i['ID']))==1:
+                        self._Log.Info("load模式获取指标组计算任务ID %s" % int(i['ID']))
+                        return i['ID']
+                elif i['CALC_TYPE']==1:
+                    if self.CheckZbDepend(i['ETL_CYCLE_ID'],i['ZB_DEPEND']) and self.CheckScopeDepend(i['ETL_CYCLE_ID'],i['SCOPE_DEPEND']):
+                        if self.MetaDB.ExecCnt("update %s set etl_status=3,PID=?,load_start_time=current timestamp where id=? and etl_status=0" % MetaTab['DispatchTab'],(self._pid,i['ID']))==1:
+                            self._Log.Info("load模式获取指标计算任务ID %s" % int(i['ID']))
+                            return i['ID']
+            return None
+        elif self._RunType == 'move':
+            self._Log.Debug("执行计算任务获取 select * from %s where etl_status=4 order by priority,etl_cycle_id with ur" % MetaTab['DispatchTab'])
+            for i in self.MetaDB.query("select * from %s where etl_status=4 order by priority,etl_cycle_id with ur" % MetaTab['DispatchTab']):
+                if self.MetaDB.ExecCnt("update %s set etl_status=5,PID=?,move_start_time=current timestamp where id=? and etl_status=4" % MetaTab['DispatchTab'],(self._pid,i['ID']))==1:
+                    self._Log.Info("move模式获取指标组计算任务ID %s" % int(i['ID']))
+                    return i['ID']
+            return None
+        else:
+            self._Log.Info("任务ID %s 获取异常" % int(i['ID']))
+            return None
+
+    def ChkZbExist(self,zb):
+        """确认指标是否存在"""
+        if len(self.MetaDB.query("select * from %s where zb_code=? with ur" % MetaTab['ZbTab'],(zb)))==1:
+            return True
+        else: return False
+
+    def GetTaskInfo(self,ID=None,scope=None,zb=None):
+        """ 获取任务当前信息 """
+        if ID <> None:
+            self._Log.Debug("获取任务ID信息 select ID,CALC_TYPE,scope_code,zb_code,appname,apptype,etl_cycle_id from %s where id=? with ur" % MetaTab['DispatchTab'] + " 绑定变量 %s" % ID)
+            return self.MetaDB.query("select ID,CALC_TYPE,scope_code,zb_code,appname,apptype,etl_cycle_id from %s where id=? with ur" % MetaTab['DispatchTab'],ID)[0]
+        elif scope<>None and zb==None:
+            self._Log.Debug("获取任务指标组信息 select 0 ID,0 CALC_TYPE,scope_code,'' zb_code,appname,apptype,'%s' etl_cycle_id from %s where scope_code=? with ur" % (self._TaskId,MetaTab['ScopeTab']) + " 绑定变量 %s" % scope)
+            return self.MetaDB.query("select 0 ID,0 CALC_TYPE,scope_code,'' zb_code,appname,apptype,'%s' etl_cycle_id from %s where scope_code=? with ur" % (self._TaskId,MetaTab['ScopeTab']),scope)[0]
+        elif scope<>None and zb<>None:
+            self._Log.Debug("获取任务指标组和指标信息 select 0 ID,0 CALC_TYPE,scope_code,'' zb_code,appname,apptype,'%s' etl_cycle_id from %s where scope_code=? with ur" % (self._TaskId,MetaTab['ScopeTab']) + " 绑定变量 %s" % scope)
+            return self.MetaDB.query("select 0 ID,0 CALC_TYPE,scope_code,'%s' zb_code,appname,apptype,'%s' etl_cycle_id from %s where scope_code=? with ur" % (zb,self._TaskId,MetaTab['ScopeTab']),scope)[0]
+        elif scope==None and zb<>None:
+            self._Log.Debug("获取任务指标信息 select 0 ID,CALC_TYPE,'' scope_code, ZB_CODE, APPNAME, APPTYPE,'%s' etl_cycle_id from %s where CALC_TYPE=1 and ZB_CODE=? with ur" % (self._TaskId,MetaTab['ZbTab']) + " 绑定变量 %s" % zb)
+            return self.MetaDB.query("select 0 ID,CALC_TYPE,'' scope_code, ZB_CODE, APPNAME, APPTYPE,'%s' etl_cycle_id from %s where CALC_TYPE=1 and ZB_CODE=? with ur" % (self._TaskId,MetaTab['ZbTab']),zb)[0]
+
+    def CheckProcDepend(self,etl_cycle_id,proc_depend=None):
+        """确认程序依赖"""
+        _etl_cycle_id=etl_cycle_id.strip()
+        _proc_depend='' if proc_depend==None else proc_depend.replace('\r',' ').replace('\n',' ').strip()
+
+        if _proc_depend.strip()=='':
+            self._Log.Debug("前置依赖程序配置为空,验证通过")
+            return True
+        else:
+            for i in _proc_depend.split(';'):
+                if i <> '':
+                    self._Log.Debug("前置依赖程序验证 select * from %s where etl_progname=? and length(etl_cycle_id)=? and etl_cycle_id>? and etl_state=3 with ur" % MetaTab['EtlTab'] + " 绑定参数 %s %s %s" % (i,len(_etl_cycle_id),_etl_cycle_id))
+                    if len(self.MetaDB.query("select * from %s where etl_progname=? and length(etl_cycle_id)=? and etl_cycle_id>? and etl_state=3 with ur" % MetaTab['EtlTab'],(i,len(_etl_cycle_id),_etl_cycle_id)))<>1:
+                        self._Log.Debug("%s 前置依赖程序验证失败" % _proc_depend)
+                        return False
+                    self._Log.Debug("程序 %s 验证通过" % i)
+            self._Log.Debug("前置依赖程序验证通过")
+            return True
+        return False
+
+    def CheckScopeDepend(self,etl_cycle_id,SCOPE_DEPEND=None):
+        """确认指标组依赖"""
+        _etl_cycle_id=etl_cycle_id.strip()
+        _scope_depend='' if SCOPE_DEPEND==None else SCOPE_DEPEND.replace('\r',' ').replace('\n',' ').strip()
+
+        if _scope_depend=='':
+            self._Log.Debug("前置依赖指标组配置为空,验证通过")
+            return True
+        else:
+            for i in _scope_depend.split(';'):
+                if i <> '':
+                    self._Log.Debug("前置依赖指标组验证 select a.* from %s a where a.id in (select max(b.id) from %s b where b.scope_code=? and length(b.etl_cycle_id)=? and b.etl_cycle_id=?) and abs(a.etl_status)>=4 with ur" % (MetaTab['DispatchTab'],MetaTab['DispatchTab']) + " 绑定参数 %s %s %s" % (i,len(_etl_cycle_id),_etl_cycle_id))
+                    if len(self.MetaDB.query("select a.* from %s a where a.id in (select max(b.id) from %s b where b.scope_code=? and length(b.etl_cycle_id)=? and b.etl_cycle_id=?) and abs(a.etl_status)>=4 with ur" % (MetaTab['DispatchTab'],MetaTab['DispatchTab']),(i,len(_etl_cycle_id),_etl_cycle_id)))<>1:
+                        self._Log.Debug("%s 前置依赖指标组验证失败" % i)
+                        return False
+                    self._Log.Debug("指标组 %s 验证通过" % i)
+            self._Log.Debug("前置依赖指标组验证通过")
+            return True
+        return False
+
+    def CheckZbDepend(self,etl_cycle_id,ZB_DEPEND=None):
+        """确认指标依赖"""
+        _etl_cycle_id=etl_cycle_id.strip()
+        _zb_depend='' if ZB_DEPEND==None else ZB_DEPEND.replace('\r',' ').replace('\n',' ').strip()
+
+        if _zb_depend=='':
+            return True
+        else:
+            for i in _zb_depend.split(';'):
+                if i <> '':
+                    self._Log.Debug("前置依赖指标验证 select a.* from %s a where a.id in (select max(b.id) from %s b where b.zb_code=? and length(b.etl_cycle_id)=? and b.etl_cycle_id=?) and abs(a.etl_status)>=4 with ur" % (MetaTab['DispatchTab'],MetaTab['DispatchTab']) + " 绑定参数 %s %s %s" % (i,len(_etl_cycle_id),_etl_cycle_id))
+                    if len(self.MetaDB.query("select a.* from %s a where a.id in (select max(b.id) from %s b where b.zb_code=? and length(b.etl_cycle_id)=? and b.etl_cycle_id=?) and abs(a.etl_status)>=4 with ur" % (MetaTab['DispatchTab'],MetaTab['DispatchTab']),(i,len(_etl_cycle_id),_etl_cycle_id)))<>1:
+                        return False
+            return True
+
+    def GenerateFromSql(self,SCOPE_CODE):
+        return self.MetaDB.query("select * from %s where scope_code=? and status=0 with ur" % MetaTab['ScopeTab'],(SCOPE_CODE))[0]['SCOPE_DEF']
+
+    def GenerateZbSql (self,task_id,ID,Dim,SCOPE_CODE,zb_code,is_SLICE=True):
+        if is_SLICE==True:
+            _SLICE_CNT = self.MetaDB.query("select SLICE_CNT from %s where scope_code = ? and STATUS=0 with ur" % MetaTab['ScopeTab'],SCOPE_CODE)[0]['SLICE_CNT']
+        else:
+            _SLICE_CNT = 0
+
+        if zb_code==None or zb_code.strip()=='':
+            if len(task_id)==8:
+                _lst = self.MetaDB.query("select * from %s where SCOPE_CODE=? and STATUS=0 and ? between int(date(ONLINE_DATE)) and int(date(OFFLINE_DATE)) with ur" % MetaTab['ZbTab'],(SCOPE_CODE,int(task_id)))
+            else:
+                _lst = self.MetaDB.query("select * from %s where SCOPE_CODE=? and STATUS=0 and ? between int(date(ONLINE_DATE))/100 and int(date(OFFLINE_DATE))/100 with ur" % MetaTab['ZbTab'],(SCOPE_CODE,int(task_id)))
+        else:
+            _zb_code=','.join(["'%s'" % i for i in zb_code.split(';') if i.strip()<>''])
+            if len(task_id)==8:
+                _lst = self.MetaDB.query("select * from %s where SCOPE_CODE=? and ZB_CODE in (%s) and STATUS=0 and ? between int(date(ONLINE_DATE)) and int(date(OFFLINE_DATE)) with ur" % (MetaTab['ZbTab'],_zb_code),(SCOPE_CODE,int(task_id)))
+            else:
+                _lst = self.MetaDB.query("select * from %s where SCOPE_CODE=? and ZB_CODE in (%s) and STATUS=0 and ? between int(date(ONLINE_DATE))/100 and int(date(OFFLINE_DATE))/100 with ur" % (MetaTab['ZbTab'],_zb_code),(SCOPE_CODE,int(task_id)))
+
+        if _SLICE_CNT==0 or _SLICE_CNT>=len(_lst):
+            _CaseSql = ','.join([i['ZB_DEF']+' '+i['ZB_CODE'] for i in _lst])
+            _ZbSql = ' union all '.join(["select '%s' time_id,'%s' zb_code, '%s' zb_name, %s, sum(%s) value,%s PROC_ID from tab group by %s having sum(%s)<>0" % (task_id,i['ZB_CODE'],i['ZB_NAME'],Dim,i['ZB_CODE'],ID,Dim,i['ZB_CODE']) for i in _lst])
+            _ZbCode = ','.join(["'%s'" % i['ZB_CODE'] for i in _lst])
+            return (1,_CaseSql,_ZbSql,_ZbCode)
+        else:
+            _CaseSql = [','.join(j['ZB_DEF']+' '+j['ZB_CODE'] for j in _lst[(i-1)*_SLICE_CNT:i*_SLICE_CNT]) for i in xrange(1,int(ceil(float(len(_lst))/_SLICE_CNT))+1)]
+            _ZbSql = [' union all '.join("select '%s' time_id,'%s' zb_code, '%s' zb_name, %s, sum(%s) value,%s PROC_ID from tab group by %s having sum(%s)<>0" % (task_id,j['ZB_CODE'],j['ZB_NAME'],Dim,j['ZB_CODE'],ID,Dim,j['ZB_CODE']) for j in _lst[(i-1)*_SLICE_CNT:i*_SLICE_CNT]) for i in xrange(1,int(ceil(float(len(_lst))/_SLICE_CNT))+1)]
+            _ZbCode = [','.join("'%s'" % j['ZB_CODE'] for j in _lst[(i-1)*_SLICE_CNT:i*_SLICE_CNT]) for i in xrange(1,int(ceil(float(len(_lst))/_SLICE_CNT))+1)]
+            return (int(ceil(float(len(_lst))/_SLICE_CNT)),_CaseSql,_ZbSql,_ZbCode)
+
+    def runsql (self,runsql,global_val):
+        _runsql = runsql
+        _global_val = global_val
+        _ListZb=self.GenerateZbSql(_global_val['&TASK_ID'],_global_val['{PROC_ID}'],_global_val['{DIM}'],_global_val['{SCOPE_CODE}'],_global_val['{INFO_ZBCODE}'])
+        if not ChkExistsTab(self.DataDB,ParaReplace(_global_val,_runsql['TEMP_TAB'])):
+            self._Log.Info("执行SQL %s" % ParaReplace(_global_val,_runsql['TEMP_TAB_SQL']))
+            _cnt = self.DataDB.ExecCnt(ParaReplace(_global_val,_runsql['TEMP_TAB_SQL']))
+            self._Log.Info("影响行数 %s" % _cnt)
+
+        self._Log.Info("执行SQL %s" % ParaReplace(_global_val,_runsql['PRE_RUN']))
+        _cnt = self.DataDB.ExecCnt(ParaReplace(_global_val,_runsql['PRE_RUN']))
+        self._Log.Info("影响行数 %s" % _cnt)
+
+        if _ListZb[0]==1:
+            _global_val['{CASE_SQL}'] = _ListZb[1]
+            _global_val['{ZB_SQL}'] = _ListZb[2]
+            _global_val['{ZB_CODE}'] = _ListZb[3]
+            _global_val['{RUN_LOOP}'] = ''
+            for i in _runsql['RUN']:
+                self._Log.Info("执行SQL %s" % ParaReplace(_global_val,i))
+                _cnt = self.DataDB.ExecCnt(ParaReplace(_global_val,i))
+                self._Log.Info("影响行数 %s" % _cnt)
+        elif _ListZb[0]>1:
+            for j in range(_ListZb[0]):
+                _global_val['{CASE_SQL}'] = _ListZb[1][j]
+                _global_val['{ZB_SQL}'] = _ListZb[2][j]
+                _global_val['{ZB_CODE}'] = _ListZb[3][j]
+                _global_val['{RUN_LOOP}'] = '%s批次' % (j+1)
+                for i in _runsql['RUN']:
+                    self._Log.Info("执行SQL %s" % ParaReplace(_global_val,i))
+                    _cnt = self.DataDB.ExecCnt(ParaReplace(_global_val,i))
+                    self._Log.Info("影响行数 %s" % _cnt)
+        else:
+            self._Log.Alarm("run守护模式执行失败,进程号:%s,主机名:%s,异常信息:%s" % (self._pid,self._host,"运行指标切片异常"))
+            self._Log.Debug("切分变量 %s" % str(_ListZb))
+            self.MetaDB.ExecCnt("update %s set err_msg=?,etl_status=-1*etl_status,err_time=current timestamp where id=?" % MetaTab['DispatchTab'],(str(ex),_ID))
+        self.MetaDB.ExecCnt("update %s set etl_status=2,calc_end_time=current timestamp where id=? and etl_status=1" % MetaTab['DispatchTab'],int(round(float(_global_val['{PROC_ID}']))))
+        self._Log.Info("runsql执行完毕")
+
+    def loadsql (self,loadsql,global_val):
+        _loadsql = loadsql
+        _global_val = global_val
+        if _global_val['{CALC_TYPE}']==0:
+            self._Log.Info("开始指标组数据加载")
+            _ListZb=self.GenerateZbSql(_global_val['&TASK_ID'],_global_val['{PROC_ID}'],_global_val['{DIM}'],_global_val['{SCOPE_CODE}'],_global_val['{INFO_ZBCODE}'],False)
+            _global_val['{CASE_SQL}'] = _ListZb[1]
+            _global_val['{ZB_SQL}'] = _ListZb[2]
+            _global_val['{ZB_CODE}'] = _ListZb[3]
+
+            self._Log.Info("执行SQL %s" % ParaReplace(_global_val,_loadsql['PRE_LOAD']))
+            _cnt = self.DataDB.ExecCnt(ParaReplace(_global_val,_loadsql['PRE_LOAD']))
+            self._Log.Info("影响行数 %s" % _cnt)
+
+            for i in _loadsql['LOAD']:
+                self._Log.Info("执行SQL %s" % ParaReplace(_global_val,i))
+                _cnt = self.DataDB.ExecCnt(ParaReplace(_global_val,i))
+                self._Log.Info("影响行数 %s" % _cnt)
+            self.MetaDB.ExecCnt("update %s set etl_status=4,load_end_time=current timestamp where id=? and etl_status=3" % MetaTab['DispatchTab'],int(round(float(_global_val['{PROC_ID}']))))
+        elif _global_val['{CALC_TYPE}']==1:
+            self._Log.Info("开始计算指标数据加载")
+            #~ -1 解析异常
+            #~ 0 竞争指标首日不减
+            #~ 1 竞争指标首日减
+            #~ 2 无除数
+            #~ 3 有除数
+            _dct=self.MetaDB.query("select * from %s where CALC_TYPE=1 and ZB_CODE=? with ur" %  MetaTab['ZbTab'] ,_global_val['{CALC_ZBCODE}'])[0]
+            _d = self.ParsFormula(_dct['ZB_CODE'],_dct['ZB_DEF'])
+            self._Log.Debug("公式解析%s" % str(_d))
+            if  _d['status']==-1:
+                self._Log.Alarm('解析异常:[公式:%s;目标指标:%s]' % (_d['FORMULA'],d['ZB_CODE']))
+                self.MetaDB.ExecCnt("update %s set etl_status=-1*etl_status,err_time=current timestamp,err_msg=? where id=? and etl_status=3" % MetaTab['DispatchTab'],('解析异常:[公式:%s;目标指标:%s]' % (_d['FORMULA'],d['ZB_CODE']),int(round(float(_global_val['{PROC_ID}'])))))
+                return None
+
+            _global_val['{ZB_CODE}'] = "'%s'" % _d['TAG_ZB_CODE']
+
+            self._Log.Info("执行SQL %s" % ParaReplace(_global_val,_loadsql['PRE_LOAD']))
+            _cnt = self.DataDB.ExecCnt(ParaReplace(_global_val,_loadsql['PRE_LOAD']))
+            self._Log.Info("影响行数 %s" % _cnt)
+
+            _global_val['{FORMULA_ZB_CODE}']=  "'%s'" % _d['ZB_CODE']
+            _global_val['{ZB_CODE_NAME}']=  "'%s'" % self.MetaDB.query("select zb_name from %s where zb_code=? with ur" % MetaTab['ZbTab'],(_d['TAG_ZB_CODE']))[0]['ZB_NAME']
+
+            if _d['status']==0:
+                self._Log.Info("执行SQL %s" % ParaReplace(_global_val,_loadsql['CALC_0']))
+                _cnt = self.DataDB.ExecCnt(ParaReplace(_global_val,_loadsql['CALC_0']))
+                self._Log.Info("影响行数 %s" % _cnt)
+                self.MetaDB.ExecCnt("update %s set etl_status=4,load_end_time=current timestamp where id=? and etl_status=3" % MetaTab['DispatchTab'],int(round(float(_global_val['{PROC_ID}']))))
+            elif _d['status']==1:
+                self._Log.Info("执行SQL %s" % ParaReplace(_global_val,_loadsql['CALC_1']))
+                _cnt = self.DataDB.ExecCnt(ParaReplace(_global_val,_loadsql['CALC_1']))
+                self._Log.Info("影响行数 %s" % _cnt)
+                self.MetaDB.ExecCnt("update %s set etl_status=4,load_end_time=current timestamp where id=? and etl_status=3" % MetaTab['DispatchTab'],int(round(float(_global_val['{PROC_ID}']))))
+            elif _d['status'] in (2,3):
+                _global_val['{FORMULA_ZB_CODE}'] = ','.join(["'%s'" % i for i in _d['ZB_CODE']])
+                _FORMULA_VALUE = _d['FORMULA']
+                self._Log.Debug("公式转换:%s" % str(_FORMULA_VALUE))
+                for i in _d['ZB_CODE']:
+                    _FORMULA_VALUE = _FORMULA_VALUE.replace(i,"decimal(sum(case when zb_code = '%s' then value else 0 end),16,4)" % i)
+                    self._Log.Debug("公式转换:%s" % _FORMULA_VALUE)
+                _global_val['{FORMULA_VALUE}']=_FORMULA_VALUE
+                if _d['status'] == 2:
+                    self._Log.Info("执行SQL %s" % ParaReplace(_global_val,_loadsql['CALC_2']))
+                    _cnt = self.DataDB.ExecCnt(ParaReplace(_global_val,_loadsql['CALC_2']))
+                    self._Log.Info("影响行数 %s" % _cnt)
+                    self.MetaDB.ExecCnt("update %s set etl_status=4,load_end_time=current timestamp where id=? and etl_status=3" % MetaTab['DispatchTab'],int(round(float(_global_val['{PROC_ID}']))))
+                else:
+                    _global_val['{DIVISOR_FORMULA}']=''
+                    _DIVISOR_FORMULA=' and '.join([i+'<>0' for i in _d['DIVISOR']])
+                    self._Log.Debug("除数公式转换:%s" % str(_DIVISOR_FORMULA))
+                    for i in _d['ZB_CODE']:
+                        _DIVISOR_FORMULA = _DIVISOR_FORMULA.replace(i,"decimal(sum(case when zb_code = '%s' then value else 0 end),16,4)" % i)
+                        self._Log.Debug("除数公式转换:%s" % _DIVISOR_FORMULA)
+                    _global_val['{DIVISOR_FORMULA}']=_DIVISOR_FORMULA
+                    self._Log.Info("执行SQL %s" % ParaReplace(_global_val,_loadsql['CALC_3']))
+                    _cnt = self.DataDB.ExecCnt(ParaReplace(_global_val,_loadsql['CALC_3']))
+                    self._Log.Info("影响行数 %s" % _cnt)
+                    self.MetaDB.ExecCnt("update %s set etl_status=4,load_end_time=current timestamp where id=? and etl_status=3" % MetaTab['DispatchTab'],int(round(float(_global_val['{PROC_ID}']))))
+            else:
+                self._Log.Alarm('未知状态:[公式:%s;目标指标:%s]' % (_d['FORMULA'],d['ZB_CODE']))
+                self.MetaDB.ExecCnt("update %s set etl_status=-1*etl_status,err_time=current timestamp,err_msg=? where id=? and etl_status=3" % MetaTab['DispatchTab'],('未知状态:[公式:%s;目标指标:%s]' % (_d['FORMULA'],d['ZB_CODE']),int(round(float(_global_val['{PROC_ID}'])))))
+        self._Log.Info("loadsql执行完毕")
+
+    def movesql (self,movesql,global_val):
+        _movesql = movesql
+        _global_val = global_val
+
+        if _global_val['{CALC_TYPE}']==0:
+            _ListZb=self.GenerateZbSql(_global_val['&TASK_ID'],_global_val['{PROC_ID}'],_global_val['{DIM}'],_global_val['{SCOPE_CODE}'],_global_val['{INFO_ZBCODE}'],False)
+            _global_val['{ZB_CODE}'] = _ListZb[3]
+        elif _global_val['{CALC_TYPE}'] == 1:
+            _global_val['{ZB_CODE}'] = "'%s'" % _global_val['{CALC_ZBCODE}']
+
+        _global_val['{DataDB}']=DB_CFG['DataDB']['db']
+        _global_val['{DataDB_USER}']=DB_CFG['DataDB']['uid']
+        _global_val['{DataDB_PWD}']=DB_CFG['DataDB']['pwd']
+        _global_val['{MoveDB}']=DB_CFG['MoveDB']['db']
+        _global_val['{MoveDB_USER}']=DB_CFG['MoveDB']['uid']
+        _global_val['{MoveDB_PWD}']=DB_CFG['MoveDB']['pwd']
+        _global_val['{DataDir}']=ProcCfg['DataDir']
+
+        _sql =''
+        for i in _movesql['MOVE']:
+            _sql += ParaReplace(_global_val,i)+os.linesep
+        self._Log.Debug("分发进程执行SQL \n%s" % _sql,False)
+        _sqlfile = "%s%s_%s.sql" % (ProcCfg['DataDir'],_global_val['{PROC_ID}'],self._pid)
+        with open(_sqlfile,'w') as f: f.write(_sql)
+        status,pipe =getstatusoutput("db2 -stvf %s" % _sqlfile)
+        self._Log.Debug("分发进程执行输出 \n%s" % pipe,False)
+        export_num = '0'
+        import_num = '0'
+        for i in pipe.split(os.linesep):
+            if i.startswith("Number of rows exported"):export_num=i.split(":")[1].strip()
+            elif i.startswith("Number of rows committed"):import_num=i.split("=")[1].strip()
+        _res="加载返回码:%s;导出记录:%s;加载记录:%s" % (status,export_num,import_num)
+        self._Log.Info(_res)
+
+        if export_num<>None and import_num<>None and \
+                status in ProcCfg['DB2_STATUS'] and export_num==import_num and \
+                (export_num<>'0' or import_num<>'0'):
+            self._Log.Info("加载成功")
+            self.MetaDB.ExecCnt("update %s set etl_status=6,move_end_time=current timestamp where id=? and etl_status=5" % MetaTab['DispatchTab'],int(round(float(_global_val['{PROC_ID}']))))
+        else:
+            self._Log.Alarm("加载失败")
+            self.MetaDB.ExecCnt("update %s set etl_status=-1*etl_status,err_time=current timestamp,err_msg=? where id=? and etl_status=5" % MetaTab['DispatchTab'],(_res,int(round(float(_global_val['{PROC_ID}'])))))
+
+        os.system("rm %s" % _sqlfile)
+
+    def run(self,TaskInfo):
+        """ 指标生成函数 """
+        _run=None
+        _global_val=GetTaskID(self.MetaDB,TaskInfo['ETL_CYCLE_ID'])
+        if TaskInfo['APPNAME'] in self.RUN.keys() and TaskInfo['APPTYPE'] in self.RUN[TaskInfo['APPNAME']].keys():
+            _run=self.RUN[TaskInfo['APPNAME']][TaskInfo['APPTYPE']]
+            _global_val['&TASK_ID'] = TaskInfo['ETL_CYCLE_ID']
+            _global_val['{PID}'] = self._pid
+            _global_val['{PROC_ID}'] = str(int(TaskInfo['ID']))
+            _global_val['{CALC_TYPE}'] = TaskInfo['CALC_TYPE']
+            _global_val['{TARGET_TAB}'] = _run['TARGET_TAB']
+            _global_val['{MOVE_TARGET_TAB}'] = _run['MOVE_TARGET_TAB']
+            _global_val['{DIM}'] = _run['DIM']
+
+            if _global_val['{CALC_TYPE}'] == 0:
+                _global_val['{TBS}'] = DB_CFG['DataDB']['tbs']
+                _global_val['{SCOPE_CODE}'] = TaskInfo['SCOPE_CODE']
+                _global_val['{INFO_ZBCODE}'] = TaskInfo['ZB_CODE']
+                _global_val['{FROM_SQL}']=self.GenerateFromSql(TaskInfo['SCOPE_CODE'])
+                self._Log.TaskName='指标组 %s(%s)' % (TaskInfo['SCOPE_CODE'],int(TaskInfo['ID']))
+            elif _global_val['{CALC_TYPE}'] == 1:
+                _global_val['{CALC_ZBCODE}'] = TaskInfo['ZB_CODE']
+                self._Log.TaskName='指标 %s(%s)' % (TaskInfo['ZB_CODE'],int(TaskInfo['ID']))
+
+            #开始SQL执行部分#
+            self._Log.Debug("初始化批次参数 %s" % str(_global_val))
+            self._Log.Info("应用名称%s,应用类型%s,执行批次%s,进程号%s,主机%s" % (TaskInfo['APPNAME'],TaskInfo['APPTYPE'],TaskInfo['ETL_CYCLE_ID'],self._pid,self._host))
+
+            if self._RunType == 'run':
+                self.runsql(_run,_global_val)
+            elif self._RunType == 'load':
+                self.loadsql(_run,_global_val)
+            elif self._RunType == 'move':
+                self.movesql(_run,_global_val)
+            elif self._RunType == 'scope' and _global_val['{CALC_TYPE}'] == 0:
+                self.runsql(_run,_global_val)
+                self.loadsql(_run,_global_val)
+                self.movesql(_run,_global_val)
+            elif self._RunType == 'scope' and _global_val['{CALC_TYPE}'] == 1:
+                self.loadsql(_run,_global_val)
+                self.movesql(_run,_global_val)
+
+        else:
+            self._Log.Info("指标名称和类型异常,应用名称%s,应用类型%s,执行批次%s,进程号%s" % (TaskInfo['APPNAME'],TaskInfo['APPTYPE'],TaskInfo['ETL_CYCLE_ID'],self._pid))
+            self.MetaDB.ExecCnt("update %s set err_msg=?,etl_status=-1*etl_status,err_time=current timestamp where id=?" % MetaTab['DispatchTab'],("指标名称和类型异常",int(TaskInfo['ID'])))
+
+    def dispatch_scope(self):
+        #指标组获取
+        if len(self._TaskId)==8:
+            if self._ScopeCode == None and self._ZbCode == None:
+                self._Log.Debug("获取指标组任务 select distinct b.SCOPE_CODE,b.APPNAME,b.APPTYPE,b.PROC_DEPEND,b.zb_depend,b.PRIORITY from %s a,%s b where a.status =0 and b.status=0 and a.calc_type=0 and b.APPTYPE='daily' and a.SCOPE_CODE=b.SCOPE_CODE and %s between int(date(a.ONLINE_DATE)) and int(date(a.OFFLINE_DATE)) with ur" % (MetaTab['ZbTab'],MetaTab['ScopeTab'],self._TaskId))
+                _lst=self.MetaDB.query("select distinct b.SCOPE_CODE,b.APPNAME,b.APPTYPE,b.PROC_DEPEND,b.zb_depend,b.PRIORITY from %s a,%s b where a.status =0 and b.status=0 and a.calc_type=0 and b.APPTYPE='daily' and a.SCOPE_CODE=b.SCOPE_CODE and %s between int(date(a.ONLINE_DATE)) and int(date(a.OFFLINE_DATE)) with ur" % (MetaTab['ZbTab'],MetaTab['ScopeTab'],self._TaskId))
+            elif self._ScopeCode <> None and self._ZbCode == None:
+                _s= ','.join(["'%s'" % i for i in self._ScopeCode.replace('\r',' ').replace('\n',' ').strip().split(";")])
+                self._Log.Debug("获取指标组任务 select distinct b.SCOPE_CODE,b.APPNAME,b.APPTYPE,b.PROC_DEPEND,b.zb_depend,b.PRIORITY from %s a,%s b where a.status =0 and b.status=0 and a.calc_type=0 and b.APPTYPE='daily' and a.SCOPE_CODE=b.SCOPE_CODE and %s between int(date(a.ONLINE_DATE)) and int(date(a.OFFLINE_DATE)) and b.SCOPE_CODE in (%s) with ur" % (MetaTab['ZbTab'],MetaTab['ScopeTab'],self._TaskId,_s))
+                _lst=self.MetaDB.query("select distinct b.SCOPE_CODE,b.APPNAME,b.APPTYPE,b.PROC_DEPEND,b.zb_depend,b.PRIORITY from %s a,%s b where a.status =0 and b.status=0 and a.calc_type=0 and b.APPTYPE='daily' and a.SCOPE_CODE=b.SCOPE_CODE and %s between int(date(a.ONLINE_DATE)) and int(date(a.OFFLINE_DATE)) and b.SCOPE_CODE in (%s) with ur" % (MetaTab['ZbTab'],MetaTab['ScopeTab'],self._TaskId,_s))
+            elif self._ScopeCode <> None and self._ZbCode <> None:
+                _s= ','.join(["'%s'" % i for i in self._ScopeCode.replace('\r',' ').replace('\n',' ').strip().split(";")])
+                _z= ','.join(["'%s'" % i for i in self._ZbCode.replace('\r',' ').replace('\n',' ').strip().split(";")])
+                __z= ';'.join([i for i in self._ZbCode.replace('\r',' ').replace('\n',' ').strip().split(";")])
+                self._Log.Debug("获取指标组任务 select distinct b.SCOPE_CODE,'%s' zb_code,b.APPNAME,b.APPTYPE,b.PROC_DEPEND,b.zb_depend,b.PRIORITY from %s a,%s b where a.status =0 and b.status=0 and a.calc_type=0 and b.APPTYPE='daily' and a.SCOPE_CODE=b.SCOPE_CODE and %s between int(date(a.ONLINE_DATE)) and int(date(a.OFFLINE_DATE)) and b.SCOPE_CODE in (%s) and a.zb_code in (%s) with ur" % (__z,MetaTab['ZbTab'],MetaTab['ScopeTab'],self._TaskId,_s,_z))
+                _lst=self.MetaDB.query("select distinct b.SCOPE_CODE,'%s' zb_code,b.APPNAME,b.APPTYPE,b.PROC_DEPEND,b.zb_depend,b.PRIORITY from %s a,%s b where a.status =0 and b.status=0 and a.calc_type=0 and b.APPTYPE='daily' and a.SCOPE_CODE=b.SCOPE_CODE and %s between int(date(a.ONLINE_DATE)) and int(date(a.OFFLINE_DATE)) and b.SCOPE_CODE in (%s) and a.zb_code in (%s) with ur" % (__z,MetaTab['ZbTab'],MetaTab['ScopeTab'],self._TaskId,_s,_z))
+        elif len(self._TaskId)==6 :
+            if self._ScopeCode == None and self._ZbCode == None:
+                self._Log.Debug("获取指标组任务 select distinct b.SCOPE_CODE,b.APPNAME,b.APPTYPE,b.PROC_DEPEND,b.zb_depend,b.PRIORITY from %s a,%s b where a.status =0 and b.status=0 and a.calc_type=0 and b.APPTYPE='monthly' and a.SCOPE_CODE=b.SCOPE_CODE and %s between int(date(a.ONLINE_DATE))/100 and int(date(a.OFFLINE_DATE))/100 with ur" % (MetaTab['ZbTab'],MetaTab['ScopeTab'],self._TaskId))
+                _lst=self.MetaDB.query("select distinct b.SCOPE_CODE,b.APPNAME,b.APPTYPE,b.PROC_DEPEND,b.zb_depend,b.PRIORITY from %s a,%s b where a.status =0 and b.status=0 and a.calc_type=0 and b.APPTYPE='monthly' and a.SCOPE_CODE=b.SCOPE_CODE and %s between int(date(a.ONLINE_DATE))/100 and int(date(a.OFFLINE_DATE))/100 with ur" % (MetaTab['ZbTab'],MetaTab['ScopeTab'],self._TaskId))
+            elif self._ScopeCode <> None and self._ZbCode == None:
+                _s= ','.join(["'%s'" % i for i in self._ScopeCode.replace('\r',' ').replace('\n',' ').strip().split(";")])
+                self._Log.Debug("获取指标组任务 select distinct b.SCOPE_CODE,b.APPNAME,b.APPTYPE,b.PROC_DEPEND,b.zb_depend,b.PRIORITY from %s a,%s b where a.status =0 and b.status=0 and a.calc_type=0 and b.APPTYPE='monthly' and a.SCOPE_CODE=b.SCOPE_CODE and %s between int(date(a.ONLINE_DATE))/100 and int(date(a.OFFLINE_DATE))/100 and b.SCOPE_CODE in (%s) with ur" % (MetaTab['ZbTab'],MetaTab['ScopeTab'],self._TaskId,_s))
+                _lst=self.MetaDB.query("select distinct b.SCOPE_CODE,b.APPNAME,b.APPTYPE,b.PROC_DEPEND,b.zb_depend,b.PRIORITY from %s a,%s b where a.status =0 and b.status=0 and a.calc_type=0 and b.APPTYPE='monthly' and a.SCOPE_CODE=b.SCOPE_CODE and %s between int(date(a.ONLINE_DATE))/100 and int(date(a.OFFLINE_DATE))/100 and b.SCOPE_CODE in (%s) with ur" % (MetaTab['ZbTab'],MetaTab['ScopeTab'],self._TaskId,_s))
+            elif self._ScopeCode <> None and self._ZbCode <> None:
+                _s= ','.join(["'%s'" % i for i in self._ScopeCode.replace('\r',' ').replace('\n',' ').strip().split(";")])
+                _z= ','.join(["'%s'" % i for i in self._ZbCode.replace('\r',' ').replace('\n',' ').strip().split(";")])
+                __z= ';'.join([i for i in self._ZbCode.replace('\r',' ').replace('\n',' ').strip().split(";")])
+                self._Log.Debug("获取指标组任务 select distinct b.SCOPE_CODE,'%s' zb_code,b.APPNAME,b.APPTYPE,b.PROC_DEPEND,b.zb_depend,b.PRIORITY from %s a,%s b where a.status =0 and b.status=0 and a.calc_type=0 and b.APPTYPE='monthly' and a.SCOPE_CODE=b.SCOPE_CODE and %s between int(date(a.ONLINE_DATE))/100 and int(date(a.OFFLINE_DATE))/100 and b.SCOPE_CODE in (%s) and a.zb_code in (%s) with ur" % (__z,MetaTab['ZbTab'],MetaTab['ScopeTab'],self._TaskId,_s,_z))
+                _lst=self.MetaDB.query("select distinct b.SCOPE_CODE,'%s' zb_code,b.APPNAME,b.APPTYPE,b.PROC_DEPEND,b.zb_depend,b.PRIORITY from %s a,%s b where a.status =0 and b.status=0 and a.calc_type=0 and b.APPTYPE='monthly' and a.SCOPE_CODE=b.SCOPE_CODE and %s between int(date(a.ONLINE_DATE))/100 and int(date(a.OFFLINE_DATE))/100 and b.SCOPE_CODE in (%s) and a.zb_code in (%s) with ur" % (__z,MetaTab['ZbTab'],MetaTab['ScopeTab'],self._TaskId,_s,_z))
+        else:
+            return False
+
+        #发布
+        if (self._ScopeCode==None and self._ZbCode == None) or \
+                (self._ScopeCode<>None and self._ZbCode <> None) or\
+                (self._ScopeCode<>None and self._ZbCode == None):
+            if len(_lst)==0:
+                return False
+            else:
+                for i in _lst:
+                    _zb = '' if i['ZB_DEPEND']==None else i['ZB_DEPEND'].replace('\n',' ').replace('\r',' ').strip()
+                    if _zb =='':
+                        if (self._ScopeCode==None and self._ZbCode == None) or \
+                                (self._ScopeCode<>None and self._ZbCode == None):
+                            self._Log.Debug("发布指标组任务 INSERT INTO %s (CALC_TYPE, SCOPE_CODE, APPNAME, APPTYPE, ETL_CYCLE_ID, ETL_STATUS, PROC_DEPEND, PRIORITY, DISPATCH_TIME) values(0,?,?,?,?,?,?,?,current timestamp)" % MetaTab['DispatchTab'] + " 绑定变量 %s;%s;%s;%s;%s;%s;%s " % (i['SCOPE_CODE'],i['APPNAME'],i['APPTYPE'],self._TaskId,0,i['PROC_DEPEND'],i['PRIORITY']))
+                            self.MetaDB.ExecCnt("INSERT INTO %s (CALC_TYPE, SCOPE_CODE, APPNAME, APPTYPE, ETL_CYCLE_ID, ETL_STATUS, PROC_DEPEND, PRIORITY, DISPATCH_TIME) values(0,?,?,?,?,?,?,?,current timestamp)" % MetaTab['DispatchTab'],(i['SCOPE_CODE'],i['APPNAME'],i['APPTYPE'],self._TaskId,0,i['PROC_DEPEND'],i['PRIORITY']))
+                        else:
+                            self._Log.Debug("发布指标组任务 INSERT INTO %s (CALC_TYPE, SCOPE_CODE, ZB_CODE, APPNAME, APPTYPE, ETL_CYCLE_ID, ETL_STATUS, PROC_DEPEND, PRIORITY, DISPATCH_TIME) values(0,?,?,?,?,?,?,?,?,current timestamp)" % MetaTab['DispatchTab'] + " 绑定变量 %s;%s;%s;%s;%s;%s;%s;%s " % (i['SCOPE_CODE'],i['ZB_CODE'],i['APPNAME'],i['APPTYPE'],self._TaskId,0,i['PROC_DEPEND'],i['PRIORITY']))
+                            self.MetaDB.ExecCnt("INSERT INTO %s (CALC_TYPE, SCOPE_CODE, ZB_CODE, APPNAME, APPTYPE, ETL_CYCLE_ID, ETL_STATUS, PROC_DEPEND, PRIORITY, DISPATCH_TIME) values(0,?,?,?,?,?,?,?,?,current timestamp)" % MetaTab['DispatchTab'],(i['SCOPE_CODE'],i['ZB_CODE'],i['APPNAME'],i['APPTYPE'],self._TaskId,0,i['PROC_DEPEND'],i['PRIORITY']))
+                    else:
+                        _zb_code = ','.join(["'%s'" % j for j in _zb.split(';') if j.strip()<>''])
+                        self._Log.Debug("获取指标对应指标组 select distinct SCOPE_CODE from %s where zb_code in (%s) and calc_type=0 and SCOPE_CODE is not null and status = 0 with ur" % (MetaTab['ZbTab'],_zb_code))
+                        _scpoe_code = self.MetaDB.query("select distinct SCOPE_CODE from %s where zb_code in (%s) and calc_type=0 and SCOPE_CODE is not null and status = 0  with ur"% (MetaTab['ZbTab'],_zb_code))
+                        if len(_scpoe_code)==0: print '指标依赖异常 %s ' % _zb_code
+                        else:
+                            __scpoe_code=';'.join([k['SCOPE_CODE'] for k in _scpoe_code])
+                            self._Log.Debug("发布指标组任务 INSERT INTO %s (CALC_TYPE,SCOPE_CODE, APPNAME, APPTYPE, ETL_CYCLE_ID, ETL_STATUS, PROC_DEPEND, SCOPE_DEPEND, PRIORITY, DISPATCH_TIME) values(0,?,?,?,?,?,?,?,?,current timestamp)" % MetaTab['DispatchTab'] + " 绑定变量 %s;%s;%s;%s;%s;%s;%s;%s" % (i['SCOPE_CODE'],i['APPNAME'],i['APPTYPE'],self._TaskId,0,i['PROC_DEPEND'],__scpoe_code,i['PRIORITY']))
+                            self.MetaDB.ExecCnt("INSERT INTO %s (CALC_TYPE,SCOPE_CODE, APPNAME, APPTYPE, ETL_CYCLE_ID, ETL_STATUS, PROC_DEPEND, SCOPE_DEPEND, PRIORITY, DISPATCH_TIME) values(0,?,?,?,?,?,?,?,?,current timestamp)" % MetaTab['DispatchTab'],(i['SCOPE_CODE'],i['APPNAME'],i['APPTYPE'],self._TaskId,0,i['PROC_DEPEND'],__scpoe_code,i['PRIORITY']))
+            return True
+        else:
+            return False
+
+    def dispatch_zb (self):
+        if len(self._TaskId)==8:
+            if self._ZbCode == None:
+                self._Log.Debug("获取指标任务 select zb_code,zb_def,appname,apptype from %s a where a.status=0 and a.calc_type=1 and APPTYPE='daily' and %s between int(date(a.ONLINE_DATE)) and int(date(a.OFFLINE_DATE)) with ur" % (MetaTab['ZbTab'],self._TaskId))
+                _lst=self.MetaDB.query("select zb_code,zb_def,appname,apptype from %s a where a.status=0 and a.calc_type=1 and APPTYPE='daily' and %s between int(date(a.ONLINE_DATE)) and int(date(a.OFFLINE_DATE)) with ur" % (MetaTab['ZbTab'],self._TaskId))
+            elif self._ZbCode <> None:
+                _z= ','.join(["'%s'" % i for i in self._ZbCode.replace('\r',' ').replace('\n',' ').strip().split(";")])
+                self._Log.Debug("获取指标任务 select zb_code,zb_def,appname,apptype from %s a where a.status=0 and a.calc_type=1 and APPTYPE='daily' and %s between int(date(a.ONLINE_DATE)) and int(date(a.OFFLINE_DATE)) and zb_code in (%s) with ur" % (MetaTab['ZbTab'],self._TaskId,_z))
+                _lst=self.MetaDB.query("select zb_code,zb_def,appname,apptype from %s a where a.status=0 and a.calc_type=1 and APPTYPE='daily' and %s between int(date(a.ONLINE_DATE)) and int(date(a.OFFLINE_DATE)) and zb_code in (%s) with ur" % (MetaTab['ZbTab'],self._TaskId,_z))
+        elif len(self._TaskId)==6:
+            if self._ZbCode == None:
+                self._Log.Debug("获取指标任务 select zb_code,zb_def,appname,apptype from %s a where a.status=0 and a.calc_type=1 and APPTYPE='monthly' and %s between int(date(a.ONLINE_DATE))/100 and int(date(a.OFFLINE_DATE))/100 with ur" % (MetaTab['ZbTab'],self._TaskId))
+                _lst=self.MetaDB.query("select zb_code,zb_def,appname,apptype from %s a where a.status=0 and a.calc_type=1 and APPTYPE='monthly' and %s between int(date(a.ONLINE_DATE))/100 and int(date(a.OFFLINE_DATE))/100 with ur" % (MetaTab['ZbTab'],self._TaskId))
+            elif self._ZbCode <> None:
+                _z= ','.join(["'%s'" % i for i in self._ZbCode.replace('\r',' ').replace('\n',' ').strip().split(";")])
+                self._Log.Debug("获取指标任务 select zb_code,zb_def,appname,apptype from %s a where a.status=0 and a.calc_type=1 and APPTYPE='monthly' and %s between int(date(a.ONLINE_DATE))/100 and int(date(a.OFFLINE_DATE))/100 and zb_code in (%s) with ur" % (MetaTab['ZbTab'],self._TaskId,_z))
+                _lst=self.MetaDB.query("select zb_code,zb_def,appname,apptype from %s a where a.status=0 and a.calc_type=1 and APPTYPE='monthly' and %s between int(date(a.ONLINE_DATE))/100 and int(date(a.OFFLINE_DATE))/100 and zb_code in (%s) with ur" % (MetaTab['ZbTab'],self._TaskId,_z))
+        if len(_lst)==0: return False
+
+        for i in _lst:
+            _d = self.ParsFormula(i['ZB_CODE'],i['ZB_DEF'])
+            if _d['status']==-1:
+                print "指标发布异常%s" % i['ZB_CODE']
+            elif _d['status'] in (0,1,2,3):
+                if _d['status'] in (0,1): _where_zb_code = "'%s'" % _d['ZB_CODE']
+                else: _where_zb_code = ','.join(["'%s'" % j for j in _d['ZB_CODE']])
+                self._Log.Debug("获取指标对应指标组 select distinct SCOPE_CODE from %s where zb_code in (%s) and calc_type=0 and SCOPE_CODE is not null and status = 0 with ur" % (MetaTab['ZbTab'],_where_zb_code))
+                _scpoe_code = self.MetaDB.query("select distinct SCOPE_CODE from %s where zb_code in (%s) and calc_type=0 and SCOPE_CODE is not null and status = 0 with ur"% (MetaTab['ZbTab'],_where_zb_code))
+                self._Log.Debug("获取指标对应指标 select ZB_CODE from %s where zb_code in (%s) and SCOPE_CODE is not null and status = 0 and calc_type=1 with ur" % (MetaTab['ZbTab'],_where_zb_code))
+                _zb_code = self.MetaDB.query("select ZB_CODE from %s where zb_code in (%s) and SCOPE_CODE is not null and status = 0 and calc_type=1 with ur"% (MetaTab['ZbTab'],_where_zb_code))
+                if len(_scpoe_code)==0: __scpoe_code=''
+                else: __scpoe_code=';'.join([k['SCOPE_CODE'] for k in _scpoe_code])
+                if len(_zb_code)==0:  __zb_code=''
+                else: __zb_code=';'.join([m['ZB_CODE'] for m in _zb_code])
+                self._Log.Debug("发布指标组任务 INSERT INTO %s (CALC_TYPE,ZB_CODE, APPNAME, APPTYPE, ETL_CYCLE_ID, ETL_STATUS, SCOPE_DEPEND, ZB_DEPEND, DISPATCH_TIME) values(1,?,?,?,?,?,?,?,current timestamp)" % MetaTab['DispatchTab'] + " 绑定变量 %s;%s;%s;%s;%s;%s;%s" % (i['ZB_CODE'],i['APPNAME'],i['APPTYPE'],self._TaskId,0,__scpoe_code,__zb_code))
+                self.MetaDB.ExecCnt("INSERT INTO %s (CALC_TYPE,ZB_CODE, APPNAME, APPTYPE, ETL_CYCLE_ID, ETL_STATUS, SCOPE_DEPEND, ZB_DEPEND, DISPATCH_TIME) values(1,?,?,?,?,?,?,?,current timestamp)" % MetaTab['DispatchTab'],(i['ZB_CODE'],i['APPNAME'],i['APPTYPE'],self._TaskId,0,__scpoe_code,__zb_code))
+            else:
+                print "指标发布异常%s" % i['ZB_CODE']
+        return True
+
+    def dispatch(self):
+        if (self._ScopeCode==None and self._ZbCode == None) or \
+                (self._ScopeCode<>None and self._ZbCode <> None) or\
+                (self._ScopeCode<>None and self._ZbCode == None):
+            if self.dispatch_scope():
+                self._Log.Info("发布指标组成功 Task:%s|Scope:%s|Zb:%s" % (self._TaskId,self._ScopeCode,self._ZbCode))
+
+        if self._ScopeCode==None:
+            if self.dispatch_zb():
+                self._Log.Info("发布指标成功 Task:%s|Zb:%s" % (self._TaskId,self._ZbCode))
+
+    def go(self):
+        if self._RunType == 'dispatch':
+            self.ChkTaskId()
+            self._Log.Info("启动dispatch指标分发模式,指标批次%s" % self._TaskId)
+            self.dispatch()
+
+        elif self._RunType == 'run':
+            self._Log.Info("启动run守护模式,进程号%s,主机名%s" % (self._pid,self._host))
+            while 1==1:
+                _ID = self.GetTask()
+                if _ID == None:
+                    sleep(ProcCfg['Run_Sleep'])
+                else:
+                    #~ self.run(self.GetTaskInfo(ID=_ID))
+                    try:
+                        self.run(self.GetTaskInfo(ID=_ID))
+                    except Exception, ex:
+                        self._Log.Alarm("run守护模式执行失败,进程号:%s,主机名:%s,异常信息:%s" % (self._pid,self._host,ex))
+                        self.MetaDB.ExecCnt("update %s set err_msg=?,etl_status=-1*etl_status,err_time=current timestamp where id=?" % MetaTab['DispatchTab'],(str(ex),_ID))
+                self._Log.TaskName=None
+                self._Log.Info("run守护模式进入等待状态,等待%s秒,进程号%s,主机名%s" % (ProcCfg['Run_Sleep'],self._pid,self._host))
+
+        elif self._RunType == 'load':
+            self._Log.Info("启动load守护模式,进程号%s,主机名%s" % (self._pid,self._host))
+            while 1==1:
+                _ID = self.GetTask()
+                if _ID == None:
+                    sleep(ProcCfg['Load_Sleep'])
+                else:
+                    #~ self.run(self.GetTaskInfo(ID=_ID))
+                    try:
+                        self.run(self.GetTaskInfo(ID=_ID))
+                    except Exception, ex:
+                        self._Log.Alarm("load守护模式执行失败,进程号%s,错误信息 %s" % (self._pid,ex))
+                        self.MetaDB.ExecCnt("update %s set err_msg=?,etl_status=-1*etl_status,err_time=current timestamp where id=?" % MetaTab['DispatchTab'],(str(ex),_ID))
+                self._Log.TaskName=None
+                self._Log.Info("load守护模式进入等待状态,等待%s秒,进程号%s,主机名%s" % (ProcCfg['Load_Sleep'],self._pid,self._host))
+
+        elif self._RunType == 'move':
+            self._Log.Info("启动move守护模式,进程号%s,主机名%s" % (self._pid,self._host))
+            while 1==1:
+                _ID = self.GetTask()
+                if _ID == None:
+                    sleep(ProcCfg['Move_Sleep'])
+                else:
+                    #~ self.run(self.GetTaskInfo(ID=_ID))
+                    try:
+                        self.run(self.GetTaskInfo(ID=_ID))
+                    except Exception, ex:
+                        self._Log.Alarm("load守护模式执行失败,进程号%s,错误信息 %s" % (self._pid,ex))
+                        self.MetaDB.ExecCnt("update %s set err_msg=?,etl_status=-1*etl_status,err_time=current timestamp where id=?" % MetaTab['DispatchTab'],(str(ex),_ID))
+                self._Log.TaskName=None
+                self._Log.Info("move守护模式进入等待状态,等待%s秒,进程号%s,主机名%s" % (ProcCfg['Move_Sleep'],self._pid,self._host))
+
+        elif self._RunType == 'scope':
+            self.ChkTaskId()
+            if self._ScopeCode<>None and self._ZbCode<>None:
+                self._Log.Info("启动单指标组调试模式,进程号%s,指标组%s,指标%s" % (self._pid,self._ScopeCode,self._ZbCode))
+                self.run(self.GetTaskInfo(scope=self._ScopeCode,zb=self._ZbCode))
+            elif self._ScopeCode<>None and self._ZbCode==None:
+                self._Log.Info("启动指标组调试模式,进程号%s,指标组%s" % (self._pid,self._ScopeCode))
+                self.run(self.GetTaskInfo(scope=self._ScopeCode))
+            elif self._ScopeCode==None and self._ZbCode<>None:
+                self._Log.Info("启动指标计算调试模式,进程号%s,指标%s" % (self._pid,self._ZbCode))
+                self.run(self.GetTaskInfo(zb=self._ZbCode))
+
+if __name__ == '__main__':
+    usage_desc = u"""
+
+调用方式：
+  -s GvUser -z MH200002 -t 201401
+    启用指标组调试模式,依赖关系不校验.-z 单独使用时为计算指标.
+
+  --dispatch 20140101 -s -z 调用, --dispatch参数必须, -s -z 可选.
+    任务发布(调度集成与临时指标发布),-s -z 参数用于临时指标发布
+
+  --run  指标运算
+
+  --load 指标加载和指标公式运算
+
+  --move 指标分发"""
+
+    opt = optparse.OptionParser(usage="usage: %prog [options] arg1 arg2" + usage_desc ,version="%prog 1.0")
+    opt.prog = 'KpiGather'
+    opt.add_option("--dispatch",action="store",type="string",metavar='YYYYMM[DD]',help=u"发布任务(调度使用)")
+    opt.add_option("--run"  ,action="store_true" ,help=u"指标运算(守护模式,可多进程)")
+    opt.add_option("--load" ,action="store_true" ,help=u"指标加载(守护模式,单进程)")
+    opt.add_option("--move"  ,action="store_true" ,help=u"指标分发(守护模式,单进程)")
+    opt.add_option("-s" ,action="store" ,type="string" ,metavar='GvUser'      ,help=u"指标组")
+    opt.add_option("-z" ,action="store" ,type="string" ,metavar='DH200002'    ,help=u"指标")
+    opt.add_option("-t" ,action="store" ,type="string" ,metavar='YYYYMM[DD]'  ,help=u"运行批次")
+    opt.add_option('--dbg', action='store_true', dest='dbg', default=False, help=optparse.SUPPRESS_HELP)
+    options = opt.parse_args()[0]
+    DictOpt = eval(str(options))
+
+    if options.dispatch<>None:
+        KpiGather=KpiGather(RunType='dispatch',t=options.dispatch,z=options.z,s=options.s,debugger=options.dbg)
+    elif options.run<>None:
+        KpiGather=KpiGather(RunType='run',debugger=options.dbg)
+    elif options.load<>None:
+        KpiGather=KpiGather(RunType='load',debugger=options.dbg)
+    elif options.move<>None:
+        KpiGather=KpiGather(RunType='move',debugger=options.dbg)
+    elif (options.s<>None or options.z<>None) and options.t<> None:
+        KpiGather=KpiGather(RunType='scope',s=options.s,z=options.z,t=options.t,debugger=options.dbg)
+    else:
+        opt.print_help()
+        exit(1)
+    KpiGather.go()
+EOF

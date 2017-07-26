@@ -1,8 +1,11 @@
+create database gbas DEFAULT CHARACTER SET utf8;
+
 set schema=gbas;
 --指标定义表
-create table if not exists gbas.zb_def
+create table gbas.zb_def
 (
 zb_code      varchar(32),
+boi_code     varchar(8),         /*一经接口号*/
 zb_name      varchar(512),
 zb_type      varchar(64),        /*筛选框:一经,省内等*/
 zb_def       varchar(2048),      /*sql配置*/
@@ -14,17 +17,21 @@ offline_date date,               /*下线时间,默认2999-12-31*/
 remark       varchar(1024),      /*指标描述*/
 creater      varchar(64),        /*创建人*/
 developer    varchar(64),        /*开发人*/
-creater      varchar(64),        /*创建人*/
 manager      varchar(64)         /*局方负责人*/
 );
 
+insert into zb_def
+values
+('D02001Z0001','XXs','1','1','DmFlowDm','0','daily',now(),now(),'1','xiao','xiaoqi','yht');
+
+
 
 --指标规则定义表
-create table if not exists gbas.rule_def
+create table gbas.rule_def
 (
 rule_code    varchar(32),
+boi_code     varchar(8),         /*一经接口号*/
 rule_name    varchar(512),
-depends     varchar(1024),       /*依赖程序*/
 rule_type    varchar(4),         /*筛选框:1强规则,0弱规则等,默认0*/
 rule_def     varchar(2048),      /*配置*/
 comp_oper    varchar(32),        /*比较运算符,如==,>=等*/
@@ -37,13 +44,12 @@ offline_date date,               /*下线时间,默认2999-12-31*/
 remark       varchar(1024),      /*指标描述*/
 creater      varchar(64),        /*创建人*/
 developer    varchar(64),        /*开发人*/
-creater      varchar(64),        /*创建人*/
 manager      varchar(64)         /*局方负责人*/
 );
 
 
 --调度表
-create table if not exists gbas.run_dispatch
+create table gbas.run_dispatch
 (
 id                 bigint,                  /*主键*/
 type            varchar(32),         /*zb,rule,export*/
@@ -58,9 +64,9 @@ priority          int,                     /*优先级*/
 pid                 varchar(32),
 hostname     varchar(64),
 expect_end_time  date,   /*例如8.5表示8点半预期完成时间*/
-dispatch_time       timestamp,   /*发布时间*/
-exec_start_time              timestamp,   /*开始执行时间*/
-exec_end_time               timestamp,   /*执行完成时间*/
-err_time                           timestamp,   /*报错时间*/
-err_msg         varchar(512),  /*报错信息*/
+dispatch_time       datetime,   /*发布时间*/
+exec_start_time              datetime,   /*开始执行时间*/
+exec_end_time               datetime,   /*执行完成时间*/
+err_time                           datetime,   /*报错时间*/
+err_msg         varchar(512)  /*报错信息*/
 )
