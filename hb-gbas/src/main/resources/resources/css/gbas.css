@@ -1,0 +1,39 @@
+li{
+	list-style: none;
+	height: 20px;
+	line-height: 20px;
+}
+
+a {
+	cursor: pointer;
+	text-decoration: none;
+	color: #999999;
+}
+
+.inp-lab {
+	width: 24%;
+	height: 32px;
+	line-height: 32px;
+	float: left;
+}
+
+.inp-cont{
+	width:70%;
+	height:32px;
+}
+
+.fl{
+	float: left;
+}
+
+.mar-8{
+	margin: 8px;
+}
+
+.mar-l5{
+	margin-left: 5px;
+}
+
+.mar-b15{
+	margin-bottom: 15px;
+}
