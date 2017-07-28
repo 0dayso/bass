@@ -15,22 +15,22 @@ public class ZbDao extends CommonDao{
 	public void saveZbDef(ZbDef zbDef){
 		mLog.debug("-----saveZbDef-----" + zbDef);
 		
-		String sql = "insert into gbas.zb_def (zb_code, zb_name,boi_code, zb_type, zb_def, depends, status, cycle, online_date," +
+		String sql = "insert into gbas.zb_def (zb_code, zb_name,boi_code, zb_type, zb_def, proc_depend, gbas_depend, status, cycle, online_date," +
 				" offline_date, remark, creater, developer, manager, priority,expect_end_day, expect_end_time) values(" +
-				" ?,?,?,?,?,?,?,?,'" + zbDef.getOnlineDate() + "','" + zbDef.getOfflineDate() +"',?,?,?,?,?,?,?)";
+				" ?,?,?,?,?,?,?,?,?,'" + zbDef.getOnlineDate() + "','" + zbDef.getOfflineDate() +"',?,?,?,?,?,?,?)";
 		
-		this.jdbcTemplate.update(sql, new Object[]{zbDef.getZbCode(), zbDef.getZbName(), zbDef.getBoiCode(), zbDef.getZbType(),
-				zbDef.getZbDef(), zbDef.getDepends(), zbDef.getStatus(), zbDef.getCycle(), zbDef.getRemark(), zbDef.getCreater(),
+		this.jdbcTemplate.update(sql, new Object[]{zbDef.getZbCode(), zbDef.getZbName(), zbDef.getBoiCode(), zbDef.getZbType(),zbDef.getZbDef(),
+				zbDef.getProcDepend(), zbDef.getGbasDepend(), zbDef.getStatus(), zbDef.getCycle(), zbDef.getRemark(), zbDef.getCreater(),
 				zbDef.getDeveloper(), zbDef.getManager(), zbDef.getPriority(), zbDef.getExpectEndDay(), zbDef.getExpectEndTime()});
 	}
 	
 	public void updateZb(ZbDef zbDef){
 		mLog.debug("-----updateZb-----" + zbDef);
-		String sql = "update gbas.zb_def set zb_name=?, zb_def=?,zb_type=? ,depends=?,status=?,online_date='" + zbDef.getOnlineDate() + "'" +
+		String sql = "update gbas.zb_def set zb_name=?, zb_def=?,zb_type=? ,proc_depend=?, gbas_depend=?,status=?,online_date='" + zbDef.getOnlineDate() + "'" +
 				",offline_date='" + zbDef.getOfflineDate() + "',remark=?,developer=?,manager=?,priority=?,expect_end_day=?" +
 				",expect_end_time=? where zb_code=?";
 		
-		this.jdbcTemplate.update(sql, new Object[]{zbDef.getZbName(), zbDef.getZbDef(), zbDef.getZbType(), zbDef.getDepends(),
+		this.jdbcTemplate.update(sql, new Object[]{zbDef.getZbName(), zbDef.getZbDef(), zbDef.getZbType(), zbDef.getProcDepend(),zbDef.getGbasDepend(),
 				zbDef.getStatus(), zbDef.getRemark(), zbDef.getDeveloper(), zbDef.getManager(), zbDef.getPriority(),
 				zbDef.getExpectEndDay(), zbDef.getExpectEndTime(), zbDef.getZbCode()});
 	}

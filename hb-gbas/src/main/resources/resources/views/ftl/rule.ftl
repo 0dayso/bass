@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>指标管理</title>
+<title>规则管理</title>
 <link rel="stylesheet" type="text/css" href="${mvcPath}/resources/js/jquery-easyui-1.5.1/themes/bootstrap/easyui.css"/>
 <link rel="stylesheet" type="text/css" href="${mvcPath}/resources/js/jquery-easyui-1.5.1/themes/icon.css">
 <link rel="stylesheet" type="text/css" href="${mvcPath}/resources/css/gbas.css">
@@ -14,8 +14,8 @@
 function openAddDialog(){
 	clearFormValue();
 	enableIdRelInput();
-	$('#zbDialog').panel({title: "新增指标"});
-	$('#zbDialog').dialog('open');
+	$('#ruleDialog').panel({title: "新增规则"});
+	$('#ruleDialog').dialog('open');
 }
 
 function enableIdRelInput(){
@@ -24,15 +24,17 @@ function enableIdRelInput(){
 }
 
 function clearFormValue(){
-	$('#zbCode').val('');
+	$('#ruleCode').val('');
 	$('#cycle').combobox('setValue','daily');
 	$('#boiCode').textbox('setValue','');
-	$('#zbName').textbox('setValue','');
+	$('#ruleName').textbox('setValue','');
 	$('#remark').textbox('setValue','');
-	$('#zbType').combobox('setValue','一经');
+	$('#ruleType').combobox('setValue','0');
+	$('#compOper').textbox('setValue','');
+	$('#val').textbox('setValue','');
 	$('#procDepend').textbox('setValue','');
 	$('#gbasDepend').textbox('setValue','');
-	$('#zbDef').textbox('setValue','');
+	$('#ruleDef').textbox('setValue','');
 	$('#status').combobox('setValue','0');
 	$('#onlineDate').textbox('setValue','');
 	$('#offlineDate').textbox('setValue','2999-12-31');
@@ -45,15 +47,15 @@ function clearFormValue(){
 }
 
 function openEditDialog(){
-	var rows = $('#zbTable').datagrid('getSelections');
+	var rows = $('#ruleTable').datagrid('getSelections');
 	if(rows.length != 1){
-		$.messager.alert('提示','请选择一条指标信息','info');
+		$.messager.alert('提示','请选择一条规则信息','info');
 		return;
 	}
 	setFormValue(rows[0]);
 	disableIdRelInput();
-	$('#zbDialog').panel({title: "修改指标"});
-	$('#zbDialog').dialog('open');
+	$('#ruleDialog').panel({title: "修改规则"});
+	$('#ruleDialog').dialog('open');
 }
 
 function disableIdRelInput(){
@@ -62,15 +64,17 @@ function disableIdRelInput(){
 }
 
 function setFormValue(data){
-	$('#zbCode').val(data.zb_code);
+	$('#ruleCode').val(data.rule_code);
 	$('#cycle').combobox('setValue',data.cycle);
 	$('#boiCode').textbox('setValue',data.boi_code);
-	$('#zbName').textbox('setValue',data.zb_name);
+	$('#ruleName').textbox('setValue',data.rule_name);
 	$('#remark').textbox('setValue',data.remark);
-	$('#zbType').combobox('setValue',data.zb_type);
+	$('#ruleType').combobox('setValue',data.rule_type);
+	$('#compOper').textbox('setValue',data.comp_oper);
+	$('#val').textbox('setValue',data.val);
 	$('#procDepend').textbox('setValue',data.proc_depend);
 	$('#gbasDepend').textbox('setValue',data.gbas_depend);
-	$('#zbDef').textbox('setValue',data.zb_def);
+	$('#ruleDef').textbox('setValue',data.rule_def);
 	$('#status').combobox('setValue',data.status);
 	$('#onlineDate').textbox('setValue',data.online_date);
 	$('#offlineDate').textbox('setValue',data.offline_date);
@@ -82,20 +86,20 @@ function setFormValue(data){
 	$('#manager').textbox('setValue',data.manager);
 }
 
-function delZb(){
-	var rows = $('#zbTable').datagrid('getSelections');
+function delRule(){
+	var rows = $('#ruleTable').datagrid('getSelections');
 	if(rows.length != 1){
-		$.messager.alert('提示','请选择一条指标信息','info');
+		$.messager.alert('提示','请选择一条规则信息','info');
 		return;
 	}
 	
-	$.messager.confirm('提示', '您确定要删除此条指标吗?', function(r){
+	$.messager.confirm('提示', '您确定要删除此条规则吗?', function(r){
 		if (r){
 			$.ajax({
 				type: "POST"
-				,url: "${mvcPath}/zb/deleteZbDef"
+				,url: "${mvcPath}/rule/deleteRuleDef"
 				,data: {
-					zbCode: rows[0].zb_code
+					ruleCode: rows[0].rule_code
 				}
 				,dataType : "json"
 				,success: function(data){
@@ -109,7 +113,7 @@ function delZb(){
 	});
 }
 
-function checkZbInput(){
+function checkRuleInput(){
 	var boiCode = $('#boiCode').textbox('getValue').trim();
 	if(boiCode.length == 0){
 		$.messager.alert('提示','请输入一经接口号','info');
@@ -121,15 +125,15 @@ function checkZbInput(){
 		return false;
 	}
 	
-	var zbName = $('#zbName').textbox('getValue').trim();
-	if(zbName.length == 0){
-		$.messager.alert('提示','请输入指标名称','info');
+	var ruleName = $('#ruleName').textbox('getValue').trim();
+	if(ruleName.length == 0){
+		$.messager.alert('提示','请输入规则名称','info');
 		return false;
 	}
 	
 	var remark = $('#remark').textbox('getValue').trim();
 	if(remark.length == 0){
-		$.messager.alert('提示','请输入指标描述','info');
+		$.messager.alert('提示','请输入规则描述','info');
 		return false;
 	}
 	
@@ -145,9 +149,21 @@ function checkZbInput(){
 		return false;
 	}
 	
-	var zbDef = $('#zbDef').textbox('getValue').trim();
-	if(zbDef.length == 0){
-		$.messager.alert('提示','请输入指标sql','info');
+	var ruleDef = $('#ruleDef').textbox('getValue').trim();
+	if(ruleDef.length == 0){
+		$.messager.alert('提示','请输入规则sql','info');
+		return false;
+	}
+	
+	var compOper = $('#compOper').textbox('getValue').trim();
+	if(compOper.length == 0){
+		$.messager.alert('提示','请输入比较运算符','info');
+		return false;
+	}
+	
+	var val = $('#val').textbox('getValue').trim();
+	if(val.length == 0){
+		$.messager.alert('提示','请输入阈值','info');
 		return false;
 	}
 	
@@ -204,41 +220,53 @@ function statusReplace(value){
 	return value;
 }
 
-function queryZb(){
-	var zbType = $("#qryZbType").val().trim();
-	var zbCycle = $("#qryCycle").val().trim();
+function typeReplace(value){
+	if(value == "0"){
+		return "弱规则";
+	}
+	if(value == "1"){
+		return "强规则";
+	}
+	return value;
+}
+
+function queryRule(){
+	var ruleType = $("#qryRuleType").val().trim();
+	var ruleCycle = $("#qryCycle").val().trim();
 	var status = $("#qryStatus").val().trim();
-	var zbName = $("#qryZbName").val().trim();
-	var zbCode = $("#qryZbCode").val().trim();
+	var ruleName = $("#qryRuleName").val().trim();
+	var ruleCode = $("#qryRuleCode").val().trim();
 	
-	$("#zbTable").datagrid("load", {
-		zbType : zbType,
-		zbCycle : zbCycle,
+	$("#ruleTable").datagrid("load", {
+		ruleType : ruleType,
+		ruleCycle : ruleCycle,
 		status : status,
-		zbName : zbName,
-		zbCode : zbCode
+		ruleName : ruleName,
+		ruleCode : ruleCode
 	});
 }
 
 </script>
 </head>
 <body>
-	<table id="zbTable" class="easyui-datagrid" title="指标信息" style="height:auto;"
+	<table id="ruleTable" class="easyui-datagrid" title="规则信息" style="height:auto;"
 			data-options="fit:true, fitColumns : true, striped:true, pagination : true, pageSize : 10, pageList : [10, 20, 30, 50],
 				rownumbers:true, singleSelect:true, checkOnSelect : false,
-				url:'${mvcPath}/zb/getZbList',toolbar:'#tb'">
+				url:'${mvcPath}/rule/getRuleList',toolbar:'#tb'">
 		<thead>
 			<tr>
 				<!--<th field="itemId" checkbox="true"></th>-->
-				<th data-options="field:'zb_type',width:60">类型</th>
+				<th data-options="field:'rule_type',width:60,formatter:typeReplace">类型</th>
 				<th data-options="field:'cycle',width:60,formatter:cycleReplace">周期</th>
 				<th data-options="field:'boi_code',width:80,hidden:'true'">一经接口号</th>
-				<th data-options="field:'zb_code',width:80">编码</th>
-				<th data-options="field:'zb_name',width:120">名称</th>
+				<th data-options="field:'rule_code',width:110">编码</th>
+				<th data-options="field:'rule_name',width:130">名称</th>
 				<th data-options="field:'remark',width:180">描述</th>
 				<th data-options="field:'proc_depend',width:80,hidden:'true'">依赖程序</th>
 				<th data-options="field:'gbas_depend',width:80,hidden:'true'">依赖的gbas指标,规则,接口</th>
-				<th data-options="field:'zb_def',width:80,hidden:'true'">指标SQL</th>
+				<th data-options="field:'rule_def',width:80,hidden:'true'">规则SQL</th>
+				<th data-options="field:'comp_oper',width:100">比较运算符</th>
+				<th data-options="field:'val',width:100">阈值</th>
 				<th data-options="field:'status',width:60,formatter:statusReplace">状态</th>
 				<th data-options="field:'online_date',width:100">上线日期</th>
 				<th data-options="field:'offline_date',width:100">下线日期</th>
@@ -255,10 +283,10 @@ function queryZb(){
 	<div id="tb" style="padding:5px;height:auto">
 		<div style="padding: 3px;">
 			<span>类型</span>
-			<select id="qryZbType">
+			<select id="qryRuleType">
 				<option value="">---请选择---</option>
-				<option value="一经">一经</option>
-				<option value="省内">省内</option>
+				<option value="0">弱规则</option>
+				<option value="1">强规则</option>
 			</select>
 			<span>周期</span>
 			<select id="qryCycle">
@@ -272,20 +300,20 @@ function queryZb(){
 				<option value="0">开发</option>
 				<option value="1">上线</option>
 			</select>
-			<span>指标名称</span>
-			<input id="qryZbName">
-			<span>指标编码</span>
-			<input id="qryZbCode">
-			<a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="queryZb()">查询</a>
+			<span>规则名称</span>
+			<input id="qryRuleName">
+			<span>规则编码</span>
+			<input id="qryRuleCode">
+			<a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="queryRule()">查询</a>
 		</div>
 		<div>
 			<a href="#" class="easyui-linkbutton" iconCls="icon-add" onclick="openAddDialog()">新增</a>
 			<a href="#" class="easyui-linkbutton" iconCls="icon-edit" onclick="openEditDialog()">修改</a>
-			<a href="#" class="easyui-linkbutton" iconCls="icon-remove" onclick="delZb()">删除</a>
+			<a href="#" class="easyui-linkbutton" iconCls="icon-remove" onclick="delRule()">删除</a>
 		</div>
 	</div>
 	
-	<div id="zbDialog" class="easyui-dialog" title="新增指标" data-options="
+	<div id="ruleDialog" class="easyui-dialog" title="新增规则" data-options="
 			modal:true,
 			closed:true,
 			width:430,
@@ -293,10 +321,10 @@ function queryZb(){
 			buttons: [{
 					text:'提交',
 					handler:function(){
-						$('#zbDefForm').form('submit', {
-							url: '${mvcPath}/zb/saveZbDef',
+						$('#ruleDefForm').form('submit', {
+							url: '${mvcPath}/rule/saveRuleDef',
 							onSubmit: function(param){
-								return checkZbInput();
+								return checkRuleInput();
 							},
 							success:function(data){
 								var wind = $.messager.alert('提示','提交成功','info');
@@ -310,14 +338,14 @@ function queryZb(){
 				},{
 					text:'取消',
 					handler:function(){
-						$('#zbDialog').dialog('close');
+						$('#ruleDialog').dialog('close');
 					}
 				}]">
-		<form id="zbDefForm">
-			<input id="zbCode" name="zbCode" type="hidden">
+		<form id="ruleDefForm">
+			<input id="ruleCode" name="ruleCode" type="hidden">
 			<div class="mar-8" style="height:100px;">
 				<div class="mar-b15">
-					<div class="inp-lab"><span style="color:red;">*</span>指标周期:</div>
+					<div class="inp-lab"><span style="color:red;">*</span>规则周期:</div>
 					<select id="cycle" name="cycle" class="easyui-combobox form-inp" data-options="editable:false,panelHeight:'auto'" style="width:75%;height:32px;">
 						<option value="daily">日</option>
 						<option value="monthly">月</option>
@@ -328,18 +356,18 @@ function queryZb(){
 					<input id="boiCode" name="boiCode" class="easyui-textbox form-inp" style="width:75%;height:32px;">
 				</div>
 				<div class="mar-b15">
-					<div class="inp-lab"><span style="color:red;">*</span>指标名称:</div>
-					<input id="zbName" name="zbName" class="easyui-textbox form-inp" style="width:75%;height:32px;">
+					<div class="inp-lab"><span style="color:red;">*</span>规则名称:</div>
+					<input id="ruleName" name="ruleName" class="easyui-textbox form-inp" style="width:75%;height:32px;">
 				</div>
 				<div class="mar-b15">
-					<div class="inp-lab"><span style="color:red;">*</span>指标描述:</div>
+					<div class="inp-lab"><span style="color:red;">*</span>规则描述:</div>
 					<input id="remark" name="remark" class="easyui-textbox form-inp" data-options="multiline:true" style="width:75%;height:60px;">
 				</div>
 				<div class="mar-b15">
-					<div class="inp-lab"><span style="color:red;">*</span>指标类型:</div>
-					<select id="zbType" name="zbType" class="easyui-combobox form-inp" data-options="editable:false,panelHeight:'auto'" style="width:75%;height:32px;">
-						<option value="一经">一经</option>
-						<option value="省内">省内</option>
+					<div class="inp-lab"><span style="color:red;">*</span>规则类型:</div>
+					<select id="ruleType" name="ruleType" class="easyui-combobox form-inp" data-options="editable:false,panelHeight:'auto'" style="width:75%;height:32px;">
+						<option value="0">弱规则</option>
+						<option value="1">强规则</option>
 					</select>
 				</div>
 				<div class="mar-b15">
@@ -351,8 +379,24 @@ function queryZb(){
 					<input id="gbasDepend" name="gbasDepend" class="easyui-textbox form-inp" style="height:32px; width:57%;">
 				</div>
 				<div class="mar-b15">
-					<div class="inp-lab"><span style="color:red;">*</span>指标sql:</div>
-					<input id="zbDef" name="zbDef" class="easyui-textbox form-inp" data-options="multiline:true" style="width:75%;height:60px;">
+					<div class="inp-lab"><span style="color:red;">*</span>规则sql:</div>
+					<input id="ruleDef" name="ruleDef" class="easyui-textbox form-inp" data-options="multiline:true" style="width:75%;height:60px;">
+				</div>
+				<div class="mar-b15">
+					<div class="inp-lab"><span style="color:red;">*</span>比较运算符:</div>
+					<select id="compOper" name="compOper" class="easyui-combobox form-inp" data-options="editable:false,panelHeight:'auto'" style="width:75%;height:32px;">
+						<option value="&gt;">&gt;</option>
+						<option value="&lt;">&lt;</option>
+						<option value="&gt;=">&gt;=</option>
+						<option value="&lt;=">&lt;=</option>
+						<option value="==">==</option>
+						<option value="!=">!=</option>
+					</select>
+				</div>
+				<div class="mar-b15">
+					<div class="inp-lab"><span style="color:red;">*</span>阈值:</div>
+					<input id="val" name="val" class="easyui-numberbox form-inp" 
+						data-options="precision:2,decimalSeparator:'.'" style="width:75%;height:32px;">
 				</div>
 				<div class="mar-b15">
 					<div class="inp-lab"><span style="color:red;">*</span>状态:</div>

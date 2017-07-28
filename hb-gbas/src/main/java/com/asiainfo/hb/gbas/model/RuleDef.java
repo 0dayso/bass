@@ -1,13 +1,19 @@
 package com.asiainfo.hb.gbas.model;
 
-public class ZbDef {
+public class RuleDef {
 	
-	private String zbCode;
-	private String zbName;
-	/**一经、省内*/
-	private String zbType;
+	private String ruleCode;
+	/**一经接口号*/
+	private String boiCode;
+	private String ruleName;
+	/**1强规则,0弱规则等,默认0*/
+	private String ruleType;
 	/**sql配置*/
-	private String zbDef;
+	private String ruleDef;
+	/**比较运算符,如==,>=等*/
+	private String compOper;
+	/**阈值*/
+	private String val;
 	/**依赖程序*/
 	private String procDepend;
 	/**依赖的gbas指标,规则,接口*/
@@ -28,9 +34,6 @@ public class ZbDef {
 	private String developer;
 	/**局方负责人*/
 	private String manager;
-	
-	/**一经接口号*/
-	private String boiCode;
 	/**优先级，默认99*/
 	private String priority;
 	/**预期完成日期 ，0每日,1-31表示1-31日*/
@@ -38,29 +41,47 @@ public class ZbDef {
 	/**预期完成时间 8.5表示8点半 */
 	private String expectEndTime;
 	
-	public String getZbCode() {
-		return zbCode;
+	public String getRuleCode() {
+		return ruleCode;
 	}
-	public void setZbCode(String zbCode) {
-		this.zbCode = zbCode;
+	public void setRuleCode(String ruleCode) {
+		this.ruleCode = ruleCode;
 	}
-	public String getZbName() {
-		return zbName;
+	public String getBoiCode() {
+		return boiCode;
 	}
-	public void setZbName(String zbName) {
-		this.zbName = zbName;
+	public void setBoiCode(String boiCode) {
+		this.boiCode = boiCode;
 	}
-	public String getZbType() {
-		return zbType;
+	public String getRuleName() {
+		return ruleName;
 	}
-	public void setZbType(String zbType) {
-		this.zbType = zbType;
+	public void setRuleName(String ruleName) {
+		this.ruleName = ruleName;
 	}
-	public String getZbDef() {
-		return zbDef;
+	public String getRuleType() {
+		return ruleType;
 	}
-	public void setZbDef(String zbDef) {
-		this.zbDef = zbDef;
+	public void setRuleType(String ruleType) {
+		this.ruleType = ruleType;
+	}
+	public String getRuleDef() {
+		return ruleDef;
+	}
+	public void setRuleDef(String ruleDef) {
+		this.ruleDef = ruleDef;
+	}
+	public String getCompOper() {
+		return compOper;
+	}
+	public void setCompOper(String compOper) {
+		this.compOper = compOper;
+	}
+	public String getVal() {
+		return val;
+	}
+	public void setVal(String val) {
+		this.val = val;
 	}
 	public String getProcDepend() {
 		return procDepend;
@@ -122,12 +143,6 @@ public class ZbDef {
 	public void setManager(String manager) {
 		this.manager = manager;
 	}
-	public String getBoiCode() {
-		return boiCode;
-	}
-	public void setBoiCode(String boiCode) {
-		this.boiCode = boiCode;
-	}
 	public String getPriority() {
 		return priority;
 	}
@@ -146,16 +161,16 @@ public class ZbDef {
 	public void setExpectEndTime(String expectEndTime) {
 		this.expectEndTime = expectEndTime;
 	}
-	
 	@Override
 	public String toString() {
-		return "ZbDef [zbCode=" + zbCode + ", zbName=" + zbName + ", zbType="
-				+ zbType + ", zbDef=" + zbDef + ", procDepend=" + procDepend
-				+ ", gbasDepend=" + gbasDepend + ", status=" + status
-				+ ", cycle=" + cycle + ", onlineDate=" + onlineDate
-				+ ", offlineDate=" + offlineDate + ", remark=" + remark
-				+ ", creater=" + creater + ", developer=" + developer
-				+ ", manager=" + manager + ", boiCode=" + boiCode
+		return "RuleDef [ruleCode=" + ruleCode + ", boiCode=" + boiCode
+				+ ", ruleName=" + ruleName + ", ruleType=" + ruleType
+				+ ", ruleDef=" + ruleDef + ", compOper=" + compOper + ", val="
+				+ val + ", procDepend=" + procDepend + ", gbasDepend="
+				+ gbasDepend + ", status=" + status + ", cycle=" + cycle
+				+ ", onlineDate=" + onlineDate + ", offlineDate=" + offlineDate
+				+ ", remark=" + remark + ", creater=" + creater
+				+ ", developer=" + developer + ", manager=" + manager
 				+ ", priority=" + priority + ", expectEndDay=" + expectEndDay
 				+ ", expectEndTime=" + expectEndTime + "]";
 	}
