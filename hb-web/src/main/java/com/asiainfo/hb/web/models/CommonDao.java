@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.springframework.util.StringUtils;
 
 import com.asiainfo.hb.core.datastore.SqlPageHelper;
 import com.asiainfo.hb.core.datastore.SqlserverSqlPageHelper;
@@ -46,12 +47,14 @@ public class CommonDao  extends BaseDao{
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (params != null && !params.isEmpty()) {
 			for (String key : params.keySet()) {
-				if (key.contains("like")) {
-					sql = sql + " and " + key + " ? ";
-					list.add("%" + params.get(key) + "%");
-				} else {
-					sql = sql + " and " + key + " = ? ";
-					list.add(params.get(key));
+				if(!StringUtils.isEmpty(params.get(key))){
+					if (key.contains("like")) {
+						sql = sql + " and " + key + " ? ";
+						list.add("%" + params.get(key) + "%");
+					} else {
+						sql = sql + " and " + key + " = ? ";
+						list.add(params.get(key));
+					}
 				}
 			}
 		}
