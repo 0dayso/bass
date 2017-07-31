@@ -137,11 +137,11 @@ $(function(){
 			handler:function(){
 				var row = getSelectRow();
 				if(row){
-					window.parent.addTab(row.id,row.name,mvcPath+'/custom/reports/'+row.reportId);
-					}
+					window.parent.addTab(row.reportId,row.reportName,mvcPath+'/custom/reports/'+row.reportId);
 				}
-			}]
-		});
+			}
+		}]
+	});
 	
 	$('#addReportWind').dialog({
 		width: 600,
@@ -228,19 +228,6 @@ $(function(){
 	});
 });
 
-function moveOption(e1, e2) {
-	try {
-		for(var i = e1.options.length-1; i >=0; i--) {
-			if(e1.options[i].selected) {
-				var e = e1.options[i];
-				e2.options.add(e);
-				e1.options.remove(i);
-			}
-		}
-
-	} catch(e) {}
-}
-
 function moveOptionLeft() {
 	if($("#selectValues option").is(":selected"))
     {
@@ -251,6 +238,27 @@ function moveOptionLeft() {
 function moveOptionRight() {
 	if($("#appValues option").is(":selected"))
     {
+		var kpiAppType = $('#kpiApp').combobox('getValue');
+		if($("#selectValues option").size()==0){
+			var type = "DAY";
+			if(kpiAppType=='daily_code'||kpiAppType=='daily_cumulate_code'){
+				type = "DAY";
+			}else{
+				type="MONTH";
+			}
+			$("#selectValues").attr("type",type)
+		}else{
+			var type = $("#selectValues").attr("type");
+			if(type=='DAY' &&!(kpiAppType=='daily_code'||kpiAppType=='daily_cumulate_code')){
+				$.messager.alert('自定义报表',"只能选择日报表/日累计报表",'error');
+				return;
+			}
+			
+			if(type=='MONTH' &&!(kpiAppType=='monthly_code'||kpiAppType=='monthly_cumulate_code')){
+				$.messager.alert('自定义报表',"只能选择月报表/月累计报表",'error');
+				return;
+			}
+		}
 		$("#appValues option:selected").appendTo("#selectValues"); 
     }
 }
@@ -287,10 +295,10 @@ function moveUp(e) {
 	e.add(o, i - 1);
 	e.add(o1, i);
 }
-			var codeType = 'daily_code';//默认日指标
-			var category = '';
-			var menuIds = new Array();
-			var reportId = $("#reportId").val();
+var codeType = 'daily_code';//默认日指标
+var category = '';
+var menuIds = new Array();
+var reportId = $("#reportId").val();
 function selectKpiList(){
 	if(!category){
 		$.ajax({
@@ -306,8 +314,6 @@ function selectKpiList(){
 	}else {
 		initAppValues();//加载未选择的指标列表
 	}
-	
-	
 }
 
 function selectItems(){

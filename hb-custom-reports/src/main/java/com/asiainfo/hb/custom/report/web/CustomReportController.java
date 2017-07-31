@@ -1,5 +1,8 @@
 package com.asiainfo.hb.custom.report.web;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,8 +14,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.ModelAndView;
 
+import com.asiainfo.hb.core.util.IdGen;
+import com.asiainfo.hb.custom.report.cache.ReportCache;
+import com.asiainfo.hb.custom.report.factory.ReportContext;
 import com.asiainfo.hb.custom.report.models.CustomReport;
+import com.asiainfo.hb.custom.report.models.QueryInfo;
 import com.asiainfo.hb.custom.report.service.CustomReportService;
 import com.asiainfo.hb.web.SessionKeyConstants;
 import com.asiainfo.hb.web.models.User;
@@ -22,9 +30,16 @@ import com.asiainfo.hb.web.models.User;
 @Controller
 public class CustomReportController {
 	private Logger logger = Logger.getLogger(CustomReportController.class);
+	
+	@Autowired
+	private ReportContext context;
 
 	@Autowired
 	private CustomReportService customReportService;
+	
+	@Autowired
+	private ReportCache cache;
+	
 
 	@RequestMapping("/page")
 	public String page() {
@@ -32,9 +47,19 @@ public class CustomReportController {
 	}
 	
 	@RequestMapping("/{reportId}")
-	public String report(@PathVariable("reportId")String reportId) {
-		return "ftl/custom-report/report";
+	public ModelAndView report(@PathVariable("reportId")String reportId) {
+		ModelAndView view = new ModelAndView("ftl/custom-report/report");
+		context.setReportId(reportId);
+		context.init();
+		String defaultDate = context.getSearchDate();
+		view.addObject("reportId", reportId);
+		view.addObject("defaultDate", defaultDate);
+		view.addObject("type", context.getType());
+		logger.info("<------> reportId = " + reportId + ",defaultDate = " + defaultDate + ",type = " + context.getType());
+		return view;
 	}
+	
+	
 
 	@RequestMapping(value = { "/list" }, method = { RequestMethod.POST })
 	@ResponseBody
@@ -45,7 +70,7 @@ public class CustomReportController {
 		logger.info("<----parameters---->page=" + page + ",rows=" + rows);
 		return customReportService.getReportPageList(page, rows, userId);
 	}
-
+	
 	@RequestMapping(value = { "/getReportTypeList" }, method = { RequestMethod.POST })
 	@ResponseBody
 	public Object getReportTypeList(@RequestParam("codeType") String codeType,
@@ -53,10 +78,49 @@ public class CustomReportController {
 		return customReportService.getReportTypeList(codeType, category,menuIds);
 	}
 
+	@RequestMapping(value = { "/getCityList" }, method = { RequestMethod.POST })
+	@ResponseBody
+	public Object getCityList() {
+		return customReportService.getCityList();
+	}
+	
+	@RequestMapping(value = { "/getCountyList/{areaCode}" }, method = { RequestMethod.POST })
+	@ResponseBody
+	public Object getCountyList(@PathVariable("areaCode") String areaCode) {
+		return customReportService.getCountyList(areaCode);
+	}
+
 	@RequestMapping(value = { "/getCategory" }, method = { RequestMethod.POST })
 	@ResponseBody
 	public Object getCategory() {
 		return customReportService.getCategorys();
+	}
+	
+	
+	@RequestMapping(value = { "/query" }, method = { RequestMethod.POST })
+	@ResponseBody
+	public Object query(QueryInfo info) {
+		Map<String, Object> result = new HashMap<String,Object>();
+		System.out.println("<--------->"+info);
+		context.setReportId(info.getReportId());
+		context.setInfo(info);
+		context.init();
+		context.inittHead();
+		String queryId = IdGen.genId();
+		cache.set(queryId, context);
+		result.put("queryId", queryId);
+		result.put("header", context.getColumns());
+		return result;
+	}
+	
+	@RequestMapping(value = { "/reportPageList" })
+	@ResponseBody
+	public Object reportPageList(@RequestParam(value = "page", defaultValue = "1") Integer page,
+			@RequestParam(value = "rows", defaultValue = "10") Integer rows,@RequestParam("queryId")String queryId) {
+		logger.info("<----parameters---->page=" + page + ",rows=" + rows+",queryId"+queryId);
+		ReportContext context = (ReportContext) cache.get(queryId);
+		context.query(page, rows);
+		return context.getDatas();
 	}
 
 	@RequestMapping(value = { "/delete/{reportId}" }, method = { RequestMethod.POST })

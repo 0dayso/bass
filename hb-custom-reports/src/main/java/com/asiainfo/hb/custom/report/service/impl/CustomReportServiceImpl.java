@@ -11,9 +11,11 @@ import org.springframework.stereotype.Service;
 
 import com.asiainfo.hb.core.util.IdGen;
 import com.asiainfo.hb.custom.report.dao.CustomReportDao;
+import com.asiainfo.hb.custom.report.factory.ReportContext;
 import com.asiainfo.hb.custom.report.models.ComboboxBean;
 import com.asiainfo.hb.custom.report.models.CustomReport;
 import com.asiainfo.hb.custom.report.models.CustomReportMap;
+import com.asiainfo.hb.custom.report.models.ReportInfo;
 import com.asiainfo.hb.custom.report.service.CustomReportService;
 
 @Service
@@ -64,7 +66,7 @@ public class CustomReportServiceImpl implements CustomReportService {
 		} else { // 更新操作
 			reportDao.updateCustomReport(report);
 		}
-		
+
 		saveReportMap(reportMapList, report.getReportId(), updateFlag);
 		if (updateFlag) {
 			result.put("msg", "修改成功");
@@ -97,16 +99,75 @@ public class CustomReportServiceImpl implements CustomReportService {
 	}
 
 	@Override
-	public List<Map<String, Object>> getReportTypeList(String codeType, String category,String menuIds) {
+	public List<Map<String, Object>> getReportTypeList(String codeType, String category, String menuIds) {
 		if (StringUtils.isBlank(codeType) || StringUtils.isBlank(category)) {
 			throw new RuntimeException("the codeType = " + codeType + ",category=" + category + " not allow for null.");
 		}
-		return reportDao.getReportTypeList(codeType, category,menuIds);
+		return reportDao.getReportTypeList(codeType, category, menuIds);
 	}
 
 	@Override
 	public List<CustomReportMap> querySelectReport(String reportId) {
 		return reportDao.querySelectReport(reportId);
+	}
+
+	@Override
+	public Map<String, String> getIndicatorMenus() {
+		List<Map<String, Object>> list = reportDao.getIndicatorMenus();
+		Map<String, String> result = null;
+		if (list != null && list.size() > 0) {
+			Map<String, Object> map = null;
+			result = new HashMap<String, String>();
+			for (int i = 0; i < list.size(); i++) {
+				map = list.get(i);
+				result.put(map.get("id").toString(), map.get("value").toString());
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public List<ReportInfo> getReportList(String reportId) {
+		return reportDao.getReportList(reportId);
+	}
+
+	@Override
+	public List<Map<String, Object>> getCountyList(String areaCode) {
+		List<Map<String, Object>> list = reportDao.getCountyList(areaCode);
+		if (list != null && list.size() > 0) {
+			list.get(0).put("selected", true);
+		}
+		return list;
+	}
+
+	@Override
+	public String getKpiDefaultDate(String type, String kpiCode) {
+		String date = null;
+		if (StringUtils.isBlank(type) || StringUtils.isBlank(kpiCode)) {
+			throw new RuntimeException("the type and kpiCode not allow null.");
+		}
+		if (ReportContext.DAY.equalsIgnoreCase(type)) {
+			date = reportDao.getDaylyDate(kpiCode);
+		} else if (ReportContext.MONTH.equalsIgnoreCase(type)) {
+			date = reportDao.getMonthlyDate(kpiCode);
+		} else {
+			throw new RuntimeException("the type is not defined.");
+		}
+		return date;
+	}
+
+	@Override
+	public List<Map<String, Object>> getCityList() {
+		List<Map<String, Object>> list = reportDao.getCityList();
+		if (list != null && list.size() > 0) {
+			list.get(0).put("selected", true);
+		}
+		return list;
+	}
+
+	@Override
+	public Map<String, Object> getReportQueryDate(int page, int rows, String sql, Map<String, Object> parameters) {
+		return reportDao.getReportQueryDate(page, rows, sql, parameters);
 	}
 
 }

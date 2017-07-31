@@ -1,11 +1,15 @@
 package com.asiainfo.hb.custom.report.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.asiainfo.hb.core.datastore.SqlPageHelper;
+import com.asiainfo.hb.core.datastore.SqlserverSqlPageHelper;
 import com.asiainfo.hb.custom.report.models.ComboboxBean;
 import com.asiainfo.hb.custom.report.models.CustomReport;
 import com.asiainfo.hb.custom.report.models.CustomReportMap;
+import com.asiainfo.hb.custom.report.models.ReportInfo;
 
 public interface CustomReportDao {
 	/**
@@ -39,4 +43,26 @@ public interface CustomReportDao {
 	void saveCustomReportMap(List<Object[]> listArgs);
 
 	void updateCustomReport(CustomReport report);
+	
+	List<Map<String, Object>> getIndicatorMenus();
+	
+	List<ReportInfo> getReportList(String reportId);
+	/**
+	 * 通过市区编码查询县市信息
+	 * @param areaCode
+	 * @return
+	 */
+	List<Map<String, Object>> getCountyList(String areaCode);
+	/**
+	 * 查询全省市区信息
+	 * @return
+	 */
+	List<Map<String, Object>> getCityList();
+	
+	String getDaylyDate(String kpiCode);
+	
+	String getMonthlyDate(String kpiCode);
+	
+	
+	Map<String, Object> getReportQueryDate(int page, int rows, String sql,Map<String, Object> parameters);
 }

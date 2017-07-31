@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.asiainfo.hb.core.datastore.SqlPageHelper;
@@ -20,6 +21,7 @@ import com.asiainfo.hb.custom.report.dao.CustomReportDao;
 import com.asiainfo.hb.custom.report.models.ComboboxBean;
 import com.asiainfo.hb.custom.report.models.CustomReport;
 import com.asiainfo.hb.custom.report.models.CustomReportMap;
+import com.asiainfo.hb.custom.report.models.ReportInfo;
 
 /**
  * 自定义报表DAO操作
@@ -33,6 +35,16 @@ public class CustomReportDaoImpl implements CustomReportDao {
 	private static Logger LOG = Logger.getLogger(CustomReportDaoImpl.class);
 
 	private JdbcTemplate jdbcTemplate;
+	
+	private NamedParameterJdbcTemplate jdbcTemplateN;
+
+	public NamedParameterJdbcTemplate getJdbcTemplateN() {
+		return jdbcTemplateN;
+	}
+	@Autowired
+	public void setJdbcTemplateN(NamedParameterJdbcTemplate jdbcTemplateN) {
+		this.jdbcTemplateN = jdbcTemplateN;
+	}
 
 	@Autowired
 	public void setDataSource(DataSource dataSource) {
@@ -131,6 +143,70 @@ public class CustomReportDaoImpl implements CustomReportDao {
 		LOG.info("sql---->" + sql + ",args=" + Arrays.toString(args));
 
 		return jdbcTemplate.queryForList(sql, args);
+	}
+
+	@Override
+	public List<Map<String, Object>> getIndicatorMenus() {
+		return jdbcTemplate.queryForList("select t.iD ,t.name from BOC_INDICATOR_MENU t");
+	}
+
+	@Override
+	public List<ReportInfo> getReportList(String reportId) {
+		String sql = "select m.REPORT_ID reportId,t.ID menuId,t.NAME menuName,'' type, m.KPI_CODE kpiCode from ST.BOC_INDICATOR_MENU t ,st.FPF_IRS_CUSMTOM_REPORT_map m where t.ID = m.INDICATOR_MENU_ID and m.REPORT_ID= ?";
+		List<ReportInfo> reports = jdbcTemplate.query(sql, new BeanPropertyRowMapper<ReportInfo>(ReportInfo.class),
+				new Object[] { reportId });
+		return reports;
+	}
+
+	@Override
+	public List<Map<String, Object>> getCountyList(String areaCode) {
+		String sql = "select county_code id ,county_name name from mk.BT_AREA_ALL";
+		if (StringUtils.isNotBlank(areaCode) || areaCode.equals("0")) {
+			return jdbcTemplate.queryForList(sql);
+		}
+		sql += " where area_code =?";
+		return jdbcTemplate.queryForList(sql, new Object[] { areaCode });
+	}
+
+	@Override
+	public String getDaylyDate(String kpiCode) {
+		String sql = "select max(op_time) from KPI_COMP_CD005_D_VERTICAL where kpi_code =?";
+		return jdbcTemplate.queryForObject(sql, String.class, new Object[] { kpiCode });
+	}
+
+	@Override
+	public String getMonthlyDate(String kpiCode) {
+		String sql = "select max(op_time) from KPI_COMP_CD005_M_VERTICAL where kpi_code =?";
+		return jdbcTemplate.queryForObject(sql, String.class, new Object[] { kpiCode });
+	}
+
+	@Override
+	public List<Map<String, Object>> getCityList() {
+		String sql = "select id,name from (select '0' as id,'全省' as name, 0 as order_id from sysibm.sysdummy1 "
+				+ "union all select area_code as id,area_name as name,new_code as order_id from mk.BT_AREA) order by order_id";
+		return jdbcTemplate.queryForList(sql);
+	}
+
+	@Override
+	public Map<String, Object> getReportQueryDate(int page, int rows, String sql, Map<String, Object> parameters) {
+		LOG.info("<==========================================>");
+		LOG.info("<=========>sql->"+sql);
+		LOG.info("<=========>page->"+page);
+		LOG.info("<=========>rows->"+rows);
+		LOG.info("<=========>parameters->"+parameters);
+		Map<String, Object> result = new HashMap<String, Object>();
+		SqlPageHelper sqlPageHelper = new SqlserverSqlPageHelper();
+		String totalPage = "select count(*) from ( " + sql + " ) ";
+		LOG.info("<=========>totalPage->"+totalPage);
+		String totalRows = sqlPageHelper.getLimitSQL(sql, rows, (page - 1) * rows, "dim_val");
+		LOG.info("<=========>totalRows->"+totalRows);
+		
+		result.put("total", jdbcTemplateN.queryForObject(totalPage, parameters, Integer.class));
+		List<Map<String, Object>> reports = jdbcTemplateN.queryForList(totalRows, parameters);
+		result.put("rows", reports);
+		LOG.info("the page result: " + result);
+		LOG.info("<==========================================>");
+		return result;
 	}
 
 }
