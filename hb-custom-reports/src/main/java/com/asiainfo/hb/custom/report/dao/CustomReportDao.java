@@ -1,11 +1,8 @@
 package com.asiainfo.hb.custom.report.dao;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.asiainfo.hb.core.datastore.SqlPageHelper;
-import com.asiainfo.hb.core.datastore.SqlserverSqlPageHelper;
 import com.asiainfo.hb.custom.report.models.ComboboxBean;
 import com.asiainfo.hb.custom.report.models.CustomReport;
 import com.asiainfo.hb.custom.report.models.CustomReportMap;
