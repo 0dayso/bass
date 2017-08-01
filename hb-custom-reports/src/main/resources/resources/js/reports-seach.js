@@ -1,7 +1,6 @@
 var mvcPath = $("#mvcPath").val();
 var defaultDate = $("#defaultDate").val();
 var reportId = $("#reportId").val();
-var type = $("#type").val();
 var queryId;
 var columnLength;
 $.fn.datebox.defaults.formatter = function(date) {
@@ -79,6 +78,7 @@ function getQueryParameters() {
 	//自定义指标id
 	data.reportId = $("#reportId").val()||'';
 	var kpiDate = $("#kpi_date").datebox('getValue') || '';
+	var type = $("#type").val();
 	if(type == "MONTH_TYPE" && kpiDate && kpiDate.lastIndexOf("-") > -1){
 		kpiDate = kpiDate.substr(0,kpiDate.lastIndexOf("-"));
 	}

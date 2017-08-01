@@ -75,7 +75,7 @@ COMMENT on column st.fpf_irs_cusmtom_report.user_id IS '用户id';
 CREATE TABLE st.fpf_irs_cusmtom_report_map
  (
  	id  varchar(32) not null primary key,
- 	report_id integer not null,
+ 	report_id varchar(32) not null,
 	indicator_menu_id integer not null,
  	kpi_code varchar(16)	
  )
