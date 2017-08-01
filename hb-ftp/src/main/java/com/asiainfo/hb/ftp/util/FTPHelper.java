@@ -27,7 +27,8 @@ public class FTPHelper {
 	private String chartset = "utf-8";
 
 	public FTPHelper() {
-		this("yh:yh@10.31.81.246:21");
+//		this("yh:yh@10.31.81.246:21");
+		this("jfftp:1Qaz#edc@192.168.1.200:21");
 	}
 
 	public FTPHelper(String url) {

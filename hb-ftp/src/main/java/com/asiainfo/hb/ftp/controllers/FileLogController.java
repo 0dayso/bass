@@ -26,6 +26,11 @@ public class FileLogController {
 	@Autowired
 	private FileLogDao logDao;
 	
+	@RequestMapping("/index")
+	public String index(){
+		return "ftl/fileLog";
+	}
+	
 	@RequestMapping(value="/getLogInfo")
 	@ResponseBody
 	public Map<String, Object> getLogInfo(HttpServletRequest req, HttpSession session){
