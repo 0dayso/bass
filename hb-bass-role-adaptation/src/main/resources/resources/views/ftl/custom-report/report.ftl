@@ -25,20 +25,25 @@
 				<td><input id="cityList" name="cityList"></td>
 				<td><span>县市</span><input type="checkbox" id="countyX" name="countyX" value="1"> 细分</td>
 				<td><input id="countyList" name="countyList"></td>
+				<td></td><td></td>
+				<!--
 				<td><span>营销中心</span><input type="checkbox" id="marktingX" name="marktingX"> 细分</td>
-				<td><input id="marketing_center" name="marketing_center" id="marketing_center"></td>
+				<td><input id="marketing_center" name="marketing_center" id="marketing_center"></td>-->
 			</tr>
 			<tr>
 				<td colspan="8">
+					<!--
 					<input type="checkbox" name="compare_type" value="1"> 环比增长
 					<input type="checkbox" name="compare_type" value="2"> 同比增长
-					<input type="checkbox" name="compare_type" value="3"> 年同比增长
+					<input type="checkbox" name="compare_type" value="3"> 年同比增长-->
 				</td>
 			</tr>
 			<tr>
 				<td colspan="8">
 					<div style="float: right;margin-right: 90px;"><button id="query">查询</button>
-						<button id="download">下载</button></div>
+						<!--
+						<button id="download">下载</button>-->
+					</div>
 				</td>
 			</tr>
 		</table>

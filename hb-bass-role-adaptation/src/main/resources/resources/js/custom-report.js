@@ -92,8 +92,7 @@ $(function(){
 			handler:function(){
 				clean();
 				$('#addReportWind').dialog('open');
-				//$('#kpiType').combobox('reload');
-				//$('#kpiApp').combobox('reload');
+				$("#addReportWind").dialog("move",{top:$(document).scrollTop() + ($(window).height()-400) * 0.3});
 			}
 		},'-',{
 			text:'修改',
@@ -103,13 +102,12 @@ $(function(){
 				if(row){
 					$('#addReportWind').dialog({title:'修改自定义报表'});
 					$('#addReportWind').dialog('open');
+					$("#addReportWind").dialog("move",{top:$(document).scrollTop() + ($(window).height()-400) * 0.3});
 					loadData(row);
-					//$('#kpiType').combobox('reload');
-					//$('#kpiApp').combobox('reload');
 				}
 			}
 		},'-',{
-			text:'Delete',
+			text:'删除',
 			iconCls:'icon-remove',
 			handler:function(){
 				var row = getSelectRow();

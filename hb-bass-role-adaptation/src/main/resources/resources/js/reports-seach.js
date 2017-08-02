@@ -111,8 +111,8 @@ function getQueryParameters() {
 		marktingXVal = marktingX.join(",");
 	}
 	data.marktingX = marktingXVal;
-	// 营销中心信息
-	data.marketingCenters = $("#marketing_center").combobox('getValue') || '';
+	// 营销中心信息 TODO $("#marketing_center").combobox('getValue') ||
+	data.marketingCenters =  '';
 	return data;
 }
 
