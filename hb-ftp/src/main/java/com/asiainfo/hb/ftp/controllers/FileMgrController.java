@@ -136,7 +136,7 @@ public class FileMgrController {
 		return "ftl/audit";
 	}
 
-	@RequestMapping(value = "/fileAudit", method = RequestMethod.GET)
+	@RequestMapping(value = "/fileAudit", method = RequestMethod.POST)
 	@ResponseBody
 	public boolean fileAudit(Audit audit, HttpServletRequest request, HttpServletResponse response, Model model, HttpSession session) {
 		

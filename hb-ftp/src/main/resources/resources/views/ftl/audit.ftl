@@ -1,5 +1,5 @@
 <#if msg = 1>  
- <form id="auditForm" method="get">
+ <form id="auditForm" method="post">
  <div>
  	<input id="file_id" name="file_id" value="${file_id!''}" type="hidden"/>
 	<table style='width: 360px;font-size:12px;border-collapse:collapse;text-align: center;'>

@@ -117,6 +117,7 @@ $(function(){
 							text : '保存',
 							handler : function() {
 								$('#auditForm').ajaxSubmit({
+									contentType: "application/x-www-form-urlencoded; charset=utf-8",
 									url : '${mvcPath}/FileMgr/fileAudit',
 									success : function(data) {
 										if (data) {
@@ -316,8 +317,10 @@ function downFile(parameter, callbake) {
 				var url = "${mvcPath}/FileMgr/download?fileName=" + fileName + "&fileId=" + fileId;
 				var download = data.urlBegin + "/download?fileName=" + fileName + "&fileId=" + fileId;
 				if (parameter) {
+					//alert(download);
 					callbake(download);
 				} else {
+					//alert(url);
 					window.location.href = url;
 				}
 			} else {
@@ -423,7 +426,7 @@ function getAuditor(){
 		<a href="#" class="easyui-linkbutton" iconCls="icon-tip" plain="true" onclick="queryDetail()" >详情</a> 
 		<a href="#" class="easyui-linkbutton" iconCls="icon-back" plain="true" id="auditBtn">文件审核</a>
 		<a href="#" class="easyui-linkbutton" iconCls="icon-down_load" plain="true" onclick="downFile()">本地下载</a>
-		<a href="#" class="easyui-linkbutton" iconCls="icon-download" plain="true" onclick="downaddr()">外部下载</a>
+		<!--  a href="#" class="easyui-linkbutton" iconCls="icon-download" plain="true" onclick="downaddr()">外部下载</a-->
 	</div>
 	<div>
 		文件名称: <input class="easyui-text" style="width: 120px; height:20px; line-height:20px;" id="filename">
