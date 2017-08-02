@@ -46,14 +46,23 @@ function checkData() {
  * 查询县市下拉框
  * @returns
  */
-function queryCountyList(){
+function queryCountyList(record){
 	if ($("#countyX").is(":checked")) { // 选中
 		var areaCode = $("#cityList").combobox('getValue');
+		if(record){
+			areaCode = record.id;
+		}
 		if (areaCode) {
+			var data ={};
+			data.areaCode = areaCode;
 			$("#countyList").combobox({
 				disabled : false,
-				url : 'getCountyList/' + areaCode,
+				url : 'getCountyList',
 				width : 120,
+				dataType:'json',
+				onBeforeLoad: function (param) {  
+                    param.areaCode = areaCode;  
+                }, 
 				valueField : 'id',
 				textField : 'name',
 				onSelect : function(record) {
@@ -124,7 +133,7 @@ $(function() {
 		valueField : 'id',
 		textField : 'name',
 		onSelect : function(record) {
-			queryCountyList();
+			queryCountyList(record);
 		}
 	});
 	// 默认禁用县市细分
@@ -133,7 +142,9 @@ $(function() {
 	});
 	// 县市细分按钮
 	$("#countyX").change(function(data) {
-		
+		if(getCheckBoxValue("countyX")){
+			queryCountyList();
+		} 
 	});
 	// 默认禁用营销中心细分
 	$("#marketing_center").combobox({

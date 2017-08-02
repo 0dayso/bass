@@ -168,14 +168,22 @@ public class ReportContext {
 	 * 获取报表周期,如果kpiDate为null则默认为当前日期
 	 */
 	private void initQueryDate() {
-		if (StringUtils.isNotBlank(info.getKpiDate())) {
-			try {
-				queryDate = FORMAT_2.format(FORMAT_1.parse(info.getKpiDate()));
-			} catch (ParseException e) {
-				e.printStackTrace();
+		try {
+			if(type.equals(DAY)) {
+				if(StringUtils.isBlank(info.getKpiDate())) {
+					queryDate = FORMAT_1.format(new Date());
+				}else {
+					queryDate = FORMAT_1.format(FORMAT_2.parse(info.getKpiDate()));
+				}
+			}else {
+				if(StringUtils.isBlank(info.getKpiDate())) {
+					queryDate = FORMAT_MONTH_1.format(new Date());
+				}else {
+					queryDate = FORMAT_MONTH_1.format(FORMAT_MONTH_2.parse(info.getKpiDate()));
+				}
 			}
-		} else {
-			queryDate = FORMAT_2.format(new Date());
+		} catch (ParseException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -201,15 +209,6 @@ public class ReportContext {
 		sb.append(" where kpi_code in ");
 		if (kpis.length() > 1) {
 			sb.append(kpis.substring(0, kpis.length() - 1) + " ) ");
-		}
-		// TODO 生产环境需要删除
-		if (StringUtils.isNoneBlank(queryDate)) {
-			logger.info("the queryDate is " + queryDate);
-			if (!queryDate.equals("20170302")) {
-				queryDate = "20170302";
-				logger.info("the queryDate replace :" + queryDate);
-			}
-			sb.append(" and op_time='").append(queryDate + "' ");
 		}
 
 		sb.append(" group by  dim_val,op_time");
@@ -245,7 +244,7 @@ public class ReportContext {
 			parameters.put("countyId", info.getCountyList());
 			countrySQL.append(" and county.county_id=:countyId ");
 		}
-		if (StringUtils.isNotBlank(info.getAreaCode()) && !info.getAreaCode().equals("0")) {
+		if (StringUtils.isNotBlank(info.getAreaCode()) && !info.getAreaCode().equals("HB")) {
 			countrySQL.append(" and city.city_id = :cityId ");
 			citySQL.append(" and city.city_id = :cityId ");
 			parameters.put("cityId", info.getAreaCode());

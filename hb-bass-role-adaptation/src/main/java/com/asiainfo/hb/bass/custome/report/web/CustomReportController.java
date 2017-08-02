@@ -84,9 +84,9 @@ public class CustomReportController {
 		return customReportService.getCityList();
 	}
 	
-	@RequestMapping(value = { "/getCountyList/{areaCode}" }, method = { RequestMethod.POST })
+	@RequestMapping(value = { "/getCountyList" }, method = { RequestMethod.POST })
 	@ResponseBody
-	public Object getCountyList(@PathVariable("areaCode") String areaCode) {
+	public Object getCountyList(@RequestParam("areaCode") String areaCode) {
 		return customReportService.getCountyList(areaCode);
 	}
 

@@ -160,11 +160,11 @@ public class CustomReportDaoImpl implements CustomReportDao {
 
 	@Override
 	public List<Map<String, Object>> getCountyList(String areaCode) {
-		String sql = "select county_code id ,county_name name from mk.BT_AREA_ALL";
-		if (StringUtils.isNotBlank(areaCode) || areaCode.equals("0")) {
+		String sql = "select county_id id,county_name name from st.DIM_PUB_COUNTY ";
+		if (areaCode.equals("HB")) {
 			return jdbcTemplate.queryForList(sql);
 		}
-		sql += " where area_code =?";
+		sql += " where city_id =?";
 		return jdbcTemplate.queryForList(sql, new Object[] { areaCode });
 	}
 
@@ -182,8 +182,7 @@ public class CustomReportDaoImpl implements CustomReportDao {
 
 	@Override
 	public List<Map<String, Object>> getCityList() {
-		String sql = "select id,name from (select '0' as id,'全省' as name, 0 as order_id from sysibm.sysdummy1 "
-				+ "union all select area_code as id,area_name as name,new_code as order_id from mk.BT_AREA) order by order_id";
+		String sql = "select city_id id,city_name name from st.DIM_PUB_CITY t order by AREA_CODE";
 		return jdbcTemplate.queryForList(sql);
 	}
 
