@@ -35,7 +35,7 @@ public class ReportContext {
 	public static final Integer ROWS = 10;
 	private static final SimpleDateFormat FORMAT_1 = new SimpleDateFormat("yyyy-MM-dd");
 	private static final SimpleDateFormat FORMAT_2 = new SimpleDateFormat("yyyyMMdd");
-	
+
 	private static final SimpleDateFormat FORMAT_MONTH_1 = new SimpleDateFormat("yyyy-MM");
 	private static final SimpleDateFormat FORMAT_MONTH_2 = new SimpleDateFormat("yyyyMM");
 	public String type = null;
@@ -69,18 +69,18 @@ public class ReportContext {
 		getTypeInfo();
 		if (reportList != null && reportList.size() > 0) {
 			defaultDate = customReportService.getKpiDefaultDate(type, reportList.get(0).getKpiCode());
-			
+
 			try {
-				if(type.equals(DAY)) {
-					if(StringUtils.isBlank(defaultDate)) {
+				if (type.equals(DAY)) {
+					if (StringUtils.isBlank(defaultDate)) {
 						defaultDate = FORMAT_1.format(new Date());
-					}else {
+					} else {
 						defaultDate = FORMAT_1.format(FORMAT_2.parse(defaultDate));
 					}
-				}else {
-					if(StringUtils.isBlank(defaultDate)) {
+				} else {
+					if (StringUtils.isBlank(defaultDate)) {
 						defaultDate = FORMAT_MONTH_1.format(new Date());
-					}else {
+					} else {
 						defaultDate = FORMAT_MONTH_1.format(FORMAT_MONTH_2.parse(defaultDate));
 					}
 				}
@@ -88,12 +88,12 @@ public class ReportContext {
 				e.printStackTrace();
 			}
 		}
-		if(StringUtils.isBlank(defaultDate)){
+		if (StringUtils.isBlank(defaultDate)) {
 			defaultDate = FORMAT_1.format(new Date());
 		}
 		return defaultDate;
 	}
-	
+
 	public static void main(String[] args) {
 		try {
 			SimpleDateFormat s = new SimpleDateFormat("yyyyMM");
@@ -102,8 +102,6 @@ public class ReportContext {
 			e.printStackTrace();
 		}
 	}
-	
-	
 
 	public void init() {
 		parameters = new HashMap<String, Object>();
@@ -169,16 +167,16 @@ public class ReportContext {
 	 */
 	private void initQueryDate() {
 		try {
-			if(type.equals(DAY)) {
-				if(StringUtils.isBlank(info.getKpiDate())) {
+			if (type.equals(DAY)) {
+				if (StringUtils.isBlank(info.getKpiDate())) {
 					queryDate = FORMAT_1.format(new Date());
-				}else {
+				} else {
 					queryDate = FORMAT_1.format(FORMAT_2.parse(info.getKpiDate()));
 				}
-			}else {
-				if(StringUtils.isBlank(info.getKpiDate())) {
+			} else {
+				if (StringUtils.isBlank(info.getKpiDate())) {
 					queryDate = FORMAT_MONTH_1.format(new Date());
-				}else {
+				} else {
 					queryDate = FORMAT_MONTH_1.format(FORMAT_MONTH_2.parse(info.getKpiDate()));
 				}
 			}
@@ -225,14 +223,14 @@ public class ReportContext {
 		StringBuffer citySQL = new StringBuffer();
 		citySQL.append(
 				"select t.*,length(t.dim_val) len,city.CITY_NAME as city,city.CITY_NAME as country,'' as marking ");
-		citySQL.append(" from st.DIM_PUB_CITY city ,(");
+		citySQL.append(" from DIM_PUB_CITY city ,(");
 		citySQL.append(sql);
 		citySQL.append(" ) t where city.CITY_ID  = t.dim_val");
 
 		StringBuffer countrySQL = new StringBuffer();
 		countrySQL.append(
 				"select t.*,length(t.dim_val) len,city.CITY_NAME as city,county.county_name as country,'' as marking ");
-		countrySQL.append(" from st.DIM_PUB_CITY city ,st.dim_pub_county county,(");
+		countrySQL.append(" from DIM_PUB_CITY city ,dim_pub_county county,(");
 		countrySQL.append(sql);
 		countrySQL.append(" ) t where county.county_id  =t.dim_val and city.city_id = county.city_id ");
 
@@ -311,6 +309,14 @@ public class ReportContext {
 
 	public void setDefaultDate(String defaultDate) {
 		this.defaultDate = defaultDate;
+	}
+
+	public String getQueryDate() {
+		return queryDate;
+	}
+
+	public void setQueryDate(String queryDate) {
+		this.queryDate = queryDate;
 	}
 
 }
