@@ -138,7 +138,6 @@ public class ComputerMonitorUtil {
 	/**
 	 * 功能：Linux 和 Window 内存使用率
 	 */
-	@SuppressWarnings("restriction")
 	public static double getMemUsage() {
 		if (osName.toLowerCase().contains("windows") || osName.toLowerCase().contains("win")) {
 

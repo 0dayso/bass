@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8"></meta>
 <title>湖北移动经营分析系统</title>
-    <script type="text/javascript" src="../../../../resources/js/jquery-easyui-1.5.1/jquery.min.js"></script>
-	<script type="text/javascript" src="../../../../resources/js/jquery-easyui-1.5.1/jquery.easyui.min.js"></script>
-	<script type="text/javascript" src="../../../../resources/js/jquery-easyui-1.5.1/locale/easyui-lang-zh_CN.js"></script>
-	<script type="text/javascript" src="../../../../resources/lib/jqLoading/js/jquery-ui-jqLoding.js"></script>
-	<link rel="stylesheet" href="../../../../resources/js/jquery-easyui-1.5.1/themes/default/easyui.css" type="text/css"></link>
-	<link rel="stylesheet" href="../../../../resources/js/jquery-easyui-1.5.1/themes/icon.css" type="text/css"></link>
+    <script type="text/javascript" src="${mvcPath}/resources/js/jquery-easyui-1.5.1/jquery.min.js"></script>
+	<script type="text/javascript" src="${mvcPath}/resources/js/jquery-easyui-1.5.1/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="${mvcPath}/resources/js/jquery-easyui-1.5.1/locale/easyui-lang-zh_CN.js"></script>
+	<script type="text/javascript" src="${mvcPath}/resources/lib/jqLoading/js/jquery-ui-jqLoding.js"></script>
+	<link rel="stylesheet" href="${mvcPath}/resources/js/jquery-easyui-1.5.1/themes/default/easyui.css" type="text/css"></link>
+	<link rel="stylesheet" href="${mvcPath}/resources/js/jquery-easyui-1.5.1/themes/icon.css" type="text/css"></link>
 </head>
 <body>
 <div style="margin: 20px 0;"></div>

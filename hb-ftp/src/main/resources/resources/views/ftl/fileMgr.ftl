@@ -80,12 +80,12 @@ $(function(){
 	$('#auditBtn').bind('click', function() {
 		var filelist = $('#dataTable').datagrid('getChecked');
 		if (filelist.length > 1) {
-			$.messager.alert("信息", "只能选择一行", "info");
+			$.messager.alert("信息", "只能选择一行记录", "info");
 			return false;
 		}
 		
 		if (filelist.length == 0 || filelist.length < 1) {
-			$.messager.alert("信息", "不能一行也不选", "info");
+			$.messager.alert("信息", "请先选择一行记录", "info");
 			return false;
 		}
 		

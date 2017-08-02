@@ -17,12 +17,6 @@
 		</dependency>
 		<dependency>
 			<groupId>com.asiainfo.hb</groupId>
-			<artifactId>hb-custom-reports</artifactId>
-			<version>${hb.version}</version>
-			<type>jar</type>
-		</dependency>
-		<dependency>
-			<groupId>com.asiainfo.hb</groupId>
 			<artifactId>hb-bass-data</artifactId>
 			<version>${hb.version}</version>
 			<type>jar</type>
@@ -48,6 +42,12 @@
 		<dependency>
 			<groupId>com.asiainfo.hb</groupId>
 			<artifactId>hb-webservice</artifactId>
+			<version>${hb.version}</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>com.asiainfo.hb</groupId>
+			<artifactId>hb-ftp</artifactId>
 			<version>${hb.version}</version>
 			<type>jar</type>
 		</dependency>
