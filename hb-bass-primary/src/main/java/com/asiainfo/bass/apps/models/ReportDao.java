@@ -197,7 +197,9 @@ public class ReportDao {
 					report.setMaxTime(str.indexOf(";")>0?str.substring(0, str.indexOf(";")):str);
 				}
 			} else if ("SQL".equalsIgnoreCase((String) map.get("code"))) {
-				report.setOriSQL(((String) map.get("value")));
+				String sql=((String) map.get("value"));
+				sql=sql.replaceAll("PT.","ST.");
+				report.setOriSQL(sql);
 			} else if ("Code".equalsIgnoreCase((String) map.get("code"))) {
 				report.setCodeData((String) map.get("value"));
 			} else if ("AreaAll".equalsIgnoreCase((String) map.get("code"))) {
@@ -546,11 +548,16 @@ public class ReportDao {
 	@SuppressWarnings("rawtypes")
 	public List getCorrealtiveReport(Report report) {
 		LOG.info("id=" + report.getId());
+		List list=new ArrayList();
+		try{
 		String sql = " select id,name,desc,kind,dy_uname from FPF_bir_subject_correlation" + " ,(" + " select a.*" + " ,case when kind='动态' and a.status='开发' then value((select area_name from mk.bt_area where int(cityid)=area_id),'省公司')||username end dy_uname from FPF_IRS_SUBJECT a" + " left join FPF_IRS_PACKAGE b on a.pid=b.id"
 				+ " left join FPF_USER_USER c on b.user_id=c.userid" + " where ((kind='配置' and a.status='在用') or kind='动态') " + " ) t " + " where SOURCE=? and target=id order by value desc fetch first 30 rows only with ur";
 
-		List list = (List) jdbcTemplate.queryForList(sql, new Object[] { Integer.valueOf(report.getId()) });
+		 list = (List) jdbcTemplate.queryForList(sql, new Object[] { Integer.valueOf(report.getId()) });
 		LOG.info("getCorrealtiveReport执行结束");
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 		return list;
 	}
 

@@ -73,8 +73,9 @@ public class JsonDataAction extends Action {
 
 			SQLQuery sqlQuery = SQLQuery.NULL;
 
-			boolean isCached = !"false".equalsIgnoreCase(request.getParameter("isCached"));// 是否缓存，除非制定不缓存，其他的都默认缓存
-			if (!isCached)
+			//boolean isCached = !"false".equalsIgnoreCase(request.getParameter("isCached"));// 是否缓存，除非制定不缓存，其他的都默认缓存
+			boolean isCached= false;
+			if (isCached==false)
 				LOG.info("没有使用缓存");
 			if ("limit".equalsIgnoreCase(queryType)) {
 				int limit = 0;
