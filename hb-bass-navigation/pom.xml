@@ -46,6 +46,12 @@
 			<type>jar</type>
 		</dependency>
 		<dependency>
+			<groupId>com.asiainfo.hb</groupId>
+			<artifactId>hb-ftp</artifactId>
+			<version>${hb.version}</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
 			<groupId>db2</groupId>
 			<artifactId>db2java</artifactId>
 			<scope>compile</scope>

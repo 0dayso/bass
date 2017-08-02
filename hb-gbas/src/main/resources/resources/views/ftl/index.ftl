@@ -36,13 +36,20 @@ function addTab(title, url){
 					<ul style="padding: 0 10px;">
 						<li><a href='#' onclick="addTab('指标配置', '${mvcPath}/zb/index')"><span>指标配置</span></a></li>
 						<li><a href='#' onclick="addTab('规则配置', '${mvcPath}/rule/index')"><span>规则配置</span></a></li>
+						<li><a href='#' ><span>接口配置</span></a></li>
+						<li><a href='#' ><span>接口时限告警</span></a></li>
+						<li><a href='#' ><span>短信告警人配置</span></a></li>
+						<li><a href='#' ><span>短信告警群组配置</span></a></li>
+						<li><a href='#' ><span>违反稽核告警配置</span></a></li>
 					</ul>
 				</div>
 		
 				<div title='业务'>
 					<ul style="padding: 0 10px;">
-						<li><a href='#'><span>任务运行概况</span></a></li>
-						<li><a href='#'><span>查看执行条件</span></a></li>
+						<li><a href='#' onclick="addTab('任务运行概况', '${mvcPath}/task/index')"><span>任务运行概况</span></a></li>
+						<li><a href='#' ><span>程序运行分析</span></a></li>
+						<li><a href='#' ><span>指标波动性展示</span></a></li>
+						<li><a href='#' ><span>平台健康度监控</span></a></li>
 					</ul>
 				</div>
 			</div>

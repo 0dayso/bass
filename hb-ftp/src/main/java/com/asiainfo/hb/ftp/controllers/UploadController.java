@@ -159,7 +159,7 @@ public class UploadController {
 								LOG.info(e.getMessage().toString());
 							}
 							
-							FtpUtil ftp = new FtpUtil("yh:yh@10.31.81.246:21");
+							FtpUtil ftp = new FtpUtil();
 							try {
 								ftp.connect();
 								String filePath = "safetyFile/";

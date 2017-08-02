@@ -1,3 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>日志管理</title>
+<script type="text/javascript" src="${mvcPath}/resources/jslib/jquery-easyui-1.3.1/jquery-1.8.0.min.js"></script>
+<script type="text/javascript" src="${mvcPath}/resources/jslib/jquery-easyui-1.3.1/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="${mvcPath}/resources/jslib/jquery-easyui-1.3.1/locale/easyui-lang-zh_CN.js"></script>
+<link rel="stylesheet" href="${mvcPath}/resources/jslib/jquery-easyui-1.3.1/themes/default/easyui.css" type="text/css"></link>
+<link rel="stylesheet" href="${mvcPath}/resources/jslib/jquery-easyui-1.3.1/themes/icon.css" type="text/css"></link>
 <script type="text/javascript">
 
 function searchLog(){
@@ -17,12 +27,14 @@ function searchLog(){
 }
 
 </script>
+</head>
+<body>
 <div style="margin: 2px 0;"></div>
 <table id="logTable" class="easyui-datagrid" title="日志信息列表"
 	style="width: auto; height: auto"
 	data-options="fit:true,fitColumns : true,striped:true,pagination : true,idField : 'fileid',pageSize : 10,pageList : [10, 20, 30, 50],
 				rownumbers:true,singleSelect:true,checkOnSelect : false,
-				url:'fileLog/getLogInfo',toolbar:'#tb'">
+				url:'${mvcPath}/fileLog/getLogInfo',toolbar:'#tb'">
 	<thead>
 		<tr>
 			<th data-options="field:'file_id',width:120">文件ID</th>
@@ -51,3 +63,5 @@ function searchLog(){
 			onclick="searchLog()">查询</a>
 	</div>
 </div>
+</body>
+</html>

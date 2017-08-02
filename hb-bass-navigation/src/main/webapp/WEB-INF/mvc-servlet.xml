@@ -14,6 +14,7 @@
 	<import resource="classpath:conf/spring/mvc-hb-power.xml" />
 	<import resource="classpath:conf/spring/mvc-hb-bass-role-adaptation.xml" />
 	<import resource="classpath:conf/spring/mvc-webservice.xml" />
+	<import resource="classpath:conf/spring/mvc-hb-ftp.xml" />
 
 	<mvc:resources mapping="/hbapp/**" location="/hbapp/" cache-period="0" />
 

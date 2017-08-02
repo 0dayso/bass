@@ -29,7 +29,7 @@ public class SqlExceController {
 	
 	@RequestMapping(value = "/sql")
 	public String excute(HttpServletRequest request, HttpServletResponse response, Model model, HttpSession session) {
-		return "ftl/sqlExce/sql";
+		return "ftl/sqlExec/sql";
 	}
 	
 	@RequestMapping(value = "/excute")

@@ -1,3 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>文件管理</title>
+<link rel="stylesheet" href="${mvcPath}/resources/jslib/jquery-easyui-1.3.1/themes/default/easyui.css" type="text/css"></link>
+<link rel="stylesheet" href="${mvcPath}/resources/jslib/jquery-easyui-1.3.1/themes/icon.css" type="text/css"></link>
+<link rel="stylesheet" type="text/css" href="${mvcPath}/resources/js/ext2.0/resources/css/ext-all.css">
+<link rel="stylesheet" type="text/css" href="${mvcPath}/resources/js/ext2.0/ux/UploadDialog/css/Ext.ux.UploadDialog.css" />
+<script type="text/javascript" src="${mvcPath}/resources/jslib/jquery-easyui-1.3.1/jquery-1.8.0.min.js"></script>
+<script type="text/javascript" src="${mvcPath}/resources/jslib/jquery-easyui-1.3.1/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="${mvcPath}/resources/jslib/jquery-easyui-1.3.1/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="${mvcPath}/resources/jslib/zclip/jquery.zclip.js"></script>
+<script type="text/javascript" src="${mvcPath}/resources/js/jquery.form.js"></script>
+<script type="text/javascript" src="${mvcPath}/resources/js/ext2.0/ext-base.js"></script>
+<script type="text/javascript" src="${mvcPath}/resources/js/ext2.0/ext-all.js"></script>
+<script type="text/javascript" src="${mvcPath}/resources/js/ext2.0/ux/UploadDialog/Ext.ux.UploadDialog.js"></script>
+<script type="text/javascript" src="${mvcPath}/resources/js/ext2.0/ux/UploadDialog/locale/ru.utf-8_zh.js"></script>
 <script type="text/javascript">
 var userName = "";
 var userId = "";
@@ -8,7 +26,7 @@ $(function(){
 		document.getElementById("newFileName").value = ""; // 将hidden值置空
 		dialog = new Ext.ux.UploadDialog.Dialog({
 			title : '文件上传',
-			url : '/hb-ftp/uploadfile/upload',
+			url : '${mvcPath}/uploadfile/upload',
 			post_var_name : 'uploadFiles', // 这里是自己定义的，默认的名字叫file
 			width : 450,
 			height : 300,
@@ -57,6 +75,73 @@ $(function(){
 			userName = data.user.name;
 			userId = data.user.id;
 		}
+	});
+	
+	$('#auditBtn').bind('click', function() {
+		var filelist = $('#dataTable').datagrid('getChecked');
+		if (filelist.length > 1) {
+			$.messager.alert("信息", "只能选择一行记录", "info");
+			return false;
+		}
+		
+		if (filelist.length == 0 || filelist.length < 1) {
+			$.messager.alert("信息", "请先选择一行记录", "info");
+			return false;
+		}
+		
+		var approver = filelist[0].approver_id;
+		if(approver != userId){
+			$.messager.alert("信息", "您没有权限审核此文件", "info");
+			return false;
+		}
+		
+		var fileId = filelist[0].file_id;
+		$.ajax({
+			url : "toExamine",
+			async : false,
+			data : {
+				file_id : fileId
+			},
+			type : "get",
+			success : function(msg) {
+				if (msg == 1) {
+					$.parser.parse();
+					$.messager.alert("操作信息", "该信息已经审核通过", "info");
+				} else {
+					$("#audit").html(msg);
+					$("#audit").dialog({
+						title : '审核',
+						modal: true,
+						cache : false,
+						buttons : [ {
+							text : '保存',
+							handler : function() {
+								$('#auditForm').ajaxSubmit({
+									url : '${mvcPath}/fileAudit',
+									success : function(data) {
+										if (data) {
+											$(function() {
+												$.messager.alert("信息", "修改成功", "info");
+												$('#dataTable').datagrid('load', {});
+											});
+										}
+										$('#audit').dialog('close')
+									}
+								});
+							}
+						}, {
+							text : '关闭',
+							handler : function() {
+								$('#audit').dialog('close');
+							}
+						} ],
+						onClose : function() {
+							$('#dataTable').datagrid('load', {});
+						}
+					});
+				}
+			}
+		});
 	});
 });
 //日期格式化
@@ -198,73 +283,6 @@ function queryDetail() {
 	}
 }
 
-$('#auditBtn').bind('click', function() {
-	var filelist = $('#dataTable').datagrid('getChecked');
-	if (filelist.length > 1) {
-		$.messager.alert("信息", "只能选择一行", "info");
-		return false;
-	}
-	
-	if (filelist.length == 0 || filelist.length < 1) {
-		$.messager.alert("信息", "不能一行也不选", "info");
-		return false;
-	}
-	
-	var approver = filelist[0].approver_id;
-	if(approver != userId){
-		$.messager.alert("信息", "您没有权限审核此文件", "info");
-		return false;
-	}
-	
-	var fileId = filelist[0].file_id;
-	$.ajax({
-		url : "toExamine",
-		async : false,
-		data : {
-			file_id : fileId
-		},
-		type : "get",
-		success : function(msg) {
-			if (msg == 1) {
-				$.parser.parse();
-				$.messager.alert("操作信息", "该信息已经审核通过", "info");
-			} else {
-				$("#audit").html(msg);
-				$("#audit").dialog({
-					title : '审核',
-					modal: true,
-					cache : false,
-					buttons : [ {
-						text : '保存',
-						handler : function() {
-							$('#auditForm').ajaxSubmit({
-								url : '/hb-ftp/fileAudit',
-								success : function(data) {
-									if (data) {
-										$(function() {
-											$.messager.alert("信息", "修改成功", "info");
-											$('#dataTable').datagrid('load', {});
-										});
-									}
-									$('#audit').dialog('close')
-								}
-							});
-						}
-					}, {
-						text : '关闭',
-						handler : function() {
-							$('#audit').dialog('close');
-						}
-					} ],
-					onClose : function() {
-						$('#dataTable').datagrid('load', {});
-					}
-				});
-			}
-		}
-	});
-
-})
 
 function downFile(parameter, callbake) {
 	var filelist = $('#dataTable').datagrid('getChecked');
@@ -295,7 +313,7 @@ function downFile(parameter, callbake) {
 		success : function(data) {
 
 			if (filelist[0].creator_id == userId) {
-				var url = "/hb-ftp/download?fileName=" + fileName + "&fileId=" + fileId;
+				var url = "${mvcPath}/download?fileName=" + fileName + "&fileId=" + fileId;
 				var download = data.urlBegin + "/download?fileName=" + fileName + "&fileId=" + fileId;
 				if (parameter) {
 					callbake(download);
@@ -336,7 +354,7 @@ function copyUrl(){
 		}
 	}else{
 		$("#copy").zclip({
-			path: "/hb-ftp/resources/jslib/zclip/ZeroClipboard.swf",
+			path: "${mvcPath}/resources/jslib/zclip/ZeroClipboard.swf",
 			copy: function(){
 				return $("#outDownUrl").html();
 			},
@@ -375,6 +393,8 @@ function getAuditor(){
 }
 	
 </script>
+</head>
+<body>
 <div style="margin: 2px 0;"></div>
 <table id="dataTable" class="easyui-datagrid" title="文件信息列表"
 	style="width: auto; height: auto"
@@ -502,7 +522,7 @@ function getAuditor(){
 				<td><input type="text" name="filepath" id="objFilePath"
 					size="20" value="" readonly="readonly" data-options="required:true" style="color: gray; width: 200px;" /> <input
 					type="hidden" id="newFileName" /> <img id="upload_image"
-					src="/hb-ftp/resources/js/ext/resources/images/default/dd/drop-yes.gif"
+					src="${mvcPath}/resources/js/ext/resources/images/default/dd/drop-yes.gif"
 					style="display: none" alt="" /></td>
 			</tr>
 			<tr>
@@ -591,3 +611,5 @@ function getAuditor(){
 	</div>
 </div>
 <!-- 弹框结束-->
+</body>
+</html>

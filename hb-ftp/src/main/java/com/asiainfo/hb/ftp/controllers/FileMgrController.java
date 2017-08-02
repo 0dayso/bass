@@ -58,6 +58,11 @@ public class FileMgrController {
 		return "ftl/index";
 	}
 	
+	@RequestMapping("/fileManage")
+	public String fileManage(){
+		return "ftl/fileMgr";
+	}
+	
 	@RequestMapping(value="/getCurrentUser")
 	@ResponseBody
 	public Map<String, Object> getCurrentUser(HttpSession session){
@@ -185,7 +190,7 @@ public class FileMgrController {
 		List<Map<String, Object>> list = fileMgrDao.queryFilepathByIds(fileids);
 		
 		User user = (User) session.getAttribute(SessionKeyConstants.USER);
-		FtpUtil ftpUtil = new FtpUtil("yh:yh@10.31.81.246:21");
+		FtpUtil ftpUtil = new FtpUtil();
 		StringBuffer succIds = new StringBuffer();
 		Map<String, Object> resMap = new HashMap<String, Object>();
 		try {
