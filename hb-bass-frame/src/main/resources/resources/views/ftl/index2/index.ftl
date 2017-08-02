@@ -23,8 +23,7 @@
 						<!--<li><span class="play3" onclick="addTab('98091240','知识库','../hbapp/app/yx_redirect.jsp')">知识库</span></li>-->
 						<li><span class="play3" onclick="addTab('98091104','指标库','../hbapp/app/req_redirect.jsp?method=zbInfolistFrame&menuid=98091104')">指标库</span></li>
 					    <li><span class="play3" onclick="addTab('382','问题申告','../issue?menuid=382')">问题申告</span></li>
-					    <li><span class="play3" onclick="addTab('266789980','应用责任人','./applyAbility.ftl')">应用责任人</span></li>
-					    <li><span class="play3" onclick="addTab('266789981124','自助报表分析','../custom/reports/page')">自定义报表</span></li>	    
+					    <li><span class="play3" onclick="addTab('266789980','应用责任人','./applyAbility.ftl')">应用责任人</span></li>   
 					</ul>
 				</div>
 				<div class="logo_quit">
