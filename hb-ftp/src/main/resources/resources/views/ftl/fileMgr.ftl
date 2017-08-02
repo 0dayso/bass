@@ -68,7 +68,7 @@ $(function(){
 			
 	$.ajax({
 		type : "POST",
-		url : 'getCurrentUser',
+		url : '${mvcPath}/FileMgr/getCurrentUser',
 		data : {},
 		dataType : 'json',
 		success : function(data) {
@@ -117,7 +117,7 @@ $(function(){
 							text : '保存',
 							handler : function() {
 								$('#auditForm').ajaxSubmit({
-									url : '${mvcPath}/fileAudit',
+									url : '${mvcPath}/FileMgr/fileAudit',
 									success : function(data) {
 										if (data) {
 											$(function() {
@@ -313,7 +313,7 @@ function downFile(parameter, callbake) {
 		success : function(data) {
 
 			if (filelist[0].creator_id == userId) {
-				var url = "${mvcPath}/download?fileName=" + fileName + "&fileId=" + fileId;
+				var url = "${mvcPath}/FileMgr/download?fileName=" + fileName + "&fileId=" + fileId;
 				var download = data.urlBegin + "/download?fileName=" + fileName + "&fileId=" + fileId;
 				if (parameter) {
 					callbake(download);

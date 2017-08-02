@@ -42,6 +42,7 @@ import com.asiainfo.hb.web.models.User;
  */
 @SuppressWarnings("unused")
 @Controller
+@RequestMapping("/FileMgr")
 public class FileMgrController {
 
 	private static Logger log = Logger.getLogger(FileMgrController.class);
@@ -51,15 +52,8 @@ public class FileMgrController {
 	@Autowired
 	private AuditDao auditDao;
 	
-	@RequestMapping(value = "/index", method = RequestMethod.GET)
-	public String index(HttpServletRequest request, HttpServletResponse response, Model model, HttpSession session) {
-		User user = (User) session.getAttribute(SessionKeyConstants.USER);
-		model.addAttribute("userName", user.getName());
-		return "ftl/index";
-	}
-	
-	@RequestMapping("/fileManage")
-	public String fileManage(){
+	@RequestMapping("/index")
+	public String index(){
 		return "ftl/fileMgr";
 	}
 	
