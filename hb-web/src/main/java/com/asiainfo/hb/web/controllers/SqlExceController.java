@@ -1,6 +1,7 @@
 
 package com.asiainfo.hb.web.controllers;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -117,14 +118,24 @@ public class SqlExceController {
 	@ResponseBody
 	public String exportToCsv(HttpServletRequest request, HttpServletResponse response, Model model, HttpSession session) {
 		String sqlStr=request.getParameter("sqlStr");
-		String fileName=sqlDao.generateFilename();
-		String filePath="E:/"+fileName;
+		String fileName = sqlDao.generateFilename();
+
+		String fileDir = request.getSession().getServletContext().getRealPath("download");
+		File file = new File(fileDir);
+		if (!file.exists()) {
+			file.mkdir();
+		}
+
+		String filePath = fileDir + "/" + fileName;
+		LOG.debug("filePath:" + filePath);
+	
 		LOG.debug("-------ExportFile---------");
 		try {
 			sqlDao.genCsvFile(sqlStr, filePath);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 		return "SUCCESS" ;
 	}
 	

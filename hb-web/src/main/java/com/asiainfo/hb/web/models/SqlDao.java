@@ -165,7 +165,7 @@ public class SqlDao extends CommonDao {
         String[] arr=new String[jsonArray.size()];   
         for(int i=0;i<jsonArray.size();i++){   
             arr[i]=jsonArray.getString(i);   
-            System.out.println(arr[i]);   
+            //System.out.println(arr[i]);   
         }   
         return arr;   
   }  
