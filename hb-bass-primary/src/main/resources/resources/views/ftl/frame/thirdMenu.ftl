@@ -42,7 +42,7 @@
     padding: 5px 3px 4px 5px;
     border: 1px solid #99bbe8;
     line-height: 15px;
-    background: transparent url(${mvcPath}/hb-bass-primary/js/ztree/images/default/panel/white-top-bottom.gif) repeat-x 0 -1px;
+    background: transparent url(${mvcPath}/hbapp/resources/js/ext/resources/images/default/panel/white-top-bottom.gif) repeat-x 0 -1px;
 }
 .x-tool-collapse-west {
     background-position: 0 -180px;
@@ -56,7 +56,7 @@
     height: 15px;
     float: right;
     cursor: pointer;
-    background: transparent url(${mvcPath}/hb-bass-primary/js/ztree/images/default/panel/tool-sprites.gif) no-repeat;
+    background: transparent url(${mvcPath}/hbapp/resources/js/ext/resources/images/default/panel/tool-sprites.gif) no-repeat;
     margin-left: 2px;
 }
 .x-unselectable, .x-unselectable * {
