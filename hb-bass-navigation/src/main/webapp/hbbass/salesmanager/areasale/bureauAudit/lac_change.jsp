@@ -323,6 +323,8 @@ window.onload=function(){
 								<td class='dim_cell_content' id="times_start1"> <input type="text" value='<%=defaultDate%>' id="sdate1" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" class="Wdate"/></td>
 								<td class='dim_cell_title' id="times_end" >结束时间:</td>
 								<td class='dim_cell_content' id="times_end1" ><input type="text" value='<%=defaultDate%>' id="sdate2" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" class="Wdate"/></td>
+							    <td class='dim_cell_title' id="something" style="display: none"></td>
+								<td class='dim_cell_content' id="something1" style="display: none"></td>
 							</tr>
 							<tr class='dim_row'>
 								<!--  
@@ -527,7 +529,7 @@ window.onload=function(){
 				$('passbtn').style.display = "";
 				$('failbtn').style.display = "";
 				$('eff_td1').style.display = "";
-				$('eff_td2').style.display = "";			
+				$('eff_td2').style.display = "";	
 			}
 
 		}else{
@@ -535,18 +537,22 @@ window.onload=function(){
 				$('passbtn').style.display = "none";
 				$('failbtn').style.display = "none";
 				$('eff_td1').style.display = "none";
-				$('eff_td2').style.display = "none";								
+				$('eff_td2').style.display = "none";
 			}
 		}
 		if("allRec" == id){
 			if($('status_td1')){
 				$('status_td1').style.display = "";
-				$('status_td2').style.display = "";			
+				$('status_td2').style.display = "";	
+				$('something').style.display="";
+				$('something1').style.display="";
 			}
 		}else{
 			if($('status_td1')){
 				$('status_td1').style.display = "none";
-				$('status_td2').style.display = "none";				
+				$('status_td2').style.display = "none";	
+				$('something').style.display="none";
+				$('something1').style.display="none";
 			}
 		}		
 		query();

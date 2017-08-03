@@ -284,7 +284,7 @@ function query(){
 		header:_header
 		,sql: genSQL()
 		,limit:400
-		,pageSize : 200
+		,pageSize : 15
 	});
 	grid.run();
 	/*aihb.AjaxHelper.request({
@@ -346,19 +346,13 @@ window.onload=function(){
 	<body>
 		<form method="post" action="">
 			<input type="hidden" name="header">
-			<div class="divinnerfieldset">
-				<fieldset>
-					<legend>
-						<table>
-							<tr>
-								<td onclick="hideTitle(this.childNodes[0],'dim_div')" title="点击隐藏">
-									<img flag='1' src="${mvcPath}/hbapp/resources/image/default/ns-expand.gif"></img>
-									&nbsp;查询条件区域：
-								</td>
-							</tr>
-						</table>
-					</legend>
-					<div id="dim_div">
+			<div class="widget widget-nopad">
+			         <div class="widget-header">
+					  <span class="icon"><i class="icon-align-justify"></i></span>
+					   <h3>查询条件列表</h3>
+					 </div>
+					 <div class="widget-content">
+					<div id="dim_div" style="margin: 16px 16px 6px;">
 						<table align='center' width='99%' class='grid-tab-blue' cellspacing='1' cellpadding='0' border='0'>
 							<tr class='dim_row'>
 								<td class='dim_cell_title' id="times_start" >状态时间:</td>
@@ -373,8 +367,8 @@ window.onload=function(){
 									至
 									<input type="text" value='<%=defaultDate%>' id="date4" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" class="Wdate" size="12"/>
 								</td>
-								<td class='dim_cell_title'></td>
-								<td class='dim_cell_content'></td>
+								<td class='dim_cell_title' id="something" style="display:none"></td>
+								<td class='dim_cell_content' id="something1" style="display:none"></td>
 							</tr>
 							<tr class='dim_row'>
 								<td class='dim_cell_title'>操作类型</td>
@@ -411,8 +405,8 @@ window.onload=function(){
 								%>
 								</select>
 								</td>
-								<td class='dim_cell_title' id="status_td1" >状态</td>
-								<td class='dim_cell_content' id="status_td2" ><select id="STATUS" disabled="disabled"><option value="">全部</option><option value="waitaudit1">待一级审核</option><option value="waitaudit2">待二级审核</option><option value="waitaudit3">待三级审核</option><option value="succ">审核通过</option><option value="fail">审核不通过</option></select></td>
+								<td class='dim_cell_title' id="status_td1" style="display: none">状态</td>
+								<td class='dim_cell_content' id="status_td2" style="display: none"><select id="STATUS"><option value="">全部</option><option value="waitaudit1">待一级审核</option><option value="waitaudit2">待二级审核</option><option value="waitaudit3">待三级审核</option><option value="succ">审核通过</option><option value="fail">审核不通过</option></select></td>
 							</tr>
 							<tr style="display: none">
 								<td class='dim_cell_title_wide' id="eff_td1">审批生效类型(非查询条件，仅供审批使用)</td>
@@ -437,11 +431,17 @@ window.onload=function(){
 							</tr>
 						</table>
 					</div>
-				</fieldset>
+			   </div>
 			</div>
-			<br>
-			<div class="divinnerfieldset">
-			<table><tr><td>本地区的审批流程：
+			<div class="widget widget-nopad">
+			         <div class="widget-header">
+					  <span class="icon"><i class="icon-align-justify"></i></span>
+					   <h3>审批流程列表</h3>
+					 </div>
+			<div class="widget-content">
+			<table style=" margin: 5px 27px 4px;">
+			<tr><td>本地区的审批流程：
+			<span style="color:red;font-size: 14px;">
 			<%			
 			if(isProvince){
 				%>
@@ -449,34 +449,33 @@ window.onload=function(){
 				<%
 			}else{
 				%>
-				<%= operatorCN%> --> <%= provinceOperatorCN%>
+				<%= operatorCN%> ~~~> <%= provinceOperatorCN%>
 				<%
 			}
 			%>
+			</span>
 			</td></tr>
 			</table>
-				<fieldset>
-					<legend>
-						<table>
-							<tr>
-								<td onclick="hideTitle(this.childNodes[0],'show_div')" title="点击隐藏">
-									<img flag='1' src="${mvcPath}/hbapp/resources/image/default/ns-expand.gif"></img>
-									&nbsp;数据展现区域：
-								</td>
-								<td>全选<input type="checkbox" name="checkAllBox" onclick="selAll();"></td>
-							</tr>
-						</table>
-					</legend>
-		    		<table style="border-collapse:collapse;border-color:#9AADBE;BACKGROUND-COLOR:#ffffff;border-top:0px;border-bottom:0px;margin-left: 6px" border=1>
-					<tr height="21px" valign="top" style="padding-bottom:0px;padding-top:3px;WIDTH: 10%; border-collapse:collapse;border-color:#9AADBE;BACKGROUND-COLOR:81A3F5">
-						<td  class="tab" background=${mvcPath}/hbapp/resources/image/default/tab1.png onclick='changetab("toDo");'>&nbsp;待我审核</TD>
-						<td  class="tab" background=${mvcPath}/hbapp/resources/image/default/tab2.png onclick='changetab("hasDone");'>我已审核</TD>
-						<td  class="tab" background=${mvcPath}/hbapp/resources/image/default/tab2.png onclick='changetab("allRec");'>全部记录</TD>
-						<input type="hidden" id="selType" value="toDo">
-					</tr>
-					</table>					
+			</div>
+			</div>
+			<div class="widget widget-nopad">
+			<div class="widget-header">
+			 <span class="icon"><i class="icon-align-justify"></i></span>
+			 <h3>数据展示列表</h3>
+			</div>
+			<div class="widget-content">
+			    <div style=" margin: 9px 25px -5px;width: 100%;height: 4%;">
+			         <span id="toDo" style="color: #47cd2e;cursor:pointer;font-size: 14px;" onclick='changetab("toDo")' class="color1 like">待我审核</span>
+				     <span id="hasDone" style="color: #999999;cursor:pointer;font-size: 14px;"  onclick='changetab("hasDone")' class="color1">|我已审核</span>
+					 <span id="allRec" style="color: #999999;cursor:pointer;font-size: 14px;" onclick='changetab("allRec")' class="color1">|全部记录</span>
+				     <input type="hidden" id="selType" value="toDo">
+				</div>
+				<table style="border-collapse:collapse;border-color:#9AADBE;BACKGROUND-COLOR:#ffffff;border-top:0px;border-bottom:0px;margin-left: 6px" border=1>
+			 </table>
+			 <div id="grid" style="display: none;"></div>
+			</div>
+			<br>				
 					<div id="grid" style="display: none;"></div>
-				</fieldset>
 			</div>
 			<br>
 		</form>
@@ -553,15 +552,19 @@ window.onload=function(){
 
 	
 	function changetab(id){
-		var obj=event.srcElement;
-		while(obj.tagName!="TD") obj=obj.parentElement;
-		var cellindex=obj.cellIndex;
-		while(obj.tagName!="TABLE") obj=obj.parentElement;
-		if(obj.lastcell) {obj.rows[0].cells[obj.lastcell].style.backgroundImage="url(${mvcPath}/hbapp/resources/image/default/tab2.png)";}
-		else{obj.rows[0].cells[0].style.backgroundImage="url(${mvcPath}/hbapp/resources/image/default/tab2.png)";}
-		obj.lastcell=cellindex;
-		obj.rows[0].cells[cellindex].style.backgroundImage="url(${mvcPath}/hbapp/resources/image/default/tab1.png)";
-		
+		if("toDo"==id){
+			$('toDo').style.color="#47cd2e";
+			$('hasDone').style.color="#999999";
+			$('allRec').style.color="#999999";
+		}else if("hasDone"==id){
+			$('toDo').style.color="#999999";
+			$('hasDone').style.color="#47cd2e";
+			$('allRec').style.color="#999999";
+		}else if("allRec" == id){
+			$('toDo').style.color="#999999";
+			$('hasDone').style.color="#999999";
+			$('allRec').style.color="#47cd2e";
+		}
 		$('selType').value = id;
 		
 		if("toDo" == id){
@@ -578,21 +581,21 @@ window.onload=function(){
 		}
 		if("allRec" == id){
 			if($('status_td1')){
-				//$('status_td1').style.display = "";
-				//$('status_td2').style.display = "";	
-				//$('STATUS').disabled=true;
+				$('status_td1').style.display = "";
+				$('status_td2').style.display = "";	
+				$('something').style.display="";
+				$('something1').style.display="";
+				$('something').style.display="";
+				$('something1').style.display="";
 			}
-			$('STATUS').disabled=false;
 		}else{
 			if($('status_td1')){
-				//$('status_td1').style.display = "none";
-				//$('status_td2').style.display = "none";	
-				$('STATUS').disabled=false;
+				$('status_td1').style.display = "none";
+				$('status_td2').style.display = "none";				
+				$('something').style.display="none";
+				$('something1').style.display="none";
 			}
 		}
-		if("hasDone" == id){
-			$('STATUS').disabled=true;
-		}		
 		query();
 	}
 	
