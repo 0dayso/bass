@@ -73,23 +73,23 @@ function getSelectRow(){
 function getQueryData(){
 	var data ={};
 	
-	var reportId = $("#reportId").textbox('getText');
+	var reportId = $("#q_reportId").textbox('getText');
 	if(reportId){
 		data.reportId = reportId;
 	}
-	var reportName = $("#reportName").textbox('getText');
+	var reportName = $("#q_reportName").textbox('getText');
 	if(reportName){
 		data.reportName = reportName;
 	}
-	var procedureName = $("#procedureName").textbox('getText');
+	var procedureName = $("#q_procedureName").textbox('getText');
 	if(procedureName){
 		data.procedureName = procedureName;
 	}
-	var developerName = $("#developerName").textbox('getText');
+	var developerName = $("#q_developerName").textbox('getText');
 	if(developerName){
 		data.developerName = developerName;
 	}
-	var manager = $("#manager").textbox('getText');
+	var manager = $("#q_manager").textbox('getText');
 	if(manager){
 		data.manager = manager;
 	}
@@ -107,7 +107,7 @@ function getQueryData(){
 	if(maintenanceVal && maintenanceVal!='-1'){
 		data.maintenanceVal = maintenanceVal;
 	}
-	
+	data.page = 1;
 	return data
 }
 function loadData(row){
