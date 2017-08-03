@@ -33,8 +33,8 @@ public class FtpUtil {
 	public FtpUtil() {
 		// this("yh:yh@10.31.81.246:21");
 		// this("file:file@10.25.124.115:21");
-//		this("jfftp:1Qaz#edc@10.25.125.87:21");
-		this("jfftp:1Qaz#edc@192.168.1.200:21");
+		this("jfftp:1Qaz#edc@10.25.125.87:21");
+//		this("jfftp:1Qaz#edc@192.168.1.200:21");
 		
 	}
 

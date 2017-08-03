@@ -28,7 +28,8 @@ public class FTPHelper {
 
 	public FTPHelper() {
 //		this("yh:yh@10.31.81.246:21");
-		this("jfftp:1Qaz#edc@192.168.1.200:21");
+		this("jfftp:1Qaz#edc@10.25.125.87:21");
+//		this("jfftp:1Qaz#edc@192.168.1.200:21");
 	}
 
 	public FTPHelper(String url) {
