@@ -389,7 +389,7 @@ callback: {
  onClick: this.onClick
 },
 };
-zNodes = ${bocIndicatorMenus};
+zNodes = ${bocIndicatorMenus!};
 function addDiyDom(treeId, treeNode) {
 	var spaceWidth = 5;
 	var switchObj = $("#" + treeNode.tId + "_switch"),
