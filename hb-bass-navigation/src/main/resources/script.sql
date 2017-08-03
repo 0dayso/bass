@@ -95,3 +95,18 @@ COMMENT on column st.fpf_irs_cusmtom_report_map.report_id IS '自定义报表配
 COMMENT on column st.fpf_irs_cusmtom_report_map.indicator_menu_id IS '指标菜单id';
 
 COMMENT on column st.fpf_irs_cusmtom_report_map.kpi_code IS '指标编码';
+
+CREATE TABLE "ST"."FPF_REQ"
+ ("REQ_CODE"       VARCHAR(50),
+  "REQ_NAME"       VARCHAR(200),
+  "REQ_CHARGE"     VARCHAR(30),
+  "REQ_CHARGE_ID"  VARCHAR(30)
+ );
+ 
+COMMENT ON "ST"."FPF_REQ"
+ ("REQ_CODE" IS '需求编号',
+  "REQ_NAME" IS '需求名称',
+  "REQ_CHARGE" IS '需求责任人',
+  "REQ_CHARGE_ID" IS '需求责任人ID'
+ );
+
