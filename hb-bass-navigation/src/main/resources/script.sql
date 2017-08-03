@@ -110,3 +110,53 @@ COMMENT ON "ST"."FPF_REQ"
   "REQ_CHARGE_ID" IS '需求责任人ID'
  );
 
+
+drop table st.fpf_report_maintenance;
+CREATE TABLE st.fpf_report_maintenance
+ (
+  id  varchar(32) not null primary key,
+  report_id varchar(32),
+  report_name varchar(100) ,
+  procedure_name varchar(100),
+  developer_name varchar(100),
+  manager  varchar(100) ,
+  level   char(1),
+  online  char(1),
+  maintenance char(1)
+ )
+  DATA CAPTURE NONE  IN "USERSPACE1";
+  
+ALTER TABLE st.fpf_report_maintenance
+  LOCKSIZE ROW
+  APPEND OFF
+  NOT VOLATILE;
+
+ALTER TABLE  st.fpf_report_maintenance
+   ADD  column  expectation_date varchar(30); 
+ALTER TABLE  st.fpf_report_maintenance
+   ADD  column  actual_date varchar(30); 
+ 
+  
+COMMENT on table st.fpf_report_maintenance is '报表维护表';
+
+COMMENT on column st.fpf_report_maintenance.id IS '主键ID';
+
+COMMENT on column st.fpf_report_maintenance.report_id IS '报表id';
+
+COMMENT on column st.fpf_report_maintenance.report_name IS '报表名称';
+
+COMMENT on column st.fpf_report_maintenance.procedure_name IS '后台程序名';
+
+COMMENT on column st.fpf_report_maintenance.developer_name IS '开发人员';
+
+COMMENT on column st.fpf_report_maintenance.manager IS '负责人';
+
+COMMENT on column st.fpf_report_maintenance.level IS '重要级别';
+
+COMMENT on column st.fpf_report_maintenance.online IS '是否云化上线';
+
+COMMENT on column st.fpf_report_maintenance.maintenance IS '是否交维';
+
+COMMENT on column st.fpf_report_maintenance.expectation_date IS '期望数据最晚到达时间';
+
+COMMENT on column st.fpf_report_maintenance.actual_date IS '实际数据到达时间';
