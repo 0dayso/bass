@@ -110,7 +110,7 @@ COMMENT ON "ST"."FPF_REQ"
   "REQ_CHARGE_ID" IS '需求责任人ID'
  );
 
-
+--20170804--
 drop table st.fpf_report_maintenance;
 CREATE TABLE st.fpf_report_maintenance
  (
@@ -160,3 +160,6 @@ COMMENT on column st.fpf_report_maintenance.maintenance IS '是否交维';
 COMMENT on column st.fpf_report_maintenance.expectation_date IS '期望数据最晚到达时间';
 
 COMMENT on column st.fpf_report_maintenance.actual_date IS '实际数据到达时间';
+
+
+--20170807--
