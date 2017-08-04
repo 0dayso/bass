@@ -107,7 +107,6 @@ function getQueryData(){
 	if(maintenanceVal && maintenanceVal!='-1'){
 		data.maintenanceVal = maintenanceVal;
 	}
-	data.page = 1;
 	return data
 }
 function loadData(row){
@@ -254,10 +253,9 @@ $(function(){
 	});
 	
 	$("#query").click(function(){
-		var queryDatas = getQueryData();
-		$('#reportMaintenance').datagrid({
-			queryParams: queryDatas
-		});
+		var queryData = getQueryData();
+		$('#reportMaintenance').datagrid({queryParams:queryData});
+		$('#reportMaintenance').datagrid('load');
 	});
 	$("#reportMaintenance").datagrid({
 		url:mvcPath+'/report/maintenance/list',   
