@@ -29,9 +29,9 @@ ${appName}
 <br/>
 <div class="bodyImg">
 <form action="${mvcPath}/login" method="post">
-	<div style="position:absolute;left:195px;top:128px;"><input type="text" id="name" name="userId" class="text_input" value="<#if userId?? >${userId}</#if>admin"/></div>
+	<div style="position:absolute;left:195px;top:128px;"><input type="text" id="name" name="userId" class="text_input" value="<#if userId?? >${userId}</#if>"/></div>
 	
-	<div style="position:absolute;left:195px;top:195px;"><input type=password id="pass" name="pwd" class="text_input" value="<#if pwd?? >${pwd}</#if>let me pass"/></div>
+	<div style="position:absolute;left:195px;top:195px;"><input type=password id="pass" name="pwd" class="text_input" value="<#if pwd?? >${pwd}</#if>"/></div>
 	
 	<div style="position:absolute;left:195px;top:265px;">
 		<input id="code_input" type=text name="verification"  class="text_input_" /></div>
