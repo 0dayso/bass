@@ -9,7 +9,7 @@
         http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-	<import resource="classpath:conf/spring/mvc-hb-web.xml" />
+	<!--  import resource="classpath:conf/spring/mvc-hb-web.xml" /-->
 	
 	<bean id="dataSource" name="dataSource,defaultDB,null,METADB,WBDB," class="org.springframework.jndi.JndiObjectFactoryBean">
 		<property name="jndiName" value="java:comp/env/jdbc/AiomniDB"></property>

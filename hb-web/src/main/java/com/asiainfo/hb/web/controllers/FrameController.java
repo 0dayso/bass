@@ -1,20 +1,19 @@
 package com.asiainfo.hb.web.controllers;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
+
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -37,8 +36,7 @@ import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMeth
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import com.asiainfo.hb.core.cache.CacheServer;
-import com.asiainfo.hb.core.cache.CacheServerFactory;
+
 import com.asiainfo.hb.core.models.BeanFactory;
 import com.asiainfo.hb.core.models.Configuration;
 import com.asiainfo.hb.core.util.Encryption;
@@ -121,8 +119,6 @@ public class FrameController {
 							return toLoginPage(session, model);
 						}else{
 							String ip = Util.getRemoteAddr(req);
-							CacheServer cache = CacheServerFactory.getInstance().getCache("SSO");
-							cache.put(ip, user.getId());// 改成放用户名
 							session.setAttribute("loginname", user.getId());
 							session.setAttribute("area_id", user.getCityId());
 							session.setAttribute(SessionKeyConstants.USER, user);
@@ -342,13 +338,7 @@ public class FrameController {
 	public void loginCheck(HttpSession session, HttpServletRequest request, HttpServletResponse response, String userId) {
 		LOG.info("userId=" + userId);
 		String ip = Util.getRemoteAddr(request);
-		CacheServer cacheSSO = CacheServerFactory.getInstance().getCache("SSO");
-		Integer loginErrorCount = (Integer)cacheSSO.get("login_error_count"+ip);
-		loginErrorCount=null;
-		LOG.info("loginErrorCount=" + loginErrorCount);
 		User user = userDao.getUserById(userId);
-		CacheServer cache = CacheServerFactory.getInstance().getCache("SSO");
-		cache.put(ip, user.getId());// 改成放用户名
 	}
 	
 }
