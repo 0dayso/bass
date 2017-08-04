@@ -324,8 +324,7 @@ text-align: center;
 							<span class="play7 z3">最新上线</span>
 
 						</div>
-					
-						<#if lastestOnlineReport?exists && lastestOnlineReport.size != 0 >
+						<#if (lastestOnlineReport ? exists) && (lastestOnlineReport ? size) gt 0>
 						<#list lastestOnlineReport as online>
 						    <div class="r1082">
 						    <a href="#"
