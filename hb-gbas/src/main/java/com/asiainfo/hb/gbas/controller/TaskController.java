@@ -38,9 +38,8 @@ public class TaskController {
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("type", req.getParameter("type"));
 		param.put("cycle", req.getParameter("cycle"));
-		param.put("status", req.getParameter("status"));
-		param.put("manager", req.getParameter("manager"));
-		param.put("procName", req.getParameter("procName"));
+		param.put("etl_status", req.getParameter("status"));
+		param.put("gbas_code like", req.getParameter("name"));
 		
 		String page = req.getParameter("page");
 		String rows = req.getParameter("rows");
@@ -57,8 +56,9 @@ public class TaskController {
 	}
 	
 	@RequestMapping("/execCondition")
-	public String execCondition(Model model){
-		model.addAttribute("nodeData", JsonHelper.getInstance().write(mTaskDao.getNodeData()));
+	public String execCondition(HttpServletRequest req, Model model){
+		String gbasCode = req.getParameter("gbasCode");
+		model.addAttribute("nodeData", JsonHelper.getInstance().write(mTaskDao.getNodeData(gbasCode)));
 		return "ftl/task/execCondition";
 	}
 

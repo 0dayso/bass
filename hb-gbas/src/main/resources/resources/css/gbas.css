@@ -1,3 +1,15 @@
+html,body,ul {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-family: "MicrosoftYaHei", "Microsoft YaHei";
+	font-weight: 400;
+	font-style: normal;
+	font-size: 12px;
+}
+
 li{
 	list-style: none;
 	height: 20px;
@@ -8,6 +20,11 @@ a {
 	cursor: pointer;
 	text-decoration: none;
 	color: #999999;
+}
+
+.wrap{
+	width: 98%;
+	padding: 1%;
 }
 
 .inp-lab {
@@ -36,4 +53,40 @@ a {
 
 .mar-b15{
 	margin-bottom: 15px;
+}
+
+.chart-box-title{
+	height:35px;
+	line-height: 35px;
+	margin-top: 1%;
+	background-color: #F4F4F4;
+	border: 1px solid #ccc;
+	border-bottom :none;
+	width: 98%;
+	text-align: center;
+	font-size: 16px;
+	color: #666666;
+	border-radius: 3px 3px 0 0;
+}
+
+.chart-container{
+	height: 350px;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	width: 98%;
+	border-radius: 0 0 3px 3px;
+}
+
+.qry-btn{
+	padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 3px;
+    color: #fff;
+    background-color: #5bc0de;
+    border: 1px solid #46b8da;
+}
+
+.qry-btn:hover {
+    background-color: #31b0d5;
+    border-color: #269abc
 }

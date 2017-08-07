@@ -48,7 +48,7 @@ function addTab(title, url){
 					<ul style="padding: 0 10px;">
 						<li><a href='#' onclick="addTab('任务运行概况', '${mvcPath}/task/index')"><span>任务运行概况</span></a></li>
 						<li><a href='#' ><span>程序运行分析</span></a></li>
-						<li><a href='#' ><span>指标波动性展示</span></a></li>
+						<li><a href='#' onclick="addTab('指标波动性展示', '${mvcPath}/analyse/zbFluctuate')"><span>指标波动性展示</span></a></li>
 						<li><a href='#' ><span>平台健康度监控</span></a></li>
 					</ul>
 				</div>

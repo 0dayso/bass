@@ -1,10 +1,14 @@
 package com.asiainfo.hb.gbas.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
+
 import com.asiainfo.hb.web.models.CommonDao;
 
 @Repository
@@ -22,6 +26,7 @@ public class ZbDao extends CommonDao{
 		this.jdbcTemplate.update(sql, new Object[]{zbDef.getZbCode(), zbDef.getZbName(), zbDef.getBoiCode(), zbDef.getZbType(),zbDef.getZbDef(),
 				zbDef.getProcDepend(), zbDef.getGbasDepend(), zbDef.getStatus(), zbDef.getCycle(), zbDef.getRemark(), zbDef.getCreater(),
 				zbDef.getDeveloper(), zbDef.getManager(), zbDef.getPriority(), zbDef.getExpectEndDay(), zbDef.getExpectEndTime()});
+		insertRelation(zbDef.getZbCode(), zbDef.getGbasDepend());
 	}
 	
 	public void updateZb(ZbDef zbDef){
@@ -33,6 +38,22 @@ public class ZbDao extends CommonDao{
 		this.jdbcTemplate.update(sql, new Object[]{zbDef.getZbName(), zbDef.getZbDef(), zbDef.getZbType(), zbDef.getProcDepend(),zbDef.getGbasDepend(),
 				zbDef.getStatus(), zbDef.getRemark(), zbDef.getDeveloper(), zbDef.getManager(), zbDef.getPriority(),
 				zbDef.getExpectEndDay(), zbDef.getExpectEndTime(), zbDef.getZbCode()});
+		insertRelation(zbDef.getZbCode(), zbDef.getGbasDepend());
+	}
+	
+	private void insertRelation(String zbCode, String gbasDepend){
+		String[] codeArr = gbasDepend.split(";");
+		List<String> sqlList = new ArrayList<String>();
+		for(String gbasCode: codeArr){
+			if(!StringUtils.isEmpty(gbasCode)){
+				sqlList.add("delete from gbas.code_relation where code='" + zbCode + "' and depend_code='" + gbasCode + "'");
+				sqlList.add("insert into gbas.code_relation (code, depend_code) values('" + zbCode + "','" + gbasCode +"')");
+			}
+		}
+		if(sqlList.size() != 0){
+			this.jdbcTemplate.batchUpdate(sqlList.toArray(new String[sqlList.size()]));
+		}
+		
 	}
 	
 	public void deleteZb(String zbCode){
