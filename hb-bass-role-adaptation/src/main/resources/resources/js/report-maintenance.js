@@ -1,4 +1,44 @@
 var mvcPath = $("#mvcPath").val();
+function ww4(date){  
+    var y = date.getFullYear();  
+    var m = date.getMonth()+1;  
+    var d = date.getDate();  
+    var h = date.getHours();  
+    return  y+'-'+(m<10?('0'+m):m)+'-'+(d<10?('0'+d):d)+' '+(h<10?('0'+h):h);  
+      
+}  
+function w4(s){  
+	if (!s) return new Date();  
+    var y = s.substring(0,4);  
+    var m =s.substring(5,7);  
+    var d = s.substring(8,10);  
+    var h = s.substring(11,14);  
+    var min = s.substring(15,17);  
+    var sec = s.substring(18,20);  
+    if (!isNaN(y) && !isNaN(m) && !isNaN(d) && !isNaN(h) && !isNaN(min) && !isNaN(sec)){  
+        return new Date(y,m-1,d,h,min,sec);  
+    } else {  
+        return new Date();  
+    }   
+}
+var myview = $.extend({}, $.fn.datagrid.defaults.view, {
+	onAfterRender: function(target) {
+		$.fn.datagrid.defaults.view.onAfterRender.call(this, target);
+		var opts = $(target).datagrid('options');
+		var vc = $(target).datagrid('getPanel').children('div.datagrid-view');
+		vc.children('div.datagrid-empty').remove();
+		if(!$(target).datagrid('getRows').length) {
+			var d = $('<div class="datagrid-empty"></div>').html(opts.emptyMsg || 'no records').appendTo(vc);
+			d.css({
+				position: 'absolute',
+				left: 0,
+				top: 50,
+				width: '100%',
+				textAlign: 'center'
+			});
+		}
+	}
+});
 function check(){
 	if($("#reportId").textbox('getText').length==0){
 		$.messager.alert('报表维护信息',"您必须填写报表ID",'error');
@@ -43,7 +83,7 @@ function check(){
 		return false;
 	}
 	
-	if($("#expectationDate").datebox('getValue').length==0){
+	if($("#expectationDate").datetimebox('getValue').length==0){
 		$.messager.alert('报表维护信息',"您必须填写期望日期",'error');
 		return false;
 	}
@@ -119,7 +159,7 @@ function loadData(row){
 	$('#level').combobox('setValue',row.levelVal);
 	$('#online').combobox('setValue',row.onlineVal);
 	$('#maintenance').combobox('setValue',row.maintenanceVal);
-	$('#expectationDate').datebox('setValue', row.expectationDate);
+	$('#expectationDate').datetimebox('setValue', row.expectationDate);
 }
 function clean(){
 	$("#id").val('');
@@ -131,10 +171,18 @@ function clean(){
 	$('#level').combobox('setValue','0');
 	$('#online').combobox('setValue','0');
 	$('#maintenance').combobox('setValue','0');
-	$('#expectationDate').datebox('setValue', '2017-08-04');
+	setExpectationDate();
+}
+function setExpectationDate(){
+	var d = new Date();
+	var y = d.getFullYear();
+    var m = d.getMonth()+1;
+    var day = d.getDay();
+    var h = d.getHours();
+	$('#expectationDate').datetimebox('setValue', y+"-"+m+"-"+d+" "+h);
 }
 $(function(){	
-	$('#expectationDate').datebox('setValue', '2017-08-04');
+	setExpectationDate();
 	$('#level').combobox({
 		data: [{
 				"id": "0",
@@ -260,6 +308,8 @@ $(function(){
 	$("#reportMaintenance").datagrid({
 		url:mvcPath+'/report/maintenance/list',   
 		method:'post',
+		view: myview,
+		emptyMsg: '<span style="color:red;font-size:16px;">没有相关记录!<span>',
 	    columns:[[    
 	    	    {field:'id',title:'ID',hidden:true},
 	        {field:'reportId',title:'报表ID',width:50},    
@@ -279,17 +329,6 @@ $(function(){
 	    fitColumns: true,
 	    singleSelect:true,
 	    pagination:true,
-	    onLoadSuccess: function (data) {
-            if (data.total == 0) {
-                //添加一个新数据行，第一列的值为你需要的提示信息，然后将其他列合并到第一列来，注意修改colspan参数为你columns配置的总列数
-                $(this).datagrid('appendRow', { reportId: '<div style="text-align:center;color:red">没有相关记录！</div>' }).datagrid('mergeCells', { index: 1, field: 'reportId', colspan: 14 })
-                //隐藏分页导航条，这个需要熟悉datagrid的html结构，直接用jquery操作DOM对象，easyui datagrid没有提供相关方法隐藏导航条
-                $(this).closest('div.datagrid-wrap').find('div.datagrid-pager').hide();
-            }else{
-            	//如果通过调用reload方法重新加载数据有数据时显示出分页导航容器
-            	$(this).closest('div.datagrid-wrap').find('div.datagrid-pager').show();
-            }
-        },
 	    toolbar:[{
 			text:'新建',
 			iconCls:'icon-add',

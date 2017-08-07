@@ -52,7 +52,7 @@
 		</table>
 	</div>
 	<div>
-		<table id="reportMaintenance"></table>
+		<table id="reportMaintenance" style="height:360px;"></table>
 	</div>
  	<div id="addReportWind" class="easyui-dialog" style="width:600px;height:400px">
  			<input type="hidden" id="mvcPath" name="mvcPath" value="${mvcPath}">
@@ -85,15 +85,15 @@
 					</tr>
 					<tr>
 						<td class="width=250px;text-align:right;"><label for="online">是否云化上线: </label></td>
-						<td><input class="easyui-combobox" name="online" id="online" style="width:100px"><td>
+						<td><input class="easyui-combobox" name="online" id="online" style="width:200px"><td>
 					</tr>
 					<tr>
 						<td class="width=250px;text-align:right;"><label for="maintenance">是否交维: </label></td>
-						<td><input class="easyui-combobox" name="maintenance" id="maintenance"><td>
+						<td><input class="easyui-combobox" name="maintenance" id="maintenance" style="width:200px"><td>
 					</tr>
 					<tr>
 						<td class="width=250px;text-align:right;"><label for="expectationDate">期望时间: </label></td>
-						<td><input class="easyui-datebox" name="expectationDate" id="expectationDate" style="width:100px"><td>
+						<td><input class="easyui-datetimebox" data-options="formatter:ww4,parser:w4" name="expectationDate" id="expectationDate" style="width:200px"><td>
 					</tr>
 				</table>
 			</form>
