@@ -107,6 +107,7 @@ function getSelectRow(){
 	var row = $("#reportMaintenance").datagrid('getSelected');
 	if(!row){
 		$.messager.alert('报表维护信息',"您必须选择一条数据",'error');
+		return;
 	}
 	return row;
 }
@@ -179,7 +180,7 @@ function setExpectationDate(){
     var m = d.getMonth()+1;
     var day = d.getDay();
     var h = d.getHours();
-	$('#expectationDate').datetimebox('setValue', y+"-"+m+"-"+d+" "+h);
+	$('#expectationDate').datetimebox('setValue', y+"-"+m+"-"+d+" "+h +":00:00");
 }
 $(function(){	
 	setExpectationDate();
@@ -309,8 +310,11 @@ $(function(){
 		url:mvcPath+'/report/maintenance/list',   
 		method:'post',
 		view: myview,
+		checkbox	:true,
+		singleSelect:true,
 		emptyMsg: '<span style="color:red;font-size:16px;">没有相关记录!<span>',
 	    columns:[[    
+	    	    {field:'ck',checkbox:true},
 	    	    {field:'id',title:'ID',hidden:true},
 	        {field:'reportId',title:'报表ID',width:50},    
 	        {field:'reportName',title:'报表名称',width:100},    
@@ -334,6 +338,7 @@ $(function(){
 			iconCls:'icon-add',
 			handler:function(){
 				clean();
+				$('#addReportWind').dialog({title:'新增报表维护信息'});
 				$('#addReportWind').dialog('open');
 				$("#addReportWind").dialog("move",{top:$(document).scrollTop() + ($(window).height()-400) * 0.3});
 			}

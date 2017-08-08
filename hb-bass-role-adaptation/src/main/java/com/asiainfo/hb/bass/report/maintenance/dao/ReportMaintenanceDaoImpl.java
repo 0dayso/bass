@@ -108,7 +108,7 @@ public class ReportMaintenanceDaoImpl implements ReportMaintenanceDao {
 	@Override
 	public void update(ReportMaintenance maintenance) {
 		String sql = "update fpf_report_maintenance  set REPORT_ID = :reportId, REPORT_NAME = :reportName,procedure_name = :procedureName,"
-				+ " DEVELOPER_NAME = :developerName ,MANAGER = :manager,LEVEL = :level,ONLINE = :online, MAINTENANCE = :maintenance "
+				+ " DEVELOPER_NAME = :developerName ,MANAGER = :manager,LEVEL = :level,ONLINE = :online, MAINTENANCE = :maintenance,expectation_date = :expectationDate "
 				+ " where id = :id";
 		jdbcTemplateN.update(sql, objectToMap(maintenance));
 	}
@@ -123,7 +123,8 @@ public class ReportMaintenanceDaoImpl implements ReportMaintenanceDao {
 				+ "  expectation_date as expectationDate,"
 				+ "  actual_date actualDate,"
 				+ "	 decode(ONLINE,'0','未上线','1','上线','2','下线','其他状态') online," + "	 ONLINE onlineVal, "
-				+ "	 decode(MAINTENANCE,'0','未交维','1','已交维','其他状态') maintenance," + "	 MAINTENANCE maintenanceVal "
+				+ "	 decode(MAINTENANCE,'0','未交维','1','已交维','其他状态') maintenance," + "	 MAINTENANCE maintenanceVal, "
+				+ " expectation_date expectationDate"
 				+ "    from   fpf_report_maintenance where 1 = 1 ";
 	
 		Map<String, String> map = objectToMap(maintenance);
@@ -159,9 +160,6 @@ public class ReportMaintenanceDaoImpl implements ReportMaintenanceDao {
 			sql += " and maintenance like :maintenance ";
 			map.put("maintenance", "%" + map.get("maintenance") + "%");
 		}
-		
-		
-		
 
 		String totalPage = "select count(*) from ( " + sql + " ) ";
 		String totalRows = sqlPageHelper.getLimitSQL(sql, rows, (page - 1) * rows, "id");
