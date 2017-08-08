@@ -32,6 +32,7 @@ function getSelectRow(){
 	var row = $("#customReports").datagrid('getSelected');
 	if(!row){
 		$.messager.alert('自定义报表',"您必须选择一条数据",'error');
+		return;
 	}
 	return row;
 }
@@ -67,7 +68,10 @@ $(function(){
 	$("#customReports").datagrid({
 		url:mvcPath+'/custom/reports/list',   
 		method:'post',
+		checkbox	:true,
+		singleSelect:true,
 	    columns:[[    
+	      	{field:'ck',checkbox:true}, 
 	        {field:'reportId',title:'自定义报表ID',width:100},    
 	        {field:'reportName',title:'自定义报表名称',width:200},    
 	        {field:'reportDesc',title:'自定义报表描述',width:400,align:'right'}    
@@ -75,6 +79,7 @@ $(function(){
 	    fitColumns: true,
 	    singleSelect:true,
 	    pagination:true,
+	    selectOnCheck:true,
 	    onLoadSuccess: function (data) {
             if (data.total == 0) {
                 //添加一个新数据行，第一列的值为你需要的提示信息，然后将其他列合并到第一列来，注意修改colspan参数为你columns配置的总列数

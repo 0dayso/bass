@@ -198,7 +198,7 @@ $(function(){
 				"text": "高"
 			}
 		],
-		width: 180,
+		width: 200,
 		valueField: 'id',
 		textField: 'text'
 	});
@@ -220,7 +220,7 @@ $(function(){
 				"text": "高"
 			}
 		],
-		width: 180,
+		width: 132,
 		valueField: 'id',
 		textField: 'text'
 	});
@@ -239,7 +239,7 @@ $(function(){
 				"text": "下线"
 			}
 		],
-		width: 180,
+		width: 200,
 		valueField: 'id',
 		textField: 'text'
 	});
@@ -261,7 +261,7 @@ $(function(){
 				"text": "下线"
 			}
 		],
-		width: 180,
+		width: 132,
 		valueField: 'id',
 		textField: 'text'
 	});
@@ -277,7 +277,7 @@ $(function(){
 				"text": "已交维"
 			}
 		],
-		width: 100,
+		width: 200,
 		valueField: 'id',
 		textField: 'text'
 	});
@@ -295,7 +295,7 @@ $(function(){
 				"text": "已交维"
 			}
 		],
-		width: 180,
+		width: 132,
 		valueField: 'id',
 		textField: 'text'
 	});
@@ -377,8 +377,8 @@ $(function(){
 	});
 	
 	$('#addReportWind').dialog({
-		width: 600,
-		height: 400,
+		width: 400,
+		height: 450,
 		modal: true,
 		closed: true,
 		closable: true,

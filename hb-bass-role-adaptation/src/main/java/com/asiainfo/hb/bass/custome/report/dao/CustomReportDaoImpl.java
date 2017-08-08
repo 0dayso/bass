@@ -139,6 +139,7 @@ public class CustomReportDaoImpl implements CustomReportDao {
 			sql = sql.substring(0, sql.length() - 1);
 			sql += ")";
 		}
+		sql += " order by name";
 
 		LOG.info("sql---->" + sql + ",args=" + Arrays.toString(args));
 
@@ -147,7 +148,7 @@ public class CustomReportDaoImpl implements CustomReportDao {
 
 	@Override
 	public List<Map<String, Object>> getIndicatorMenus() {
-		return jdbcTemplate.queryForList("select t.iD ,t.name from BOC_INDICATOR_MENU t");
+		return jdbcTemplate.queryForList("select t.iD ,t.name from BOC_INDICATOR_MENU t order by name with ur");
 	}
 
 	@Override
@@ -182,7 +183,7 @@ public class CustomReportDaoImpl implements CustomReportDao {
 
 	@Override
 	public List<Map<String, Object>> getCityList() {
-		String sql = "select city_id id,city_name name from st.DIM_PUB_CITY t order by AREA_CODE";
+		String sql = "select city_id id,city_name name from st.DIM_PUB_CITY t order by AREA_CODE with ur";
 		return jdbcTemplate.queryForList(sql);
 	}
 
