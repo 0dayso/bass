@@ -376,7 +376,7 @@ function queryRule(){
 				</div>
 				<div class="mar-b15">
 					<div class="fl" style="height: 32px;line-height: 32px; width:42%;"><span style="color:red;">*</span>依赖的gbas指标,规则,接口:</div>
-					<input id="gbasDepend" name="gbasDepend" class="easyui-textbox form-inp" style="height:32px; width:57%;">
+					<input id="gbasDepend" name="gbasDepend" class="easyui-textbox form-inp" data-options="prompt:'多个依赖用;分割'" style="height:32px; width:57%;">
 				</div>
 				<div class="mar-b15">
 					<div class="inp-lab"><span style="color:red;">*</span>规则sql:</div>
