@@ -205,11 +205,7 @@ public class UserGroupMapDao extends BaseDao{
 				_sql.append(" ( ?, ?) ");
 				list.add(userId[len]);
 				list.add(groupId);
-				
-				
-				 	
-				 	 
-				 Object[] obj=new Object[]{userId,groupId};
+				 Object[] obj=list.toArray();
 				 jdbcTemplate.update(_sql.toString(), obj);
 				 flag = true;
 			} catch (Exception e) {
