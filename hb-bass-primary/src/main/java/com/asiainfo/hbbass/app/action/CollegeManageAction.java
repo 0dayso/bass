@@ -440,9 +440,11 @@ public class CollegeManageAction extends Action {
 							+ "',current timestamp,STATE,EFF_DATE,"
 							+ " AREA_ID,COLLEGE_NAME, COLLEGE_ID, WEB_ADD, COLLEGE_TYPE, COLLEGE_ADD,"
 							+ " STUDENTS_NUM, NEW_STUDENTS, MANAGER,MANAGER_NBR,SHORT_NUMBER, ";
-
+					
 					String sql = "update COLLEGE_INFO_PT set STATE_DATE=current timestamp, ";
-
+					
+					String dosql = null;
+					
 					if ("INSERT".equals(opCodeLs[i])) {
 						if ("IN_ADUIT_1".equals(statusCodeLs[i])) {
 							sql += " STATUS='IN_ADUIT_2' ";
@@ -460,6 +462,14 @@ public class CollegeManageAction extends Action {
 							sql += " STATUS='SUC' ";
 							auditLevel="生效";
 							insertLogSql += " 'INSERT', 'IN_ADUIT_3' ";
+							dosql =" insert into nwh.college_info_base "
+									+" (COLLEGE_ID, COLLEGE_NAME, WEB_ADD, COLLEGE_TYPE, COLLEGE_ADD, "
+								    +" SHORT_NUMBER, AREA_ID, MANAGER, STUDENTS_NUM, NEW_STUDENTS,  "
+								    +" CHANNEL_CODE, EFF_DATE, STATE, STATE_DATE, MANAGER_NBR )"
+									+" select distinct  COLLEGE_ID, COLLEGE_NAME, WEB_ADD, COLLEGE_TYPE, COLLEGE_ADD,"
+								    +" SHORT_NUMBER, AREA_ID, MANAGER, STUDENTS_NUM, NEW_STUDENTS,"
+								    +" CHANNEL_CODE, STATE_DATE, 1, STATE_DATE, MANAGER_NBR "
+									+" from COLLEGE_INFO_PT where COLLEGE_ID='"+opCollegeCodeLs[i].toUpperCase()+"' and state=1 and STATUS='SUC'";
 						}
 					}
 					if ("DELETE".equals(opCodeLs[i])) {
@@ -479,6 +489,7 @@ public class CollegeManageAction extends Action {
 							sql += " STATUS='FAL' ";
 							auditLevel="删除完成";
 							insertLogSql += " 'DELETE', 'OUT_ADUIT_3' ";
+							dosql = " update nwh.college_info_base set state=0 where COLLEGE_ID='"+opCollegeCodeLs[i].toUpperCase()+"'";
 						}
 					}
 					if ("UPDATE".equals(opCodeLs[i])) {
@@ -511,10 +522,16 @@ public class CollegeManageAction extends Action {
 					conn = ConnectionManage.getInstance().getDWConnection();
 					ps = conn.prepareStatement(insertLogSql);
 					ps.execute();
-
+					
 					log.info("sql=" + sql);
 					ps = conn.prepareStatement(sql);
 					isSuc = ps.executeUpdate();
+					
+					if(dosql!=null){
+						log.info("audisql=" + dosql);
+						ps = conn.prepareStatement(dosql);
+						ps.execute();
+					}
 					
 					
 					
@@ -775,10 +792,10 @@ public class CollegeManageAction extends Action {
 				conn.close();
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			try {
 				conn.rollback();
 				log.error(e);
-				e.printStackTrace();
 			} catch (SQLException ex) {
 				ex.printStackTrace();
 			}
