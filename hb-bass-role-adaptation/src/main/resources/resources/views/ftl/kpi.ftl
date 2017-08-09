@@ -168,6 +168,49 @@ background:#127386;
 option{
 text-align: center;
 }
+
+
+#name{
+  margin-left: 45px;
+}
+.alert-down{
+ width: 451px;
+ margin-left: -15px;
+ background: rgb(232,242,254);
+ height: 40px;
+}
+.alert-button{
+  margin-top: 10px;
+}
+.alert-suer{
+margin-left: 300px;
+}
+.mask {
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #000;
+	opacity: 0.5;
+	filter: Alpha(opacity=50);
+	-moz-opacity: 0.5;
+	z-index: 10;
+}
+.alert {
+	display: none;
+	position: fixed;
+	top: 60%;
+	left: 58%;
+	width: 453px;
+	height: auto;
+	margin-top: -231px;
+	margin-left: -330px;
+	background-color: #fff;
+	z-index: 20;
+}
+
 </style>
 </head>
 <body>
@@ -356,6 +399,18 @@ text-align: center;
 </tr> 
 </table> 
 </div> 
+
+<!--蒙版      弹窗-->
+<div class="mask"></div>
+<div class="alert">
+    <span id="name">单次曝光成本(元)</span>：
+    <input type="text" id="updvalue" style="width:65%"> 
+    <div class="alert-down">
+      <button class="alert-sure alert-button">确定</button>
+      <button class="alert-button alert-return">取消</button>
+    </div>
+</div>
+
 </body>
 <script type="text/javascript">
 var timeType;
@@ -553,15 +608,15 @@ function createKPiRow(queryDB){
            var dailyAccumulationComparedLastYear=appendArrow(d.dailyAccumulationComparedLastYear);
            if(dimCode=="PROV_ID"){
                  if(d.dimCode=="CITY_ID"){
-                  kpiHtml+="<tr class='tableTr "+d.menuId+"' style='display:none;' menuId='"+d.menuId+"' type='"+d.dimCode+"' ><td class='play1' style='text-align:left;padding-left:30px;cursor: pointer;'><span ondblclick='controlShowKpi(\""+d.menuId+"\",\""+d.dimCode+"\",\""+d.dimVal+"\",this)'>"+(d.regionName||"--")+"</span><span class='icon-export'  id='toolTip' data-toggle='tooltip' data-placement='right' title='"+(d.menuName||d.regionName||"--")+"' style='float:right;color: #3aa0da;display: inline-block' ></span></td>";
+                  kpiHtml+="<tr class='tableTr "+d.menuId+"' style='display:none;' menuId='"+d.menuId+"' type='"+d.dimCode+"' ><td class='play1' style='text-align:left;padding-left:30px;cursor: pointer;'><span ondblclick='controlShowKpi(\""+d.menuId+"\",\""+d.dimCode+"\",\""+d.dimVal+"\",this)'>"+(d.regionName||"--")+"</span><span class='icon-export'      title='"+d.description+"' style='float:right;color: #3aa0da;display: inline-block' onclick='if(checkAuth()){showEdit(\""+d.menuId+"\")}'></span></td>";
                   }else{
-                  kpiHtml+="<tr class='tableTr'  menuId='"+d.menuId+"' type='"+d.dimCode+"' ><td class='play1' style='text-align:left;padding-left:20px;cursor: pointer;'><span ondblclick='controlShowKpi(\""+d.menuId+"\",\""+d.dimCode+"\",\""+d.dimVal+"\",this)'>"+(d.regionName||"--")+"</span><span class='icon-export'  id='toolTip' data-toggle='tooltip' data-placement='right' title='"+(d.menuName||d.regionName||"--")+"' style='float:right;color: #3aa0da;display: inline-block'></span></td>";
+                  kpiHtml+="<tr class='tableTr'  menuId='"+d.menuId+"' type='"+d.dimCode+"' ><td class='play1' style='text-align:left;padding-left:20px;cursor: pointer;'><span ondblclick='controlShowKpi(\""+d.menuId+"\",\""+d.dimCode+"\",\""+d.dimVal+"\",this)'>"+(d.regionName||"--")+"</span><span class='icon-export'      title='"+d.description+"' style='float:right;color: #3aa0da;display: inline-block' onclick='if(checkAuth()){showEdit(\""+d.menuId+"\")}'></span></td>";
                   }
              }else if(dimCode=="CITY_ID"){
                 if(d.dimCode=="COUNTY_ID"){
-                 kpiHtml+="<tr class='tableTr "+d.menuId+"_"+dimValue+" "+d.menuId+"_"+dimCode+"'  style='display:none;'  menuId='"+d.menuId+"' type='"+d.dimCode+"' ><td class='play1' style='text-align:left;padding-left:30px;cursor: pointer;'><span ondblclick='controlShowKpi(\""+d.menuId+"\",\""+d.dimCode+"\",\""+d.dimVal+"\",this)'>"+(d.regionName||"--")+"</span><span class='icon-export'  id='toolTip' data-toggle='tooltip' data-placement='right' title='"+(d.menuName||d.regionName||"--")+"' style='float:right;color: #3aa0da;display: inline-block' ></span></td>";
+                 kpiHtml+="<tr class='tableTr "+d.menuId+"_"+dimValue+" "+d.menuId+"_"+dimCode+"'  style='display:none;'  menuId='"+d.menuId+"' type='"+d.dimCode+"' ><td class='play1' style='text-align:left;padding-left:30px;cursor: pointer;'><span ondblclick='controlShowKpi(\""+d.menuId+"\",\""+d.dimCode+"\",\""+d.dimVal+"\",this)'>"+(d.regionName||"--")+"</span><span class='icon-export'      title='"+d.description+"' style='float:right;color: #3aa0da;display: inline-block' onclick='if(checkAuth()){showEdit(\""+d.menuId+"\")}'></span></td>";
                }else {
-                 kpiHtml+="<tr class='tableTr "+d.menuId+"'  menuId='"+d.menuId+"' type='"+d.dimCode+"' ><td class='play1' style='text-align:left;padding-left:20px;cursor: pointer;'><span ondblclick='controlShowKpi(\""+d.menuId+"\",\""+d.dimCode+"\",\""+d.dimVal+"\",this)'>"+(d.regionName||"--")+"</span><span class='icon-export'  id='toolTip' data-toggle='tooltip' data-placement='right' title='"+(d.menuName||d.regionName||"--")+"' style='float:right;color: #3aa0da;display: inline-block' ></span></td>";
+                 kpiHtml+="<tr class='tableTr "+d.menuId+"'  menuId='"+d.menuId+"' type='"+d.dimCode+"' ><td class='play1' style='text-align:left;padding-left:20px;cursor: pointer;'><span ondblclick='controlShowKpi(\""+d.menuId+"\",\""+d.dimCode+"\",\""+d.dimVal+"\",this)'>"+(d.regionName||"--")+"</span><span class='icon-export'      title='"+d.description+"' style='float:right;color: #3aa0da;display: inline-block' onclick='if(checkAuth()){showEdit(\""+d.menuId+"\")}'></span></td>";
                 }
              }
 	        kpiHtml+="<td class='play1'>"+(d.dailyCurrent||"--")+"</td>";
@@ -578,15 +633,15 @@ function createKPiRow(queryDB){
            var monthlyAccumulationComparedLastYear=appendArrow(d.monthlyAccumulationComparedLastYear);
             if(dimCode=="PROV_ID"){
                  if(d.dimCode=="CITY_ID"){
-                  kpiHtml+="<tr class='tableTr "+menuId+"' style='display:none;' menuId='2110000'  menuId='2110000' type='"+d.dimCode+"' ><td class='play1' style='text-align:left;padding-left:30px;cursor: pointer;'><span ondblclick='controlShowKpi(\""+d.menuId+"\",\""+d.dimCode+"\",\""+d.dimVal+"\",this)'>"+(d.regionName||"--")+"</span><span class='icon-export'  id='toolTip' data-toggle='tooltip' data-placement='right' title='"+(d.menuName||d.regionName||"--")+"' style='float:right;color: #3aa0da;display: inline-block' ></span></td>";
+                  kpiHtml+="<tr class='tableTr "+menuId+"' style='display:none;' menuId='2110000'  menuId='2110000' type='"+d.dimCode+"' ><td class='play1' style='text-align:left;padding-left:30px;cursor: pointer;'><span ondblclick='controlShowKpi(\""+d.menuId+"\",\""+d.dimCode+"\",\""+d.dimVal+"\",this)'>"+(d.regionName||"--")+"</span><span class='icon-export'     title='"+(d.menuName||d.regionName||"--")+"' style='float:right;color: #3aa0da;display: inline-block' ></span></td>";
                   }else{
-                  kpiHtml+="<tr class='tableTr'  menuId='2110000' type='"+d.dimCode+"' ><td class='play1' style='text-align:left;padding-left:20px;cursor: pointer;'><span ondblclick='controlShowKpi(\""+d.menuId+"\",\""+d.dimCode+"\",\""+d.dimVal+"\",this)'>"+(d.regionName||"--")+"</span><span class='icon-export'  id='toolTip' data-toggle='tooltip' data-placement='right' title='"+(d.menuName||d.regionName||"--")+"' style='float:right;color: #3aa0da;display: inline-block'></span></td>";
+                  kpiHtml+="<tr class='tableTr'  menuId='2110000' type='"+d.dimCode+"' ><td class='play1' style='text-align:left;padding-left:20px;cursor: pointer;'><span ondblclick='controlShowKpi(\""+d.menuId+"\",\""+d.dimCode+"\",\""+d.dimVal+"\",this)'>"+(d.regionName||"--")+"</span><span class='icon-export'     title='"+(d.menuName||d.regionName||"--")+"' style='float:right;color: #3aa0da;display: inline-block'></span></td>";
                   }
              }else if(dimCode=="CITY_ID"){
                 if(d.dimCode=="COUNTY_ID"){
-                 kpiHtml+="<tr class='tableTr "+d.menuId+"_"+dimValue+" "+d.menuId+"_"+dimCode+"'  style='display:none;' menuId='"+d.menuId+"'  type='"+d.dimCode+"'><td class='play1' style='text-align:left;padding-left:30px;cursor: pointer;'><span ondblclick='controlShowKpi(\""+d.menuId+"\",\""+d.dimCode+"\",\""+d.dimVal+"\",this)'>"+(d.regionName||"--")+"</span><span class='icon-export'  id='toolTip' data-toggle='tooltip' data-placement='right' title='"+(d.menuName||d.regionName||"--")+"' style='float:right;color: #3aa0da;display: inline-block' ></span></td>";
+                 kpiHtml+="<tr class='tableTr "+d.menuId+"_"+dimValue+" "+d.menuId+"_"+dimCode+"'  style='display:none;' menuId='"+d.menuId+"'  type='"+d.dimCode+"'><td class='play1' style='text-align:left;padding-left:30px;cursor: pointer;'><span ondblclick='controlShowKpi(\""+d.menuId+"\",\""+d.dimCode+"\",\""+d.dimVal+"\",this)'>"+(d.regionName||"--")+"</span><span class='icon-export'      title='"+(d.menuName||d.regionName||"--")+"' style='float:right;color: #3aa0da;display: inline-block' ></span></td>";
                }else {
-                 kpiHtml+="<tr class='tableTr "+d.menuId+"'  menuId='"+d.menuId+"'   type='"+d.dimCode+"' ><td class='play1' style='text-align:left;padding-left:20px;cursor: pointer;'><span ondblclick='controlShowKpi(\""+d.menuId+"\",\""+d.dimCode+"\",\""+d.dimVal+"\",this)'>"+(d.regionName||"--")+"</span><span class='icon-export'  id='toolTip' data-toggle='tooltip' data-placement='right' title='"+(d.menuName||d.regionName||"--")+"' style='float:right;color: #3aa0da;display: inline-block' ></span></td>";
+                 kpiHtml+="<tr class='tableTr "+d.menuId+"'  menuId='"+d.menuId+"'   type='"+d.dimCode+"' ><td class='play1' style='text-align:left;padding-left:20px;cursor: pointer;'><span ondblclick='controlShowKpi(\""+d.menuId+"\",\""+d.dimCode+"\",\""+d.dimVal+"\",this)'>"+(d.regionName||"--")+"</span><span class='icon-export'      title='"+(d.menuName||d.regionName||"--")+"' style='float:right;color: #3aa0da;display: inline-block' ></span></td>";
                 }
              }
 			kpiHtml+="<td class='play1'>"+(d.monthlyCurrent||"--")+"</td>";
@@ -717,7 +772,7 @@ function appendNextLevelData(menuid,dimCode,dimValue,th){
 	           var dailyAccumulationComparedLastMonth=appendArrow(d.dailyAccumulationComparedLastMonth);
 	           var dailyAccumulationComparedLastYear=appendArrow(d.dailyAccumulationComparedLastYear);
 	          if(d.dimCode=="COUNTY_ID"){
-	            childHtml+="<tr class='tableTr "+menuid+"_"+dimValue+" "+menuid+"_"+dimCode+"' menuId='"+menuid+"'  type='"+d.dimCode+"' ><td class='play1' style='text-align:left;padding-left:40px;cursor: pointer;' ><span ondblclick='controlShowKpi(\""+menuid+"\",\""+d.dimCode+"\",\""+d.dimVal+"\",this)'>"+(d.regionName||"--")+"</span><span class='icon-export'  id='toolTip' data-toggle='tooltip' data-placement='right' title='"+(d.menuName||d.regionName||"--")+"' style='float:right;color: #3aa0da;display: inline-block' ></span></td>";
+	            childHtml+="<tr class='tableTr "+menuid+"_"+dimValue+" "+menuid+"_"+dimCode+"' menuId='"+menuid+"'  type='"+d.dimCode+"' ><td class='play1' style='text-align:left;padding-left:40px;cursor: pointer;' ><span ondblclick='controlShowKpi(\""+menuid+"\",\""+d.dimCode+"\",\""+d.dimVal+"\",this)'>"+(d.regionName||"--")+"</span><span class='icon-export'      title='"+(d.menuName||d.regionName||"--")+"' style='float:right;color: #3aa0da;display: inline-block' ></span></td>";
 	            childHtml+="<td class='play1'>"+(d.dailyCurrent||"--")+"</td>";
 				childHtml+="<td class='play1'>"+dailyComparedYesterday+"</td>";
 				childHtml+="<td class='play1'>"+dailyComparedLastMonth+"</td>";
@@ -726,7 +781,7 @@ function appendNextLevelData(menuid,dimCode,dimValue,th){
 				childHtml+="<td class='play1'>"+dailyAccumulationComparedLastYear+"</td>";
 				childHtml+="<td class='play1' style='text-align:center;'><span style='color:#3AA0DA;cursor: pointer;'  onclick='controlShowKpi(\""+menuid+"\",\""+d.dimCode+"\",\""+d.dimVal+"\",this)'>分析</span>&nbsp;<span style='color:#4BB901;cursor: pointer;' onclick='addFavorite(\""+d.id+"\")'>收藏</span></td></tr>";
 	           }else if(d.dimCode=="MARKET_ID"){
-	            childHtml+="<tr class='tableTr "+menuid+"_"+dimValue+" "+menuid+"_"+dimCode+"'  menuId='"+menuid+"' type='"+d.dimCode+"' ><td class='play1' style='text-align:left;padding-left:50px;cursor: pointer;'>"+(d.regionName||"--")+"<span class='icon-export'  id='toolTip' data-toggle='tooltip' data-placement='right' title='"+(d.menuName||d.regionName||"--")+"' style='float:right;color: #3aa0da;display: inline-block'></span></td>";
+	            childHtml+="<tr class='tableTr "+menuid+"_"+dimValue+" "+menuid+"_"+dimCode+"'  menuId='"+menuid+"' type='"+d.dimCode+"' ><td class='play1' style='text-align:left;padding-left:50px;cursor: pointer;'>"+(d.regionName||"--")+"<span class='icon-export'      title='"+(d.menuName||d.regionName||"--")+"' style='float:right;color: #3aa0da;display: inline-block'></span></td>";
 	            childHtml+="<td class='play1'>"+(d.dailyCurrent||"--")+"</td>";
 				childHtml+="<td class='play1'>"+dailyComparedYesterday+"</td>";
 				childHtml+="<td class='play1'>"+dailyComparedLastMonth+"</td>";
@@ -741,7 +796,7 @@ function appendNextLevelData(menuid,dimCode,dimValue,th){
 	           var monthlyAccumulationComparedLastMonth=appendArrow(d.monthlyAccumulationComparedLastMonth);
 	           var monthlyAccumulationComparedLastYear=appendArrow(d.monthlyAccumulationComparedLastYear);
 	           if(d.dimCode=="COUNTY_ID"){
-	            childHtml+="<tr class='tableTr "+menuid+"_"+dimValue+" "+menuid+"_"+dimCode+"' menuId='"+menuid+"'  type='"+d.dimCode+"' ><td class='play1' style='text-align:left;padding-left:40px;cursor: pointer;'><span ondblclick='controlShowKpi(\""+menuid+"\",\""+d.dimCode+"\",\""+d.dimVal+"\",this)'>"+(d.regionName||"--")+"</span><span class='icon-export'  id='toolTip' data-toggle='tooltip' data-placement='right' title='"+(d.menuName||d.regionName||"--")+"' style='float:right;color: #3aa0da;display: inline-block' ></span></td>";
+	            childHtml+="<tr class='tableTr "+menuid+"_"+dimValue+" "+menuid+"_"+dimCode+"' menuId='"+menuid+"'  type='"+d.dimCode+"' ><td class='play1' style='text-align:left;padding-left:40px;cursor: pointer;'><span ondblclick='controlShowKpi(\""+menuid+"\",\""+d.dimCode+"\",\""+d.dimVal+"\",this)'>"+(d.regionName||"--")+"</span><span class='icon-export'      title='"+(d.menuName||d.regionName||"--")+"' style='float:right;color: #3aa0da;display: inline-block' ></span></td>";
 	            childHtml+="<td class='play1'>"+(d.monthlyCurrent||"--")+"</td>";
 				childHtml+="<td class='play1'>"+monthlyComparedLastMonth+"</td>";
 				childHtml+="<td class='play1'>"+monthlyComparedLastYear+"</td>";
@@ -750,7 +805,7 @@ function appendNextLevelData(menuid,dimCode,dimValue,th){
 				childHtml+="<td class='play1'>"+monthlyAccumulationComparedLastYear+"</td>";
 				childHtml+="<td class='play1' style='text-align:center;'><span style='color:#3AA0DA;cursor: pointer;' onclick='controlShowKpi(\""+menuid+"\",\""+d.dimCode+"\",\""+d.dimVal+"\",this)'>分析</span>&nbsp;<span style='color:#4BB901;cursor: pointer;' onclick='addFavorite(\""+d.id+"\")'>收藏</span></td></tr>";
 	           }else if(d.dimCode=="MARKET_ID"){
-	            childHtml+="<tr class='tableTr "+menuid+"_"+dimValue+" "+menuid+"_"+dimCode+"'  menuId='"+menuid+"' type='"+d.dimCode+"' ><td class='play1' style='text-align:left;padding-left:50px;cursor: pointer;' ondblclick='controlShowKpi(\""+menuid+"\",\""+d.dimCode+"\",\""+d.dimVal+"\",this)'>"+(d.regionName||"--")+"<span class='icon-export'  id='toolTip' data-toggle='tooltip' data-placement='right' title='"+(d.menuName||d.regionName||"--")+"' style='float:right;color: #3aa0da;display: inline-block'></span></td>";
+	            childHtml+="<tr class='tableTr "+menuid+"_"+dimValue+" "+menuid+"_"+dimCode+"'  menuId='"+menuid+"' type='"+d.dimCode+"' ><td class='play1' style='text-align:left;padding-left:50px;cursor: pointer;' ondblclick='controlShowKpi(\""+menuid+"\",\""+d.dimCode+"\",\""+d.dimVal+"\",this)'>"+(d.regionName||"--")+"<span class='icon-export'      title='"+(d.menuName||d.regionName||"--")+"' style='float:right;color: #3aa0da;display: inline-block'></span></td>";
 	            childHtml+="<td class='play1'>"+(d.monthlyCurrent||"--")+"</td>";
 				childHtml+="<td class='play1'>"+monthlyComparedLastMonth+"</td>";
 				childHtml+="<td class='play1'>"+monthlyComparedLastYear+"</td>";
@@ -1643,6 +1698,60 @@ window.onload = function(){
 		
 	});
 }
+//描述编辑
+
+
+function checkAuth(){
+var name='${loginUser}';
+	if('zhaojing'==name || 'admin'==name){
+	return true;
+	}
+	//alert("您没有编辑权限");
+	return false;
+}
+
+function showEdit(menuid){
+	   var text = $.trim($(this).find("span").text());
+	   $("#updvalue").val(text);
+	   $("#name").text("编辑");
+	   $(".mask,.alert").show();
+	   $(".alert-sure").unbind('click');
+	   $(".alert-sure").click(function() {
+		var newcost = $("#updvalue").val();
+		commitUpdateDisc(menuid,newcost);
+		});
+
+}
+
+$(".alert-return").click(function() {
+		$(".mask,.alert").hide();
+	});
+	
+function commitUpdateDisc(menuid,value){
+		$.ajax({
+			type : "POST",
+			url : '${mvcPath}/roleAdapt/updateKpiDes',
+			data : {
+				menuid :menuid,
+				description:value
+			},
+			async : false,
+			success : function(data) {
+					if(data.RESULT_CODE==0){
+						alert("修改成功");	
+						$(".mask,.alert").hide();
+					}else if(data.RESULT_CODE==-1){
+						alert("修改失败");
+					}
+			},
+			error : function(request, text, error) {
+				alert("Server Error!");
+			}
+		});
+	}
+
+
+
 //document.getElementsByClassName('u995_img')[0].setAttribute("src","${mvcPath}/hb-bass-frame/views/ftl/index2/img/table/"+"u995.png");
 //document.getElementsByClassName('u995_img')[1].setAttribute("src","${mvcPath}/hb-bass-frame/views/ftl/index2/img/table/"+"u1009.png");
 //document.getElementsByClassName('u995_img')[2].setAttribute("src","${mvcPath}/hb-bass-frame/views/ftl/index2/img/table/"+"u1023.png");

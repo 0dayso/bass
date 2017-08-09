@@ -15,4 +15,6 @@ public interface KpiVisitService {
 	public void insertKpiLog(String id, String kpicode, String date, String user);
 
 	void insertKpi(int id, String kpicode);
+
+	public Map<String,Object> updateKpiDisc(String menuid,String description);
 }

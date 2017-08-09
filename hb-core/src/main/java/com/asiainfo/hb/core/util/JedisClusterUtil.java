@@ -36,15 +36,21 @@ public class JedisClusterUtil {
 		// 最大允许等待时间，如果超过这个时间还未获取到连接，则会报JedisException异常：
 		// Could not get a resource from the pool
 		poolConfig.setMaxWaitMillis(2 * 1000);
-		
-		jedisClusterNodes.add(new HostAndPort("10.25.125.83", 6379));
-		jedisClusterNodes.add(new HostAndPort("10.25.125.83", 6380));
-		jedisClusterNodes.add(new HostAndPort("10.25.125.84", 6379));
-		jedisClusterNodes.add(new HostAndPort("10.25.125.84", 6380));
-		jedisClusterNodes.add(new HostAndPort("10.25.125.85", 6379));
-		jedisClusterNodes.add(new HostAndPort("10.25.125.85", 6380));
-		jedisClusterNodes.add(new HostAndPort("10.25.125.86", 6379));
-		jedisClusterNodes.add(new HostAndPort("10.25.125.86", 6380));
+		jedisClusterNodes.add(new HostAndPort("192.168.1.200", 7000));
+		jedisClusterNodes.add(new HostAndPort("192.168.1.200", 7001));
+		jedisClusterNodes.add(new HostAndPort("192.168.1.200", 7002));
+		jedisClusterNodes.add(new HostAndPort("192.168.1.200", 7003));
+		jedisClusterNodes.add(new HostAndPort("192.168.1.200", 7004));
+		jedisClusterNodes.add(new HostAndPort("192.168.1.200", 7005));
+
+//		jedisClusterNodes.add(new HostAndPort("10.25.125.83", 6379));
+//		jedisClusterNodes.add(new HostAndPort("10.25.125.83", 6380));
+//		jedisClusterNodes.add(new HostAndPort("10.25.125.84", 6379));
+//		jedisClusterNodes.add(new HostAndPort("10.25.125.84", 6380));
+//		jedisClusterNodes.add(new HostAndPort("10.25.125.85", 6379));
+//		jedisClusterNodes.add(new HostAndPort("10.25.125.85", 6380));
+//		jedisClusterNodes.add(new HostAndPort("10.25.125.86", 6379));
+//		jedisClusterNodes.add(new HostAndPort("10.25.125.86", 6380));
 		
 //		jedisClusterNodes.add(new HostAndPort("10.25.125.171", 7000));
 //		jedisClusterNodes.add(new HostAndPort("10.25.125.171", 7001));

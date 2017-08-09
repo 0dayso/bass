@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
@@ -17,6 +19,7 @@ import com.asiainfo.hb.core.models.BaseDao;
  * */
 @Repository
 public class KpiVisitDao extends BaseDao implements KpiVisitService {
+	public Logger logger = LoggerFactory.getLogger(KpiVisitDao.class);
 	public List<Map<String, Object>> getNum() {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		String sql = "SELECT * FROM (SELECT distinct kpi_category name, COUNT(*) raised FROM FPF_KPI_VISIT GROUP BY kpi_category ORDER BY raised DESC),(select count(*) goal  from fpf_kpi_visit)  FETCH FIRST 5 ROWS ONLY with ur";
@@ -66,4 +69,19 @@ public class KpiVisitDao extends BaseDao implements KpiVisitService {
 		}
 		
 		}
+	
+	 public  Map<String,Object>  updateKpiDisc(String menuid,String description){
+		 Map<String,Object> result= new HashMap<String, Object>();
+		 try{
+		    String sql="update boc_indicator_menu set description= '"+description+"' where id='"+menuid+"' ";
+		    logger.debug("kpi更新描述sql为:"+sql);
+		    jdbcTemplate.execute(sql);
+		    result.put("RESULT_CODE","0");
+		  }catch(Exception e){
+			  e.printStackTrace();
+			  result.put("RESULT_CODE", "-1");
+			  }
+		 return result;
+	 }
+
 }

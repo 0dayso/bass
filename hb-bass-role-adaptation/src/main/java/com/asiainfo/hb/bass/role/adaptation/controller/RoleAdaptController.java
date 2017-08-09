@@ -175,6 +175,7 @@ public class RoleAdaptController {
 			model.addAttribute("lastDay", lastDay);
 			model.addAttribute("lastestOnlineReport", lastestOnlineReportList);
 			model.addAttribute("bocIndicatorMenus", bocIndicatorMenus);
+			model.addAttribute("loginUser", user.getId());
 		} catch (Exception e) {
 			logger.error(LogUtil.getExceptionMessage(e));
 		}
@@ -198,4 +199,14 @@ public class RoleAdaptController {
 	public List<Map<String, Object>> kipVisitServie() {
 		return kipVisitServie.getNum();
 	}
+	
+	@RequestMapping(value = "/updateKpiDes")
+	@ResponseBody
+	public  Map<String,Object> updateKpiDes(HttpServletRequest request, HttpServletResponse response) {
+		String menuid=request.getParameter("menuid");
+		String description=request.getParameter("description");
+		Map<String,Object> map =kipVisitServie.updateKpiDisc(menuid,description);
+		return map;
+	}
+	
 }

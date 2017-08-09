@@ -277,6 +277,7 @@ public class KpiDao implements KpiService {
 					kpi.setAccumulationKpiCode((String) map.get("A_KPI_CODE"));
 					kpi.setKpiName((String) map.get("KPI_NAME"));
 					kpi.setKpiUnit((String) map.get("KPI_UNIT"));
+					kpi.setDescription((String) map.get("DESCRIPTION"));
 					kpi.setOpTime(String.valueOf(map.get("OP_TIME")));
 					kpi.setDimCode((String) map.get("DIM_CODE"));
 					kpi.setDimVal((String) map.get("DIM_VAL"));
@@ -342,10 +343,10 @@ public class KpiDao implements KpiService {
 		StringBuffer sbf = new StringBuffer("");
 		if (dateType.equals("day") && def != null && def.getDataTableName() != null && opTime != null) {
 			sbf.append(
-					"select kpi_code,a_kpi_code,case when kpi_name is null then a_kpi_name else kpi_name end as kpi_name,kpi_unit,case when op_time is null then a_op_time else op_time end as op_time,case when dim_code is null then a_dim_code else dim_code end as dim_code,case when dim_val is null then a_dim_val else dim_val end as dim_val,case when region_name is null then a_region_name else region_name end as region_name,current,comparedYesterday,comparedLastMonth,a_current,a_comparedLastMonth,a_comparedLastYear from (");
+					"select kpi_code,a_kpi_code,case when kpi_name is null then a_kpi_name else kpi_name end as kpi_name,kpi_unit,description,case when op_time is null then a_op_time else op_time end as op_time,case when dim_code is null then a_dim_code else dim_code end as dim_code,case when dim_val is null then a_dim_val else dim_val end as dim_val,case when region_name is null then a_region_name else region_name end as region_name,current,comparedYesterday,comparedLastMonth,a_current,a_comparedLastMonth,a_comparedLastYear from (");
 			sbf.append(
-					"select kpi_code,kpi_name,kpi_unit,op_time,dim_code,dim_val,region_name,DECIMAL(current,20,2) current,DECIMAL(yesterday,20,2) yesterday,DECIMAL(last_month,20,2) last_month,DECIMAL(last_year,20,2) last_year,case when yesterday is not null and yesterday <> 0 then DECIMAL((((DECIMAL(current,20,4))) / yesterday -1)*100,20,2) else null end comparedYesterday,case when last_month is not null and last_month <> 0 then DECIMAL((((DECIMAL(current,20,4))) / last_month -1)*100,20,2) else null end comparedLastMonth,case when last_year is not null and last_year <> 0 then DECIMAL((((DECIMAL(current,20,4))) / last_year -1)*100,20,2) else null end comparedLastYear from (");
-			sbf.append("select a.kpi_code,menu.name as kpi_name,kpi_unit," + opTime + "  op_time ,");
+					"select kpi_code,kpi_name,kpi_unit,description,op_time,dim_code,dim_val,region_name,DECIMAL(current,20,2) current,DECIMAL(yesterday,20,2) yesterday,DECIMAL(last_month,20,2) last_month,DECIMAL(last_year,20,2) last_year,case when yesterday is not null and yesterday <> 0 then DECIMAL((((DECIMAL(current,20,4))) / yesterday -1)*100,20,2) else null end comparedYesterday,case when last_month is not null and last_month <> 0 then DECIMAL((((DECIMAL(current,20,4))) / last_month -1)*100,20,2) else null end comparedLastMonth,case when last_year is not null and last_year <> 0 then DECIMAL((((DECIMAL(current,20,4))) / last_year -1)*100,20,2) else null end comparedLastYear from (");
+			sbf.append("select a.kpi_code,menu.name as kpi_name,kpi_unit,description," + opTime + "  op_time ,");
 			sbf.append("dim_code,dim_val,value region_name");
 			sbf.append(",kpi_val/division current,yesterday/division yesterday,last_month/division last_month,last_year/division last_year");
 			sbf.append(" from " + def.getDataTableName() + " a ,(");
@@ -363,8 +364,8 @@ public class KpiDao implements KpiService {
 			sbf.append(") m full join ");
 			sbf.append("(");
 			sbf.append(
-					"select kpi_code as a_kpi_code,a_kpi_name,a_kpi_unit,op_time as a_op_time,dim_code as a_dim_code,dim_val as a_dim_val,region_name as a_region_name,DECIMAL(current,20,2) as a_current,DECIMAL(yesterday,20,2) as a_yesterday,DECIMAL(last_month,20,2) as a_last_month,DECIMAL(last_year,20,2) as a_last_year,case when yesterday is not null and yesterday <> 0 then DECIMAL((((DECIMAL(current,20,4))) / yesterday -1)*100,20,2) else null end a_comparedYesterday,case when last_month is not null and last_month <> 0 then DECIMAL((((DECIMAL(current,20,4))) / last_month -1)*100,20,2) else null end a_comparedLastMonth,case when last_year is not null and last_year <> 0 then DECIMAL((((DECIMAL(current,20,4))) / last_year -1)*100,20,2) else null end a_comparedLastYear from (");
-			sbf.append("select a.kpi_code,menu.name as a_kpi_name,kpi_unit as a_kpi_unit," + opTime + "  op_time ,");
+					"select kpi_code as a_kpi_code,a_kpi_name,a_kpi_unit,a_description,op_time as a_op_time,dim_code as a_dim_code,dim_val as a_dim_val,region_name as a_region_name,DECIMAL(current,20,2) as a_current,DECIMAL(yesterday,20,2) as a_yesterday,DECIMAL(last_month,20,2) as a_last_month,DECIMAL(last_year,20,2) as a_last_year,case when yesterday is not null and yesterday <> 0 then DECIMAL((((DECIMAL(current,20,4))) / yesterday -1)*100,20,2) else null end a_comparedYesterday,case when last_month is not null and last_month <> 0 then DECIMAL((((DECIMAL(current,20,4))) / last_month -1)*100,20,2) else null end a_comparedLastMonth,case when last_year is not null and last_year <> 0 then DECIMAL((((DECIMAL(current,20,4))) / last_year -1)*100,20,2) else null end a_comparedLastYear from (");
+			sbf.append("select a.kpi_code,menu.name as a_kpi_name,kpi_unit as a_kpi_unit,description as a_description," + opTime + "  op_time ,");
 			sbf.append("dim_code,dim_val,value region_name");
 			sbf.append(",kpi_val/division current,yesterday/division yesterday,last_month/division last_month,last_year/division last_year");
 			sbf.append(" from " + def.getDataTableName() + " a ,(");
@@ -383,10 +384,10 @@ public class KpiDao implements KpiService {
 		}
 		if (dateType.equals("month") && def != null && def.getDataTableName() != null && opTime != null) {
 			sbf.append(
-					"select kpi_code,a_kpi_code,case when kpi_name is null then a_kpi_name else kpi_name end as kpi_name,kpi_unit,case when op_time is null then a_op_time else op_time end as op_time,case when dim_code is null then a_dim_code else dim_code end as dim_code,case when dim_val is null then a_dim_val else dim_val end as dim_val,case when region_name is null then a_region_name else region_name end as region_name,current,comparedYesterday,comparedLastMonth,a_current,a_comparedLastMonth,a_comparedLastYear from (");
+					"select kpi_code,a_kpi_code,case when kpi_name is null then a_kpi_name else kpi_name end as kpi_name,kpi_unit,description,case when op_time is null then a_op_time else op_time end as op_time,case when dim_code is null then a_dim_code else dim_code end as dim_code,case when dim_val is null then a_dim_val else dim_val end as dim_val,case when region_name is null then a_region_name else region_name end as region_name,current,comparedYesterday,comparedLastMonth,a_current,a_comparedLastMonth,a_comparedLastYear from (");
 			sbf.append(
-					"select kpi_code,kpi_name,kpi_unit,op_time,dim_code,dim_val,region_name,DECIMAL(current,20,2) current,DECIMAL(yesterday,20,2) yesterday,DECIMAL(last_month,20,2) last_month,DECIMAL(last_year,20,2) last_year,case when yesterday is not null and yesterday <> 0 then DECIMAL((((DECIMAL(current,20,4))) / yesterday -1)*100,20,2) else null end comparedYesterday,case when last_month is not null and last_month <> 0 then DECIMAL((((DECIMAL(current,20,4))) / last_month -1)*100,20,2) else null end comparedLastMonth,case when last_year is not null and last_year <> 0 then DECIMAL((((DECIMAL(current,20,4))) / last_year -1)*100,20,2) else null end comparedLastYear from (");
-			sbf.append("select a.kpi_code,menu.name as kpi_name,kpi_unit," + opTime + "  op_time ,");
+					"select kpi_code,kpi_name,kpi_unit,description,op_time,dim_code,dim_val,region_name,DECIMAL(current,20,2) current,DECIMAL(yesterday,20,2) yesterday,DECIMAL(last_month,20,2) last_month,DECIMAL(last_year,20,2) last_year,case when yesterday is not null and yesterday <> 0 then DECIMAL((((DECIMAL(current,20,4))) / yesterday -1)*100,20,2) else null end comparedYesterday,case when last_month is not null and last_month <> 0 then DECIMAL((((DECIMAL(current,20,4))) / last_month -1)*100,20,2) else null end comparedLastMonth,case when last_year is not null and last_year <> 0 then DECIMAL((((DECIMAL(current,20,4))) / last_year -1)*100,20,2) else null end comparedLastYear from (");
+			sbf.append("select a.kpi_code,menu.name as kpi_name,kpi_unit,description," + opTime + "  op_time ,");
 			sbf.append("dim_code,dim_val,value region_name");
 			sbf.append(",kpi_val/division current,yesterday/division yesterday,last_month/division last_month,last_year/division last_year");
 			sbf.append(" from " + def.getDataTableName() + " a ,(");
@@ -404,8 +405,8 @@ public class KpiDao implements KpiService {
 			sbf.append(") m full join ");
 			sbf.append("(");
 			sbf.append(
-					"select kpi_code as a_kpi_code,a_kpi_name,a_kpi_unit,op_time as a_op_time,dim_code as a_dim_code,dim_val as a_dim_val,region_name as a_region_name,DECIMAL(current,20,2) as a_current,DECIMAL(yesterday,20,2) as a_yesterday,DECIMAL(last_month,20,2) as a_last_month,DECIMAL(last_year,20,2) as a_last_year,case when yesterday is not null and yesterday <> 0 then DECIMAL((((DECIMAL(current,20,4))) / yesterday -1)*100,20,2) else null end a_comparedYesterday,case when last_month is not null and last_month <> 0 then DECIMAL((((DECIMAL(current,20,4))) / last_month -1)*100,20,2) else null end a_comparedLastMonth,case when last_year is not null and last_year <> 0 then DECIMAL((((DECIMAL(current,20,4))) / last_year -1)*100,20,2) else null end a_comparedLastYear from (");
-			sbf.append("select a.kpi_code,menu.name as a_kpi_name,kpi_unit as a_kpi_unit," + opTime + "  op_time ,");
+					"select kpi_code as a_kpi_code,a_kpi_name,a_kpi_unit,a_description,op_time as a_op_time,dim_code as a_dim_code,dim_val as a_dim_val,region_name as a_region_name,DECIMAL(current,20,2) as a_current,DECIMAL(yesterday,20,2) as a_yesterday,DECIMAL(last_month,20,2) as a_last_month,DECIMAL(last_year,20,2) as a_last_year,case when yesterday is not null and yesterday <> 0 then DECIMAL((((DECIMAL(current,20,4))) / yesterday -1)*100,20,2) else null end a_comparedYesterday,case when last_month is not null and last_month <> 0 then DECIMAL((((DECIMAL(current,20,4))) / last_month -1)*100,20,2) else null end a_comparedLastMonth,case when last_year is not null and last_year <> 0 then DECIMAL((((DECIMAL(current,20,4))) / last_year -1)*100,20,2) else null end a_comparedLastYear from (");
+			sbf.append("select a.kpi_code,menu.name as a_kpi_name,kpi_unit as a_kpi_unit,description as a_description," + opTime + "  op_time ,");
 			sbf.append("dim_code,dim_val,value region_name");
 			sbf.append(",kpi_val/division current,yesterday/division yesterday,last_month/division last_month,last_year/division last_year");
 			sbf.append(" from " + def.getDataTableName() + " a ,(");

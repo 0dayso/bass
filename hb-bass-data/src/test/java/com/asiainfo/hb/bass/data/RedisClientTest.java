@@ -45,12 +45,12 @@ public class RedisClientTest {
 		// logger.info("k2:" + JedisUtils.getObject("K10001"));
 		//
 		Set<HostAndPort> jedisClusterNodes = new HashSet<HostAndPort>();
-		jedisClusterNodes.add(new HostAndPort("192.168.3.33", 7000));
-		jedisClusterNodes.add(new HostAndPort("192.168.3.33", 7001));
-		jedisClusterNodes.add(new HostAndPort("192.168.3.33", 7002));
-		jedisClusterNodes.add(new HostAndPort("192.168.3.33", 7003));
-		jedisClusterNodes.add(new HostAndPort("192.168.3.33", 7004));
-		jedisClusterNodes.add(new HostAndPort("192.168.3.33", 7005));
+		jedisClusterNodes.add(new HostAndPort("192.168.1.200", 7000));
+		jedisClusterNodes.add(new HostAndPort("192.168.1.200", 7001));
+		jedisClusterNodes.add(new HostAndPort("192.168.1.200", 7002));
+		jedisClusterNodes.add(new HostAndPort("192.168.1.200", 7003));
+		jedisClusterNodes.add(new HostAndPort("192.168.1.200", 7004));
+		jedisClusterNodes.add(new HostAndPort("192.168.1.200", 7005));
 		// 3个master 节点
 		JedisCluster jc = new JedisCluster(jedisClusterNodes, 3000, 3000, 5, "adminKpi", new JedisPoolConfig());
 		String key = "3434";
