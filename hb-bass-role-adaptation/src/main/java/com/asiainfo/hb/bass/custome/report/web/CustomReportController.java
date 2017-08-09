@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.asiainfo.hb.bass.custome.report.ReportContext;
-import com.asiainfo.hb.bass.custome.report.cache.ReportCache;
 import com.asiainfo.hb.bass.custome.report.models.CustomReport;
 import com.asiainfo.hb.bass.custome.report.models.QueryInfo;
 import com.asiainfo.hb.bass.custome.report.service.CustomReportService;
@@ -36,9 +35,6 @@ public class CustomReportController {
 
 	@Autowired
 	private CustomReportService customReportService;
-	
-	@Autowired
-	private ReportCache cache;
 	
 
 	@RequestMapping("/page")
@@ -107,7 +103,6 @@ public class CustomReportController {
 		context.init();
 		context.inittHead();
 		String queryId = IdGen.genId();
-		cache.set(queryId, context);
 		result.put("queryId", queryId);
 		result.put("header", context.getColumns());
 		return result;
@@ -118,7 +113,6 @@ public class CustomReportController {
 	public Object reportPageList(@RequestParam(value = "page", defaultValue = "1") Integer page,
 			@RequestParam(value = "rows", defaultValue = "10") Integer rows,@RequestParam("queryId")String queryId) {
 		logger.info("<----parameters---->page=" + page + ",rows=" + rows+",queryId"+queryId);
-		ReportContext context = (ReportContext) cache.get(queryId);
 		context.query(page, rows);
 		return context.getDatas();
 	}

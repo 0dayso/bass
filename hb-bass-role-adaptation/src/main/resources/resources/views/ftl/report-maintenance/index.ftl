@@ -15,6 +15,12 @@
 		form table tr{
 			margin: 5px;
 		}
+		
+		.td_label{
+			text-align:right;
+			float:right;
+			margin-top:15px;
+		}
 	</style>
 </head>
 <body>
@@ -36,11 +42,11 @@
 				<td><input id="q_manager" type="text" class="easyui-textbox"></input>
 				</td>
 				<td><span>重要级别:</span></td>
-				<td><input class="easyui-combobox" name="q_level" id="q_level" style="width:130px"></input>
+				<td><input class="easyui-combobox" name="q_level" id="q_level"></input>
 				<td><span>是否云化上线:</span></td>
-				<td><input class="easyui-combobox" name="q_online" id="q_online" style="width:130px"></input>
+				<td><input class="easyui-combobox" name="q_online" id="q_online"></input>
 				<td><span>是否交维:</span></td>
-				<td><input class="easyui-combobox" name="q_maintenance" id="q_maintenance" style="width:130px"></input>
+				<td><input class="easyui-combobox" name="q_maintenance" id="q_maintenance"></input>
 			</tr>
 			<tr>
 				<td colspan="8">
@@ -52,7 +58,7 @@
 		</table>
 	</div>
 	<div>
-		<table id="reportMaintenance"></table>
+		<table id="reportMaintenance" style="height:360px;"></table>
 	</div>
  	<div id="addReportWind" class="easyui-dialog" style="width:600px;height:400px">
  			<input type="hidden" id="mvcPath" name="mvcPath" value="${mvcPath}">
@@ -60,40 +66,49 @@
 				<input type="hidden" id="id" name="id" value="">
 				<table>
 					<tr>
-						<td class="width=250px;text-align:right;"><label for="reportId">报表ID: </label></td>
+						<td class="width:120px;"><label for="reportId" class="td_label">报表ID: </label></td>
 						<td><input class="easyui-textbox" name="reportId" id="reportId" style="width:200px"><td>
+						<td><span style="color:red;">*必填项</span></td>
 					</tr>
 					<tr>
-						<td class="width=250px;text-align:right;"><label for="reportName">报表名称: </label></td>
+						<td class="width:120px;"><label for="reportName" class="td_label">报表名称: </label></td>
 						<td><input class="easyui-textbox" name="reportName" id="reportName" style="width:200px"><td>
+						<td><span style="color:red;">*必填项</span></td>
 					</tr>
 					<tr>
-						<td class="width=250px;text-align:right;"><label for="procedureName">后台程序名: </label></td>
+						<td class="width:120px;"><label for="procedureName" class="td_label">后台程序名: </label></td>
 						<td><input class="easyui-textbox" name="procedureName" id="procedureName" style="width:200px"><td>
+						<td><span style="color:red;">*必填项</span></td>
 					</tr>
 					<tr>
-						<td class="width=250px;text-align:right;"><label for="developerName">开发人员: </label></td>
+						<td class="width:120px;"><label for="developerName" class="td_label">开发人员: </label></td>
 						<td><input class="easyui-textbox" name="developerName" id="developerName" style="width:200px"><td>
+						<td><span style="color:red;">*必填项</span></td>
 					</tr>
 					<tr>
-						<td class="width=250px;text-align:right;"><label for="manager">负责人: </label></td>
+						<td class="width:120px;"><label for="manager" class="td_label">负责人: </label></td>
 						<td><input class="easyui-textbox" name="manager" id="manager" style="width:200px"><td>
+						<td><span style="color:red;">*必填项</span></td>
 					</tr>
 					<tr>
-						<td class="width=250px;text-align:right;"><label for="level">重要级别: </label></td>
+						<td class="width:120px;"><label for="level" class="td_label">重要级别: </label></td>
 						<td><input class="easyui-combobox" name="level" id="level" style="width:200px"><td>
+						<td><span style="color:red;">*必填项</span></td>
 					</tr>
 					<tr>
-						<td class="width=250px;text-align:right;"><label for="online">是否云化上线: </label></td>
-						<td><input class="easyui-combobox" name="online" id="online" style="width:100px"><td>
+						<td class="width:120px;"><label for="online" class="td_label">是否云化上线: </label></td>
+						<td><input class="easyui-combobox" name="online" id="online" style="width:200px"><td>
+						<td><span style="color:red;">*必填项</span></td>
 					</tr>
 					<tr>
-						<td class="width=250px;text-align:right;"><label for="maintenance">是否交维: </label></td>
-						<td><input class="easyui-combobox" name="maintenance" id="maintenance"><td>
+						<td class="width:120px;"><label for="maintenance" class="td_label">是否交维: </label></td>
+						<td><input class="easyui-combobox" name="maintenance" id="maintenance" style="width:200px"><td>
+						<td><span style="color:red;">*必填项</span></td>
 					</tr>
 					<tr>
-						<td class="width=250px;text-align:right;"><label for="expectationDate">期望时间: </label></td>
-						<td><input class="easyui-datebox" name="expectationDate" id="expectationDate" style="width:100px"><td>
+						<td class="width:120px;"><label for="expectationDate" class="td_label">期望时间: </label></td>
+						<td><input class="easyui-datetimebox" data-options="formatter:ww4,parser:w4" name="expectationDate" id="expectationDate" style="width:200px"><td>
+						<td><span style="color:red;">*必填项</span></td>
 					</tr>
 				</table>
 			</form>

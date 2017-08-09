@@ -23,10 +23,7 @@ import org.springframework.jdbc.core.SqlTypeValue;
 import org.springframework.jdbc.core.StatementCreatorUtils;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 
-import com.asiainfo.hb.core.cache.CacheServer;
-import com.asiainfo.hb.core.cache.CacheServerFactory;
 import com.asiainfo.hb.core.datastore.SqlPageHelper;
-import com.asiainfo.hb.core.util.Encryption;
 
 /**
  *
@@ -41,13 +38,7 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
 	
 	private static Logger LOG = Logger.getLogger(JdbcTemplate.class);
 	
-	protected CacheServer cache = null;
-	
 	protected void putObjectToCache(String sql,Object obj){
-		if(cache!=null){
-			LOG.debug("cache SQL query:"+sql);
-			cache.put(Encryption.md5Encode(sql), obj);
-		}
 	}
 
 	/**
@@ -99,14 +90,8 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
 		return SqlPageHelper.getSqlPageHelper(this);
 	}
 	
-	@SuppressWarnings("unchecked")
 	protected <T> T getObjectFromCache(String sql){
 		T obj=null;
-		if(cache!=null){
-			obj=(T)cache.get(Encryption.md5Encode(sql));
-			if(obj!=null)
-				LOG.info("hit by cache SQL="+sql);
-		}
 		return obj;
 	}
 	
@@ -132,8 +117,6 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
 	
 	public JdbcTemplate(DataSource dataSource,boolean isCached){
 		super(dataSource);
-		if(isCached)
-			cache=CacheServerFactory.getInstance().getCache("SQL");
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -149,22 +132,9 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
 		return obj;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T query(String sql, PreparedStatementSetter pss, ResultSetExtractor<T> rse) throws DataAccessException {
-		if(cache!=null && pss instanceof ArgPreparedStatementSetter){
-			//这里需要把参数都取出来，然后加入到sqlKey中去
-			ArgPreparedStatementSetter apss = (ArgPreparedStatementSetter)pss;
-			String key = sql+apss.getArgsString();
-			T obj = (T)getObjectFromCache(key);
-			if( obj == null ){
-				obj = super.query(sql,pss,rse);
-				putObjectToCache(key, obj);
-			}
-			return obj;
-		}else{
 			return super.query(sql,pss,rse);
-		}
 	}
 	
 	@Override

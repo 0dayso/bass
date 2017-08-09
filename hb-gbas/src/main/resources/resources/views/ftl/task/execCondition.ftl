@@ -7,9 +7,9 @@
 <script src="${mvcPath}/resources/js/d3/dagre-d3.min.js"></script>
 <style id="css">
 text {
-  font-weight: 300;
+  font-weight: 200;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serf;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .node rect {
@@ -30,37 +30,46 @@ text {
  stroke-width: 1.5px;
 }
 
+.null-msg{
+	font-size: 12px;
+	font-family: "MicrosoftYaHei", "Microsoft YaHei";
+	color: red;
+}
+
 </style>
 </head>
 <body>
 <div>
-<svg id="svg" width=200 height=390 viewBox="0 0 400 500" ></svg>
+<div id="msg" class="null-msg" style="display:none;"><span>此任务未配置执行条件……</span></div>
+<svg id="svg" width="100%" height="100%"></svg>
 </div>
 <script>
 
 var nodeData = ${nodeData};
-var g = new dagreD3.graphlib.Graph().setGraph({});
-
 var nodes = nodeData.nodes;
-for(var i=0; i<nodes.length; i++){
-	g.setNode(nodes[i].id, {label: nodes[i].name, style: "fill: #afa"});
-}
-
 var edgeArr = nodeData.edges;
-for(var j=0; j<edgeArr.length; j++){
-	var rel = edgeArr[j].val;
-	var ed = rel.split(',');
-	g.setEdge(ed[0], ed[1],{lineInterpolate: 'basis', arrowheadClass: 'arrowhead'});
-}
 
-var render = new dagreD3.render();
-var svg = d3.select("svg"),
-inner = svg.append("g");
-render(inner, g);
-var xCenterOffset = (svg.attr("width") - g.graph().width) / 2;
-inner.attr("transform", "translate(" + xCenterOffset + ", 20)");
-svg.attr("width", g.graph().width);
-svg.attr("height", g.graph().height + 40);
+if(nodes.length == 0){
+	d3.select('#msg').attr("style", "display: inline");
+}else{
+	var g = new dagreD3.graphlib.Graph().setGraph({});
+
+	for(var i=0; i<nodes.length; i++){
+		g.setNode(nodes[i].code, {label: nodes[i].code, style: "fill: #afa"});
+	}
+	for(var j=0; j<edgeArr.length; j++){
+		g.setEdge(edgeArr[j].depend_code, edgeArr[j].code,{lineInterpolate: 'basis', arrowheadClass: 'arrowhead'});
+	}
+	
+	var render = new dagreD3.render();
+	var svg = d3.select("svg"),
+	inner = svg.append("g");
+	render(inner, g);
+	var xCenterOffset = (svg.attr("width") - g.graph().width) / 2;
+	inner.attr("transform", "translate(" + xCenterOffset + ", 20)");
+	svg.attr("width", g.graph().width);
+	svg.attr("height", g.graph().height + 40);
+}
 
 </script>
 </body>

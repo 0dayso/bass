@@ -6,14 +6,10 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.apache.log4j.Logger;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
-
-import com.asiainfo.hb.core.cache.CacheServer;
-import com.asiainfo.hb.core.cache.CacheServerFactory;
 
 /**
  * 
@@ -23,24 +19,11 @@ import com.asiainfo.hb.core.cache.CacheServerFactory;
 // ���ﲻ����@Compnonet
 public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
 
-	private Logger LOG = Logger.getLogger(JdbcTemplate.class);
-
-	protected CacheServer cache = null;
-
 	protected void putObjectToCache(String sql, Object obj) {
-		if (cache != null) {
-			LOG.debug("cache SQL query:" + sql);
-			cache.put(md5(sql), obj);
-		}
 	}
 
 	protected Object getObjectFromCache(String sql) {
 		Object obj = null;
-		if (cache != null) {
-			obj = cache.get(md5(sql));
-			if (obj != null)
-				LOG.info("hit by cache SQL=" + sql);
-		}
 		return obj;
 	}
 
@@ -50,8 +33,6 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
 
 	public JdbcTemplate(DataSource dataSource, boolean isCached) {
 		super(dataSource);
-		if (isCached)
-			cache = CacheServerFactory.getInstance().getCache("SQL");
 	}
 
 	@Override
