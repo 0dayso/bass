@@ -128,7 +128,7 @@ public class MenuController {
 		value.add(menuId);
 		String sql ="";
 		if(isAdmin==1){
-			 sql = " select distinct * from FPF_SYS_MENU_ITEMS  where parentid=" + menuId + " and state<>0 order by sortnum with ur";
+			 sql = " select distinct * from FPF_SYS_MENU_ITEMS  where parentid=? and state<>0 order by sortnum with ur";
 		}else{
 			sql = " select distinct a.* from FPF_SYS_MENU_ITEMS a, "+
 					" (select distinct user_id,menu_id from  "+
