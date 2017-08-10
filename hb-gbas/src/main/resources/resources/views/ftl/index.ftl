@@ -58,6 +58,7 @@ function addTab(title, url){
 	<div data-options="region:'center'" style="overflow: hidden;">
 		<div id="myTab" class="easyui-tabs" style="height:100%;">
 			<div title="首页" style="padding:2px; overflow: hidden;">
+				<iframe scrolling="auto" frameborder="0"  src="${mvcPath}/analyse/index/daily" style="width:100%;height:100%;"></iframe>
 			</div>
 		</div>
 	</div>

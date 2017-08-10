@@ -77,6 +77,48 @@ a {
 	border-radius: 0 0 3px 3px;
 }
 
+.ana-box{
+	width: 100%;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	display: inline-block;
+}
+
+.ana-title{
+	height: 32px;
+	line-height: 32px;
+	border-bottom: 1px solid #ccc;
+	text-align: center;
+	background-color: #F4F4F4;
+	font-size: 16px;
+}
+
+.ana-content{
+	padding: 1% 0 0 1%;
+}
+
+.chart-item{
+	height: 200px;
+	background-color: #fff;
+}
+
+.item-box{
+	width: 32%;
+	height: 230px;
+	float: left;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	margin: 0 1% 1% 0;
+}
+
+.item-title{
+	height: 28px;
+	line-height: 28px;
+	border-bottom: 1px solid #ccc;
+	text-align: center;
+	background-color: #F4F4F4;
+}
+
 .qry-btn{
 	padding: 5px 10px;
     font-size: 12px;
@@ -89,4 +131,29 @@ a {
 .qry-btn:hover {
     background-color: #31b0d5;
     border-color: #269abc
+}
+
+.form-control{
+	width: 100%;
+	height: 136px;
+	line-height: 30px;
+	padding: 6px;
+}
+
+.mult-btn{
+	width: 100%;
+	height: 30px;
+	margin-bottom: 5px;
+	color: #333;
+    background-color: #fff;
+    border: 1px solid transparent;
+    border-color: #ccc;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.mult-btn:HOVER{
+	color: #333;
+    background-color: #e6e6e6;
+    border-color: #adadad;
 }
