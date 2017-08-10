@@ -608,15 +608,15 @@ function createKPiRow(queryDB){
            var dailyAccumulationComparedLastYear=appendArrow(d.dailyAccumulationComparedLastYear);
            if(dimCode=="PROV_ID"){
                  if(d.dimCode=="CITY_ID"){
-                  kpiHtml+="<tr class='tableTr "+d.menuId+"' style='display:none;' menuId='"+d.menuId+"' type='"+d.dimCode+"' ><td class='play1' style='text-align:left;padding-left:30px;cursor: pointer;'><span ondblclick='controlShowKpi(\""+d.menuId+"\",\""+d.dimCode+"\",\""+d.dimVal+"\",this)'>"+(d.regionName||"--")+"</span><span class='icon-export'      title='"+d.description+"' style='float:right;color: #3aa0da;display: inline-block' onclick='if(checkAuth()){showEdit(\""+d.menuId+"\")}'></span></td>";
+                  kpiHtml+="<tr class='tableTr "+d.menuId+"' style='display:none;' menuId='"+d.menuId+"' type='"+d.dimCode+"' ><td class='play1' style='text-align:left;padding-left:30px;cursor: pointer;'><span ondblclick='controlShowKpi(\""+d.menuId+"\",\""+d.dimCode+"\",\""+d.dimVal+"\",this)'>"+(d.regionName||"--")+"</span><span class='icon-export'      title='"+d.description+"' style='float:right;color: #3aa0da;display: inline-block' onclick='if(checkAuth()){showEdit(\""+d.menuId+"\",\""+d.description+"\")}'></span></td>";
                   }else{
-                  kpiHtml+="<tr class='tableTr'  menuId='"+d.menuId+"' type='"+d.dimCode+"' ><td class='play1' style='text-align:left;padding-left:20px;cursor: pointer;'><span ondblclick='controlShowKpi(\""+d.menuId+"\",\""+d.dimCode+"\",\""+d.dimVal+"\",this)'>"+(d.regionName||"--")+"</span><span class='icon-export'      title='"+d.description+"' style='float:right;color: #3aa0da;display: inline-block' onclick='if(checkAuth()){showEdit(\""+d.menuId+"\")}'></span></td>";
+                  kpiHtml+="<tr class='tableTr'  menuId='"+d.menuId+"' type='"+d.dimCode+"' ><td class='play1' style='text-align:left;padding-left:20px;cursor: pointer;'><span ondblclick='controlShowKpi(\""+d.menuId+"\",\""+d.dimCode+"\",\""+d.dimVal+"\",this)'>"+(d.regionName||"--")+"</span><span class='icon-export'      title='"+d.description+"' style='float:right;color: #3aa0da;display: inline-block' onclick='if(checkAuth()){showEdit(\""+d.menuId+"\",\""+d.description+"\")}'></span></td>";
                   }
              }else if(dimCode=="CITY_ID"){
                 if(d.dimCode=="COUNTY_ID"){
-                 kpiHtml+="<tr class='tableTr "+d.menuId+"_"+dimValue+" "+d.menuId+"_"+dimCode+"'  style='display:none;'  menuId='"+d.menuId+"' type='"+d.dimCode+"' ><td class='play1' style='text-align:left;padding-left:30px;cursor: pointer;'><span ondblclick='controlShowKpi(\""+d.menuId+"\",\""+d.dimCode+"\",\""+d.dimVal+"\",this)'>"+(d.regionName||"--")+"</span><span class='icon-export'      title='"+d.description+"' style='float:right;color: #3aa0da;display: inline-block' onclick='if(checkAuth()){showEdit(\""+d.menuId+"\")}'></span></td>";
+                 kpiHtml+="<tr class='tableTr "+d.menuId+"_"+dimValue+" "+d.menuId+"_"+dimCode+"'  style='display:none;'  menuId='"+d.menuId+"' type='"+d.dimCode+"' ><td class='play1' style='text-align:left;padding-left:30px;cursor: pointer;'><span ondblclick='controlShowKpi(\""+d.menuId+"\",\""+d.dimCode+"\",\""+d.dimVal+"\",this)'>"+(d.regionName||"--")+"</span><span class='icon-export'      title='"+d.description+"' style='float:right;color: #3aa0da;display: inline-block' onclick='if(checkAuth()){showEdit(\""+d.menuId+"\",\""+d.description+"\")}'></span></td>";
                }else {
-                 kpiHtml+="<tr class='tableTr "+d.menuId+"'  menuId='"+d.menuId+"' type='"+d.dimCode+"' ><td class='play1' style='text-align:left;padding-left:20px;cursor: pointer;'><span ondblclick='controlShowKpi(\""+d.menuId+"\",\""+d.dimCode+"\",\""+d.dimVal+"\",this)'>"+(d.regionName||"--")+"</span><span class='icon-export'      title='"+d.description+"' style='float:right;color: #3aa0da;display: inline-block' onclick='if(checkAuth()){showEdit(\""+d.menuId+"\")}'></span></td>";
+                 kpiHtml+="<tr class='tableTr "+d.menuId+"'  menuId='"+d.menuId+"' type='"+d.dimCode+"' ><td class='play1' style='text-align:left;padding-left:20px;cursor: pointer;'><span ondblclick='controlShowKpi(\""+d.menuId+"\",\""+d.dimCode+"\",\""+d.dimVal+"\",this)'>"+(d.regionName||"--")+"</span><span class='icon-export'      title='"+d.description+"' style='float:right;color: #3aa0da;display: inline-block' onclick='if(checkAuth()){showEdit(\""+d.menuId+"\",\""+d.description+"\")}'></span></td>";
                 }
              }
 	        kpiHtml+="<td class='play1'>"+(d.dailyCurrent||"--")+"</td>";
@@ -1706,19 +1706,18 @@ var name='${loginUser}';
 	if('zhaojing'==name || 'admin'==name){
 	return true;
 	}
-	//alert("您没有编辑权限");
+	alert("您没有编辑权限");
 	return false;
 }
 
-function showEdit(menuid){
-	   var text = $.trim($(this).find("span").text());
-	   $("#updvalue").val(text);
+function showEdit(menuid,oldWord){
+	   $("#updvalue").val(oldWord);
 	   $("#name").text("编辑");
 	   $(".mask,.alert").show();
 	   $(".alert-sure").unbind('click');
 	   $(".alert-sure").click(function() {
-		var newcost = $("#updvalue").val();
-		commitUpdateDisc(menuid,newcost);
+		var newWord = $("#updvalue").val();
+		commitUpdateDisc(menuid,newWord);
 		});
 
 }
@@ -1735,6 +1734,7 @@ function commitUpdateDisc(menuid,value){
 				menuid :menuid,
 				description:value
 			},
+			dataType:'json',
 			async : false,
 			success : function(data) {
 					if(data.RESULT_CODE==0){
