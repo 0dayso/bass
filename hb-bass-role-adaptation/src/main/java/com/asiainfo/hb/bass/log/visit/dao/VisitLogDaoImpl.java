@@ -46,30 +46,28 @@ public class VisitLogDaoImpl implements VisitLogDao {
 		Map<String, Object> result = new HashMap<String, Object>();
 		SqlPageHelper sqlPageHelper = new Db2SqlPageHelper();
 		List<Object> args = new ArrayList<>();
-		String areaSql = "SELECT areaName FROM st.AREA a WHERE a.AREA_ID=v.AREA_ID ";
+		StringBuffer sqlBuf = new StringBuffer();
+		sqlBuf.append("select area_id,areaName,count(1) times,	 count(distinct loginname) count from ( ");
+		sqlBuf.append("SELECT a.areaName areaName,v.area_id area_id,LOGINNAME loginname,CREATE_DT create_date FROM ");
+		sqlBuf.append("st.area a,st.fpf_visitlist v WHERE a.AREA_ID=v.AREA_ID AND v.CREATE_DT IS NOT null) where 1=1 ");
 		String whereSql = "";
 		if(params.containsKey("areaId")) {
-			areaSql += " AND AREA_ID=? ";
-			args.add(params.get("areaId"));
 			whereSql +=" AND AREA_ID=? ";
 			args.add(params.get("areaId"));
 		}
 		if(params.containsKey("startDate")) {
-			whereSql +=" AND v.CREATE_DT >= timestamp(?) ";
+			whereSql +=" AND create_date >= timestamp(?) ";
 			args.add(params.get("startDate"));
 		}
 		if(params.containsKey("endDate")) {
-			whereSql +=" AND v.CREATE_DT < timestamp(?) ";
+			whereSql +=" AND create_date < timestamp(?) ";
 			args.add(params.get("endDate"));
 		}
-		StringBuffer sb = new StringBuffer();
-		sb.append("SELECT (").append(areaSql).append(" ), ");
-		sb.append("count(1) times,count(distinct LOGINNAME) count FROM st.fpf_visitlist v WHERE 1=1 and v.CREATE_DT is not null ");
-		sb.append(whereSql).append(" GROUP BY AREA_ID ");
+		sqlBuf.append(whereSql).append(" GROUP BY areaName,area_id ");
 		
-		String sql = sb.toString();
+		String sql = sqlBuf.toString();
 		String totalPage = "select count(*) from ( " + sql + " ) ";
-		String totalRows = sqlPageHelper.getLimitSQL(sql, rows, (page - 1) * rows, "AREA_ID");
+		String totalRows = sqlPageHelper.getLimitSQL(sql, rows, (page - 1) * rows, "area_id");
 		
 		result.put("total", jdbcTemplate.queryForObject(totalPage, args.toArray(), Integer.class));
 		List<VisitInfo> reports = jdbcTemplate.query(totalRows,

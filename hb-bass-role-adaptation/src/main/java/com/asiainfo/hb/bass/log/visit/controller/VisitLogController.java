@@ -4,12 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asiainfo.hb.bass.custome.report.web.CustomReportController;
 import com.asiainfo.hb.bass.log.visit.service.VisitLogService;
 
 /**
@@ -21,6 +23,9 @@ import com.asiainfo.hb.bass.log.visit.service.VisitLogService;
 @Controller
 @RequestMapping("/visit/log")
 public class VisitLogController {
+	
+	
+	private Logger logger = Logger.getLogger(VisitLogController.class);
 
 	@Autowired
 	private VisitLogService visitLogService;
@@ -44,7 +49,7 @@ public class VisitLogController {
 		if(StringUtils.isNotBlank(endDate)) {
 			params.put("endDate", endDate);
 		}
-		System.out.println(params);
+		logger.debug(params);
 		int page = 1;
 		int rows = 30;
 		return visitLogService.getPageList(page, rows, params);
