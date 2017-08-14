@@ -49,7 +49,7 @@ public class VisitLogDaoImpl implements VisitLogDao {
 		StringBuffer sqlBuf = new StringBuffer();
 		sqlBuf.append("select area_id,areaName,count(1) times,	 count(distinct loginname) count from ( ");
 		sqlBuf.append("SELECT a.areaName areaName,v.area_id area_id,LOGINNAME loginname,CREATE_DT create_date FROM ");
-		sqlBuf.append("st.area a,st.fpf_visitlist v WHERE a.AREA_ID=v.AREA_ID AND v.CREATE_DT IS NOT null) where 1=1 ");
+		sqlBuf.append("area a,fpf_visitlist v WHERE a.AREA_ID=v.AREA_ID AND v.CREATE_DT IS NOT null) where 1=1 ");
 		String whereSql = "";
 		if(params.containsKey("areaId")) {
 			whereSql +=" AND AREA_ID=? ";
