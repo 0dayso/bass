@@ -8,6 +8,8 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Component;
 
+import com.asiainfo.hb.core.models.JdbcTemplate;
+
 /**
  * 生成分页的SQL
  * @author Mei Kefu
@@ -15,6 +17,16 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class SqlserverSqlPageHelper extends SqlPageHelper{
+	
+	public SqlserverSqlPageHelper(){
+		
+	}
+	
+	public SqlserverSqlPageHelper(JdbcTemplate jdbcTemplate){
+		if(this.jdbcTemplate == null){
+			this.jdbcTemplate = jdbcTemplate;
+		}
+	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private String fetchRowName(String sql,final int columNum){

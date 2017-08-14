@@ -42,7 +42,7 @@ public class CommonDao  extends BaseDao{
 
 	public Map<String, Object> where(Map<String, Object> params, String totalRows, String totalPage, int rows, int page, String order) {
 		List<Object> list = new ArrayList<Object>();
-		SqlPageHelper sqlPageHelper = new SqlserverSqlPageHelper();
+		SqlPageHelper sqlPageHelper = new SqlserverSqlPageHelper(jdbcTemplate);
 		String sql = "";
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (params != null && !params.isEmpty()) {
@@ -71,7 +71,7 @@ public class CommonDao  extends BaseDao{
 	public Map<String, Object> page(String totalRows, String totalPage, int rows, int page, String order) {
 		log.debug("------------Paging------------");
 		Map<String, Object> map = new HashMap<String, Object>();
-		SqlPageHelper sqlPageHelper = new SqlserverSqlPageHelper();
+		SqlPageHelper sqlPageHelper = new SqlserverSqlPageHelper(jdbcTemplate);
 		totalRows = sqlPageHelper.getLimitSQL(totalRows, rows, (page - 1) * rows, order);
 		map.put("total", jdbcTemplate.queryForObject(totalPage, Integer.class));
 		List<Map<String,Object>> list =jdbcTemplate.queryForList(totalRows);
