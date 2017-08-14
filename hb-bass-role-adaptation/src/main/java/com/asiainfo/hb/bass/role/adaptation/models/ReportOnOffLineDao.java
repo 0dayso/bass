@@ -16,13 +16,13 @@ public class ReportOnOffLineDao extends CommonDao implements ReportOnOffLineServ
 	public Map<String, Object> getHasOnlineReport(String menuId, String reportName,String reportId, int perPage, int currentPage) {
 		String rowSql = "select resource_id, resource_name,resource_uri, resource_desc, to_char(lastupdate,'YYYY-MM-DD HH24:MI:SS') lastupdate ," +
 				" b.sort_name sort_name ,b.id sort_id, b.menu_name, b.menu_id, b.sort " +
-				" from st.fpf_irs_resource a " +
-				" left join (select s.id id,s.menu_id, s.name sort_name, s.sort, m.name menu_name from st.fpf_irs_resource_sort s " +
-				" left join st.boc_indicator_menu m on s.menu_id=m.id) b " +
+				" from fpf_irs_resource a " +
+				" left join (select s.id id,s.menu_id, s.name sort_name, s.sort, m.name menu_name from fpf_irs_resource_sort s " +
+				" left join boc_indicator_menu m on s.menu_id=m.id) b " +
 				" on a.irs_resource_sort_id = b.id " +
 				" where 1=1";
-		String countSql = "select count(1) from st.fpf_irs_resource a left join " +
-				" st.fpf_irs_resource_sort b on a.irs_resource_sort_id = b.id where 1=1";
+		String countSql = "select count(1) from fpf_irs_resource a left join " +
+				" fpf_irs_resource_sort b on a.irs_resource_sort_id = b.id where 1=1";
 		
 		StringBuffer condition = new StringBuffer();
 		condition.append(" and type_id=2 and state='在用' ");
@@ -43,7 +43,7 @@ public class ReportOnOffLineDao extends CommonDao implements ReportOnOffLineServ
 
 	@Override
 	public List<Map<String, Object>> getMenuList() {
-		String sql = "select id, name from st.boc_indicator_menu  where pid is null order by id";
+		String sql = "select id, name from boc_indicator_menu  where pid is null order by id";
 		return jdbcTemplate.queryForList(sql);
 	}
 
@@ -52,12 +52,12 @@ public class ReportOnOffLineDao extends CommonDao implements ReportOnOffLineServ
 		String stateSql = "";
 		if(url.indexOf("/ve/") > 0){
 			String rid = url.substring(url.indexOf("/ve/") + 4);
-			stateSql = "update st.doota_ve set state='下线' where id='" + rid + "'";
+			stateSql = "update doota_ve set state='下线' where id='" + rid + "'";
 		}else{
 			String rid = url.substring(url.indexOf("/report/") + 8);
-			stateSql = "update st.fpf_irs_subject set status='下线' where id=" + rid ;
+			stateSql = "update fpf_irs_subject set status='下线' where id=" + rid ;
 		}
-		String delSql = "delete from st.fpf_irs_resource where resource_id=?";
+		String delSql = "delete from fpf_irs_resource where resource_id=?";
 		this.jdbcTemplate.update(stateSql);
 		this.jdbcTemplate.update(delSql, new Object[]{reportId});
 		
@@ -65,8 +65,8 @@ public class ReportOnOffLineDao extends CommonDao implements ReportOnOffLineServ
 
 	@Override
 	public Map<String, Object> getWaitOnLineReport(String name, String id, int perPage, int currentPage) {
-		String pageSql = "select id, name, descr, to_char(create_dt,'YYYY-MM-DD HH24:MI:SS') create_dt, state from st.doota_ve where 1=1 ";
-		String countSql = "select count(1) from st.doota_ve where 1=1 ";
+		String pageSql = "select id, name, descr, to_char(create_dt,'YYYY-MM-DD HH24:MI:SS') create_dt, state from doota_ve where 1=1 ";
+		String countSql = "select count(1) from doota_ve where 1=1 ";
 		StringBuffer condition = new StringBuffer();
 		condition.append(" and state != '在用'");
 		if(!StringUtils.isEmpty(name)){
@@ -80,8 +80,8 @@ public class ReportOnOffLineDao extends CommonDao implements ReportOnOffLineServ
 
 	@Override
 	public List<Map<String, Object>> getSortList(String menuId, String name) {
-		String sql = "select a.id, menu_id, a.name, sort, b.name menu_name from st.fpf_irs_resource_sort a " +
-				" left join st.boc_indicator_menu b on a.menu_id=b.id where 1=1";
+		String sql = "select a.id, menu_id, a.name, sort, b.name menu_name from fpf_irs_resource_sort a " +
+				" left join boc_indicator_menu b on a.menu_id=b.id where 1=1";
 		if(!StringUtils.isEmpty(menuId)){
 			sql += " and menu_id=" + menuId;
 		}
@@ -94,10 +94,10 @@ public class ReportOnOffLineDao extends CommonDao implements ReportOnOffLineServ
 
 	@Override
 	public void onLineRpt(String menuId, String sortId, String rid, String sortNum, String keyWord, String rptCycle) {
-		String stateSql = "update st.doota_ve set state='在用' where id=?";
-		String qrySql = "select * from st.doota_ve where id=?";
+		String stateSql = "update doota_ve set state='在用' where id=?";
+		String qrySql = "select * from doota_ve where id=?";
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");//可以方便地修改日期格式
-		String sql = "insert into st.fpf_irs_resource (RESOURCE_ID,RESOURCE_URI,RESOURCE_NAME,TYPE_ID,MENU_ID,CREATE_DT,RESOURCE_DESC,CREATER_ID,LASTUPDATE," +
+		String sql = "insert into fpf_irs_resource (RESOURCE_ID,RESOURCE_URI,RESOURCE_NAME,TYPE_ID,MENU_ID,CREATE_DT,RESOURCE_DESC,CREATER_ID,LASTUPDATE," +
 				"STATE,KEYWORDS,IRS_RESOURCE_SORT_ID,SORT,RESOURCE_CYCLE) values (?,?,?,?,?,'" + dateFormat.format(new Date()) + "',?,?,current TIMESTAMP,?,?,?,?,?)";
 		
 		Map<String, Object> detailMap = this.jdbcTemplate.queryForMap(qrySql, new Object[]{rid});
@@ -112,20 +112,20 @@ public class ReportOnOffLineDao extends CommonDao implements ReportOnOffLineServ
 	@Override
 	public void addRptSort(String menuId, String name, String sortNum) {
 		if(StringUtils.isEmpty(sortNum)){
-			String sortSql = "select value(max(sort),0) from st.fpf_irs_resource_sort where menu_id=" + menuId;
+			String sortSql = "select value(max(sort),0) from fpf_irs_resource_sort where menu_id=" + menuId;
 			int sort = this.jdbcTemplate.queryForObject(sortSql, Integer.class) + 1;
 			sortNum = sort + "";
 		}
-		String idSql = "select value(max(id),0) from st.fpf_irs_resource_sort";
+		String idSql = "select value(max(id),0) from fpf_irs_resource_sort";
 		int id = this.jdbcTemplate.queryForObject(idSql, Integer.class) + 1;
-		String sql = "insert into st.fpf_irs_resource_sort (ID,MENU_ID,NAME,SORT) values(?,?,?,?)";
+		String sql = "insert into fpf_irs_resource_sort (ID,MENU_ID,NAME,SORT) values(?,?,?,?)";
 		this.jdbcTemplate.update(sql, new Object[]{id, menuId, name, sortNum});
 	}
 
 	@Override
 	public void deleteRptSort(String ids) {
-		String sql = "delete from st.fpf_irs_resource_sort where id in (" + ids + ")";
-		String resSql = "update st.fpf_irs_resource set irs_resource_sort_id=null where irs_resource_sort_id in (" + ids + ")";
+		String sql = "delete from fpf_irs_resource_sort where id in (" + ids + ")";
+		String resSql = "update fpf_irs_resource set irs_resource_sort_id=null where irs_resource_sort_id in (" + ids + ")";
 		this.jdbcTemplate.update(sql);
 		this.jdbcTemplate.update(resSql);
 	}
@@ -134,20 +134,20 @@ public class ReportOnOffLineDao extends CommonDao implements ReportOnOffLineServ
 	public void updateRptSort(String sortId, String menuId, String name,
 			String sortNum) {
 		if(StringUtils.isEmpty(sortNum)){
-			String sortSql = "select value(max(sort),0) from st.fpf_irs_resource_sort where menu_id=" + menuId;
+			String sortSql = "select value(max(sort),0) from fpf_irs_resource_sort where menu_id=" + menuId;
 			int sort = this.jdbcTemplate.queryForObject(sortSql, Integer.class) + 1;
 			sortNum = sort + "";
 		}
-		String sql = "update st.fpf_irs_resource_sort set menu_id=?,name=?,sort=? where id=?";
+		String sql = "update fpf_irs_resource_sort set menu_id=?,name=?,sort=? where id=?";
 		this.jdbcTemplate.update(sql, new Object[]{menuId, name, sortNum, sortId});
-		String resSql = "update st.fpf_irs_resource set menu_id=? where irs_resource_sort_id=?";
+		String resSql = "update fpf_irs_resource set menu_id=? where irs_resource_sort_id=?";
 		this.jdbcTemplate.update(resSql, new Object[]{menuId, sortId});
 	}
 
 
 	@Override
 	public void changeSort(String rid, String menuId, String sortId) {
-		String sql = "update st.fpf_irs_resource set menu_id=?, irs_resource_sort_id=? where resource_id=?";
+		String sql = "update fpf_irs_resource set menu_id=?, irs_resource_sort_id=? where resource_id=?";
 		this.jdbcTemplate.update(sql, new Object[]{menuId, sortId, rid});
 	}
 
