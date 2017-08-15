@@ -3,6 +3,7 @@ package com.asiainfo.hb.gbas.controller;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -13,8 +14,11 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.asiainfo.hb.gbas.model.ZbDao;
 import com.asiainfo.hb.gbas.model.ZbDef;
+import com.asiainfo.hb.web.SessionKeyConstants;
+import com.asiainfo.hb.web.models.User;
 
 /**
  * 指标管理
@@ -32,8 +36,9 @@ public class ZbController {
 	
 	@RequestMapping("/index")
 	public String index(HttpSession session, Model model){
-		String userId = (String) session.getAttribute("loginname");
-		model.addAttribute("userId", userId);
+		User user = (User) session.getAttribute(SessionKeyConstants.USER);
+		model.addAttribute("userId", user.getId());
+		model.addAttribute("userName", user.getName());
 		return "ftl/zb";
 	}
 	
@@ -61,7 +66,7 @@ public class ZbController {
 		if(!StringUtils.isEmpty(page)){
 			currentPage = Integer.valueOf(page);
 		}
-		if(StringUtils.isEmpty(rows)){
+		if(!StringUtils.isEmpty(rows)){
 			perPage = Integer.valueOf(rows);
 		}
 		
@@ -72,31 +77,16 @@ public class ZbController {
 	}
 	
 	
-	@RequestMapping("/saveZbDef")
+	@RequestMapping(value="/saveZbDef")
 	@ResponseBody
-	public void saveZbDef(ZbDef zbDef, HttpSession session){
-		if(!StringUtils.isEmpty(zbDef.getZbCode())){
+	public boolean saveZbDef(HttpServletResponse resp, HttpServletRequest req,ZbDef zbDef, HttpSession session){
+		String optType = req.getParameter("optType");
+		if(optType.equals("edit")){
 			mZbDao.updateZb(zbDef);
-			return;
+			return true;
 		}
 		
-		String userId = (String) session.getAttribute("loginname");
-		zbDef.setCreater(userId);
-		//生成zbcode
-		StringBuffer strBuf = new StringBuffer();
-		if(zbDef.getCycle().equals("daily")){
-			strBuf.append("D");
-		}else{
-			strBuf.append("M");
-		}
-		strBuf.append(zbDef.getBoiCode());
-		strBuf.append("Z");
-		strBuf.append(mZbDao.getNextNum());
-		mLog.info("生成指标编码：" + strBuf.toString());
-		
-		zbDef.setZbCode(strBuf.toString());	
-		
-		mZbDao.saveZbDef(zbDef);
+		return mZbDao.saveZbDef(zbDef);
 	}
 
 	@RequestMapping("/deleteZbDef")
@@ -104,6 +94,32 @@ public class ZbController {
 	public void deleteZbDef(HttpServletRequest req){
 		String zbCode = req.getParameter("zbCode");
 		mZbDao.deleteZb(zbCode);
+	}
+	
+	@RequestMapping("/checkZbCode")
+	@ResponseBody
+	public boolean checkZbCode(HttpServletRequest req){
+		String zbCode = req.getParameter("zbCode");
+		return mZbDao.checkZbCode(zbCode);
+	}
+	
+	@RequestMapping("/getUserList")
+	@ResponseBody
+	public Map<String, Object> getUserList(HttpServletRequest req){
+		String page = req.getParameter("page");
+		String rows = req.getParameter("rows");
+		int perPage = 10;
+		int currentPage = 1;
+		if(!StringUtils.isEmpty(page)){
+			currentPage = Integer.valueOf(page);
+		}
+		if(!StringUtils.isEmpty(rows)){
+			perPage = Integer.valueOf(rows);
+		}
+		String name = req.getParameter("userName");
+		String id = req.getParameter("userId");
+		String cityId = req.getParameter("cityId");
+		return mZbDao.getUserList(name, id, cityId, perPage, currentPage);
 	}
 	
 }
