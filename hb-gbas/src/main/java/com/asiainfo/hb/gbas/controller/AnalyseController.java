@@ -154,8 +154,8 @@ public class AnalyseController {
 			}
 			temp.put("data", dataList);
 			temp.put("type", "line");
-			temp.put("name", gbasName);
-			nameList.add(gbasName);
+			temp.put("name", gbasName == null ?"": gbasName);
+			nameList.add(gbasName == null ?"": gbasName);
 			result.add(temp);
 		}
 		

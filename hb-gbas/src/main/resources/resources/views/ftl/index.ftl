@@ -35,7 +35,6 @@ function addTab(title, url){
 				<div title='基本配置'>
 					<ul style="padding: 0 10px;">
 						<li><a href='#' onclick="addTab('指标配置', '${mvcPath}/zb/index')"><span>指标配置</span></a></li>
-						<li><a href='#' onclick="addTab('规则配置', '${mvcPath}/rule/index')"><span>规则配置</span></a></li>
 						<li><a href='#' ><span>接口配置</span></a></li>
 						<li><a href='#' ><span>接口时限告警</span></a></li>
 						<li><a href='#' ><span>短信告警人配置</span></a></li>

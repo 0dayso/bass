@@ -48,7 +48,7 @@ public class TaskController {
 		if(!StringUtils.isEmpty(page)){
 			currentPage = Integer.valueOf(page);
 		}
-		if(StringUtils.isEmpty(rows)){
+		if(!StringUtils.isEmpty(rows)){
 			perPage = Integer.valueOf(rows);
 		}
 		

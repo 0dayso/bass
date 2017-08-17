@@ -157,3 +157,10 @@ a {
     background-color: #e6e6e6;
     border-color: #adadad;
 }
+
+.user-qry{
+	color: blue;
+	height: 28px;
+	line-height: 28px;
+	text-decoration: underline;
+}
