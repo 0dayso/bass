@@ -5,6 +5,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -22,6 +24,8 @@ import com.asiainfo.hb.gbas.model.SMSConfigDao;
 @RequestMapping("/smsConfig")
 public class SMSConfigController {
 	
+	private Logger mLog = LoggerFactory.getLogger(SMSConfigController.class);
+	
 	@Autowired
 	private SMSConfigDao mConfigDao;
 	
@@ -31,6 +35,7 @@ public class SMSConfigController {
 	 */
 	@RequestMapping("/user/index")
 	public String userIndex(){
+		mLog.debug("---userIndex---");
 		return "ftl/smsConfig/user";
 	}
 	
@@ -40,6 +45,7 @@ public class SMSConfigController {
 	 */
 	@RequestMapping("/group/index")
 	public String groupIndex(){
+		mLog.debug("---groupIndex---");
 		return "ftl/smsConfig/group";
 	}
 	
@@ -62,6 +68,7 @@ public class SMSConfigController {
 		String name = req.getParameter("userName");
 		String accNbr = req.getParameter("accNbr");
 		String remark = req.getParameter("userRemark");
+		mLog.info("---saveAlarmUser---,id:?;name:?;accNbr:?;remark:?", new Object[]{id, name, accNbr, remark});
 		if(StringUtils.isEmpty(id)){
 			mConfigDao.addUser(name, accNbr, remark);
 			return;
@@ -77,6 +84,7 @@ public class SMSConfigController {
 	@ResponseBody
 	public void delAlarmUser(HttpServletRequest req){
 		String ids = req.getParameter("alarmsIds");
+		mLog.info("---delAlarmUser---,ids:?", new Object[]{ids});
 		mConfigDao.delUser(ids);
 	}
 
@@ -118,6 +126,7 @@ public class SMSConfigController {
 		String groupId = req.getParameter("groupId");
 		String groupName = req.getParameter("groupName");
 		String groupType = req.getParameter("groupType");
+		mLog.info("---saveAlarmGroup---,operType:?; groupId:?; groupName:?; groupType:?", new Object[]{operType, groupId, groupName, groupType});
 		if(operType.equals("edit")){
 			mConfigDao.updateAlarmGroup(groupId, groupName, groupType);
 			return;
@@ -135,6 +144,7 @@ public class SMSConfigController {
 	@ResponseBody
 	public boolean checkGroupId(HttpServletRequest req){
 		String groupId = req.getParameter("groupId");
+		mLog.debug("---checkGroupId---, groupId:?", new Object[]{groupId});
 		return mConfigDao.checkGroupId(groupId);
 	}
 	

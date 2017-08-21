@@ -15,7 +15,7 @@ public class ZbDao extends CommonDao{
 	private Logger mLog = LoggerFactory.getLogger(ZbDao.class);
 
 	public boolean saveZbDef(ZbDef zbDef){
-		mLog.debug("-----saveZbDef-----" + zbDef);
+		mLog.debug("------>saveZbDef," + zbDef);
 		if(!checkZbCode(zbDef.getZbCode())){
 			return false;
 		}
@@ -35,7 +35,7 @@ public class ZbDao extends CommonDao{
 	}
 	
 	public void updateZb(ZbDef zbDef){
-		mLog.debug("-----updateZb-----" + zbDef);
+		mLog.debug("------>updateZb," + zbDef);
 		String sql = "update gbas.zb_def set zb_name=?,cycle=?,boi_code=?, zb_def=?,zb_type=?,rule_type=?,rule_def=?,comp_oper=?,comp_val=? ," +
 				" depend_type=?,proc_depend=?, gbas_depend=?,status=?,online_date='" + zbDef.getOnlineDate() + "'" +
 				",offline_date='" + zbDef.getOfflineDate() + "',remark=?,developer=?,manager=?,developer_name=?, manager_name=?," +
@@ -49,6 +49,7 @@ public class ZbDao extends CommonDao{
 	}
 	
 	private void insertRelation(String zbCode, String gbasDepend){
+		mLog.debug("------>insertRelation");
 		String[] codeArr = gbasDepend.split(";");
 		List<String> sqlList = new ArrayList<String>();
 		for(String gbasCode: codeArr){
@@ -88,6 +89,7 @@ public class ZbDao extends CommonDao{
 	}
 	
 	public boolean checkZbCode(String zbCode){
+		mLog.debug("------>checkZbCode");
 		String sql = "select * from gbas.zb_def where zb_code=?";
 		List<Map<String, Object>> list = this.dwJdbcTemplate.queryForList(sql, new Object[]{zbCode});
 		if(list != null && list.size() > 0){
@@ -97,6 +99,7 @@ public class ZbDao extends CommonDao{
 	}
 	
 	public Map<String, Object> getUserList(String name, String id, String cityId, HttpServletRequest req){
+		mLog.debug("------>getUserList");
 		String sql = "select userid, username, AREA_name areaname from st.fpf_user_user a " +
 				" left join st.FPF_BT_AREA b on a.cityid=b.AREA_ID where 1=1 ";
 		String countSql = "select count(1) from st.fpf_user_user where 1=1 ";

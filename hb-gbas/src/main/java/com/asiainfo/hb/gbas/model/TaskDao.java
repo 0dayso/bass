@@ -4,14 +4,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 
 @Repository
 public class TaskDao extends CommonDao{
 	
+	private Logger mLog = LoggerFactory.getLogger(TaskDao.class);
+	
 	public Map<String, Object> getTaskList(Map<String, Object> params, HttpServletRequest req){
-		
+		mLog.debug("------>getTaskList");
 		String rowSql = "select type,gbas_code, cycle, etl_cycle_id, etl_status,to_char(dispatch_time,'YYYY-MM-DD HH24:MI:SS') dispatch_time," +
 				" to_char(exec_start_time,'YYYY-MM-DD HH24:MI:SS') exec_start_time, to_char(exec_end_time,'YYYY-MM-DD HH24:MI:SS') exec_end_time " +
 				" from gbas.run_dispatch where 1=1 ";
@@ -47,6 +52,7 @@ public class TaskDao extends CommonDao{
 	
 	
 	public Map<String, Object> getNodeData(String gbasCode){
+		mLog.debug("------>getNodeData");
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		String nodeSql = "WITH PPL (code, depend_code) AS  ( " +
@@ -60,7 +66,8 @@ public class TaskDao extends CommonDao{
 				"UNION ALL " +
 				"SELECT child.code,child.depend_code FROM PPL parent,gbas.code_relation child WHERE child.code =parent.depend_code) " +
 				"SELECT code, depend_code FROM PPL";
-		
+		mLog.debug("nodeSql:" + nodeSql);
+		mLog.debug("edgeSql:" + edgeSql);
 		List<Map<String, Object>> nodeList = this.dwJdbcTemplate.queryForList(nodeSql);
 		List<Map<String, Object>> edgeList = this.dwJdbcTemplate.queryForList(edgeSql);
 		

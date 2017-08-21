@@ -44,7 +44,6 @@ function getTemplAnalyseData(){
 			unMask();
 		},
 		error:function(data, textStatus){
-			alert("查询数据出错");
 			unMask();
 		}
 	});

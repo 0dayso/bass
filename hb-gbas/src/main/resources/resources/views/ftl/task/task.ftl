@@ -47,7 +47,22 @@ function formatStatus(value){
 		return "等待";
 	}
 	if(value == "1"){
-		return "开始执行";
+		return "强制开始执行";
+	}
+	if(value == "2"){
+		return "数据依赖已满足";
+	}
+	if(value == "3"){
+		return "开始执行指标计算";
+	}
+	if(value == "4"){
+		return "指标计算完成";
+	}
+	if(value == "5"){
+		return "强规则稽核失败";
+	}
+	if(value == "6"){
+		return "完成";
 	}
 	return value;
 }
@@ -91,9 +106,9 @@ function queryTask(){
 				<!--<th field="itemId" checkbox="true"></th>-->
 				<th data-options="field:'type',width:50,formatter:formatType">类型</th>
 				<th data-options="field:'gbas_code',width:60">程序名称</th>
-				<th data-options="field:'cycle',width:60,formatter:formatCycle">周期</th>
+				<th data-options="field:'cycle',width:40,formatter:formatCycle">周期</th>
 				<th data-options="field:'etl_cycle_id',width:60">批次号</th>
-				<th data-options="field:'etl_status',width:50,formatter:formatStatus">状态</th>
+				<th data-options="field:'etl_status',width:70,formatter:formatStatus">状态</th>
 				<th data-options="field:'dispatch_time',width:100">发布时间</th>
 				<th data-options="field:'exec_start_time',width:100">开始执行时间</th>
 				<th data-options="field:'exec_end_time',width:100">执行结束时间</th>
