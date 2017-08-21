@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.StringUtils;
 
 import com.asiainfo.hb.web.models.CommonDao;
 
@@ -38,12 +40,12 @@ public class ZbDao extends CommonDao{
 	
 	public void updateZb(ZbDef zbDef){
 		mLog.debug("-----updateZb-----" + zbDef);
-		String sql = "update gbas.zb_def set zb_name=?, zb_def=?,zb_type=?,rule_type=?,rule_def=?,comp_oper=?,comp_val=? ," +
+		String sql = "update gbas.zb_def set zb_name=?,cycle=?,boi_code=?, zb_def=?,zb_type=?,rule_type=?,rule_def=?,comp_oper=?,comp_val=? ," +
 				" depend_type=?,proc_depend=?, gbas_depend=?,status=?,online_date='" + zbDef.getOnlineDate() + "'" +
 				",offline_date='" + zbDef.getOfflineDate() + "',remark=?,developer=?,manager=?,developer_name=?, manager_name=?," +
 				" priority=?,expect_end_day=? ,expect_end_time=? where zb_code=?";
 		
-		this.jdbcTemplate.update(sql, new Object[]{zbDef.getZbName(), zbDef.getZbDef(), zbDef.getZbType(), zbDef.getRuleType(),
+		this.jdbcTemplate.update(sql, new Object[]{zbDef.getZbName(), zbDef.getCycle(), zbDef.getBoiCode(), zbDef.getZbDef(), zbDef.getZbType(), zbDef.getRuleType(),
 				zbDef.getRuleDef(),zbDef.getCompOper(),zbDef.getCompVal(),zbDef.getDependType(),zbDef.getProcDepend(),zbDef.getGbasDepend(),
 				zbDef.getStatus(), zbDef.getRemark(), zbDef.getDeveloper(), zbDef.getManager(),zbDef.getDeveloperName(), zbDef.getManagerName(),
 				zbDef.getPriority(),zbDef.getExpectEndDay(), zbDef.getExpectEndTime(), zbDef.getZbCode()});
@@ -54,7 +56,7 @@ public class ZbDao extends CommonDao{
 		String[] codeArr = gbasDepend.split(";");
 		List<String> sqlList = new ArrayList<String>();
 		for(String gbasCode: codeArr){
-			if(!StringUtils.isEmpty(gbasCode)){
+			if(isNotNull(gbasCode)){
 				sqlList.add("delete from gbas.code_relation where code='" + zbCode + "' and depend_code='" + gbasCode + "'");
 				sqlList.add("insert into gbas.code_relation (code, depend_code) values('" + zbCode + "','" + gbasCode +"')");
 			}
@@ -72,7 +74,7 @@ public class ZbDao extends CommonDao{
 	}
 	
 
-	public Map<String, Object> getZbList(ZbDef zbDef, int rows, int page){
+	public Map<String, Object> getZbList(ZbDef zbDef, HttpServletRequest req){
 		mLog.debug("-----getZbList-----");
 		String pageSql = "select * from gbas.zb_def where 1=1 ";
 		String countSql = "select count(1) from gbas.zb_def where 1=1 ";
@@ -84,7 +86,9 @@ public class ZbDao extends CommonDao{
 		condition.put("zb_name like", zbDef.getZbName());
 		condition.put("zb_code like", zbDef.getZbCode());
 		
-		return where(condition, pageSql, countSql, rows, page, " zb_code");
+		int[] pageParam = this.pageParam(req);
+		
+		return where(condition, pageSql, countSql, pageParam[0], pageParam[1], " zb_code");
 	}
 	
 	public boolean checkZbCode(String zbCode){
@@ -96,21 +100,24 @@ public class ZbDao extends CommonDao{
 		return true;
 	}
 	
-	public Map<String, Object> getUserList(String name, String id, String cityId, int rows, int page){
+	public Map<String, Object> getUserList(String name, String id, String cityId, HttpServletRequest req){
 		String sql = "select userid, username, AREA_name areaname from st.fpf_user_user a " +
 				" left join st.FPF_BT_AREA b on a.cityid=b.AREA_ID where 1=1 ";
 		String countSql = "select count(1) from st.fpf_user_user where 1=1 ";
 		String condition = "";
-		if(!StringUtils.isEmpty(name)){
+		if(isNotNull(name)){
 			condition += " and username like '%" + name + "%'";
 		}
-		if(!StringUtils.isEmpty(id)){
+		if(isNotNull(id)){
 			condition += " and userid like '%" + id + "%'";
 		}
-		if(!StringUtils.isEmpty(cityId)){
+		if(isNotNull(cityId)){
 			condition += " and cityid=" + cityId;
 		}
-		return where(null, sql+condition , countSql + condition, rows, page, "userId");
+		
+		int[] pageParam = this.pageParam(req);
+		
+		return page(sql+condition , countSql + condition, pageParam[0], pageParam[1], "userId");
 	}
 	
 }

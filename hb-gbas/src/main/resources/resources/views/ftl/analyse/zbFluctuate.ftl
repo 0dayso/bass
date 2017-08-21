@@ -40,8 +40,6 @@ function resetCodeOption(){
 	var codes = new Array();
 	if(type == 'zb'){
 		codes = gbasList.zbList;
-	}else if(type == 'rule'){
-		codes = gbasList.ruleList;
 	}
 	
 	var html = "";
@@ -258,9 +256,6 @@ function formatType(value){
 	if(value == "zb"){
 		return "指标";
 	}
-	if(value == "rule"){
-		return "规则";
-	}
 	if(value == "export"){
 		return "接口";
 	}
@@ -274,7 +269,6 @@ function formatType(value){
 			<label class="fl">类型</label>
 			<select class="fl" id="type" style="width:100px;height:30px;line-height:30px;" onchange="resetCodeOption()">
 				<option value='zb'>指标</option>
-				<option value='rule'>规则</option>
 				<option value='export'>接口</option>
 			</select>
 			<label class="fl" style="margin-left:15px;">周期</label>

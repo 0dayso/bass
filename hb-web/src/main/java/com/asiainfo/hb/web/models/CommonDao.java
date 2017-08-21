@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 import org.springframework.util.StringUtils;
 
@@ -19,12 +21,34 @@ public class CommonDao  extends BaseDao{
 	/**
 	 * 判断值是否为空
 	 */
-	public boolean isNull(String params) {
-		if (params != null && params.length() > 0) {
+	public boolean isNotNull(String param) {
+		if (param != null && param.length() > 0) {
 			return true;
 		} else {
 			return false;
 		}
+	}
+	
+	/**
+	 * 获取请求的分页参数
+	 * @param req
+	 * @return
+	 */
+	public int[] pageParam(HttpServletRequest req){
+		int[] param = new int[2];
+		String page = req.getParameter("page");
+		String rows = req.getParameter("rows");
+		int perPage = 10;
+		int currentPage = 1;
+		if(isNotNull(page)){
+			currentPage = Integer.valueOf(page);
+		}
+		if(isNotNull(rows)){
+			perPage = Integer.valueOf(rows);
+		}
+		param[0] = perPage;
+		param[1] = currentPage;
+		return param;
 	}
 
 	/***

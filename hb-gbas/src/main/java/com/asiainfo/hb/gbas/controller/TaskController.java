@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -41,18 +40,7 @@ public class TaskController {
 		param.put("etl_status", req.getParameter("status"));
 		param.put("gbas_code like", req.getParameter("name"));
 		
-		String page = req.getParameter("page");
-		String rows = req.getParameter("rows");
-		int perPage = 10;
-		int currentPage = 1;
-		if(!StringUtils.isEmpty(page)){
-			currentPage = Integer.valueOf(page);
-		}
-		if(!StringUtils.isEmpty(rows)){
-			perPage = Integer.valueOf(rows);
-		}
-		
-		return mTaskDao.getTaskList(param, currentPage, perPage);
+		return mTaskDao.getTaskList(param, req);
 	}
 	
 	@RequestMapping("/execCondition")

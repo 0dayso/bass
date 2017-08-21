@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -59,21 +58,10 @@ public class ZbController {
 		zbDef.setZbName(zbName);
 		zbDef.setZbCode(zbCode);
 		
-		String page = req.getParameter("page");
-		String rows = req.getParameter("rows");
-		int perPage = 10;
-		int currentPage = 1;
-		if(!StringUtils.isEmpty(page)){
-			currentPage = Integer.valueOf(page);
-		}
-		if(!StringUtils.isEmpty(rows)){
-			perPage = Integer.valueOf(rows);
-		}
-		
-		mLog.debug("参数：page=" + page + ", rows=" + rows + ",zbType=" + zbType + ",zbCycle=" +
+		mLog.debug("参数：zbType=" + zbType + ",zbCycle=" +
 					zbCycle + ",status=" + status + ",zbName=" + zbName + ",zbCode=" + zbCode);
 		
-		return mZbDao.getZbList(zbDef, perPage, currentPage);
+		return mZbDao.getZbList(zbDef, req);
 	}
 	
 	
@@ -106,20 +94,10 @@ public class ZbController {
 	@RequestMapping("/getUserList")
 	@ResponseBody
 	public Map<String, Object> getUserList(HttpServletRequest req){
-		String page = req.getParameter("page");
-		String rows = req.getParameter("rows");
-		int perPage = 10;
-		int currentPage = 1;
-		if(!StringUtils.isEmpty(page)){
-			currentPage = Integer.valueOf(page);
-		}
-		if(!StringUtils.isEmpty(rows)){
-			perPage = Integer.valueOf(rows);
-		}
 		String name = req.getParameter("userName");
 		String id = req.getParameter("userId");
 		String cityId = req.getParameter("cityId");
-		return mZbDao.getUserList(name, id, cityId, perPage, currentPage);
+		return mZbDao.getUserList(name, id, cityId, req);
 	}
 	
 }

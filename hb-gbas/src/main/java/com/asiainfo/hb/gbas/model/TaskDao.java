@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Repository;
 
 import com.asiainfo.hb.web.models.CommonDao;
@@ -11,13 +13,16 @@ import com.asiainfo.hb.web.models.CommonDao;
 @Repository
 public class TaskDao extends CommonDao{
 	
-	public Map<String, Object> getTaskList(Map<String, Object> params, Integer curPage, Integer perPage){
+	public Map<String, Object> getTaskList(Map<String, Object> params, HttpServletRequest req){
 		
 		String rowSql = "select type,gbas_code, cycle, etl_cycle_id, etl_status,to_char(dispatch_time,'YYYY-MM-DD HH24:MI:SS') dispatch_time," +
 				" to_char(exec_start_time,'YYYY-MM-DD HH24:MI:SS') exec_start_time, to_char(exec_end_time,'YYYY-MM-DD HH24:MI:SS') exec_end_time " +
 				" from gbas.run_dispatch where 1=1 ";
 		String countSql = "select count(1) from gbas.run_dispatch where 1=1 ";
-		return where(params, rowSql, countSql, perPage, curPage, " etl_cycle_id");
+		
+		int[] pageParam = this.pageParam(req);
+		
+		return where(params, rowSql, countSql, pageParam[0], pageParam[1], " etl_cycle_id");
 	}
 	
 	/**public Map<String, Object> getNodeData(String gbasCode){

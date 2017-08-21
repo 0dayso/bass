@@ -66,10 +66,10 @@ function formatType(value){
 }
 
 function queryTask(){
-	var type = $("#qryType").val().trim();
-	var cycle = $("#qryCycle").val().trim();
-	var status = $("#qryStatus").val().trim();
-	var name = $("#qryName").val().trim();
+	var type = $("#qryType").combobox("getValue").trim();
+	var cycle = $("#qryCycle").combobox("getValue").trim();
+	var status = $("#qryStatus").combobox("getValue").trim();
+	var name = $("#qryName").textbox("getValue").trim();
 	
 	$("#runTable").datagrid("load", {
 		type : type,
@@ -104,26 +104,26 @@ function queryTask(){
 	<div id="tb" style="padding:5px;height:auto">
 		<div style="padding: 3px;">
 			<span>类型</span>
-			<select id="qryType">
+			<select id="qryType" class="easyui-combobox" data-options="editable:false,panelHeight:'auto'" style="height: 27px; width: 100px;">
 				<option value="">---请选择---</option>
 				<option value="zb">指标</option>
 				<option value="rule">规则</option>
 				<option value="export">接口</option>
 			</select>
 			<span>周期</span>
-			<select id="qryCycle">
+			<select id="qryCycle" class="easyui-combobox" data-options="editable:false,panelHeight:'auto'" style="height: 27px; width: 100px;">
 				<option value="">---请选择---</option>
 				<option value="daily">日</option>
 				<option value="monthly">月</option>
 			</select>
 			<span>状态</span>
-			<select id="qryStatus">
+			<select id="qryStatus" class="easyui-combobox" data-options="editable:false,panelHeight:'auto'" style="height: 27px; width: 100px;">
 				<option value="">---请选择---</option>
 				<option value="0">等待</option>
 				<option value="1">开始执行</option>
 			</select>
 			<span>程序名称</span>
-			<input id="qryName">
+			<input id="qryName" class="easyui-textbox" style="height: 27px; width: 160px;">
 			<a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="queryTask()">查询</a>
 		</div>
 		<div>

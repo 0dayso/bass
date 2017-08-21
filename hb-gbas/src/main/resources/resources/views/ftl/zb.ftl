@@ -28,7 +28,7 @@ function checkZbCode(){
 		,dataType : "json"
 		,success: function(data){
 			if(!data){
-				var wind = $.messager.alert('提示','此指标编码已存在，请重新输入','info');
+				var wind = $.messager.alert('提示','此指标编码已存在，请重新填入','info');
 				wind.window({onBeforeClose:function(){
 					$('#zbCode').textbox('setValue','');
 				}});
@@ -161,11 +161,11 @@ function statusReplace(value){
 }
 
 function queryZb(){
-	var zbType = $("#qryZbType").val().trim();
-	var zbCycle = $("#qryCycle").val().trim();
-	var status = $("#qryStatus").val().trim();
-	var zbName = $("#qryZbName").val().trim();
-	var zbCode = $("#qryZbCode").val().trim();
+	var zbType = $("#qryZbType").combobox("getValue").trim();
+	var zbCycle = $("#qryCycle").combobox("getValue").trim();
+	var status = $("#qryStatus").combobox("getValue").trim();
+	var zbName = $("#qryZbName").textbox("getValue").trim();
+	var zbCode = $("#qryZbCode").textbox("getValue").trim();
 	
 	$("#zbTable").datagrid("load", {
 		zbType : zbType,
@@ -262,27 +262,27 @@ function userSelect(){
 	<div id="tb" style="padding:5px;height:auto">
 		<div style="padding: 3px;">
 			<span>类型</span>
-			<select id="qryZbType">
+			<select id="qryZbType" class="easyui-combobox" data-options="editable:false,panelHeight:'auto'" style="height: 27px; width: 100px;">
 				<option value="">---请选择---</option>
 				<option value="一经">一经</option>
 				<option value="省内">省内</option>
 			</select>
 			<span>周期</span>
-			<select id="qryCycle">
+			<select id="qryCycle" class="easyui-combobox" data-options="editable:false,panelHeight:'auto'" style="height: 27px; width: 100px;">
 				<option value="">---请选择---</option>
 				<option value="daily">日</option>
 				<option value="monthly">月</option>
 			</select>
 			<span>状态</span>
-			<select id="qryStatus">
+			<select id="qryStatus" class="easyui-combobox" data-options="editable:false,panelHeight:'auto'" style="height: 27px; width: 100px;">
 				<option value="">---请选择---</option>
 				<option value="0">开发</option>
 				<option value="1">上线</option>
 			</select>
 			<span>指标名称</span>
-			<input id="qryZbName">
+			<input id="qryZbName" class="easyui-textbox" style="height: 27px; width: 160px;">
 			<span>指标编码</span>
-			<input id="qryZbCode">
+			<input id="qryZbCode" class="easyui-textbox" style="height: 27px; width: 160px;">
 			<a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="queryZb()">查询</a>
 		</div>
 		<div>
@@ -325,15 +325,15 @@ function userSelect(){
 			<div class="mar-8" style="height:100px;">
 				<div class="mar-b15">
 					<div class="inp-lab"><span style="color:red;">*</span>指标编码:</div>
-					<input id="zbCode" name="zbCode" class="easyui-textbox form-inp" missingMessage="指标编码为必输项" data-options="required:true" style="width:75%;height:32px;">
+					<input id="zbCode" name="zbCode" class="easyui-textbox form-inp" missingMessage="指标编码为必填项" data-options="required:true" style="width:75%;height:32px;">
 				</div>
 				<div class="mar-b15">
 					<div class="inp-lab"><span style="color:red;">*</span>指标名称:</div>
-					<input id="zbName" name="zbName" class="easyui-textbox form-inp" missingMessage="指标名称为必输项" data-options="required:true" style="width:75%;height:32px;">
+					<input id="zbName" name="zbName" class="easyui-textbox form-inp" missingMessage="指标名称为必填项" data-options="required:true" style="width:75%;height:32px;">
 				</div>
 				<div class="mar-b15">
 					<div class="inp-lab"><span style="color:red;">*</span>一经接口号:</div>
-					<input id="boiCode" name="boiCode" class="easyui-textbox form-inp" missingMessage="一经接口号为必输项" data-options="required:true,prompt:'多个接口号用;分割'" style="width:75%;height:32px;">
+					<input id="boiCode" name="boiCode" class="easyui-textbox form-inp" missingMessage="一经接口号为必填项" data-options="required:true,prompt:'多个接口号用;分割'" style="width:75%;height:32px;">
 				</div>
 				<div class="mar-b15">
 					<div class="inp-lab"><span style="color:red;">*</span>指标类型:</div>
@@ -351,11 +351,11 @@ function userSelect(){
 				</div>
 				<div class="mar-b15">
 					<div class="inp-lab"><span style="color:red;">*</span>指标描述:</div>
-					<input id="remark" name="remark" class="easyui-textbox form-inp" missingMessage="指标描述为必输项" data-options="required:true,multiline:true" style="width:75%;height:60px;">
+					<input id="remark" name="remark" class="easyui-textbox form-inp" missingMessage="指标描述为必填项" data-options="required:true,multiline:true" style="width:75%;height:60px;">
 				</div>
 				<div class="mar-b15">
 					<div class="inp-lab"><span style="color:red;">*</span>指标sql:</div>
-					<input id="zbDef" name="zbDef" class="easyui-textbox form-inp" missingMessage="指标sql为必输项" data-options="required:true,multiline:true" style="width:75%;height:60px;">
+					<input id="zbDef" name="zbDef" class="easyui-textbox form-inp" missingMessage="指标sql为必填项" data-options="required:true,multiline:true" style="width:75%;height:60px;">
 				</div>
 				<div class="mar-b15">
 					<div class="inp-lab"><span style="color:red;">*</span>规则类型:</div>
@@ -366,7 +366,7 @@ function userSelect(){
 				</div>
 				<div class="mar-b15">
 					<div class="inp-lab"><span style="color:red;">*</span>规则配置:</div>
-					<input id="ruleDef" name="ruleDef" class="easyui-textbox form-inp" missingMessage="规则配置为必输项" data-options="required:true,multiline:true" style="width:75%;height:60px;">
+					<input id="ruleDef" name="ruleDef" class="easyui-textbox form-inp" missingMessage="规则配置为必填项" data-options="required:true,multiline:true" style="width:75%;height:60px;">
 				</div>
 				<div class="mar-b15">
 					<div class="inp-lab"><span style="color:red;">*</span>比较运算符:</div>
@@ -381,7 +381,7 @@ function userSelect(){
 				</div>
 				<div class="mar-b15">
 					<div class="inp-lab"><span style="color:red;">*</span>阈值:</div>
-					<input id="compVal" name="compVal" class="easyui-numberbox form-inp"  missingMessage="阈值为必输项" 
+					<input id="compVal" name="compVal" class="easyui-numberbox form-inp"  missingMessage="阈值为必填项" 
 						data-options="required:true,precision:2,decimalSeparator:'.'" style="width:75%;height:32px;">
 				</div>
 				<div class="mar-b15">
@@ -394,11 +394,11 @@ function userSelect(){
 				</div>
 				<div class="mar-b15">
 					<div class="inp-lab"><span style="color:red;">*</span>依赖程序:</div>
-					<input id="procDepend" name="procDepend" class="easyui-textbox form-inp"  missingMessage="依赖程序为必输项" data-options="required:true" style="width:75%;height:32px;">
+					<input id="procDepend" name="procDepend" class="easyui-textbox form-inp"  missingMessage="依赖程序为必填项" data-options="required:true" style="width:75%;height:32px;">
 				</div>
 				<div class="mar-b15">
 					<div class="fl" style="height: 32px;line-height: 32px; width:42%;"><span style="color:red;">*</span>依赖的gbas指标,规则,接口:</div>
-					<input id="gbasDepend" name="gbasDepend" class="easyui-textbox form-inp" missingMessage="依赖的gbas指标,规则,接口为必输项" data-options="required:true,prompt:'多个依赖用;分割'" style="height:32px; width:57%;">
+					<input id="gbasDepend" name="gbasDepend" class="easyui-textbox form-inp" missingMessage="依赖的gbas指标,规则,接口为必填项" data-options="required:true,prompt:'多个依赖用;分割'" style="height:32px; width:57%;">
 				</div>
 				<div class="mar-b15">
 					<div class="inp-lab"><span style="color:red;">*</span>状态:</div>
@@ -409,25 +409,25 @@ function userSelect(){
 				</div>
 				<div class="mar-b15">
 					<div class="inp-lab"><span style="color:red;">*</span>上线日期:</div>
-					<input id="onlineDate" name="onlineDate" editable="false" missingMessage="上线日期为必输项" data-options="required:true" class="easyui-datebox form-inp" style="width:75%;height:32px;">
+					<input id="onlineDate" name="onlineDate" editable="false" missingMessage="上线日期为必填项" data-options="required:true" class="easyui-datebox form-inp" style="width:75%;height:32px;">
 				</div>
 				<div class="mar-b15">
 					<div class="inp-lab"><span style="color:red;">*</span>下线日期:</div>
-					<input id="offlineDate" name="offlineDate" editable="false" missingMessage="下线日期为必输项" data-options="required:true" class="easyui-datebox form-inp" style="width:75%;height:32px;">
+					<input id="offlineDate" name="offlineDate" editable="false" missingMessage="下线日期为必填项" data-options="required:true" class="easyui-datebox form-inp" style="width:75%;height:32px;">
 				</div>
 				<div class="mar-b15">
 					<div class="inp-lab"><span style="color:red;">*</span>预期完成日期:</div>
-					<input id="expectEndDay" name="expectEndDay" class="easyui-numberbox form-inp"  missingMessage="预期完成日期为必输项" 
+					<input id="expectEndDay" name="expectEndDay" class="easyui-numberbox form-inp"  missingMessage="预期完成日期为必填项" 
 						data-options="required:true,min:0,max:31,prompt:'0表示每日,1-31表示1-31日'" style="width:75%;height:32px;">
 				</div>
 				<div class="mar-b15">
 					<div class="inp-lab"><span style="color:red;">*</span>预期完成时间:</div>
-					<input id="expectEndTime" name="expectEndTime" class="easyui-numberbox form-inp"  missingMessage="预期完成时间为必输项" 
+					<input id="expectEndTime" name="expectEndTime" class="easyui-numberbox form-inp"  missingMessage="预期完成时间为必填项" 
 						data-options="required:true,min:0,max:24,precision:2,decimalSeparator:'.',prompt:'例：8.5表示8点半'" style="width:75%;height:32px;">
 				</div>
 				<div class="mar-b15">
 					<div class="inp-lab"><span style="color:red;">*</span>优先级:</div>
-					<input id="priority" name="priority" class="easyui-numberbox form-inp" missingMessage="优先级为必输项" data-options="required:true" style="width:75%;height:32px;">
+					<input id="priority" name="priority" class="easyui-numberbox form-inp" missingMessage="优先级为必填项" data-options="required:true" style="width:75%;height:32px;">
 				</div>
 				<div class="mar-b15">
 					<div class="inp-lab">创建人:</div>

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.stereotype.Repository;
-import org.springframework.util.StringUtils;
 
 import com.asiainfo.hb.web.models.CommonDao;
 
@@ -18,11 +18,9 @@ public class AnalyseDao extends CommonDao{
 	 */
 	public Map<String, Object> getGbasList(){
 		String zbSql = "select zb_code code, zb_name name, cycle from gbas.zb_def";
-		String ruleSql = "select rule_code code, rule_name name, cycle from gbas.rule_def";
 		
 		Map<String, Object> resMap= new HashMap<String, Object>();
 		resMap.put("zbList", this.jdbcTemplate.queryForList(zbSql));
-		resMap.put("ruleList", this.jdbcTemplate.queryForList(ruleSql));
 		return resMap;
 	}
 	
@@ -113,7 +111,7 @@ public class AnalyseDao extends CommonDao{
 	public List<Map<String, Object>> getTemplate(String userId, String name){
 		String sql = "select id, name, cycle, type, is_first_page_show, to_char(create_time,'YYYY-MM-DD HH24:MI:SS') create_time " +
 				" from gbas.ANALYSE_TEMPLATE where creater_id='" + userId + "'";
-		if(!StringUtils.isEmpty(name)){
+		if(isNotNull(name)){
 			sql += " and name like '%" + name + "%'";
 		}
 		sql += " order by create_time desc";
