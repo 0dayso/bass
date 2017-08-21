@@ -4,14 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
-
-import com.asiainfo.hb.web.models.CommonDao;
 
 @Repository
 public class ZbDao extends CommonDao{
@@ -29,7 +25,7 @@ public class ZbDao extends CommonDao{
 				" offline_date, remark, creater, developer, manager,creater_name, developer_name, manager_name, priority,expect_end_day, expect_end_time) values(" +
 				" ?,?,?,?,?,?,?,?,?,?,?,?,?,?,'" + zbDef.getOnlineDate() + "','" + zbDef.getOfflineDate() +"',?,?,?,?,?,?,?,?,?,?)";
 		
-		this.jdbcTemplate.update(sql, new Object[]{zbDef.getZbCode(), zbDef.getZbName(), zbDef.getBoiCode(), zbDef.getZbType(),zbDef.getZbDef(),
+		this.dwJdbcTemplate.update(sql, new Object[]{zbDef.getZbCode(), zbDef.getZbName(), zbDef.getBoiCode(), zbDef.getZbType(),zbDef.getZbDef(),
 				zbDef.getRuleType(), zbDef.getRuleDef(), zbDef.getCompOper(), zbDef.getCompVal(), zbDef.getDependType(),
 				zbDef.getProcDepend(), zbDef.getGbasDepend(), zbDef.getStatus(), zbDef.getCycle(), zbDef.getRemark(), zbDef.getCreater(),
 				zbDef.getDeveloper(), zbDef.getManager(), zbDef.getCreaterName(), zbDef.getDeveloperName(), zbDef.getManagerName(),
@@ -45,7 +41,7 @@ public class ZbDao extends CommonDao{
 				",offline_date='" + zbDef.getOfflineDate() + "',remark=?,developer=?,manager=?,developer_name=?, manager_name=?," +
 				" priority=?,expect_end_day=? ,expect_end_time=? where zb_code=?";
 		
-		this.jdbcTemplate.update(sql, new Object[]{zbDef.getZbName(), zbDef.getCycle(), zbDef.getBoiCode(), zbDef.getZbDef(), zbDef.getZbType(), zbDef.getRuleType(),
+		this.dwJdbcTemplate.update(sql, new Object[]{zbDef.getZbName(), zbDef.getCycle(), zbDef.getBoiCode(), zbDef.getZbDef(), zbDef.getZbType(), zbDef.getRuleType(),
 				zbDef.getRuleDef(),zbDef.getCompOper(),zbDef.getCompVal(),zbDef.getDependType(),zbDef.getProcDepend(),zbDef.getGbasDepend(),
 				zbDef.getStatus(), zbDef.getRemark(), zbDef.getDeveloper(), zbDef.getManager(),zbDef.getDeveloperName(), zbDef.getManagerName(),
 				zbDef.getPriority(),zbDef.getExpectEndDay(), zbDef.getExpectEndTime(), zbDef.getZbCode()});
@@ -62,7 +58,7 @@ public class ZbDao extends CommonDao{
 			}
 		}
 		if(sqlList.size() != 0){
-			this.jdbcTemplate.batchUpdate(sqlList.toArray(new String[sqlList.size()]));
+			this.dwJdbcTemplate.batchUpdate(sqlList.toArray(new String[sqlList.size()]));
 		}
 		
 	}
@@ -70,7 +66,7 @@ public class ZbDao extends CommonDao{
 	public void deleteZb(String zbCode){
 		mLog.debug("-----deleteZb-----zbCode:" + zbCode);
 		String sql = "delete from gbas.zb_def where zb_code=?";
-		this.jdbcTemplate.update(sql, new Object[]{zbCode});
+		this.dwJdbcTemplate.update(sql, new Object[]{zbCode});
 	}
 	
 
@@ -88,12 +84,12 @@ public class ZbDao extends CommonDao{
 		
 		int[] pageParam = this.pageParam(req);
 		
-		return where(condition, pageSql, countSql, pageParam[0], pageParam[1], " zb_code");
+		return queryPage(dwJdbcTemplate, condition, pageSql, countSql, pageParam[0], pageParam[1], " zb_code");
 	}
 	
 	public boolean checkZbCode(String zbCode){
 		String sql = "select * from gbas.zb_def where zb_code=?";
-		List<Map<String, Object>> list = this.jdbcTemplate.queryForList(sql, new Object[]{zbCode});
+		List<Map<String, Object>> list = this.dwJdbcTemplate.queryForList(sql, new Object[]{zbCode});
 		if(list != null && list.size() > 0){
 			return false;
 		}
@@ -117,7 +113,7 @@ public class ZbDao extends CommonDao{
 		
 		int[] pageParam = this.pageParam(req);
 		
-		return page(sql+condition , countSql + condition, pageParam[0], pageParam[1], "userId");
+		return queryPage(jdbcTemplate, null, sql+condition , countSql + condition, pageParam[0], pageParam[1], "userId");
 	}
 	
 }

@@ -3,12 +3,9 @@ package com.asiainfo.hb.gbas.model;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.stereotype.Repository;
 
-import com.asiainfo.hb.web.models.CommonDao;
 
 @Repository
 public class TaskDao extends CommonDao{
@@ -22,7 +19,7 @@ public class TaskDao extends CommonDao{
 		
 		int[] pageParam = this.pageParam(req);
 		
-		return where(params, rowSql, countSql, pageParam[0], pageParam[1], " etl_cycle_id");
+		return queryPage(dwJdbcTemplate, params, rowSql, countSql, pageParam[0], pageParam[1], " etl_cycle_id");
 	}
 	
 	/**public Map<String, Object> getNodeData(String gbasCode){
@@ -40,8 +37,8 @@ public class TaskDao extends CommonDao{
 				"SELECT child.ID,child.pID,child.NAME FROM PPL parent,st.d3_test child WHERE child.id =parent.pid ) " +
 				"SELECT id code, pid depend_code FROM PPL where pid !=0";
 		
-		List<Map<String, Object>> nodeList = this.jdbcTemplate.queryForList(nodeSql);
-		List<Map<String, Object>> edgeList = this.jdbcTemplate.queryForList(edgeSql);
+		List<Map<String, Object>> nodeList = this.dwJdbcTemplate.queryForList(nodeSql);
+		List<Map<String, Object>> edgeList = this.dwJdbcTemplate.queryForList(edgeSql);
 		
 		map.put("nodes", nodeList);
 		map.put("edges", edgeList);
@@ -64,8 +61,8 @@ public class TaskDao extends CommonDao{
 				"SELECT child.code,child.depend_code FROM PPL parent,gbas.code_relation child WHERE child.code =parent.depend_code) " +
 				"SELECT code, depend_code FROM PPL";
 		
-		List<Map<String, Object>> nodeList = this.jdbcTemplate.queryForList(nodeSql);
-		List<Map<String, Object>> edgeList = this.jdbcTemplate.queryForList(edgeSql);
+		List<Map<String, Object>> nodeList = this.dwJdbcTemplate.queryForList(nodeSql);
+		List<Map<String, Object>> edgeList = this.dwJdbcTemplate.queryForList(edgeSql);
 		
 		map.put("nodes", nodeList);
 		map.put("edges", edgeList);

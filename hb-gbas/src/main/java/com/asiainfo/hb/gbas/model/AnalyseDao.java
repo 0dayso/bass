@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.stereotype.Repository;
 
-import com.asiainfo.hb.web.models.CommonDao;
 
 @Repository
 public class AnalyseDao extends CommonDao{
+	
 	
 	/**
 	 * 获取所有的gbas配置
@@ -20,7 +19,7 @@ public class AnalyseDao extends CommonDao{
 		String zbSql = "select zb_code code, zb_name name, cycle from gbas.zb_def";
 		
 		Map<String, Object> resMap= new HashMap<String, Object>();
-		resMap.put("zbList", this.jdbcTemplate.queryForList(zbSql));
+		resMap.put("zbList", this.dwJdbcTemplate.queryForList(zbSql));
 		return resMap;
 	}
 	
@@ -37,7 +36,7 @@ public class AnalyseDao extends CommonDao{
 		StringBuffer sql = new StringBuffer();
 		sql.append("select * from gbas.").append(tableName);
 		sql.append(" where time_id between ").append(startTime).append(" and ").append(endTime);
-		return this.jdbcTemplate.queryForList(sql.toString());
+		return this.dwJdbcTemplate.queryForList(sql.toString());
 	}
 	
 	/**
@@ -56,7 +55,7 @@ public class AnalyseDao extends CommonDao{
 		strBuf.append("select time_id, gbas_val val, 'gbas_val' name from gbas.").append(tableName).append(condition);
 		strBuf.append(" union all ");
 		strBuf.append("select time_id, gbas_val1 val, 'gbas_val1' name from gbas.").append(tableName).append(condition);
-		return this.jdbcTemplate.queryForList(strBuf.toString());
+		return this.dwJdbcTemplate.queryForList(strBuf.toString());
 	}
 	
 	/**
@@ -66,14 +65,9 @@ public class AnalyseDao extends CommonDao{
 	 * @return
 	 */
 	public String getGbasNameByCode(String gbasCode, String type){
-		String sql = "";
-		if("rule".equals(type)){
-			sql = "select max(rule_name) name from gbas.rule_def where rule_code=?";
-		}else{
-			sql = "select max(zb_name) name from gbas.zb_def where zb_code=?";
-		}
+		String sql = "select max(zb_name) name from gbas.zb_def where zb_code=?";
 		String name = "";
-		Map<String, Object> map = this.jdbcTemplate.queryForMap(sql, new Object[]{gbasCode});
+		Map<String, Object> map = this.dwJdbcTemplate.queryForMap(sql, new Object[]{gbasCode});
 		if(!map.isEmpty()){
 			name = (String) map.get("name");
 		}
@@ -91,7 +85,7 @@ public class AnalyseDao extends CommonDao{
 	 */
 	public void saveTemplate(String name, String cycle,String type, String gbasCodes,String isFirstPageShow, String userId){
 		String idSql = "select value(max(id), 0) from gbas.analyse_template";
-		int id = this.jdbcTemplate.queryForObject(idSql, Integer.class) + 1;
+		int id = this.dwJdbcTemplate.queryForObject(idSql, Integer.class) + 1;
 		List<String> sqlList = new ArrayList<String>();
 		sqlList.add("insert into gbas.analyse_template (id, name, cycle, type, is_first_page_show, creater_id) values (" 
 				+ id + ",'" + name + "', '" + cycle + "','" + type + "','" + isFirstPageShow + "','" + userId + "')");
@@ -99,7 +93,7 @@ public class AnalyseDao extends CommonDao{
 		for(String gbasCode: gbasCodeArr){
 			sqlList.add("insert into gbas.analyse_template_ext (id, GBAS_CODE) values (" + id + ",'" + gbasCode + "')");
 		}
-		this.jdbcTemplate.batchUpdate(sqlList.toArray(new String[sqlList.size()]));
+		this.dwJdbcTemplate.batchUpdate(sqlList.toArray(new String[sqlList.size()]));
 	}
 	
 	/**
@@ -115,7 +109,7 @@ public class AnalyseDao extends CommonDao{
 			sql += " and name like '%" + name + "%'";
 		}
 		sql += " order by create_time desc";
-		return this.jdbcTemplate.queryForList(sql);
+		return this.dwJdbcTemplate.queryForList(sql);
 	}
 	
 	public List<Map<String, Object>> getTemplateExt(String userId, String cycle){
@@ -126,19 +120,19 @@ public class AnalyseDao extends CommonDao{
 				" where a.creater_id='" + userId + "' and cycle='" + cycle + "' and is_first_page_show='1'" +
 				" order by create_time desc " +
 				" FETCH FIRST 6 ROWS ONLY with ur";
-		return this.jdbcTemplate.queryForList(sql);
+		return this.dwJdbcTemplate.queryForList(sql);
 	}
 	
 	public void updateTemplate(String ids, String firstPageShow){
 		String sql = "update gbas.ANALYSE_TEMPLATE set is_first_page_show='" + firstPageShow + "' where id in (" + ids + ")";
-		this.jdbcTemplate.update(sql);
+		this.dwJdbcTemplate.update(sql);
 	}
 	
 	public void deleteTemplate(String ids){
 		String sql = "delete from gbas.ANALYSE_TEMPLATE where id in (" + ids + ")";
 		String extSql = "delete from gbas.ANALYSE_TEMPLATE_ext where id in (" + ids + ")";
-		this.jdbcTemplate.update(sql);
-		this.jdbcTemplate.update(extSql);
+		this.dwJdbcTemplate.update(sql);
+		this.dwJdbcTemplate.update(extSql);
 	}
 	
 }

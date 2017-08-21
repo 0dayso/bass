@@ -11,11 +11,20 @@
 
 	<import resource="classpath:conf/spring/mvc-hb-web.xml" />
 	
+	<!-- web库 -->
 	<bean id="dataSource" name="dataSource,defaultDB,null,METADB,WBDB," class="org.springframework.jndi.JndiObjectFactoryBean">
 		<property name="jndiName" value="java:comp/env/jdbc/AiomniDB"></property>
 	</bean>
 	<bean id="jdbcTemplateN" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
 		<constructor-arg ref="dataSource"></constructor-arg>
 	</bean>
+	
+	<!-- 仓库-->
+	<bean id="dataSourceDw" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName">
+			<value>java:comp/env/jdbc/JDBC_HB</value>
+		</property>
+	</bean>
+	
 
 </beans>

@@ -4,12 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.stereotype.Repository;
 
-import com.asiainfo.hb.web.models.CommonDao;
 
 @Repository
 public class SMSConfigDao extends CommonDao {
@@ -25,24 +22,24 @@ public class SMSConfigDao extends CommonDao {
 			condition.append(" and acc_nbr like '%").append(num).append("%' ");
 		}
 		int[] pageParam = this.pageParam(req);
-		return page(pageSql + condition.toString(), countSql + condition.toString(), pageParam[0], pageParam[1], "user_name");
+		return queryPage(dwJdbcTemplate, null, pageSql + condition.toString(), countSql + condition.toString(), pageParam[0], pageParam[1], "user_name");
 	}
 	
 	public void addUser(String name, String num, String remark){
 		String idSql = "select value(max(id),0) from NWH.PROC_ALARM_USER";
-		int id = this.jdbcTemplate.queryForObject(idSql, Integer.class) + 1;
+		int id = this.dwJdbcTemplate.queryForObject(idSql, Integer.class) + 1;
 		String sql = "insert into NWH.PROC_ALARM_USER (id, user_name, acc_nbr, user_remark) values(?,?,?,?)";
-		this.jdbcTemplate.update(sql, new Object[]{id, name, num, remark});
+		this.dwJdbcTemplate.update(sql, new Object[]{id, name, num, remark});
 	}
 	
 	public void updateUser(String id, String name, String num, String remark){
 		String sql = "update NWH.PROC_ALARM_USER set user_name=?, acc_nbr=?, user_remark=? where id=?";
-		this.jdbcTemplate.update(sql, new Object[]{name, num, remark, id});
+		this.dwJdbcTemplate.update(sql, new Object[]{name, num, remark, id});
 	}
 	
 	public void delUser(String ids){
 		String sql = "delete from NWH.PROC_ALARM_USER where id in (" + ids + ")";
-		this.jdbcTemplate.update(sql);
+		this.dwJdbcTemplate.update(sql);
 	}
 	
 	public List<Map<String, Object>> getAlarmGroup(String groupId, String groupName, String userName, String accNbr){
@@ -68,7 +65,7 @@ public class SMSConfigDao extends CommonDao {
 				" where 1=1 " + condition.toString() + 
 				" )" +
 				" order by parentid desc";
-		List<Map<String, Object>> list =  this.jdbcTemplate.queryForList(sql);
+		List<Map<String, Object>> list =  this.dwJdbcTemplate.queryForList(sql);
 		List<Map<String, Object>> resList = new ArrayList<Map<String, Object>>();
 		Map<String, List<Map<String, Object>>> temp = new HashMap<String, List<Map<String, Object>>>();
 		for(Map<String, Object> map : list){
@@ -92,28 +89,28 @@ public class SMSConfigDao extends CommonDao {
 	
 	public List<Map<String, Object>> getUserByGroupId(String groupId){
 		String sql = "select user_name, user_remark, acc_nbr from nwh.proc_alarm where group_id=?";
-		return this.jdbcTemplate.queryForList(sql, new Object[]{groupId});
+		return this.dwJdbcTemplate.queryForList(sql, new Object[]{groupId});
 	}
 	
 	public void addAlarmGroup(String groupId, String groupName, String type, String userIds){
 		String sql = "insert into nwh.proc_alarm (group_id, group_remark, type,user_name, acc_nbr,user_remark)" +
 				" select ?,?,?, user_name, acc_nbr, user_remark from  nwh.proc_alarm_user where id in (" + userIds + ")";
-		this.jdbcTemplate.update(sql, new Object[]{groupId, groupName, type});
+		this.dwJdbcTemplate.update(sql, new Object[]{groupId, groupName, type});
 	}
 	
 	public void updateAlarmGroup(String groupId, String groupName, String type){
 		String sql = "update nwh.proc_alarm set group_remark=?, type=? where group_id=?";
-		this.jdbcTemplate.update(sql, new Object[]{groupName, type, groupId});
+		this.dwJdbcTemplate.update(sql, new Object[]{groupName, type, groupId});
 	}
 	
 	public void delAlartGroup(String groupId){
 		String sql = "delete from nwh.proc_alarm where group_id=?";
-		this.jdbcTemplate.update(sql, new Object[]{groupId});
+		this.dwJdbcTemplate.update(sql, new Object[]{groupId});
 	}
 	
 	public boolean checkGroupId(String groupId){
 		String sql = "select * from nwh.proc_alarm where group_id=?";
-		List<Map<String, Object>> list = this.jdbcTemplate.queryForList(sql, new Object[]{groupId});
+		List<Map<String, Object>> list = this.dwJdbcTemplate.queryForList(sql, new Object[]{groupId});
 		if(list != null && list.size() == 0){
 			return true;
 		}
@@ -128,12 +125,12 @@ public class SMSConfigDao extends CommonDao {
 		if(isNotNull(num)){
 			sql += " and acc_nbr like '%" + num + "%'";
 		}
-		return this.jdbcTemplate.queryForList(sql, new Object[]{groupId});
+		return this.dwJdbcTemplate.queryForList(sql, new Object[]{groupId});
 	}
 	
 	public void delGroupUser(String groupId, String accNbrs){
 		String sql = "delete from nwh.proc_alarm where group_id='" + groupId + "' and acc_nbr in (" + accNbrs + ")";
-		this.jdbcTemplate.update(sql);
+		this.dwJdbcTemplate.update(sql);
 	}
 
 }
