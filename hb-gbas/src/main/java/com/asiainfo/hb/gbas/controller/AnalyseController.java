@@ -291,7 +291,7 @@ public class AnalyseController {
 		String type = req.getParameter("type");
 		String gbasCode = req.getParameter("gbasCode");
 		String isFirstPageShow = req.getParameter("isFirstPageShow");
-		mLog.info("---saveTemplate---,name:?;cycle:?;type:?;gbasCode:?;isFirstPageShow:?", new Object[]{name, cycle, type, gbasCode, isFirstPageShow});
+		mLog.info("---saveTemplate---,name:" + name + ";cycle:" + cycle +";type:" + type + ";gbasCode:" + gbasCode + ";isFirstPageShow:" + isFirstPageShow);
 		mAnalyseDao.saveTemplate(name, cycle, type, gbasCode, isFirstPageShow, userId);
 		return true;
 	}
@@ -310,7 +310,7 @@ public class AnalyseController {
 	public boolean templageOper(HttpServletRequest req){
 		String ids = req.getParameter("ids");
 		String operType = req.getParameter("operType");
-		mLog.info("---templageOper---,ids:?;operType:?", new Object[]{ids, operType});
+		mLog.info("---templageOper---,ids:" + ids + ";operType:" + operType);
 		if(operType.equals("setShow")){
 			mAnalyseDao.updateTemplate(ids, "1");
 		}else if(operType.equals("cancelShow")){

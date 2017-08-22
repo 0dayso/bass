@@ -51,7 +51,7 @@ public class TaskController {
 	@RequestMapping("/execCondition")
 	public String execCondition(HttpServletRequest req, Model model){
 		String gbasCode = req.getParameter("gbasCode");
-		mLog.debug("---execCondition---, gbasCode:?", new Object[]{gbasCode});
+		mLog.debug("---execCondition---, gbasCode:" + gbasCode);
 		model.addAttribute("nodeData", JsonHelper.getInstance().write(mTaskDao.getNodeData(gbasCode)));
 		return "ftl/task/execCondition";
 	}

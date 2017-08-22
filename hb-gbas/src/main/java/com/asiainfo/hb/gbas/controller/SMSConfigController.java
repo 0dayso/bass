@@ -68,7 +68,7 @@ public class SMSConfigController {
 		String name = req.getParameter("userName");
 		String accNbr = req.getParameter("accNbr");
 		String remark = req.getParameter("userRemark");
-		mLog.info("---saveAlarmUser---,id:?;name:?;accNbr:?;remark:?", new Object[]{id, name, accNbr, remark});
+		mLog.info("---saveAlarmUser---,id:" + id + ";name:" + name + ";accNbr:" + accNbr + ";remark:" + remark);
 		if(StringUtils.isEmpty(id)){
 			mConfigDao.addUser(name, accNbr, remark);
 			return;
@@ -84,7 +84,7 @@ public class SMSConfigController {
 	@ResponseBody
 	public void delAlarmUser(HttpServletRequest req){
 		String ids = req.getParameter("alarmsIds");
-		mLog.info("---delAlarmUser---,ids:?", new Object[]{ids});
+		mLog.info("---delAlarmUser---,ids:" + ids);
 		mConfigDao.delUser(ids);
 	}
 
@@ -126,7 +126,7 @@ public class SMSConfigController {
 		String groupId = req.getParameter("groupId");
 		String groupName = req.getParameter("groupName");
 		String groupType = req.getParameter("groupType");
-		mLog.info("---saveAlarmGroup---,operType:?; groupId:?; groupName:?; groupType:?", new Object[]{operType, groupId, groupName, groupType});
+		mLog.info("---saveAlarmGroup---,operType:" + groupType + "; groupId:" + groupId + "; groupName:" + groupName + "; groupType:" + groupType);
 		if(operType.equals("edit")){
 			mConfigDao.updateAlarmGroup(groupId, groupName, groupType);
 			return;
@@ -144,7 +144,7 @@ public class SMSConfigController {
 	@ResponseBody
 	public boolean checkGroupId(HttpServletRequest req){
 		String groupId = req.getParameter("groupId");
-		mLog.debug("---checkGroupId---, groupId:?", new Object[]{groupId});
+		mLog.debug("---checkGroupId---, groupId:" + groupId);
 		return mConfigDao.checkGroupId(groupId);
 	}
 	

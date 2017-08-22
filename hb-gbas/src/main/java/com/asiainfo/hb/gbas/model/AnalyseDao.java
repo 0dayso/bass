@@ -38,7 +38,7 @@ public class AnalyseDao extends CommonDao{
 	 * @return
 	 */
 	public List<Map<String, Object>> getGbasData(String cycle, String startTime, String endTime, String gbasCodes){
-		mLog.debug("------>getGbasData,cycle:?; startTime:?; endTime:?; gbasCodes:?", new Object[]{cycle, startTime, endTime, gbasCodes});
+		mLog.debug("------>getGbasData,cycle:"+cycle+"; startTime:"+startTime+"; endTime:"+endTime+"; gbasCodes:" + gbasCodes);
 		String tableName = "monthly".equals(cycle) ? "BOI_TOTAL_monthly" : "BOI_TOTAL_DAILY";
 		StringBuffer sql = new StringBuffer();
 		sql.append("select * from gbas.").append(tableName);
@@ -56,7 +56,7 @@ public class AnalyseDao extends CommonDao{
 	 * @return
 	 */
 	public List<Map<String, Object>> getOneGbasData(String cycle, String startTime, String endTime, String gbasCode){
-		mLog.debug("------>getOneGbasData,cycle:?; startTime:?; endTime:?; gbasCodes:?", new Object[]{cycle, startTime, endTime, gbasCode});
+		mLog.debug("------>getOneGbasData,cycle:"+cycle+"; startTime:"+startTime+"; endTime:"+endTime+"; gbasCodes:" + gbasCode);
 		String tableName = "monthly".equals(cycle) ? "BOI_TOTAL_monthly" : "BOI_TOTAL_DAILY";
 		String condition = " where time_id between " + startTime + " and " + endTime 
 				+ " and gbas_code='" + gbasCode + "'";
@@ -75,7 +75,7 @@ public class AnalyseDao extends CommonDao{
 	 * @return
 	 */
 	public String getGbasNameByCode(String gbasCode, String type){
-		mLog.debug("------>getGbasNameByCode, gbasCode:?; type:?", new Object[]{gbasCode, type});
+		mLog.debug("------>getGbasNameByCode, gbasCode:"+gbasCode+"; type:" + type);
 		String sql = "select max(zb_name) name from gbas.zb_def where zb_code=?";
 		String name = "";
 		Map<String, Object> map = this.dwJdbcTemplate.queryForMap(sql, new Object[]{gbasCode});
@@ -95,8 +95,7 @@ public class AnalyseDao extends CommonDao{
 	 * @param userId
 	 */
 	public void saveTemplate(String name, String cycle,String type, String gbasCodes,String isFirstPageShow, String userId){
-		mLog.debug("------>saveTemplate, name:?; cycle:?; type:?; isFirstPageShow:?; userId:?",
-				new Object[]{name, cycle, type, isFirstPageShow, userId});
+		mLog.debug("------>saveTemplate, name:"+name+"; cycle:"+cycle+"; type:"+type+"; isFirstPageShow:"+isFirstPageShow+"; userId:" + userId);
 		String idSql = "select value(max(id), 0) from gbas.analyse_template";
 		int id = this.dwJdbcTemplate.queryForObject(idSql, Integer.class) + 1;
 		List<String> sqlList = new ArrayList<String>();
