@@ -14,13 +14,16 @@
 	<import resource="classpath:conf/spring/mvc-hb-power.xml" />
 	<import resource="classpath:conf/spring/mvc-hb-bass-role-adaptation.xml" />
 	<import resource="classpath:conf/spring/mvc-webservice.xml" />
+	<!-- 1. 添加spring-mybatis 继承配置-->
+	<import resource="classpath*:conf/spring/mvc-hb-core-mybatis.xml" />
+	 
 
 	<mvc:resources mapping="/hbapp/**" location="/hbapp/" cache-period="0" />
-
+	<!-- 2. 注释掉 jndi数据源
 	<bean id="dataSource" name="dataSource,defaultDB,null,METADB,WBDB," class="org.springframework.jndi.JndiObjectFactoryBean">
 		<property name="jndiName" value="java:comp/env/jdbc/AiomniDB"></property>
-	</bean>
+	</bean> -->
 	<bean id="jdbcTemplateN" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
 		<constructor-arg ref="dataSource"></constructor-arg>
-	</bean>
+	</bean>  
 </beans>

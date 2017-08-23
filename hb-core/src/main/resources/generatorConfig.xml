@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+	<!-- jdbc驱动类的路径,每个人都会不同,请修改 -->
+    <classPathEntry
+            location="/Users/king-pan/git_repository/bass/hb-bass-navigation/target/hb-bass-navigation/WEB-INF/lib/db2jcc-1.0.jar" />
+    <!-- 数据源配置不需要修改 -->
+    <context id="context1" targetRuntime="MyBatis3">
+        <jdbcConnection driverClass="com.ibm.db2.jcc.DB2Driver"
+                        connectionURL="jdbc:db2://192.168.1.200:50000/dwdb:currentSchema=ST;"
+                        userId="db2inst1" password="123123" />
+        <!-- 
+        			targetPackage: 
+        				实体类生成的包路径
+        			targetProject: 项目路径,写到java
+         -->
+        <javaModelGenerator targetPackage="com.asiainfo.hb.bass.test.model"
+                            targetProject="/Users/king-pan/git_repository/bass/hb-core/src/main/java" />
+        <!-- 
+        		 targetPackage: *Mappper.java生成的包路径
+        		 targetProject: *Mappper.java生成的项目路径到java目录
+         -->
+        <sqlMapGenerator targetPackage="com.asiainfo.hb.bass.test.dao"
+                         targetProject="/Users/king-pan/git_repository/bass/hb-core/src/main/java" />
+        <!-- 
+        		同上,Mapper.xml文件与Mapper.java文件在同一个目录
+         -->
+        <javaClientGenerator targetPackage="com.asiainfo.hb.bass.test.dao"
+            targetProject="/Users/king-pan/git_repository/bass/hb-core/src/main/java" type="XMLMAPPER" />
+        <table schema="st" tableName="FPF_REQ" />
+    </context>
+</generatorConfiguration>
