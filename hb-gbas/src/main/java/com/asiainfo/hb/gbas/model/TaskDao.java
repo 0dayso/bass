@@ -27,45 +27,45 @@ public class TaskDao extends CommonDao{
 		return queryPage(dwJdbcTemplate, params, rowSql, countSql, pageParam[0], pageParam[1], " etl_cycle_id");
 	}
 	
-	/**public Map<String, Object> getNodeData(String gbasCode){
-		Map<String, Object> map = new HashMap<String, Object>();
-		
-		String nodeSql = "WITH PPL (ID,PiD,NAME) AS  ( " +
-				"SELECT ID,PID,NAME FROM st.d3_test WHERE name='DwdCdrWlanDm' " +
-				"UNION ALL " +
-				"SELECT child.ID,child.pID,child.NAME FROM PPL parent,st.d3_test child WHERE child.id =parent.pid ) " +
-				"SELECT distinct(id) code,name FROM PPL";
-		
-		String edgeSql = "WITH PPL (ID,PiD,NAME) AS  " +
-				"( SELECT ID,PID,NAME FROM st.d3_test WHERE name='DwdCdrWlanDm' " +
-				"UNION ALL " +
-				"SELECT child.ID,child.pID,child.NAME FROM PPL parent,st.d3_test child WHERE child.id =parent.pid ) " +
-				"SELECT id code, pid depend_code FROM PPL where pid !=0";
-		
-		List<Map<String, Object>> nodeList = this.dwJdbcTemplate.queryForList(nodeSql);
-		List<Map<String, Object>> edgeList = this.dwJdbcTemplate.queryForList(edgeSql);
-		
-		map.put("nodes", nodeList);
-		map.put("edges", edgeList);
-		return map;
-	}**/
+//	public Map<String, Object> getNodeData(String gbasCode){
+//		Map<String, Object> map = new HashMap<String, Object>();
+//		
+//		String nodeSql = "WITH PPL (ID,PiD,NAME) AS  ( " +
+//				"SELECT ID,PID,NAME FROM st.d3_test WHERE name='DwdCdrWlanDm' " +
+//				"UNION ALL " +
+//				"SELECT child.ID,child.pID,child.NAME FROM PPL parent,st.d3_test child WHERE child.id =parent.pid ) " +
+//				"SELECT distinct(id) code,name FROM PPL";
+//		
+//		String edgeSql = "WITH PPL (ID,PiD,NAME) AS  " +
+//				"( SELECT ID,PID,NAME FROM st.d3_test WHERE name='DwdCdrWlanDm' " +
+//				"UNION ALL " +
+//				"SELECT child.ID,child.pID,child.NAME FROM PPL parent,st.d3_test child WHERE child.id =parent.pid ) " +
+//				"SELECT id code, pid depend_code FROM PPL where pid !=0";
+//		
+//		List<Map<String, Object>> nodeList = this.dwJdbcTemplate.queryForList(nodeSql);
+//		List<Map<String, Object>> edgeList = this.dwJdbcTemplate.queryForList(edgeSql);
+//		
+//		map.put("nodes", nodeList);
+//		map.put("edges", edgeList);
+//		return map;
+//	}
 	
 	
 	public Map<String, Object> getNodeData(String gbasCode){
 		mLog.debug("------>getNodeData");
 		Map<String, Object> map = new HashMap<String, Object>();
 		
-		String nodeSql = "WITH PPL (code, depend_code) AS  ( " +
-				"SELECT code, depend_code FROM gbas.code_relation WHERE code='" + gbasCode + "' " +
+		String nodeSql = "WITH PPL (proc, proc_dep) AS  ( " +
+				"SELECT proc, proc_dep FROM gbas.proc_deps WHERE proc='" + gbasCode + "' " +
 				"UNION ALL " +
-				"SELECT child.code,child.depend_code FROM PPL parent,gbas.code_relation child WHERE child.code =parent.depend_code) " +
-				"SELECT distinct(code) code FROM (select code from ppl union all select depend_code code from ppl)";
+				"SELECT child.proc,child.proc_dep FROM PPL parent,gbas.proc_deps child WHERE child.proc =parent.proc_dep) " +
+				"SELECT distinct(proc) proc FROM (select proc from ppl union all select proc_dep proc from ppl)";
 		
-		String edgeSql = "WITH PPL (code, depend_code) AS  ( " +
-				"SELECT code, depend_code FROM gbas.code_relation WHERE code='" + gbasCode + "' " +
+		String edgeSql = "WITH PPL (proc, proc_dep) AS  ( " +
+				"SELECT proc, proc_dep FROM gbas.proc_deps WHERE proc='" + gbasCode + "' " +
 				"UNION ALL " +
-				"SELECT child.code,child.depend_code FROM PPL parent,gbas.code_relation child WHERE child.code =parent.depend_code) " +
-				"SELECT code, depend_code FROM PPL";
+				"SELECT child.proc,child.proc_dep FROM PPL parent,gbas.proc_deps child WHERE child.proc =parent.proc_dep) " +
+				"SELECT proc, proc_dep FROM PPL";
 		mLog.debug("nodeSql:" + nodeSql);
 		mLog.debug("edgeSql:" + edgeSql);
 		List<Map<String, Object>> nodeList = this.dwJdbcTemplate.queryForList(nodeSql);

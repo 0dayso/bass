@@ -11,13 +11,13 @@
 <script src="${mvcPath}/resources/js/jquery-easyui-1.5.1/locale/easyui-lang-zh_CN.js"></script>
 <script>
 $(function(){
-	$("input",$("#zbCode").next("span")).blur(function(){
+	$("input",$("#addZbCode").next("span")).blur(function(){
 	    checkZbCode();  
 	});
 });
 
 function checkZbCode(){
-	var zbCode = $('#zbCode').textbox('getValue');
+	var zbCode = $('#addZbCode').textbox('getValue');
 	$.ajax({
 		type: "POST"
 		,url: "${mvcPath}/zb/checkZbCode"
@@ -30,7 +30,7 @@ function checkZbCode(){
 			if(!data){
 				var wind = $.messager.alert('提示','此指标编码已存在，请重新填入','info');
 				wind.window({onBeforeClose:function(){
-					$('#zbCode').textbox('setValue','');
+					$('#addZbCode').textbox('setValue','');
 				}});
 			}
 		}
@@ -38,11 +38,66 @@ function checkZbCode(){
 }
 
 function openAddDialog(){
-	clearFormValue();
+	$('#addZbDialog').panel({title: "新增指标"});
+	$('#addZbCode').textbox('setValue','');
+	$('#addZbName').textbox('setValue','');
+	$('#addDeveloperName').textbox('setValue','');
+	$('#addDeveloperName').val('');
+	$('#addZbCode').textbox('textbox').attr('disabled',false);
 	$("#optType").val("add");
-	enableIdRelInput();
-	$('#zbDialog').panel({title: "新增指标"});
-	$('#zbDialog').dialog('open');
+	$('#addZbDialog').dialog('open');
+}
+
+function openUpdateDevDialog(){
+	var row = checkSelect();
+	if(row == null){
+		return;
+	}
+	$('#addZbCode').textbox('setValue',row.zb_code);
+	$('#addZbName').textbox('setValue',row.zb_name);
+	$('#addDeveloperName').textbox('setValue',row.developer_name);
+	$('#addDeveloperName').val(row.developer);
+	$('#addZbCode').textbox('textbox').attr('disabled',true);
+	
+	$('#addZbDialog').panel({title: "修改开发人"});
+	$('#addZbDialog').dialog('open');
+	$("#optType").val("updateDev");
+}
+
+function saveZb(){
+	var zbCode = $('#addZbCode').textbox('getValue').trim();
+	if(zbCode.length == 0){
+		$.messager.alert('提示','指标编码不能为空','info');
+		return;
+	}
+	var zbName = $('#addZbName').textbox('getValue').trim();
+	if(zbName.length == 0){
+		$.messager.alert('提示','指标名称不能为空','info');
+		return;
+	}
+	var developerName = $('#addDeveloperName').textbox('getValue');
+	var developer = $('#addDeveloper').val();
+	var optType = $("#optType").val();
+	
+	$.ajax({
+		type: "POST"
+		,url: "${mvcPath}/zb/saveZbDef"
+		,data: {
+			zbCode: zbCode,
+			zbName: zbName,
+			developerName: developerName,
+			developer: developer,
+			optType: optType
+		}
+		,dataType : "json"
+		,success: function(data){
+			var wind = $.messager.alert('提示','提交成功','info');
+			wind.window({onBeforeClose:function(){
+				queryZb();
+				$('#addZbDialog').dialog('close');
+			}});
+		}
+	});
 }
 
 function enableIdRelInput(){
@@ -54,7 +109,6 @@ function clearFormValue(){
 	$('#zbDefForm').form('clear');
 	$('#cycle').combobox('setValue','daily');
 	$('#zbType').combobox('setValue','一经');
-	$('#status').combobox('setValue','0');
 	$('#ruleType').combobox('setValue','0');
 	$('#compOper').combobox('setValue','>');
 	$('#dependType').combobox('setValue','1');
@@ -65,12 +119,17 @@ function clearFormValue(){
 }
 
 function openEditDialog(){
-	var rows = $('#zbTable').datagrid('getSelections');
-	if(rows.length != 1){
-		$.messager.alert('提示','请选择一条指标信息','info');
+	var row = checkSelect();
+	if(row == null){
 		return;
 	}
-	setFormValue(rows[0]);
+	
+	if(${isAdmin} != 1 && row.developer != '${userId}'){
+		$.messager.alert('提示','您没有权限修改此指标','info');
+		return;
+	}
+
+	setFormValue(row);
 	disableIdRelInput();
 	$("#optType").val("edit");
 	$('#zbDialog').panel({title: "修改指标"});
@@ -99,7 +158,6 @@ function setFormValue(data){
 	$('#procDepend').textbox('setValue',data.proc_depend);
 	$('#gbasDepend').textbox('setValue',data.gbas_depend);
 	$('#zbDef').textbox('setValue',data.zb_def);
-	$('#status').combobox('setValue',data.status);
 	$('#onlineDate').textbox('setValue',data.online_date);
 	$('#offlineDate').textbox('setValue',data.offline_date);
 	$('#expectEndDay').textbox('setValue',data.expect_end_day);
@@ -113,10 +171,50 @@ function setFormValue(data){
 	$('#manager').val(data.manager);
 }
 
-function delZb(){
+function updateStatus(status, content){
+	var row = checkSelect();
+	if(row == null){
+		return;
+	}
+	
+	if(${isAdmin} != 1 && row.developer != '${userId}'){
+		$.messager.alert('提示','您没有权限提交此指标','info');
+		return;
+	}
+	
+	$.messager.confirm('提示', '您确定要' + content + '吗?', function(r){
+		if (r){
+			$.ajax({
+				type: "POST"
+				,url: "${mvcPath}/zb/updateStatus"
+				,data: {
+					zbCode: row.zb_code,
+					status: status
+				}
+				,dataType : "json"
+				,success: function(data){
+					var wind = $.messager.alert('提示', content + '成功','info');
+					wind.window({onBeforeClose:function(){
+						queryZb();
+					}});
+				}
+			});
+		}
+	});
+}
+
+function checkSelect(){
 	var rows = $('#zbTable').datagrid('getSelections');
 	if(rows.length != 1){
 		$.messager.alert('提示','请选择一条指标信息','info');
+		return null;
+	}
+	return rows[0];
+}
+
+function delZb(){
+	var row = checkSelect();
+	if(row == null){
 		return;
 	}
 	
@@ -126,13 +224,13 @@ function delZb(){
 				type: "POST"
 				,url: "${mvcPath}/zb/deleteZbDef"
 				,data: {
-					zbCode: rows[0].zb_code
+					zbCode: row.zb_code
 				}
 				,dataType : "json"
 				,success: function(data){
 					var wind = $.messager.alert('提示','删除成功','info');
 					wind.window({onBeforeClose:function(){
-						window.location.reload();
+						queryZb();
 					}});
 				}
 			});
@@ -157,6 +255,12 @@ function statusReplace(value){
 	if(value == "1"){
 		return "上线";
 	}
+	if(value == "2"){
+		return "待上线";
+	}
+	if(value == "3"){
+		return "下线";
+	}
 	return value;
 }
 
@@ -166,13 +270,15 @@ function queryZb(){
 	var status = $("#qryStatus").combobox("getValue").trim();
 	var zbName = $("#qryZbName").textbox("getValue").trim();
 	var zbCode = $("#qryZbCode").textbox("getValue").trim();
+	var developer = $("#qryDeveloper").textbox("getValue").trim();
 	
 	$("#zbTable").datagrid("load", {
 		zbType : zbType,
 		zbCycle : zbCycle,
 		status : status,
 		zbName : zbName,
-		zbCode : zbCode
+		zbCode : zbCode,
+		developer: developer
 	});
 }
 
@@ -210,6 +316,9 @@ function userSelect(){
 	if(userType == 'developer'){
 		$("#developer").val(rows[0].userid);
 		$("#developerName").textbox('setValue',rows[0].username);
+	}else if(userType == 'updateDeveloper'){
+		$("#addDeveloper").val(rows[0].userid);
+		$("#addDeveloperName").textbox('setValue',rows[0].username);
 	}else{
 		$("#manager").val(rows[0].userid);
 		$("#managerName").textbox('setValue',rows[0].username);
@@ -280,19 +389,65 @@ function userSelect(){
 				<option value="1">上线</option>
 			</select>
 			<span>指标名称</span>
-			<input id="qryZbName" class="easyui-textbox" style="height: 27px; width: 160px;">
+			<input id="qryZbName" class="easyui-textbox" style="height: 27px; width: 150px;">
 			<span>指标编码</span>
-			<input id="qryZbCode" class="easyui-textbox" style="height: 27px; width: 160px;">
+			<input id="qryZbCode" class="easyui-textbox" style="height: 27px; width: 150px;">
+			<span>开发者</span>
+			<input id="qryDeveloper" class="easyui-textbox" style="height: 27px; width: 150px;">
 			<a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="queryZb()">查询</a>
 		</div>
 		<div>
-			<a href="#" class="easyui-linkbutton" iconCls="icon-add" onclick="openAddDialog()">新增</a>
-			<a href="#" class="easyui-linkbutton" iconCls="icon-edit" onclick="openEditDialog()">修改</a>
-			<a href="#" class="easyui-linkbutton" iconCls="icon-remove" onclick="delZb()">删除</a>
+			<#if isAdmin == 1>
+				<a href="#" class="easyui-linkbutton" iconCls="icon-add" onclick="openAddDialog()">新增</a>
+				<a href="#" class="easyui-linkbutton" iconCls="icon-user" onclick="openUpdateDevDialog()">修改开发人</a>
+			</#if>
+				<a href="#" class="easyui-linkbutton" iconCls="icon-edit" onclick="openEditDialog()">修改指标</a>
+				<a href="#" class="easyui-linkbutton" iconCls="icon-submit" onclick="updateStatus('2','提交申请')">提交申请</a>
+			<#if isAdmin == 1>
+				<a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="updateStatus('1','上线')">上线</a>
+				<a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="updateStatus('3','下线')">下线</a>
+			</#if>
 		</div>
 	</div>
 	
-	<div id="zbDialog" class="easyui-dialog" title="新增指标" data-options="
+	<!--新增指标结束-->
+	<div id="addZbDialog" class="easyui-dialog" title="新增指标" data-options="
+			modal:true,
+			closed:true,
+			width:430,
+			height:250,
+			buttons: [{
+					text:'提交',
+					handler:function(){
+						saveZb();
+					}
+				},{
+					text:'取消',
+					handler:function(){
+						$('#addZbDialog').dialog('close');
+					}
+				}]">
+			<div class="mar-8" style="height:100px;">
+				<div class="mar-b15">
+					<div class="inp-lab"><span style="color:red;">*</span>指标编码:</div>
+					<input id="addZbCode" name="addZbCode" class="easyui-textbox form-inp" missingMessage="指标编码为必填项" data-options="required:true" style="width:75%;height:32px;">
+				</div>
+				<div class="mar-b15">
+					<div class="inp-lab"><span style="color:red;">*</span>指标名称:</div>
+					<input id="addZbName" name="addZbName" class="easyui-textbox form-inp" missingMessage="指标名称为必填项" data-options="required:true" style="width:75%;height:32px;">
+				</div>
+				<div class="mar-b15">
+					<div class="inp-lab">开发人:</div>
+					<input id="addDeveloperName" name="addDeveloperName" class="easyui-textbox form-inp" data-options="editable:false," style="width:55%;height:32px;">
+					<input id="addDeveloper" name="addDeveloper" type="hidden" value="">
+					<a href="#" class="user-qry" onclick="openUserDialog('updateDeveloper')">选择用户</a>
+				</div>
+			</div>
+		
+	</div>
+	<!--新增指标结束-->	
+	<!--修改指标-->		
+	<div id="zbDialog" class="easyui-dialog" title="修改指标" data-options="
 			modal:true,
 			closed:true,
 			width:430,
@@ -308,7 +463,8 @@ function userSelect(){
 							success:function(data){
 								var wind = $.messager.alert('提示','提交成功','info');
 								wind.window({onBeforeClose:function(){
-									window.location.reload();
+									queryZb();
+									$('#zbDialog').dialog('close');
 								}});
    							}
    							
@@ -393,19 +549,12 @@ function userSelect(){
 					</select>
 				</div>
 				<div class="mar-b15">
-					<div class="inp-lab"><span style="color:red;">*</span>依赖程序:</div>
-					<input id="procDepend" name="procDepend" class="easyui-textbox form-inp"  missingMessage="依赖程序为必填项" data-options="required:true" style="width:75%;height:32px;">
+					<div class="inp-lab">依赖程序:</div>
+					<input id="procDepend" name="procDepend" class="easyui-textbox form-inp" data-options="prompt:'多个依赖用;分割'" style="width:75%;height:32px;">
 				</div>
 				<div class="mar-b15">
-					<div class="fl" style="height: 32px;line-height: 32px; width:42%;"><span style="color:red;">*</span>依赖的gbas指标,规则,接口:</div>
-					<input id="gbasDepend" name="gbasDepend" class="easyui-textbox form-inp" missingMessage="依赖的gbas指标,规则,接口为必填项" data-options="required:true,prompt:'多个依赖用;分割'" style="height:32px; width:57%;">
-				</div>
-				<div class="mar-b15">
-					<div class="inp-lab"><span style="color:red;">*</span>状态:</div>
-					<select id="status" name="status" class="easyui-combobox form-inp" missingMessage="状态为必选项" data-options="required:true,editable:false,panelHeight:'auto'" style="width:75%;height:32px;">
-						<option value="0">开发</option>
-						<option value="1">上线</option>
-					</select>
+					<div class="fl" style="height: 32px;line-height: 32px; width:42%;">依赖的gbas指标,规则,接口:</div>
+					<input id="gbasDepend" name="gbasDepend" class="easyui-textbox form-inp"  data-options="prompt:'多个依赖用;分割'" style="height:32px; width:57%;">
 				</div>
 				<div class="mar-b15">
 					<div class="inp-lab"><span style="color:red;">*</span>上线日期:</div>
@@ -416,18 +565,18 @@ function userSelect(){
 					<input id="offlineDate" name="offlineDate" editable="false" missingMessage="下线日期为必填项" data-options="required:true" class="easyui-datebox form-inp" style="width:75%;height:32px;">
 				</div>
 				<div class="mar-b15">
-					<div class="inp-lab"><span style="color:red;">*</span>预期完成日期:</div>
-					<input id="expectEndDay" name="expectEndDay" class="easyui-numberbox form-inp"  missingMessage="预期完成日期为必填项" 
-						data-options="required:true,min:0,max:31,prompt:'0表示每日,1-31表示1-31日'" style="width:75%;height:32px;">
+					<div class="inp-lab">预期完成日期:</div>
+					<input id="expectEndDay" name="expectEndDay" class="easyui-numberbox form-inp"
+						data-options="min:0,max:31,prompt:'0表示每日,1-31表示1-31日'" style="width:75%;height:32px;">
 				</div>
 				<div class="mar-b15">
-					<div class="inp-lab"><span style="color:red;">*</span>预期完成时间:</div>
-					<input id="expectEndTime" name="expectEndTime" class="easyui-numberbox form-inp"  missingMessage="预期完成时间为必填项" 
-						data-options="required:true,min:0,max:24,precision:2,decimalSeparator:'.',prompt:'例：8.5表示8点半'" style="width:75%;height:32px;">
+					<div class="inp-lab">预期完成时间:</div>
+					<input id="expectEndTime" name="expectEndTime" class="easyui-numberbox form-inp"  
+						data-options="min:0,max:24,precision:2,decimalSeparator:'.',prompt:'例：8.5表示8点半'" style="width:75%;height:32px;">
 				</div>
 				<div class="mar-b15">
-					<div class="inp-lab"><span style="color:red;">*</span>优先级:</div>
-					<input id="priority" name="priority" class="easyui-numberbox form-inp" missingMessage="优先级为必填项" data-options="required:true" style="width:75%;height:32px;">
+					<div class="inp-lab">优先级:</div>
+					<input id="priority" name="priority" class="easyui-numberbox form-inp" style="width:75%;height:32px;">
 				</div>
 				<div class="mar-b15">
 					<div class="inp-lab">创建人:</div>

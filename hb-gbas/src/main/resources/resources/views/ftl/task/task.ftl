@@ -142,8 +142,8 @@ function queryTask(){
 			<a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="queryTask()">查询</a>
 		</div>
 		<div>
-			<a href="#" class="easyui-linkbutton" iconCls="icon-tip" onclick="viewExecCondition()">查看执行条件</a>
-			<a href="#" class="easyui-linkbutton" iconCls="icon-tip" onclick="viewDependCondition()">查看依赖条件</a>
+			<a href="#" class="easyui-linkbutton" iconCls="icon-branch" onclick="viewExecCondition()">查看执行条件</a>
+			<a href="#" class="easyui-linkbutton" iconCls="icon-list" onclick="viewDependCondition()">查看依赖条件</a>
 			<a href="#" class="easyui-linkbutton" iconCls="icon-tip" onclick="viewLog()">查看日志</a>
 			<a href="#" class="easyui-linkbutton" iconCls="icon-do" onclick="run()">强制执行</a>
 			<a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="stop()">强制停止</a>

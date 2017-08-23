@@ -38,6 +38,7 @@ public class ZbController {
 		User user = (User) session.getAttribute(SessionKeyConstants.USER);
 		model.addAttribute("userId", user.getId());
 		model.addAttribute("userName", user.getName());
+		model.addAttribute("isAdmin", mZbDao.checkIsAdmin(user.getId()));
 		return "ftl/zb";
 	}
 	
@@ -50,6 +51,7 @@ public class ZbController {
 		String status = req.getParameter("status");
 		String zbName = req.getParameter("zbName");
 		String zbCode = req.getParameter("zbCode");
+		String developer = req.getParameter("developer");
 		
 		ZbDef zbDef = new ZbDef();
 		zbDef.setZbType(zbType);
@@ -57,6 +59,7 @@ public class ZbController {
 		zbDef.setStatus(status);
 		zbDef.setZbName(zbName);
 		zbDef.setZbCode(zbCode);
+		zbDef.setDeveloperName(developer);
 		
 		mLog.debug("参数：zbType=" + zbType + ",zbCycle=" +
 					zbCycle + ",status=" + status + ",zbName=" + zbName + ",zbCode=" + zbCode);
@@ -69,12 +72,29 @@ public class ZbController {
 	@ResponseBody
 	public boolean saveZbDef(HttpServletResponse resp, HttpServletRequest req,ZbDef zbDef, HttpSession session){
 		String optType = req.getParameter("optType");
-		if(optType.equals("edit")){
+		if("edit".equals(optType)){
 			mZbDao.updateZb(zbDef);
 			return true;
 		}
 		
+		if("updateDev".equals(optType)){
+			mZbDao.updateDevelop(zbDef);
+			return true;
+		}
+		
+		User user = (User) session.getAttribute(SessionKeyConstants.USER);
+		zbDef.setCreater(user.getId());
+		zbDef.setCreaterName(user.getName());
+		zbDef.setStatus("0");
 		return mZbDao.saveZbDef(zbDef);
+	}
+	
+	@RequestMapping("/updateStatus")
+	@ResponseBody
+	public void updateStatus(HttpServletRequest req){
+		String zbCode = req.getParameter("zbCode");
+		String status = req.getParameter("status");
+		mZbDao.updateStatus(zbCode, status);
 	}
 
 	@RequestMapping("/deleteZbDef")
