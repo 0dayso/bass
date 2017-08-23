@@ -55,10 +55,10 @@ if(nodes.length == 0){
 	var g = new dagreD3.graphlib.Graph().setGraph({});
 
 	for(var i=0; i<nodes.length; i++){
-		g.setNode(nodes[i].code, {label: nodes[i].code, style: "fill: #afa"});
+		g.setNode(nodes[i].proc, {label: nodes[i].proc, style: "fill: #afa"});
 	}
 	for(var j=0; j<edgeArr.length; j++){
-		g.setEdge(edgeArr[j].depend_code, edgeArr[j].code,{lineInterpolate: 'basis', arrowheadClass: 'arrowhead'});
+		g.setEdge(edgeArr[j].proc_dep, edgeArr[j].proc,{lineInterpolate: 'basis', arrowheadClass: 'arrowhead'});
 	}
 	
 	var render = new dagreD3.render();

@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html style="height:100%;">
+<html>
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8"></meta>
 <title>集中化省级经分质量管控平台</title>
@@ -35,11 +35,10 @@ function addTab(title, url){
 				<div title='基本配置'>
 					<ul style="padding: 0 10px;">
 						<li><a href='#' onclick="addTab('指标配置', '${mvcPath}/zb/index')"><span>指标配置</span></a></li>
-						<li><a href='#' onclick="addTab('规则配置', '${mvcPath}/rule/index')"><span>规则配置</span></a></li>
 						<li><a href='#' ><span>接口配置</span></a></li>
 						<li><a href='#' ><span>接口时限告警</span></a></li>
-						<li><a href='#' ><span>短信告警人配置</span></a></li>
-						<li><a href='#' ><span>短信告警群组配置</span></a></li>
+						<li><a href='#' onclick="addTab('短信告警人配置', '${mvcPath}/smsConfig/user/index')"><span>短信告警人配置</span></a></li>
+						<li><a href='#' onclick="addTab('短信告警群组配置', '${mvcPath}/smsConfig/group/index')"><span>短信告警群组配置</span></a></li>
 						<li><a href='#' ><span>违反稽核告警配置</span></a></li>
 					</ul>
 				</div>
@@ -58,6 +57,7 @@ function addTab(title, url){
 	<div data-options="region:'center'" style="overflow: hidden;">
 		<div id="myTab" class="easyui-tabs" style="height:100%;">
 			<div title="首页" style="padding:2px; overflow: hidden;">
+				<iframe scrolling="auto" frameborder="0"  src="${mvcPath}/analyse/index/daily" style="width:100%;height:100%;"></iframe>
 			</div>
 		</div>
 	</div>

@@ -6,9 +6,11 @@
 	<script type="text/javascript" src="${mvcPath}/resources/jquery-easyui-1.5/jquery.min.js"></script>
 	<script type="text/javascript" src="${mvcPath}/resources/jquery-easyui-1.5/jquery.easyui.min.js"></script>
 	<script type="text/javascript" src="${mvcPath}/resources/jquery-easyui-1.5/locale/easyui-lang-zh_CN.js"></script>
+	<script type="text/javascript" src="${mvcPath}/resources/js/easyui-date-util.js"></script>
 	<script type="text/javascript" src="${mvcPath}/resources/js/reports-seach.js"></script>
 	<link rel="stylesheet" type="text/css" href="${mvcPath}/resources/jquery-easyui-1.5/themes/default/easyui.css">
 	<link rel="stylesheet" type="text/css" href="${mvcPath}/resources/jquery-easyui-1.5/themes/icon.css">
+	
 </head>
 <body>
 	<input type="hidden" id="mvcPath" name="mvcPath" value="${mvcPath}">
