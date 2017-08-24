@@ -160,11 +160,23 @@ function down(){
 				var status = resultMap.status;
 				if(status=='1'){
 					down1();
+				}else if(status=='0'){
+					downNormal();
 				}else{
 					alert(resultMap.message);
 				}
 			}
 		}
+	});
+}
+
+function downNormal(){
+	aihb.AjaxHelper.down({
+		 sql : encodeURIComponent(desSql())
+		 ,header : _header
+		 ,url: "${mvcPath}/report/${sid}/down"
+		 ,ds : "${ds}"
+		 ,useExcel : "${useExcel}"
 	});
 }
 
@@ -187,13 +199,7 @@ function down1(){
 				downFromSensitive();
 			}else{
 				alert("该报表未纳入文档安全管理");
-				aihb.AjaxHelper.down({
-					 sql : encodeURIComponent(desSql())
-					 ,header : _header
-					 ,url: "${mvcPath}/report/${sid}/down"
-					 ,ds : "${ds}"
-					 ,useExcel : "${useExcel}"
-				});
+				downNormal();
 			}
 		}
 	});
