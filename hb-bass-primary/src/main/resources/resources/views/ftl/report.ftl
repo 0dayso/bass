@@ -84,6 +84,15 @@ function query(){
 	grid.run();
 }
 
+var appSessionId;
+var clientIp;
+var maxTime;
+var cooperate;
+var sceneId;
+var accounts;
+var nid;
+var cooperateStatus;
+var account;
 function down(){
 	var sid = ${sid};
 	$j.ajax({
@@ -97,14 +106,14 @@ function down(){
 			var msg = resultMap.msg;
 			if(!flag){
 				alert(msg);
-				var appSessionId = resultMap.appSessionId;
-				var clientIp = resultMap.ip;
-				var maxTime = resultMap.maxTime;
-				var cooperate = resultMap.cooperate;
-				var sceneId = resultMap.sceneId;
-				var accounts = resultMap.accounts;
-				var nid = resultMap.nid;
-				var cooperateStatus = resultMap.cooperateStatus;
+				appSessionId = resultMap.appSessionId;
+				clientIp = resultMap.ip;
+				maxTime = resultMap.maxTime;
+				cooperate = resultMap.cooperate;
+				sceneId = resultMap.sceneId;
+				accounts = resultMap.accounts;
+				nid = resultMap.nid;
+				cooperateStatus = resultMap.cooperateStatus;
 				var passFlag= false;
 				var accountFlag = "N";
 				if (cooperate == null || cooperate == "") {
@@ -114,45 +123,8 @@ function down(){
 					alert("无协作人，请联系4A管理员");
 					return;
 				}else{
-					if(accountFlag=="N"){
-						var params = {
-							accounts:accounts
-						}
-						var returnValue = window.showModalDialog('${mvcPath}/hbapp/cooperative/account.jsp',params,'dialogHeight:380px;dialogWidth:600px;resizable:No;status:No;help:No;');
-						var accountReturn=returnValue.step;
-						var account=returnValue.account;
-						if('close' == accountReturn){
-							alert("金库认证未通过，请重新认证！");
-							return;
-						}else if('next' == accountReturn){
-							var PARAM_INFO = {
-								appSessionId:appSessionId,
-								clientIp:clientIp,
-								sceneId:sceneId,
-								maxTime:maxTime,
-								cooperate:cooperate,
-								accounts:account,
-								nid:nid
-							};
-							var RETRUN_INFO = window.showModalDialog('${mvcPath}/hbapp/cooperative/show.jsp',PARAM_INFO,'dialogHeight:380px;dialogWidth:600px;center:yes');
-							if('close' == RETRUN_INFO.isClose){
-								alert("金库认证未通过，请重新认证！");
-								return;
-							}else if('pass' == RETRUN_INFO.isClose){
-								//alert("金库认证通过,该报表已纳入文档安全管理，请确认是否安装文档安全管理软件，否则报表无法正常阅读。");
-								down1();
-							}
-							if('remoteAuth' == RETRUN_INFO.model){
-								var codeReturn = window.showModalDialog('${mvcPath}/hbapp/cooperative/code.jsp',PARAM_INFO,'dialogHeight:380px;dialogWidth:600px;resizable:No;status:No;help:No;');
-								if('close' == codeReturn.isClose){
-									alert("金库认证未通过，请重新认证！");
-									return;
-								}else if('pass' == codeReturn.isClose){
-									//alert("金库认证通过,该报表已纳入文档安全管理，请确认是否安装文档安全管理软件，否则报表无法正常阅读。");
-									down1();
-								}
-							}
-						}
+					if(accountFlag=="N"){						
+						openAccountDialog();
 					}
 				}	
 			}else{
@@ -168,6 +140,293 @@ function down(){
 			}
 		}
 	});
+}
+
+function openAccountDialog(){
+	accounts = eval(accounts);
+	var content = "<fieldset style=\"width: 350px; height: 180px; margin: 0 10px 10px 10px;\">"+
+				"<legend>"+
+					"您在4A系统中有如下主账号"+
+				"</legend>"+
+				"<table align=\"center\" width=\"90%\" height=\"90%\">"+
+					"<tr>"+
+						"<td align=\"center\">"+
+							"<label>"+
+								"<select id=\"accountSel\" style=\"width: 230px\">"+
+								"</select>"+
+							"</label>"+
+						"</td>"+
+					"</tr>"+
+				"</table>"+
+			"</fieldset>"+
+			"<br>"+
+			"<div align=\"center\" style='margin-bottom:8px;'><input type=\"button\" value=\"确定\" onclick=\"doSendAccount()\">"+
+			"&nbsp;&nbsp;&nbsp;&nbsp;"+
+			"<input type=\"button\" value=\"取消\" onclick=\"doClose()\"></div>";
+	_cont.innerHTML = content;
+	var account = document.getElementById("accountSel");
+	if(accounts.length > 0){
+		for(var k=0;k<accounts.length;k++){
+			account[k]=new Option(accounts[k],accounts[k]);
+			if(k==0){
+				account[k].selected=true;
+			}
+		}
+	}else{
+		account[0]=new Option(accounts,accounts);
+	}
+	_mask.show();
+}
+
+function doClose(){
+	alert("金库认证未通过，请重新认证！");
+	document.getElementById('closeImg').parentNode.parentNode.parentNode.style.display='none';
+	return;
+}
+
+function doSendAccount(){
+	account = document.getElementById('accountSel').value;
+	if(account == ''){
+		alert('主账号信息不能为空。');
+		return;
+	}
+	openShowDialog();
+}
+
+function openShowDialog(){
+	var content = "<table align='center' width='400px;' style='margin: 10px 0;'>  "+
+		"<tr height='40'>"+
+			"<td colspan='2' align='center'><label> <b>金库模式访问</b>"+
+			"</label></td>"+
+		"</tr>"+
+		"<tr>"+
+			"<td align='right' width='40%'><label> *授权模式： </label></td>"+
+			"<td width='60%'><input type='radio' id='model1' name='model' "+
+				"checked='checked' onclick='changeModel()'> 远程授权 <input "+
+				"type='radio' id='model2' name='model' onclick='changeModel()'>"+
+				"现场授权 <input type='radio' id='model3' name='model'"+
+				"onclick='changeModel()'> 工单授权</td>"+
+		"</tr>"+
+		"<tr height='30'>"+
+			"<td align='right'><label> *申请人： </label></td>"+
+			"<td><input id='account' type='text' style='width: 180px' "+
+				"value='' readonly='readonly'></td>"+
+		"</tr>"+
+		"<tr height='30' id='timeShow'>"+
+			"<td align='right'><label> *授权有效时限： </label></td>"+
+			"<td><input id='maxTime' type='text' style='width: 180px'"+
+				"value='' readonly='readonly'></td>"+
+		"</tr>"+
+		"<tr height='30' id='workorderShow' style='display: none' >"+
+			"<td align='right'><label> *工单编号： </label></td>"+
+			"<td><input id='workorderNO' type='text' style='width: 180px' "+
+				"value=''></td>"+
+		"</tr>"+
+
+		"<tr height='30' id='contentShow' style='display: none'>"+
+			"<td align='right'><label> *操作内容： </label></td>"+
+			"<td><textarea rows='3' id='operContent' style='width: 180px'></textarea>"+
+			"</td>"+
+		"</tr>"+
+
+		"<tr height='30' id='approverShow'>"+
+			"<td align='right'><label> *协作人员： </label></td>"+
+			"<td><select id='approver' style='width: 180px'>"+
+			"</select></td>"+
+		"</tr>"+
+		"<tr height='30' id='pwShow' style='display: none'>"+
+			"<td align='right'><label> *协作人员静态密码： </label></td>"+
+			"<td><input id='pwCode' type='password' style='width: 180px'>"+
+			"</td>"+
+		"</tr>"+
+		"<tr>"+
+			"<td align='right'><label> *申请原因： </label></td>"+
+			"<td><textarea rows='3' id='caseDesc' style='width: 180px'></textarea>"+
+				"<input id='count' type='hidden' style='width: 180px' value='0'>"+
+			"</td>"+
+		"</tr>"+
+		"<tr height='30'>"+
+			"<td align='center' colspan='2'><input type='button' value='提交申请'"+
+				"onclick='doShowSend()'> &nbsp;&nbsp;&nbsp;&nbsp; <input "+
+				"type='button' value='取消' onclick='doClose()'></td>"+
+		"</tr>"+
+	"</table>";
+_cont.innerHTML = content;
+initParamValue();
+_mask.show();
+}
+
+function initParamValue(){
+	document.getElementById('account').value = account;
+	document.getElementById('maxTime').value = maxTime;
+	var approvers = document.getElementById('approver');
+	if(cooperate.indexOf(",")>-1){
+		var cooperates = cooperate.split(",");
+		for(var k=0;k<cooperates.length;k++){
+			approvers[k]=new Option(cooperates[k],cooperates[k]);
+			if(k==0){
+				approvers[k].selected=true;
+			}
+		}
+	}else{
+		approvers[0]=new Option(cooperate,cooperate);
+	}
+}
+
+function changeModel(){
+	if(document.getElementById('model1').checked){
+		document.getElementById('timeShow').style.display = '';
+		document.getElementById('approverShow').style.display = '';
+		document.getElementById('pwShow').style.display = 'none';
+		document.getElementById('workorderShow').style.display = 'none';
+		document.getElementById('contentShow').style.display = 'none';
+	}
+	if(document.getElementById('model2').checked){
+		document.getElementById('pwShow').style.display = '';
+		document.getElementById('timeShow').style.display = '';
+		document.getElementById('approverShow').style.display = '';
+		document.getElementById('workorderShow').style.display = 'none';
+		document.getElementById('contentShow').style.display = 'none';
+	}
+	if(document.getElementById('model3').checked){
+		document.getElementById('pwShow').style.display = 'none';
+		document.getElementById('timeShow').style.display = 'none';
+		document.getElementById('approverShow').style.display = 'none';
+		document.getElementById('workorderShow').style.display = '';
+		document.getElementById('contentShow').style.display = '';
+	}
+}
+
+function doShowSend(){
+	var account = document.getElementById('account').value;
+	var time = document.getElementById('maxTime').value;
+	var approver = document.getElementById('approver').value;
+	var model = 'remoteAuth';
+	var caseDesc = document.getElementById('caseDesc').value;
+	var pwCode = document.getElementById('pwCode').value;
+	var workorderNO = document.getElementById("workorderNO").value;
+	var operContent = document.getElementById("operContent").value;
+	var count = document.getElementById("count").value;
+	if(document.getElementById('model3').checked){
+		model = 'workOrderAuth';
+		if(document.getElementById('account').value == ''){
+			alert('申请人信息不能为空。');
+			return;
+		}
+		if(document.getElementById('workorderNO').value == ''){
+			alert('工单编号不能为空。');
+			return;
+		}
+		if(document.getElementById('operContent').value == ''){
+			alert('操作内容不能为空。');
+			return;
+		}
+		if(document.getElementById('caseDesc').value == ''){
+			alert('申请原因不能为空。');
+			return;
+		}
+	}else{
+		if(document.getElementById('account').value == ''){
+			alert('申请人信息不能为空。');
+			return;
+		}
+		if(document.getElementById('time').value == ''){
+			alert('授权有效时限不能为空。');
+			return;
+		}
+		if(document.getElementById('approver').value == ''){
+			alert('协作人员信息不能为空。');
+			return;
+		}
+		if(document.getElementById('model2').checked){
+			model = 'siteAuth';
+			if(document.getElementById('pwCode').value == ''){
+				alert('协作人员静态密码信息不能为空。');
+				return;
+			}
+		}
+		if(document.getElementById('caseDesc').value == ''){
+			alert('申请原因信息不能为空，请简要描述。');
+			return;
+		}
+	}
+	var _ajax = new aihb.Ajax({
+		url : "${mvcPath}/jinku/send"
+		,parameters : "account="+account+"&time="+time+"&approver="+approver+"&caseDesc="+caseDesc+"&optype="+model+"&appSessionId="+appSessionId+"&clientIp="+clientIp+"&sceneId="+sceneId+"&workorderNO="+workorderNO+"&operContent="+operContent+"&pwCode="+pwCode+"&nid="+nid
+		,loadmask : true
+		,callback : function(xmlrequest){
+			var result = xmlrequest.responseText;
+			result = eval("("+result+")");
+			if('N' == result.isPass){
+	    		count = parseInt(count)+1;
+	    		document.getElementById("count").value = count;	
+	    		alert("认证码不正确，您已错误"+count+"次，最多输入3次，请重新认证！");
+					if(count==3){
+						doClose();
+					}
+			}else{
+				if(model!='remoteAuth'){
+					document.getElementById('closeImg').parentNode.parentNode.parentNode.style.display='none';
+					down1();
+				}else{
+					showCodeDialog();
+				}
+			}
+		}
+	})
+	_ajax.request();
+}
+
+function showCodeDialog(){
+	var content = "<div style='margin: 0 10px 10px 10px' >"
+		+"<fieldset style='width: 350px; height: 180px;'>"
+			+"<legend> 请输入远程授权动态码 </legend>"
+			+"<table align='center' width='90%' height='90%'>"
+				+"<tr>"
+					+"<td align='center'><label> <input id='pwCode1'"
+							+" type='text' style='width: 230px;'>"
+					+"</label> <input id='count1' type='hidden' style='width: 180px' value='0'>"
+					+"</td>"
+				+"</tr>"
+			+"</table>"
+		+"</fieldset>"
+		+"<br><div align='center' style='margin-bottom:8px;'><input type='button' value='确定' onclick='doCodeSend()'>"
+		+"&nbsp;&nbsp;&nbsp;&nbsp; "
+		+"<input type='button' value='取消' onclick='doClose()'></div>"
+	+"</div>";
+	_cont.innerHTML = content;
+	_mask.show();
+}
+
+function doCodeSend(){
+	var pwCode = document.getElementById('pwCode1').value;
+	var count = document.getElementById("count1").value;
+	if(pwCode == ''){
+		alert('授权动态码信息不能为空。');
+		return;
+	}
+	
+	var _ajax = new aihb.Ajax({
+		url : "${mvcPath}/jinku/send"
+		,parameters : "account="+account+"&time="+maxTime+"&approver="+cooperate+"&optype=remoteAuth2&appSessionId="+appSessionId+"&clientIp="+clientIp+"&sceneId="+sceneId+"&pwCode="+pwCode
+		,loadmask : true
+		,callback : function(xmlrequest){
+			var result = xmlrequest.responseText;
+			result = eval("("+result+")");
+			if('N' == result.isPass){
+	    		count = parseInt(count)+1;
+	    		document.getElementById("count1").value = count;	
+	    		alert("认证码不正确，您已错误"+count+"次，最多输入3次，请重新输入！");
+				if(count==3){
+					doClose();
+				}
+			}else{
+				document.getElementById('closeImg').parentNode.parentNode.parentNode.style.display='none';
+				down1();
+			}
+		}
+	});
+	_ajax.request();
 }
 
 function downNormal(){
@@ -227,15 +486,37 @@ function downFromSensitive(){
 			resultMap = eval("("+resultMap+")");
 			var flag = resultMap.flag;
 			if(flag=='1'){
-				var downUrl1 = resultMap.downUrl;
-				var params = {downUrl:resultMap.downUrl};
-				window.showModalDialog('${mvcPath}/hbapp/cooperative/down.jsp',params,'dialogHeight:80px;dialogWidth:200px;resizable:No;status:No;help:No;');
+				downUrl1 = resultMap.downUrl;
+				//var params = {downUrl:resultMap.downUrl};
+				
+				openDownDialog();
+				//window.showModalDialog('${mvcPath}/hbapp/cooperative/down.jsp',params,'dialogHeight:80px;dialogWidth:200px;resizable:No;status:No;help:No;');
 				//window.open(downUrl1);
 			}else{
 				alert(resultMap.msg);
 			}
 		}
 	});
+}
+
+var downUrl1;
+function openDownDialog(){
+	var content = "<div style='width:200px; height:100px;'>"
+			+"<table align='center' width='90%'>"
+				+"<tr height='40'>"
+					+"<td colspan='2' align='center'><label><a href='#' onclick='downFromUrl();'>下载</a>"
+					+"</label></td>"
+				+"</tr>"
+			+"</table>"
+			+"<br>"
+		+"</div>";
+	_cont.innerHTML = content;
+	_mask.show();
+}
+
+function downFromUrl(){
+	window.open(downUrl1);
+	document.getElementById('closeImg').parentNode.parentNode.parentNode.style.display='none';
 }
 
 	function transHeader(header,isOri){//把Grid用到header对象转成字符串，传给服务端
