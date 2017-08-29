@@ -14,6 +14,8 @@ import javax.servlet.http.HttpSession;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,11 +37,14 @@ import com.asiainfo.hb.gbas.model.AnalyseDao;
 @RequestMapping("/analyse")
 public class AnalyseController {
 	
+	private Logger mLog = LoggerFactory.getLogger(AnalyseController.class);
+	
 	@Autowired
 	private AnalyseDao mAnalyseDao;
 	
 	@RequestMapping("/index/{cycle}")
 	public String index(Model model, @PathVariable String cycle){
+		mLog.debug("---index---,cycle=" + cycle);
 		model.addAttribute("cycle", cycle);
 		return "ftl/analyse/index";
 	}
@@ -48,6 +53,7 @@ public class AnalyseController {
 	@ResponseBody
 	public Object getTemplAnalyse(HttpServletRequest req, HttpSession session) throws Exception{
 		String cycle = req.getParameter("cycle");
+		mLog.info("---getTemplAnalyse---,cycle=" + cycle);
 		String userId = (String) session.getAttribute("loginname");
 		List<Map<String, Object>> templateList = mAnalyseDao.getTemplateExt(userId, cycle);
 		String sdfPattern;
@@ -57,6 +63,7 @@ public class AnalyseController {
 			sdfPattern = "yyyyMM"; 
 		}
 		JSONArray dateList = initDate("", "", sdfPattern);
+		mLog.info("dateList.size=" + dateList.size());
 		
 		List<Map<String, Object>> resList = new ArrayList<Map<String, Object>>();
 		Map<String, Object> temp = null;
@@ -82,6 +89,7 @@ public class AnalyseController {
 	 */
 	@RequestMapping("/zbFluctuate")
 	public String zbFluctuate(Model model){
+		mLog.debug("---zbFluctuate---");
 		model.addAttribute("gbasList", JsonHelper.getInstance().write(mAnalyseDao.getGbasList()));
 		return "ftl/analyse/zbFluctuate";
 	}
@@ -94,6 +102,8 @@ public class AnalyseController {
 		String endTime = req.getParameter("endTime");
 		String gbasCodes = req.getParameter("gbasCodes");
 		String type = req.getParameter("type");
+		mLog.info("---getGbasData---cycle:" + cycle + ";startTime:" + startTime
+				+ ";endTime:" + endTime + ";gbasCodes:" + gbasCodes + ";type:" + type);
 		
 		startTime = startTime.replace("-", "");
 		endTime = endTime.replace("-", "");
@@ -121,6 +131,7 @@ public class AnalyseController {
 	 * @return
 	 */
 	private Map<String, Object> getMultGbasData(JSONArray dateList, String[] codeArr, String cycle, String type){
+		mLog.debug("---getMultGbasData---,dateList.size:" + dateList.size() + ";codeArr:" + codeArr + ";cycle:" + cycle + ";type:" + type);
 		String codes = "";
 		for(String code: codeArr){
 			codes += "'" + code + "',";
@@ -154,8 +165,8 @@ public class AnalyseController {
 			}
 			temp.put("data", dataList);
 			temp.put("type", "line");
-			temp.put("name", gbasName);
-			nameList.add(gbasName);
+			temp.put("name", gbasName == null ?"": gbasName);
+			nameList.add(gbasName == null ?"": gbasName);
 			result.add(temp);
 		}
 		
@@ -174,6 +185,7 @@ public class AnalyseController {
 	 * @return
 	 */
 	private Map<String, Object> getOneGbasData(JSONArray dateList, String gbasCode, String cycle){
+		mLog.debug("---getOneGbasData---, dateList.size:" + dateList.size() + ";gbasCode:" + gbasCode + ";cycle:" + cycle);
 		Map<String, Object> res = new HashMap<String, Object>();
 		List<Map<String, Object>> list = mAnalyseDao.getOneGbasData(cycle, dateList.get(0).toString(),
 				dateList.get(dateList.size() - 1).toString(), gbasCode);
@@ -279,6 +291,7 @@ public class AnalyseController {
 		String type = req.getParameter("type");
 		String gbasCode = req.getParameter("gbasCode");
 		String isFirstPageShow = req.getParameter("isFirstPageShow");
+		mLog.info("---saveTemplate---,name:" + name + ";cycle:" + cycle +";type:" + type + ";gbasCode:" + gbasCode + ";isFirstPageShow:" + isFirstPageShow);
 		mAnalyseDao.saveTemplate(name, cycle, type, gbasCode, isFirstPageShow, userId);
 		return true;
 	}
@@ -297,6 +310,7 @@ public class AnalyseController {
 	public boolean templageOper(HttpServletRequest req){
 		String ids = req.getParameter("ids");
 		String operType = req.getParameter("operType");
+		mLog.info("---templageOper---,ids:" + ids + ";operType:" + operType);
 		if(operType.equals("setShow")){
 			mAnalyseDao.updateTemplate(ids, "1");
 		}else if(operType.equals("cancelShow")){

@@ -15,7 +15,27 @@
 <script src="${mvcPath}/resources/js/common.js"></script>
 <script>
 var gbasList = ${gbasList};
+var type = "zb";
+var cycle = "daily";
 $(function(){
+	$('#type').combobox({
+	    valueField:'id',
+	    textField:'text',
+	    onSelect: function(rec){
+	    	type = rec.id;
+		    resetCodeOption();
+	    }
+	});
+	
+	$('#cycle').combobox({
+	    valueField:'id',
+	    textField:'text',
+	    onSelect: function(rec){
+	    	cycle = rec.id;
+		    changeCycle();
+	    }
+	});
+	
 	initMonthPicker($("#startTimeM"));
 	initMonthPicker($("#endTimeM"));
 	resetCodeOption();
@@ -23,7 +43,6 @@ $(function(){
 });
 
 function changeCycle(){
-	var cycle = $("#cycle").val();
 	if(cycle == "daily"){
 		$(".daily-box").show();
 		$(".monthly-box").hide();
@@ -35,13 +54,9 @@ function changeCycle(){
 }
 
 function resetCodeOption(){
-	var type = $("#type").val();
-	var cycle = $("#cycle").val();
 	var codes = new Array();
 	if(type == 'zb'){
 		codes = gbasList.zbList;
-	}else if(type == 'rule'){
-		codes = gbasList.ruleList;
 	}
 	
 	var html = "";
@@ -63,8 +78,6 @@ function queryGbasData(){
     	$.messager.alert('提示','请选择需要分析的指标','info');
     	return;
     }
-    var type = $("#type").val();
-	var cycle = $("#cycle").val();
 	var startTime;
 	var endTime;
 	if(cycle == "daily"){
@@ -155,8 +168,8 @@ function saveTemplate(){
 		return;
 	}
 	var firstPageShow = $("#firstPageShow").val();
-	var cycle = $("#cycle").val();
-	var type = $("#type").val();
+	var cycle = $("#cycle").combobox('getValue');
+	var type = $("#type").combobox('getValue');
 	var gbasCodes = new Array();
 	$("#undo_redo_to option").each(function(){
         gbasCodes.push($(this).val());
@@ -258,9 +271,6 @@ function formatType(value){
 	if(value == "zb"){
 		return "指标";
 	}
-	if(value == "rule"){
-		return "规则";
-	}
 	if(value == "export"){
 		return "接口";
 	}
@@ -271,28 +281,27 @@ function formatType(value){
 <body>
 	<div class='wrap'>
 		<div style="height:30px; line-height:30px;">
-			<label class="fl">类型</label>
-			<select class="fl" id="type" style="width:100px;height:30px;line-height:30px;" onchange="resetCodeOption()">
+			<label>类型</label>
+			<select id="type" class="easyui-combobox" data-options="editable:false,panelHeight:'auto'" style="height:30px;width:100px;">
 				<option value='zb'>指标</option>
-				<option value='rule'>规则</option>
 				<option value='export'>接口</option>
 			</select>
-			<label class="fl" style="margin-left:15px;">周期</label>
-			<select class="fl"  id="cycle" style="width:100px;height:30px;line-height:30px;" onchange="changeCycle()">
+			<label style="margin-left:15px;">周期</label>
+			<select id="cycle" class="easyui-combobox" data-options="editable:false,panelHeight:'auto'" style="height:30px;width:100px;">
 				<option value="daily">日</option>
 				<option value="monthly">月</option>
 			</select>
-			<label class="fl" style="margin-left:10px;">时间周期</label>
-			<div class="fl daily-box">
+			<label style="margin-left:10px;">时间周期</label>
+			<span class="daily-box">
 				<input class="easyui-datebox" style="height:30px;width:140px;" id="startTimeD" editable="false">
 				<span>~</span>
 				<input class="easyui-datebox" style="height:30px;width:140px;" id="endTimeD" editable="false">
-			</div>
-			<div class="fl monthly-box" style="display:none;">
+			</span>
+			<span class="monthly-box" style="display:none;">
 				<input class="easyui-datebox" style="height:30px; width:140px;" id="startTimeM" editable="false">
 				<span>~</span>
 				<input class="easyui-datebox" style="height:30px;width:140px;" id="endTimeM"  editable="false">
-			</div>
+			</span>
 			<input class="qry-btn mar-l5" onclick="queryGbasData()" type="button" value='查询'>
 			<input class="qry-btn" data-toggle="modal" onclick="openAddDialog()" type="button" value='保存为模板'>
 			<input class="qry-btn" data-toggle="modal" onclick="openManageDialog()" type="button" value='模板管理'>

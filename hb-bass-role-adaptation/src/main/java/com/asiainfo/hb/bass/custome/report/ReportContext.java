@@ -94,15 +94,6 @@ public class ReportContext {
 		return defaultDate;
 	}
 
-	public static void main(String[] args) {
-		try {
-			SimpleDateFormat s = new SimpleDateFormat("yyyyMM");
-			s.parse("20172");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-	}
-
 	public void init() {
 		parameters = new HashMap<String, Object>();
 		// 查询指标配置信息
@@ -259,7 +250,7 @@ public class ReportContext {
 		if (type.equals(DAY)) {
 			return DAY_REPORT_TABLE;
 		} else {
-			return DAY_REPORT_TABLE;
+			return MONTH_REPORT_TABLE;
 		}
 	}
 

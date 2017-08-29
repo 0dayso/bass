@@ -190,21 +190,28 @@ public class jinkuController {
 
 	      File tempFile = this.jinkuService.createTempFile(ds, sql, fileName, _header, fileType);
 	      LOG.info("tempFile.Name=========" + tempFile.getName());
-	      Map map = this.jinkuDao.checkSensitive(sid);
-	      String message = "未纳入金库模式，下载文件未加密";
-	      LOG.info("是否需要上传云平台==============" + ((String)map.get("result")));
+	      
 	      String status = "1";
-	      if (((String)map.get("result")).equals("1")) {
-	        HashMap result = this.jinkuService.encryptFile(tempFile, req);
-	        String downUrl = String.valueOf(result.get("downUrl"));
-	        LOG.info("云平台路径：============" + downUrl);
-	        LOG.info("云平台路径11111111111111：============" + ((String)result.get("downUrl")));
-	        message = String.valueOf(result.get("msg"));
-	        status = String.valueOf(result.get("flag"));
-	        msg.put("downUrl", downUrl);
-	        if (tempFile == null)
-	          message = "文件生成失败，请重新下载。";
-
+	      String message = "未纳入金库模式，下载文件未加密";
+	      String isOpen = jinkuDao.get4ASwitch();
+	      if (!"".equals(isOpen) && isOpen.equals("Y")) {
+	    	  Map map = this.jinkuDao.checkSensitive(sid);
+	    	  LOG.info("是否需要上传云平台==============" + ((String)map.get("result")));
+	    	  if (((String)map.get("result")).equals("1")) {
+	    		  HashMap result = this.jinkuService.encryptFile(tempFile, req);
+	    		  String downUrl = String.valueOf(result.get("downUrl"));
+	    		  LOG.info("云平台路径：============" + downUrl);
+	    		  LOG.info("云平台路径11111111111111：============" + ((String)result.get("downUrl")));
+	    		  message = String.valueOf(result.get("msg"));
+	    		  status = String.valueOf(result.get("flag"));
+	    		  msg.put("downUrl", downUrl);
+	    		  if (tempFile == null)
+	    			  message = "文件生成失败，请重新下载。";
+	    		  
+	    	  }
+	      }else{
+	    	  message = "未开启金库模式，可直接下载";
+	    	  status = "0";
 	      }
 
 	      msg.put("message", message);

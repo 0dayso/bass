@@ -80,7 +80,7 @@ try{
 	
 	
 	//求出该用户的areaid
-	sql = "select b.region,b.itemname from FPF_USER_USER a,mk.dim_areacity b where char(a.cityid) = char(b.site_id) and userid='"+userid+"'";
+	sql = "select b.region_new,b.itemname from FPF_USER_USER a,mk.dim_areacity b where char(a.cityid) = char(b.site_id) and userid='"+userid+"'";
 	ps = conn.prepareStatement(sql);
 	rs = ps.executeQuery();
 	if(rs.next()){
@@ -283,7 +283,7 @@ function genSQL(){
 		%>		
 		
 		//var sql="select '' c0,'' c0_1,newdelcell_seq c1,area_id c2_1,(select dim.itemname from mk.dim_areacity dim where char(dim.region)=area_id) c2,LAC_DEC c3,CELLID_DEC c4,Bureau_ID c5,bureau_name c5_1,(select A.name from nwh.bureau_tree A where A.ID=town_code) c6_1,(select B.county_code  from nwh.vdim_bureau_tree B where B.town_code=F.town_code) c6_1_1,(select B.COUNTY_NAME  from nwh.vdim_bureau_tree B where B.town_code=F.town_code) c6_1_2,(select B.ZONE_CODE  from nwh.vdim_bureau_tree B where B.town_code=F.town_code) c6_1_3,(select B.ZONE_NAME  from nwh.vdim_bureau_tree B where B.town_code=F.town_code) c6_1_4,town_code c6,createuser c7,substr(char(CREATE_DATE),1,19) c8,case when operate_type='new' then '新增' when operate_type='del' then '删除' end c9,case when STATUS='waitaudit1' then '待一级审核' when STATUS='waitaudit2' then '待二级审核' when STATUS='waitaudit3' then '待三级审核' when STATUS='succ' then '审核通过'  when STATUS='fail' then '审核不通过'  end c10,substr(char(STATE_DATE),1,19) c11,case when eff_type='0' then '立即生效' when eff_type='1' then '下月生效' end c12 from BUREAU_CELL_NEWDEL_INFO F "
-		var sql="select '' c0,'' c0_1,newdelcell_seq c1,area_id c2_1,(select dim.itemname from mk.dim_areacity dim where char(dim.region)=area_id) c2,LAC_DEC c3,CELLID_DEC c4,Bureau_ID c5,bureau_name c5_1,(select A.name from nwh.bureau_tree A where A.ID=town_code) c6_1,(select B.county_code  from nwh.vdim_bureau_tree B where B.town_code=F.town_code) c6_1_1,(select B.COUNTY_NAME  from nwh.vdim_bureau_tree B where B.town_code=F.town_code) c6_1_2,(select B.ZONE_CODE  from nwh.vdim_bureau_tree B where B.town_code=F.town_code) c6_1_3,(select B.zone_name  from nwh.vdim_bureau_tree B where B.town_code=F.town_code) c6_1_4,town_code c6,createuser c7,substr(char(CREATE_DATE),1,19) c8,case when operate_type='new' then '新增' when operate_type='del' then '删除' end c9,case when STATUS='waitaudit1' then '待一级审核' when STATUS='waitaudit2' then '待二级审核' when STATUS='waitaudit3' then '待三级审核' when STATUS='succ' then '审核通过'  when STATUS='fail' then '审核不通过'  end c10,substr(char(STATE_DATE),1,19) c11,case when eff_type='0' then '立即生效' when eff_type='1' then '下月生效' end c12,(select A.college_name from BUREAU_COLLEGE_ORINFO A where A.newdelcell_seq=F.newdelcell_seq  and A.state_time = (select max(B.state_time) from BUREAU_COLLEGE_ORINFO B where B.newdelcell_seq=F.newdelcell_seq)) C12_1 from BUREAU_CELL_NEWDEL_INFO F "
+		var sql="select '' c0,'' c0_1,newdelcell_seq c1,area_id c2_1,(select dim.itemname from mk.dim_areacity dim where char(dim.region_new)=area_id) c2,LAC_DEC c3,CELLID_DEC c4,Bureau_ID c5,bureau_name c5_1,(select A.name from nwh.bureau_tree A where A.ID=town_code) c6_1,(select B.county_code  from nwh.vdim_bureau_tree B where B.town_code=F.town_code) c6_1_1,(select B.COUNTY_NAME  from nwh.vdim_bureau_tree B where B.town_code=F.town_code) c6_1_2,(select B.ZONE_CODE  from nwh.vdim_bureau_tree B where B.town_code=F.town_code) c6_1_3,(select B.zone_name  from nwh.vdim_bureau_tree B where B.town_code=F.town_code) c6_1_4,town_code c6,createuser c7,substr(char(CREATE_DATE),1,19) c8,case when operate_type='new' then '新增' when operate_type='del' then '删除' end c9,case when STATUS='waitaudit1' then '待一级审核' when STATUS='waitaudit2' then '待二级审核' when STATUS='waitaudit3' then '待三级审核' when STATUS='succ' then '审核通过'  when STATUS='fail' then '审核不通过'  end c10,substr(char(STATE_DATE),1,19) c11,case when eff_type='0' then '立即生效' when eff_type='1' then '下月生效' end c12,(select A.college_name from BUREAU_COLLEGE_ORINFO A where A.newdelcell_seq=F.newdelcell_seq  and A.state_time = (select max(B.state_time) from BUREAU_COLLEGE_ORINFO B where B.newdelcell_seq=F.newdelcell_seq)) C12_1 from BUREAU_CELL_NEWDEL_INFO F "
 			+ wherePiece
 		  + getwhere('STATE_DATE')
 		  + getwhereDate('CREATE_DATE','date3','date4')	
@@ -309,7 +309,7 @@ function genSQL(){
 		}
 		%>		
 		
-		var sql="select '' c0,'' c0_1,a.newdelcell_seq c1,area_id c2_1,(select dim.itemname from mk.dim_areacity dim where char(dim.region)=area_id) c2,LAC_DEC c3,CELLID_DEC c4,Bureau_ID c5,(select A.name from nwh.bureau_tree A where A.ID=town_code) c6_1,town_code c6,createuser c7,substr(char(CREATE_DATE),1,19) c8,case when a.operate_type='new' then '新增' when a.operate_type='del' then '删除' end c9,case when a.STATUS='waitaudit1' then '待一级审核' when a.STATUS='waitaudit2' then '待二级审核' when a.STATUS='waitaudit3' then '待三级审核' when a.STATUS='succ' then '审核通过'  when a.STATUS='fail' then '审核不通过'  end c10,substr(char(a.STATE_DATE),1,19) c11,case when eff_type='0' then '立即生效' when eff_type='1' then '下月生效' end c12 from BUREAU_CELL_NEWDEL_INFO a,BUREAU_CELL_NEWDEL_AUDIT_LOG b where a.NEWDELCELL_SEQ = b.NEWDELCELL_SEQ and b.OPERATOR = '<%=userid%>' "
+		var sql="select '' c0,'' c0_1,a.newdelcell_seq c1,area_id c2_1,(select dim.itemname from mk.dim_areacity dim where char(dim.region_new)=area_id) c2,LAC_DEC c3,CELLID_DEC c4,Bureau_ID c5,(select A.name from nwh.bureau_tree A where A.ID=town_code) c6_1,town_code c6,createuser c7,substr(char(CREATE_DATE),1,19) c8,case when a.operate_type='new' then '新增' when a.operate_type='del' then '删除' end c9,case when a.STATUS='waitaudit1' then '待一级审核' when a.STATUS='waitaudit2' then '待二级审核' when a.STATUS='waitaudit3' then '待三级审核' when a.STATUS='succ' then '审核通过'  when a.STATUS='fail' then '审核不通过'  end c10,substr(char(a.STATE_DATE),1,19) c11,case when eff_type='0' then '立即生效' when eff_type='1' then '下月生效' end c12 from BUREAU_CELL_NEWDEL_INFO a,BUREAU_CELL_NEWDEL_AUDIT_LOG b where a.NEWDELCELL_SEQ = b.NEWDELCELL_SEQ and b.OPERATOR = '<%=userid%>' "
 			+ wherePiece
 			+ getwhere('STATE_DATE')
 			+ getwhereDate('CREATE_DATE','date3','date4')	
@@ -340,7 +340,7 @@ function genSQL(){
 		}
 		%>
 		
-		var sql="select '' c0,'' c0_1,newdelcell_seq c1,area_id c2_1,(select dim.itemname from mk.dim_areacity dim where char(dim.region)=area_id) c2,LAC_DEC c3,CELLID_DEC c4,Bureau_ID c5,bureau_name c5_1,(select A.name from nwh.bureau_tree A where A.ID=town_code) c6_1,town_code c6,createuser c7,substr(char(CREATE_DATE),1,19) c8,case when operate_type='new' then '新增' when operate_type='del' then '删除' end c9,case when STATUS='waitaudit1' then '待一级审核' when STATUS='waitaudit2' then '待二级审核' when STATUS='succ' then '审核通过'  when STATUS='fail' then '审核不通过'  end c10,substr(char(STATE_DATE),1,19) c11,case when eff_type='0' then '立即生效' when eff_type='1' then '下月生效' end c12 ,zone_name c21,zone_code c31,town_name c22,cell_name c23 from (select a.* ,b.zone_name,zone_code,town_name,bureau_name cell_name from BUREAU_CELL_NEWDEL_INFO a left join nwh.vdim_bureau_tree b on a.town_code=b.town_code) tt "
+		var sql="select '' c0,'' c0_1,newdelcell_seq c1,area_id c2_1,(select dim.itemname from mk.dim_areacity dim where char(dim.region_new)=area_id) c2,LAC_DEC c3,CELLID_DEC c4,Bureau_ID c5,bureau_name c5_1,(select A.name from nwh.bureau_tree A where A.ID=town_code) c6_1,town_code c6,createuser c7,substr(char(CREATE_DATE),1,19) c8,case when operate_type='new' then '新增' when operate_type='del' then '删除' end c9,case when STATUS='waitaudit1' then '待一级审核' when STATUS='waitaudit2' then '待二级审核' when STATUS='succ' then '审核通过'  when STATUS='fail' then '审核不通过'  end c10,substr(char(STATE_DATE),1,19) c11,case when eff_type='0' then '立即生效' when eff_type='1' then '下月生效' end c12 ,zone_name c21,zone_code c31,town_name c22,cell_name c23 from (select a.* ,b.zone_name,zone_code,town_name,bureau_name cell_name from BUREAU_CELL_NEWDEL_INFO a left join nwh.vdim_bureau_tree b on a.town_code=b.town_code) tt "
 			+ wherePiece
 			+ getwhere('STATE_DATE')
 			+ getwhereDate('CREATE_DATE','date3','date4')	
@@ -597,7 +597,7 @@ function getGridPanel(){
     limit : 30
       }
    });
-   var _Uselect = "select distinct college_id id,college_name value from NWH.COLLEGE_INFO where state=1 and area_id in (select itemid from mk.dim_areacity where  region=<%=region%>) order by college_name asc ";
+   var _Uselect = "select distinct college_id id,college_name value from NWH.COLLEGE_INFO where state=1 and area_id in (select itemid from mk.dim_areacity where  region_new=<%=region%>) order by college_name asc ";
              var ds_1=new Ext.data.Store({
                     proxy: new Ext.data.HttpProxy({url:"${mvcPath}/hbirs/action/jsondata?method=query&sql="+_Uselect+"&qType=limit&start=1&limit=510"}),
                     reader: new Ext.data.JsonReader({

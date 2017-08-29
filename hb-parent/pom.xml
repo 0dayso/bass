@@ -205,21 +205,18 @@
 				<groupId>db2</groupId>
 				<artifactId>db2java</artifactId>
 				<version>1.0</version>
-				<scope>provided</scope>
 			</dependency>
 
 			<dependency>
 				<groupId>db2</groupId>
 				<artifactId>db2jcc</artifactId>
 				<version>1.0</version>
-				<scope>provided</scope>
 			</dependency>
 
 			<dependency>
 				<groupId>ojdbc</groupId>
 				<artifactId>ojdbc</artifactId>
 				<version>6</version>
-				<scope>provided</scope>
 			</dependency>
 			
 			<dependency>

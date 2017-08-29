@@ -63,7 +63,7 @@ public class JinkuDao {
 		return jdbcTemplate.queryForList("select sid, isjinku,sceneid,name from FPF_IRS_SUBJECT_MENU_MAP inner join FPF_IRS_SUBJECT on sid = id where sid=?", new Object[] { Integer.parseInt(id) });
 	}
 	
-	//得到金库状态：0表示4a认证功能开启;1表示4a认证功能关闭
+	//得到金库状态：Y表示4a认证功能开启;N表示4a认证功能关闭
 	public String get4ASwitch() {
 		try {
 			JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource, false);

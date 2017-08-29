@@ -1,22 +1,7 @@
 var mvcPath = $("#mvcPath").val();
 var defaultDate = $("#defaultDate").val();
 var reportId = $("#reportId").val();
-var queryId;
 var columnLength;
-$.fn.datebox.defaults.formatter = function(date) {
-	var y = date.getFullYear();
-	var m = date.getMonth() + 1;
-	var d = date.getDate();
-	return y + "-" + m + "-" + d;
-}
-$.fn.datebox.defaults.parser = function(s) {
-	var t = Date.parse(s);
-	if (!isNaN(t)) {
-		return new Date(t);
-	} else {
-		return new Date();
-	}
-}
 /**
  * 获取checkbox选中的值,返回值是一个数组
  * 
@@ -66,7 +51,6 @@ function queryCountyList(record){
 				valueField : 'id',
 				textField : 'name',
 				onSelect : function(record) {
-					console.log(record);
 				}
 			});
 		} else {
@@ -87,10 +71,6 @@ function getQueryParameters() {
 	//自定义指标id
 	data.reportId = $("#reportId").val()||'';
 	var kpiDate = $("#kpi_date").datebox('getValue') || '';
-	var type = $("#type").val();
-	if(type == "MONTH_TYPE" && kpiDate && kpiDate.lastIndexOf("-") > -1){
-		kpiDate = kpiDate.substr(0,kpiDate.lastIndexOf("-"));
-	}
 	// 统计周期
 	data.kpiDate = kpiDate;
 	// 省市
@@ -121,9 +101,21 @@ window.onload = function (){
 }
 
 $(function() {
-	$("#kpi_date").datebox({
-		required : true
-	});
+	var type = $("#type").val();
+	if(type == "MONTH_TYPE"){
+		$("#kpi_date").datebox({
+			formatter:monthFormat,
+			parser:monthParse,
+			required : true
+		});
+		
+	}else{
+		$("#kpi_date").datebox({
+			formatter:dayFormat,
+			parser:dayParse,
+			required : true
+		});
+	}
 	// 设置报表周期
 	$("#kpi_date").datebox('setValue', defaultDate);
 	// 查询省市信息
@@ -172,9 +164,6 @@ $(function() {
 				
 				data : getQueryParameters(),
 				success : function(data) {
-					console.log(data);
-					queryId = data.queryId;
-					
 					if(data.header){
 						columnLength = data.header.length;
 						$('#reportDataGrid').datagrid({   
@@ -182,6 +171,7 @@ $(function() {
 						    columns:[data.header],
 						    fitColumns: true,
 						    pagination: true,
+						    
 						    onLoadSuccess: function (data) {
 					            if (data.total == 0) {
 					                //添加一个新数据行，第一列的值为你需要的提示信息，然后将其他列合并到第一列来，注意修改colspan参数为你columns配置的总列数
@@ -193,9 +183,7 @@ $(function() {
 					            	$(this).closest('div.datagrid-wrap').find('div.datagrid-pager').show();
 					            }
 					        },
-						    queryParams: {
-						    		queryId: queryId
-						    }
+						    queryParams: getQueryParameters()
 						});
 					}
 				}

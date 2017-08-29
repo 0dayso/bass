@@ -1292,7 +1292,7 @@ aihb.Util = {
 		if(options.mvcPath){
 			mvcPath = options.mvcPath;
 		}
-		_close.html('<img src=\'/hb-bass-navigation/resources/image/default/tab-close.gif\' style="cursor: hand;" onclick="{this.parentNode.parentNode.parentNode.style.display=\'none\';}"></img>');
+		_close.html('<img id=\'closeImg\' src=\'/hb-bass-navigation/resources/image/default/tab-close.gif\' style="cursor: hand;" onclick="{this.parentNode.parentNode.parentNode.style.display=\'none\';}"></img>');
 		_content.append(_close);
 		_content.append(options.content);
 		

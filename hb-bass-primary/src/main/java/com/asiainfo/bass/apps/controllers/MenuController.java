@@ -122,20 +122,27 @@ public class MenuController {
 	@RequestMapping(value = "{menuId}/children")
 	public @ResponseBody
 	List children(@ModelAttribute("mvcPath") String mvcPath, @ModelAttribute("user") User user, @PathVariable String menuId) {
-		String user_id = user.getId();
+		
 		int isAdmin = user.getSperAdmin();
-		String sql = " select distinct a.* from FPF_SYS_MENU_ITEMS a, "+
-				" (select distinct user_id,menu_id from  "+
-				" (select a.userid user_id,d.resourceid menu_id from FPF_USER_USER a,FPF_user_group_map b,fpf_group_role_map c ,FPF_sys_menuitem_right d  "+
-				" where  a.userid=b.userid and b.group_id = c.group_id and c.role_id = d.operatorid  "+
-				" union all select user_id,menu_id from FPF_SYS_MENUITEM_USER )  "+
-				" ) b where a.menuitemid = b.menu_id and a.state<>0 and b.user_id= "+user_id+" and parentid="+menuId+" order by sortnum with ur ";
+		List<Object> value = new ArrayList<Object>();
+		value.add(menuId);
+		String sql ="";
 		if(isAdmin==1){
-			 sql = " select distinct * from FPF_SYS_MENU_ITEMS  where parentid=" + menuId + " and state<>0 order by sortnum with ur";
+			 sql = " select distinct * from FPF_SYS_MENU_ITEMS  where parentid=? and state<>0 order by sortnum with ur";
+		}else{
+			sql = " select distinct a.* from FPF_SYS_MENU_ITEMS a, "+
+					" (select distinct user_id,menu_id from  "+
+					" (select a.userid user_id,d.resourceid menu_id from FPF_USER_USER a,FPF_user_group_map b,fpf_group_role_map c ,FPF_sys_menuitem_right d  "+
+					" where  a.userid=b.userid and b.group_id = c.group_id and c.role_id = d.operatorid  "+
+					" union all select user_id,menu_id from FPF_SYS_MENUITEM_USER )  "+
+					" ) b where a.menuitemid = b.menu_id and a.state<>0 and parentid= ? and b.user_id= ?  order by sortnum with ur ";
+			String user_id = user.getId();
+			value.add(user_id);
+			
 		}
 		List list = new ArrayList();
 		try {
-			list = jdbcTemplate.queryForList(sql);
+			list = jdbcTemplate.queryForList(sql,value.toArray());
 		} catch (DataAccessException e) {
 			
 			e.printStackTrace();

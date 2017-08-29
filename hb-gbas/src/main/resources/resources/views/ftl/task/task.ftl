@@ -47,7 +47,22 @@ function formatStatus(value){
 		return "等待";
 	}
 	if(value == "1"){
-		return "开始执行";
+		return "强制开始执行";
+	}
+	if(value == "2"){
+		return "数据依赖已满足";
+	}
+	if(value == "3"){
+		return "开始执行指标计算";
+	}
+	if(value == "4"){
+		return "指标计算完成";
+	}
+	if(value == "5"){
+		return "强规则稽核失败";
+	}
+	if(value == "6"){
+		return "完成";
 	}
 	return value;
 }
@@ -66,10 +81,10 @@ function formatType(value){
 }
 
 function queryTask(){
-	var type = $("#qryType").val().trim();
-	var cycle = $("#qryCycle").val().trim();
-	var status = $("#qryStatus").val().trim();
-	var name = $("#qryName").val().trim();
+	var type = $("#qryType").combobox("getValue").trim();
+	var cycle = $("#qryCycle").combobox("getValue").trim();
+	var status = $("#qryStatus").combobox("getValue").trim();
+	var name = $("#qryName").textbox("getValue").trim();
 	
 	$("#runTable").datagrid("load", {
 		type : type,
@@ -91,9 +106,9 @@ function queryTask(){
 				<!--<th field="itemId" checkbox="true"></th>-->
 				<th data-options="field:'type',width:50,formatter:formatType">类型</th>
 				<th data-options="field:'gbas_code',width:60">程序名称</th>
-				<th data-options="field:'cycle',width:60,formatter:formatCycle">周期</th>
+				<th data-options="field:'cycle',width:40,formatter:formatCycle">周期</th>
 				<th data-options="field:'etl_cycle_id',width:60">批次号</th>
-				<th data-options="field:'etl_status',width:50,formatter:formatStatus">状态</th>
+				<th data-options="field:'etl_status',width:70,formatter:formatStatus">状态</th>
 				<th data-options="field:'dispatch_time',width:100">发布时间</th>
 				<th data-options="field:'exec_start_time',width:100">开始执行时间</th>
 				<th data-options="field:'exec_end_time',width:100">执行结束时间</th>
@@ -104,31 +119,31 @@ function queryTask(){
 	<div id="tb" style="padding:5px;height:auto">
 		<div style="padding: 3px;">
 			<span>类型</span>
-			<select id="qryType">
+			<select id="qryType" class="easyui-combobox" data-options="editable:false,panelHeight:'auto'" style="height: 27px; width: 100px;">
 				<option value="">---请选择---</option>
 				<option value="zb">指标</option>
 				<option value="rule">规则</option>
 				<option value="export">接口</option>
 			</select>
 			<span>周期</span>
-			<select id="qryCycle">
+			<select id="qryCycle" class="easyui-combobox" data-options="editable:false,panelHeight:'auto'" style="height: 27px; width: 100px;">
 				<option value="">---请选择---</option>
 				<option value="daily">日</option>
 				<option value="monthly">月</option>
 			</select>
 			<span>状态</span>
-			<select id="qryStatus">
+			<select id="qryStatus" class="easyui-combobox" data-options="editable:false,panelHeight:'auto'" style="height: 27px; width: 100px;">
 				<option value="">---请选择---</option>
 				<option value="0">等待</option>
 				<option value="1">开始执行</option>
 			</select>
 			<span>程序名称</span>
-			<input id="qryName">
+			<input id="qryName" class="easyui-textbox" style="height: 27px; width: 160px;">
 			<a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="queryTask()">查询</a>
 		</div>
 		<div>
-			<a href="#" class="easyui-linkbutton" iconCls="icon-tip" onclick="viewExecCondition()">查看执行条件</a>
-			<a href="#" class="easyui-linkbutton" iconCls="icon-tip" onclick="viewDependCondition()">查看依赖条件</a>
+			<a href="#" class="easyui-linkbutton" iconCls="icon-branch" onclick="viewExecCondition()">查看执行条件</a>
+			<a href="#" class="easyui-linkbutton" iconCls="icon-list" onclick="viewDependCondition()">查看依赖条件</a>
 			<a href="#" class="easyui-linkbutton" iconCls="icon-tip" onclick="viewLog()">查看日志</a>
 			<a href="#" class="easyui-linkbutton" iconCls="icon-do" onclick="run()">强制执行</a>
 			<a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="stop()">强制停止</a>

@@ -55,6 +55,18 @@
 .icon-tip{
 	background:url('icons/tip.png') no-repeat center center;
 }
+.icon-branch{
+	background:url('icons/branch.png') no-repeat center center;
+}
+.icon-list{
+	background:url('icons/list.png') no-repeat center center;
+}
+.icon-user{
+	background:url('icons/user.png') no-repeat center center;
+}
+.icon-submit{
+	background:url('icons/submit.png') no-repeat center center;
+}
 .icon-filter{
 	background:url('icons/filter.png') no-repeat center center;
 }

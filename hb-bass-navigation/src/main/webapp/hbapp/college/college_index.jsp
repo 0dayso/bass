@@ -46,7 +46,7 @@
 			String userCityId="HB.00";
 			try {
 				//判断当前登陆人权限
-				String auditSql = "SELECT region_id from FPF_USER_USER where userid='"+session.getAttribute("loginname")+"'";
+				String auditSql = "SELECT OPT_REGION from FPF_USER_USER where userid='"+session.getAttribute("loginname")+"'";
 
 				conn = ConnectionManage.getInstance().getWEBConnection();
 				PreparedStatement ps = conn.prepareStatement(auditSql);
@@ -54,10 +54,15 @@
 
 				if (rs.next()) {
 					String region_id=rs.getString(1);
+
 					if(null!=region_id&&!"".equals(region_id)){
 						userCityId=region_id.equals("HB")?"HB.00":region_id;
+						if(userCityId.length()>5){
+							userCityId= userCityId.substring(0, 5);
+						}
 					}
 				}
+				System.out.println(userCityId);
 				rs.close();
 				ps.close();
 

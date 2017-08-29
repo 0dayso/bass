@@ -20,7 +20,6 @@ import com.asiainfo.hb.bass.custome.report.ReportContext;
 import com.asiainfo.hb.bass.custome.report.models.CustomReport;
 import com.asiainfo.hb.bass.custome.report.models.QueryInfo;
 import com.asiainfo.hb.bass.custome.report.service.CustomReportService;
-import com.asiainfo.hb.core.util.IdGen;
 import com.asiainfo.hb.web.SessionKeyConstants;
 import com.asiainfo.hb.web.models.User;
 
@@ -102,8 +101,6 @@ public class CustomReportController {
 		context.setInfo(info);
 		context.init();
 		context.inittHead();
-		String queryId = IdGen.genId();
-		result.put("queryId", queryId);
 		result.put("header", context.getColumns());
 		return result;
 	}
@@ -111,9 +108,14 @@ public class CustomReportController {
 	@RequestMapping(value = { "/reportPageList" })
 	@ResponseBody
 	public Object reportPageList(@RequestParam(value = "page", defaultValue = "1") Integer page,
-			@RequestParam(value = "rows", defaultValue = "10") Integer rows,@RequestParam("queryId")String queryId) {
-		logger.info("<----parameters---->page=" + page + ",rows=" + rows+",queryId"+queryId);
+			@RequestParam(value = "rows", defaultValue = "10") Integer rows,QueryInfo info) {
+		logger.info("<----parameters---->page=" + page + ",rows=" + rows+",info"+info);
+		context.setReportId(info.getReportId());
+		context.setInfo(info);
+		context.init();
+		context.inittHead();
 		context.query(page, rows);
+		logger.info("type:" + context.type);
 		return context.getDatas();
 	}
 

@@ -1,0 +1,54 @@
+html,body,ul {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-family: "MicrosoftYaHei", "Microsoft YaHei";
+	font-weight: 400;
+	font-style: normal;
+	font-size: 12px;
+}
+
+li{
+	list-style: none;
+	height: 20px;
+	line-height: 20px;
+}
+
+a {
+	cursor: pointer;
+	text-decoration: none;
+	color: #999999;
+}
+
+.mar-b15{
+	margin-bottom: 15px;
+}
+
+.mar-t15{
+	margin-top: 15px;
+}
+
+.inp-lab {
+	width: 24%;
+	height: 32px;
+	line-height: 32px;
+	float: left;
+	text-align: right;
+}
+
+.qry-line{
+	height: 40px;
+	line-height: 40px;
+}
+
+.datagrid-row-selected {
+  background: #ffe48d;
+  color: #000;
+}
+
+.oper{
+	text-decoration: underline;
+	color: blue;
+}

@@ -24,10 +24,13 @@ public class ZbDef {
 	private String remark;
 	/**创建人*/
 	private String creater;
+	private String createrName;
 	/**开发人*/
 	private String developer;
+	private String developerName;
 	/**局方负责人*/
 	private String manager;
+	private String managerName;
 	
 	/**一经接口号*/
 	private String boiCode;
@@ -37,6 +40,17 @@ public class ZbDef {
 	private String expectEndDay;
 	/**预期完成时间 8.5表示8点半 */
 	private String expectEndTime;
+	
+	/**1强规则,0弱规则等,默认0*/
+	private String ruleType;
+	/**规则配置*/
+	private String ruleDef;
+	/**比较运算符,如==,>=等*/
+	private String compOper;
+	/**阈值*/
+	private String compVal; 
+	/**依赖类型*/
+	private String dependType;
 	
 	public String getZbCode() {
 		return zbCode;
@@ -116,6 +130,24 @@ public class ZbDef {
 	public void setDeveloper(String developer) {
 		this.developer = developer;
 	}
+	public String getCreaterName() {
+		return createrName;
+	}
+	public void setCreaterName(String createrName) {
+		this.createrName = createrName;
+	}
+	public String getDeveloperName() {
+		return developerName;
+	}
+	public void setDeveloperName(String developerName) {
+		this.developerName = developerName;
+	}
+	public String getManagerName() {
+		return managerName;
+	}
+	public void setManagerName(String managerName) {
+		this.managerName = managerName;
+	}
 	public String getManager() {
 		return manager;
 	}
@@ -147,6 +179,37 @@ public class ZbDef {
 		this.expectEndTime = expectEndTime;
 	}
 	
+	public String getRuleType() {
+		return ruleType;
+	}
+	public void setRuleType(String ruleType) {
+		this.ruleType = ruleType;
+	}
+	public String getRuleDef() {
+		return ruleDef;
+	}
+	public void setRuleDef(String ruleDef) {
+		this.ruleDef = ruleDef;
+	}
+	public String getCompOper() {
+		return compOper;
+	}
+	public void setCompOper(String compOper) {
+		this.compOper = compOper;
+	}
+	public String getCompVal() {
+		return compVal;
+	}
+	public void setCompVal(String compVal) {
+		this.compVal = compVal;
+	}
+	public String getDependType() {
+		return dependType;
+	}
+	public void setDependType(String dependType) {
+		this.dependType = dependType;
+	}
+	
 	@Override
 	public String toString() {
 		return "ZbDef [zbCode=" + zbCode + ", zbName=" + zbName + ", zbType="
@@ -157,7 +220,9 @@ public class ZbDef {
 				+ ", creater=" + creater + ", developer=" + developer
 				+ ", manager=" + manager + ", boiCode=" + boiCode
 				+ ", priority=" + priority + ", expectEndDay=" + expectEndDay
-				+ ", expectEndTime=" + expectEndTime + "]";
+				+ ", expectEndTime=" + expectEndTime + ", ruleType=" + ruleType
+				+ ", ruleDef=" + ruleDef + ", compOper=" + compOper
+				+ ", compVal=" + compVal + ", dependType=" + dependType + "]";
 	}
 	
 }

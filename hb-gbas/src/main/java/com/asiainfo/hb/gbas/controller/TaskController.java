@@ -5,10 +5,11 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -24,11 +25,14 @@ import com.asiainfo.hb.gbas.model.TaskDao;
 @RequestMapping("/task")
 public class TaskController {
 	
+	private Logger mLog = LoggerFactory.getLogger(TaskController.class);
+	
 	@Autowired
 	private TaskDao mTaskDao;
 	
 	@RequestMapping("/index")
 	public String index(){
+		mLog.debug("---index---");
 		return "ftl/task/task";
 	}
 	
@@ -41,23 +45,13 @@ public class TaskController {
 		param.put("etl_status", req.getParameter("status"));
 		param.put("gbas_code like", req.getParameter("name"));
 		
-		String page = req.getParameter("page");
-		String rows = req.getParameter("rows");
-		int perPage = 10;
-		int currentPage = 1;
-		if(!StringUtils.isEmpty(page)){
-			currentPage = Integer.valueOf(page);
-		}
-		if(StringUtils.isEmpty(rows)){
-			perPage = Integer.valueOf(rows);
-		}
-		
-		return mTaskDao.getTaskList(param, currentPage, perPage);
+		return mTaskDao.getTaskList(param, req);
 	}
 	
 	@RequestMapping("/execCondition")
 	public String execCondition(HttpServletRequest req, Model model){
 		String gbasCode = req.getParameter("gbasCode");
+		mLog.debug("---execCondition---, gbasCode:" + gbasCode);
 		model.addAttribute("nodeData", JsonHelper.getInstance().write(mTaskDao.getNodeData(gbasCode)));
 		return "ftl/task/execCondition";
 	}

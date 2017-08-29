@@ -774,8 +774,8 @@ public class JinkuService {
 				resultInfo.put("isPass", "N");
 			}
 		}else{
-			resultInfo.put("msg", "未开启金库模式");
-			resultInfo.put("flag", false);
+			resultInfo.put("msg", "未开启金库模式，可直接下载");
+			resultInfo.put("flag", true);
 		}
 		return resultInfo;
 	}
