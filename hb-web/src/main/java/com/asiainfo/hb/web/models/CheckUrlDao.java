@@ -5,7 +5,7 @@ import java.util.List;
 public interface CheckUrlDao{
 
 	/**
-	 * 查询URL菜单中所有不为空的URL
+	 * 查询URL菜单中所有不为空并且启用的URL
 	 */
 	public List<String> getAllUrl();
 	

@@ -12,7 +12,7 @@ public class CheckUrlService {
 	CheckUrlDao checkUrlDao;
 	
 	/**
-	 * 查询URL菜单中所有不为空的URL
+	 * 查询URL菜单中所有不为空并且启用的URL
 	 */
 	public List<String> getAllUrl(){
 		return checkUrlDao.getAllUrl();
