@@ -6,7 +6,9 @@ import java.net.InetAddress;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -31,7 +33,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.asiainfo.hb.core.models.BeanFactory;
@@ -51,13 +52,7 @@ public class MenuFaultDetectionJob {
 	
 //	@Scheduled(cron = "0 30 7,12 * * ?")
 	@SuppressWarnings("unchecked")
-	@Scheduled(cron = "0 0/1 * * * ?")
 	public void getMsgcontent() {
-		try {
-			getPropertiesInfo();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
 		CheckUrlService checkUrlService = (CheckUrlService) BeanFactory.getBean("checkUrlService");
 		try {
 			//访问所有url
@@ -75,16 +70,16 @@ public class MenuFaultDetectionJob {
 				if(contentList != null && contentList.size() > 0){
 					for(ErrorPageInfoVO error : contentList){
 						error.setSendState("1");//发送短信成功
-						LOG.info(error.getErrorCode());
 					}
+					LOG.info("------------------错误URL："+contentList.size()+"个------------------");
 					checkUrlService.insertErrorUrl(contentList);//将访问错误的url和错误信息持久化
 				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
 		} catch (ServletException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		LOG.info("------------------结束并且关闭连接------------------");
@@ -112,12 +107,24 @@ public class MenuFaultDetectionJob {
 		HttpPost httppost = new HttpPost(mmsUrl);
 		List<NameValuePair> params = new ArrayList<NameValuePair>(6);
 		String contacs = getPropertiesInfo();
-		String content = "访问:";
-		for(ErrorPageInfoVO errorPage : contentList){
-			content += "‘"+errorPage.getMenuItemTitle()+"’,";
-			errorPage.setSendPhoneNum(contacs);
+		String content = "无法访问的菜单有"+contentList.size()+"个，";
+		List<ErrorPageInfoVO> list = new ArrayList<ErrorPageInfoVO>();
+		String end = "";
+		if(contentList.size() > 3){//错误url过多会导致短信过长
+			list.add(contentList.get(0));
+			list.add(contentList.get(1));
+			list.add(contentList.get(2));
+			contentList.clear();
+			contentList = list;
+			end = "等等。。详情请查看后台程序";
 		}
-		content += content.substring(0,content.length()-1)+"页面失败";
+		for(ErrorPageInfoVO errorPage : contentList){
+			content += "访问:‘"+errorPage.getMenuItemTitle()+"’页面失败,访问地址:"+errorPage.getUrl()+"。";
+			errorPage.setSendPhoneNum(contacs);
+			errorPage.setErrorDate(new Timestamp((new Date()).getTime()));
+		}
+		content += end;
+		System.out.println(content);
 		//请求类型action。email为邮件，sms为短信，mms为彩信
 		params.add(new BasicNameValuePair("action", "mms"));
 		//发送主题subject。短信发送不需要此属性
@@ -146,10 +153,11 @@ public class MenuFaultDetectionJob {
 		InputStream in = MenuFaultDetectionJob.class.getClassLoader().getResourceAsStream("/contentInformation.properties");
 		pro.load(in);
 		Iterator<String> it = pro.stringPropertyNames().iterator();
+		String contacs  = "";
 		while(it.hasNext()){
-			System.out.println(pro.getProperty(it.next()));
+			contacs += pro.getProperty(it.next());
 		}
-		return "";
+		return contacs;
 	}
 	
 	/**
@@ -207,9 +215,10 @@ public class MenuFaultDetectionJob {
 						list.add(errorMsg);
 //						map.put(checkUrl.getMenuItemId(), "访问页面"+checkUrl.getMenuItemTitle()+"错误，"
 //								+ "返回错误码："+String.valueOf(status.getStatusCode())+ ",错误原因：" +status.getReasonPhrase());
+					}else{
+						succ++;
 					}
 				}
-				succ++;
 			} catch (ClientProtocolException e) {
 				LOG.error(LogUtil.getExceptionMessage(e));
 			} catch (IOException e) {

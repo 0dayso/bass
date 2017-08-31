@@ -10,6 +10,11 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.asiainfo.hb</groupId>
+			<artifactId>hb-web</artifactId>
+			<version>${hb.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.asiainfo.hb</groupId>
 			<artifactId>hb-core</artifactId>
 			<version>${hb.version}</version>
 		</dependency>
