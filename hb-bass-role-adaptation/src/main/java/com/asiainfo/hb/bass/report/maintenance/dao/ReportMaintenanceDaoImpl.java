@@ -9,6 +9,7 @@ import javax.sql.DataSource;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -168,6 +169,21 @@ public class ReportMaintenanceDaoImpl implements ReportMaintenanceDao {
 		result.put("rows", maintenances);
 		LOG.info("the page result: " + result);
 		return result;
+	}
+
+	@Override
+	public String getReportType(String id) {
+		String sql = "select resource_cycle t from fpf_irs_resource where resource_id = ?";
+		String type = null;
+		try {
+			type = jdbcTemplate.queryForObject(sql, String.class,new Object[] {id});
+			if(StringUtils.isBlank(type)) {
+				type = "null";
+			}
+		} catch (EmptyResultDataAccessException e) {
+			type = "none";
+		}
+		return type;
 	}
 
 }

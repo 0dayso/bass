@@ -55,4 +55,11 @@ public class ReportMaintenanceController {
 	public Object save(@RequestBody ReportMaintenance maintenance, @ModelAttribute(SessionKeyConstants.USER) User user) {
 		return service.saveOrUpdateReportMaintenance(maintenance);
 	}
+	
+	
+	@RequestMapping(value = { "/getReportType" }, method = { RequestMethod.POST })
+	@ResponseBody
+	public Object save(@RequestParam(value="reportId",defaultValue="00001111")String reportId) {
+		return service.getReportType(reportId);
+	}
 }

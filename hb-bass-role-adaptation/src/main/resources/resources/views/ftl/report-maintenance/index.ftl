@@ -67,7 +67,8 @@
 				<table>
 					<tr>
 						<td class="width:120px;"><label for="reportId" class="td_label">报表ID: </label></td>
-						<td><input class="easyui-textbox" name="reportId" id="reportId" style="width:200px"><td>
+						<td><input class="easyui-textbox" name="reportId" id="reportId" style="width:200px">
+						<td>
 						<td><span style="color:red;">*必填项</span></td>
 					</tr>
 					<tr>
@@ -106,8 +107,57 @@
 						<td><span style="color:red;">*必填项</span></td>
 					</tr>
 					<tr>
+						<td colspan="3">
+							时间格式: &nbsp;&nbsp;&nbsp;&nbsp;时:分<input type="radio" name="type" value="0" />&nbsp;&nbsp;
+							日<input type="radio" name="type" value="1" />&nbsp;&nbsp;
+							日 时:分<input type="radio" name="type" value="2" />&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
 						<td class="width:120px;"><label for="expectationDate" class="td_label">期望时间: </label></td>
-						<td><input class="easyui-datetimebox" data-options="formatter:ww4,parser:w4" name="expectationDate" id="expectationDate" style="width:200px"><td>
+						<td>
+							<div id="date_div0" style="display: none;">
+								<input id="time0" class="easyui-timespinner" style="width:80px;" required="required" data-options="min:'08:30',showSeconds:false" />
+							</div>
+							<div id="date_div1" style="display: none;">
+								<select id="time1" class="easyui-combobox" name="dept" style="width:50px;">  
+								    <option value="1">1</option>  
+								    <option value="2">2</option>  
+								    <option value="3">3</option>  
+								    <option value="4">4</option>  
+								    <option value="5">5</option> 
+								    <option value="6">6</option> 
+								    <option value="7">7</option> 
+								    <option value="8">8</option> 
+								    <option value="9">9</option> 
+								    <option value="10">10</option> 
+								    <option value="11">11</option> 
+								    <option value="12">12</option> 
+								    <option value="13">13</option> 
+								    <option value="14">14</option> 
+								    <option value="15">15</option> 
+								    <option value="16">16</option> 
+								    <option value="17">17</option> 
+								    <option value="18">18</option> 
+								    <option value="19">19</option> 
+								    <option value="20">20</option> 
+								    <option value="21">21</option> 
+								    <option value="22">22</option> 
+								    <option value="23">23</option> 
+								    <option value="24">24</option> 
+								    <option value="25">25</option> 
+								    <option value="26">26</option> 
+								    <option value="27">27</option> 
+								    <option value="28">28</option> 
+								    <option value="29">29</option> 
+								    <option value="30">30</option>  
+								    <option value="31">31</option>  
+								</select>  
+							</div>
+							<div id="date_div2" style="display: none;">
+								<input id="time2" class="easyui-datetimebox" data-options="formatter:monthFormat,showSeconds:false" style="width:150px;"  />
+							</div>
+						<td>
 						<td><span style="color:red;">*必填项</span></td>
 					</tr>
 				</table>

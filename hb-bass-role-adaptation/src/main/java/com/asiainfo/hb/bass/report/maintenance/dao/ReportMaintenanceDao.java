@@ -9,4 +9,6 @@ public interface ReportMaintenanceDao {
 	void delete(String id);
 	void update(ReportMaintenance maintenance);
 	Map<String, Object> getReportPageList(int page, int rows, ReportMaintenance maintenance);
+	
+	String getReportType(String id);
 }
