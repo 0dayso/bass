@@ -125,7 +125,9 @@ public class KpiController {
 			} else {// 取多个指标的值
 				String[] indicatorMenuIds = indicatorMenuId.split(",");
 				// 并发查询，按每一个指标开一个线程来查询
-				ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+				//ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+				//改为单线程
+				ExecutorService executorService = Executors.newSingleThreadExecutor();
 				for (String menuId : indicatorMenuIds) {
 					executorService.execute(new KpiRunnable(menuId, date, dimCode, dimVal, kpiService, kpiList));
 				}
