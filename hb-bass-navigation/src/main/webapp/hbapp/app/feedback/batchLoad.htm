@@ -11,7 +11,12 @@
 	var loginname = "";
 	var city_id = "";
 	function getLoginName(){
-		xmlHttp = new ActiveXObject("Msxml2.XMLHTTP.3.0");
+		if(window.ActiveXObject){
+			//支持-通过ActiveXObject的一个新实例来创建XMLHttpRequest对象
+			xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+		}else if(window.XMLHttpRequest){
+			xmlHttp = new XMLHttpRequest()
+		}
     	xmlHttp.onreadystatechange=addBack; // 设置回掉函数
     	xmlHttp.open("POST","/hb-bass-navigation/hbapp/app/feedback/getSessionLogin.jsp",false);
     	xmlHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
