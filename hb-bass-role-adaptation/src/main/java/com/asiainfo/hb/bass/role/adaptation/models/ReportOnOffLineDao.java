@@ -14,7 +14,7 @@ public class ReportOnOffLineDao extends CommonDao implements ReportOnOffLineServ
 
 	@Override
 	public Map<String, Object> getHasOnlineReport(String menuId, String reportName,String reportId, int perPage, int currentPage) {
-		String rowSql = "select resource_id, resource_name,resource_uri, resource_desc, to_char(lastupdate,'YYYY-MM-DD HH24:MI:SS') lastupdate ," +
+		String rowSql = "select replace(resource_id,' ','') resource_id, resource_name,resource_uri, resource_desc, to_char(lastupdate,'YYYY-MM-DD HH24:MI:SS') lastupdate ," +
 				" b.sort_name sort_name ,b.id sort_id, b.menu_name, b.menu_id, b.sort " +
 				" from fpf_irs_resource a " +
 				" left join (select s.id id,s.menu_id, s.name sort_name, s.sort, m.name menu_name from fpf_irs_resource_sort s " +
