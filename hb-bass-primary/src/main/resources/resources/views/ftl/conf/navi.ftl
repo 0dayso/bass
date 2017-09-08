@@ -9,8 +9,11 @@
 	<script type="text/javascript" src="${mvcPath}/resources/js/default/default_min.js" charset="utf-8"></script>
 	<script type="text/javascript" src="${mvcPath}/resources/js/default/tabext.js"></script>
 	<script type="text/javascript" src="${mvcPath}/resources/js/jquery/jquery.js"></script>
-	<script type="text/javascript" src="${mvcPath}/resources/js/default/grid.js"></script>
+	<script type="text/javascript" src="${mvcPath}/resources/js/default/des.js"></script>
+	<script type="text/javascript" src="${mvcPath}/resources/js/default/grid_common.js"></script>
 	<link rel="stylesheet" type="text/css" href="${mvcPath}/resources/css/default/default.css" />
+	<script type="text/javascript" src="${mvcPath}/resources/js/cryptojs/aes.js"></script>
+	<script type="text/javascript" src="${mvcPath}/resources/js/cryptojs/mode-ecb-min.js"></script>
 	<script type="text/javascript">
 var $j=jQuery.noConflict();
 window.onload=function(){
@@ -81,6 +84,13 @@ var _header=[
 	}
 ];
 
+var key  = CryptoJS.enc.Utf8.parse('o7H8uIM2O5qv65l2');//Latin1 w8m31+Yy/Nw6thPsMpO5fg==
+function encode(text){
+   var srcs = CryptoJS.enc.Utf8.parse(text);  
+   var encrypted = CryptoJS.AES.encrypt(srcs, key, {mode:CryptoJS.mode.ECB,padding: CryptoJS.pad.Pkcs7});  
+   return encrypted.toString(); 
+}
+
 function query(){
 	var sql = "select id, name, desc, user_id, lastupd, status, proc, resp, value(caliber_descript,'') caliber_descript, value(value,'') value from VIEW_IRS_SUBJECT left join (select sid, max(case when code = 'Resp' then value end) resp, max(case when code = 'Proc' then value end) proc  from fpf_irs_subject_ext where code in ('Resp', 'Proc') group by sid) b on id = sid where kind in ('配置') ";
 	var codi="";
@@ -93,6 +103,9 @@ function query(){
 	}
 	
 	sql += codi + "  order by lastupd desc";
+	
+	sql = encode(strEncode(sql));
+	
 	var grid = new aihb.AjaxGrid({
 		header:_header
 		,sql: sql
