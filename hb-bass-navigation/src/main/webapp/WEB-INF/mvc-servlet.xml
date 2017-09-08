@@ -19,6 +19,7 @@
 	 
 
 	<mvc:resources mapping="/hbapp/**" location="/hbapp/" cache-period="0" />
+	<mvc:resources mapping="/hbbass/**" location="/hbbass/" cache-period="0" />
 	<!-- 2. 注释掉 jndi数据源
 	<bean id="dataSource" name="dataSource,defaultDB,null,METADB,WBDB," class="org.springframework.jndi.JndiObjectFactoryBean">
 		<property name="jndiName" value="java:comp/env/jdbc/AiomniDB"></property>

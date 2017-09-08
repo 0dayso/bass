@@ -10,9 +10,14 @@
 	var loginname = "";
 	var task_id = "";
 	function getLoginName(){
-		xmlHttp = new ActiveXObject("Msxml2.XMLHTTP.3.0");
+		if(window.ActiveXObject){
+			//支持-通过ActiveXObject的一个新实例来创建XMLHttpRequest对象
+			xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+		}else if(window.XMLHttpRequest){
+			xmlHttp = new XMLHttpRequest()
+		}
     	xmlHttp.onreadystatechange=addBack; // 设置回掉函数
-    	xmlHttp.open("POST","/hbapp/app/feedback/getSessionLogin.jsp",false);
+    	xmlHttp.open("POST","/hb-bass-navigation/hbapp/app/feedback/getSessionLogin.jsp",false);
     	xmlHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
     	xmlHttp.setRequestHeader("X-Requested-With","XMLHttpRequest");
     	var str = "";
@@ -111,7 +116,7 @@ function down(){
 	aihb.AjaxHelper.down({
 		sql : "select OPP_NBR,ACC_NBR,NAME,MANAGER_ID,AREA,POLICE,DATE,FLAG from COMPETE_OPPSTATE_UPLOAD where task_id='" + task_id + "'"
 		,header : _header
-		,"url" : "/hbirs/action/jsondata?method=down&fileKind=excel"
+		,"url" : "/hb-bass-navigation/hbirs/action/jsondata?method=down&fileKind=excel"
 	});
 }
 
@@ -121,7 +126,7 @@ function _delete() {
 	var _params = aihb.Util.paramsObj();
 	var sql=encodeURIComponent("delete from COMPETE_OPPSTATE_UPLOAD where task_id='" + task_id + "'");
 	var ajax = new aihb.Ajax({
-		url : "/hbirs/action/sqlExec"
+		url : "/hb-bass-navigation/hbirs/action/sqlExec"
 		,parameters : "sqls="+sql
 		,loadmask : false
 		,callback : function(xmlrequest){

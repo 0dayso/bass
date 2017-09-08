@@ -10,8 +10,10 @@
 	<script type="text/javascript" src="${mvcPath}/resources/js/default/tabext.js"></script>
 	<script type="text/javascript" src="${mvcPath}/resources/js/jquery/jquery.js"></script>
 	<script type="text/javascript" src="${mvcPath}/resources/js/default/des.js"></script>
-	<script type="text/javascript" src="${mvcPath}/resources/js/default/grid.js"></script>
+	<script type="text/javascript" src="${mvcPath}/resources/js/default/grid_common.js"></script>
 	<link rel="stylesheet" type="text/css" href="${mvcPath}/resources/css/default/default.css" />
+	<script type="text/javascript" src="${mvcPath}/resources/js/cryptojs/aes.js"></script>
+	<script type="text/javascript" src="${mvcPath}/resources/js/cryptojs/mode-ecb-min.js"></script>
 	<script type="text/javascript">
 window.onload=function(){
 	query();
@@ -111,9 +113,16 @@ function oper(val,options){
 }
 window.oper=oper;
 
+var key  = CryptoJS.enc.Utf8.parse('o7H8uIM2O5qv65l2');//Latin1 w8m31+Yy/Nw6thPsMpO5fg==
+function encode(text){
+   var srcs = CryptoJS.enc.Utf8.parse(text);  
+   var encrypted = CryptoJS.AES.encrypt(srcs, key, {mode:CryptoJS.mode.ECB,padding: CryptoJS.pad.Pkcs7});  
+   return encrypted.toString(); 
+}
+
 function query(){
 	var sql = "select NEWSID, CHAR(NEWSDATE) NEWSDATE, NEWSTITLE, NEWSMSG, VALID_BEGIN_DATE,VALID_END_DATE,CASE WHEN STATUS='0' THEN '未发布' ELSE '已发布' END STATUS ,CASE WHEN ISSEND='1' THEN '是' ELSE '否' END ISSEND, ISSEND ISSEND_VALUE,CREATOR from FPF_USER_NEWS ORDER BY NEWSDATE DESC ";
-	//sql = strEncode(sql);
+	sql = encode(strEncode(sql));
 	var grid = new aihb.AjaxGrid({
 		header:_header
 		,sql: sql
