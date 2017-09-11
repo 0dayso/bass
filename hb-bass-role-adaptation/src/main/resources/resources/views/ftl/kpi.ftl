@@ -371,7 +371,7 @@ margin-left: 300px;
 						<#list lastestOnlineReport as online>
 						    <div class="r1082">
 						    <a href="#"
-						        onclick="window.parent.addTab('${online.id}','${online.name}','${online.uri}')"
+						        onclick="window.parent.addTab('${online.id!}','${online.name!}','${online.uri!}')"
 						        title="${online.name}">
 						        <div>
 						            <span class="u995_img" style="display: block; /* width: 122px;height: 84px; */margin: auto;background-color: #e5f1f8;color:#3aa0da;font-size: 60px;padding: 12px 30px;"></span>	 

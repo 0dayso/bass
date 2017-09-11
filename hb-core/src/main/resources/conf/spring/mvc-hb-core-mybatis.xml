@@ -12,7 +12,7 @@
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
 		init-method="init" destroy-method="close">
 		<property name="url"
-			value="jdbc:db2://192.168.167.132:50000/sample:currentSchema=ST;" />
+			value="jdbc:db2://192.168.167.134:50000/sample:currentSchema=ST;" />
 		<property name="driverClassName" value="com.ibm.db2.jcc.DB2Driver"></property>
 		<property name="username" value="db2admin" />
 		<property name="password" value="db2admin" />

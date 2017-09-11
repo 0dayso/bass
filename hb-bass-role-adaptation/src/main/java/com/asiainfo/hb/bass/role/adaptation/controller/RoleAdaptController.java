@@ -58,7 +58,12 @@ public class RoleAdaptController {
 		try {
 			String queryDB = request.getParameter("queryDB");
 
-			JedisCluster jedisCluster = JedisClusterUtil.getInstance().getJedisCluster();
+			JedisCluster jedisCluster = null;
+			try {
+				jedisCluster = JedisClusterUtil.getInstance().getJedisCluster();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 
 			Date date = DateUtil.getDateByIntervalDays(new Date(), -1);
 			String lastDay = DateUtil.date2String(date, "yyyy-MM-dd");
