@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import com.asiainfo.bass.components.models.JdbcTemplate;
 import com.asiainfo.bass.components.models.Util;
+import com.asiainfo.hb.core.util.IsNumber;
 
 /**
  * 
@@ -104,6 +105,9 @@ public class FinanceAdjustDao {
 				for(int i=0;i<listById.size();i++){
 					HashMap map = (HashMap)listById.get(i);
 					String resource_id = String.valueOf(map.get("resource_id")).trim();
+					if(!IsNumber.isNumeric(resource_id)){
+						continue;
+					}
 					Map<String,Object> info = getCountByReportId(resource_id);
 					String count = String.valueOf(info.get("count"));
 					String name = String.valueOf(info.get("name"));

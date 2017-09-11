@@ -1,4 +1,3 @@
-<%@page import="com.asiainfo.hbbass.component.dimension.BassDimCache"%>
 <%@page import="com.asiainfo.hbbass.common.jdbc.ConnectionManage"%>
 <%@ page contentType="text/html; charset=utf-8"%>
 <%@page import="org.apache.log4j.Logger"%>
@@ -22,12 +21,10 @@ static Logger LOG = Logger.getLogger("com.asiainfo.gcdownAction.jsp");
 	String realPath = application.getRealPath("/");
 	LOG.info("realPaht"+realPath);
 	LOG.info("area_id"+session.getAttribute("area_id"));
-	String cityCode = (String)BassDimCache.getInstance().get("area_id").get((String)session.getAttribute("area_id"));
-	String regionid= cityCode.replaceAll("HB.","");
 	
-	filename = date+"_"+filename+"_"+regionid;
+	filename = date+"_"+filename;
 	
-	String path = "${mvcPath}/hbapp/app/ent/";
+	String path = "/hbapp/app/ent/";
 	File file = new File(realPath+path+"//"+filename+".csv");
 	if(file.exists()){
 		file.delete();
@@ -83,7 +80,7 @@ static Logger LOG = Logger.getLogger("com.asiainfo.gcdownAction.jsp");
 				}
 				LOG.error("报错，删除临时文件");
 				tmpFile.delete();
-				out.print("<script>alert('文件生成失败');window.history.go(-1);</script>");
+				out.print("<script>alert('文件生成失败');</script>");
 				return;
 			}finally{
 				if(conn!=null){
@@ -94,7 +91,7 @@ static Logger LOG = Logger.getLogger("com.asiainfo.gcdownAction.jsp");
 			}
 		}else if(tmpFile.exists())
 		{
-			out.print("<script>alert('文件正在生成中,可能需要一些时间,请稍候在来下载');window.history.go(-1);</script>");
+			out.print("<script>alert('文件正在生成中,可能需要一些时间,请稍候在来下载');</script>");
 			return;
 		}
 	}
