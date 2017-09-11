@@ -22,20 +22,34 @@
 %>
 
 <script language="javascript">
-        var _url = '<%=realUrl%>';
-        /*if(url.indexOf("10.25.124.115:8084/mmp") != -1){
-            window.open(url);
-        }else if(url.indexOf("10.25.124.112:8080/db2app55") != -1){
-        	//正式10.25.124.112:8080/db2app55
-        	//测试10.25.125.12:808/db2app55
-        	 window.open(url);
-        } else{
-            window.location.href=url;
-        }*/
-if(/^http:/i.test(_url)){
-	window.open(_url,'',',location=yes,menubar=yes,toolbar=yes,titlebar=yes,scrollbars=yes,resizable=yes,status=yes,width='+screen.availWidth+',height='+screen.availHeight);
+var _url = '<%=realUrl%>';
+var f = _url.indexOf('http://10.25.124.29:8088/db2app55/indexBi.jsp');
+var ie = isIE();
+if(f>=0){
+	if(!ie){
+		alert("对不起,由于您将访问的平台暂不支持除IE以外的浏览器,若要继续访问，请选择IE浏览器打开本系统再继续访问该平台!");
+	}else{
+		if(/^http:/i.test(_url)){
+			window.open(_url,'',',location=yes,menubar=yes,toolbar=yes,titlebar=yes,scrollbars=yes,resizable=yes,status=yes,width='+screen.availWidth+',height='+screen.availHeight);
 
-} else{
-	window.location.href=url;
+		} else{
+			window.location.href=url;
+		}
+	}
+}else{
+	if(/^http:/i.test(_url)){
+		window.open(_url,'',',location=yes,menubar=yes,toolbar=yes,titlebar=yes,scrollbars=yes,resizable=yes,status=yes,width='+screen.availWidth+',height='+screen.availHeight);
+
+	} else{
+		window.location.href=url;
+	}
 }
+
+
+function isIE() { //ie?
+	if (!!window.ActiveXObject || "ActiveXObject" in window)
+	  return true;
+	  else
+	  return false;
+} 
 </script>
