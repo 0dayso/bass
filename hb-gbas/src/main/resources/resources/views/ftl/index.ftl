@@ -11,6 +11,12 @@
 <script src="${mvcPath}/resources/js/jquery-easyui-1.5.1/locale/easyui-lang-zh_CN.js"></script>
 <script>
 function addTab(title, url){
+	
+	if(url == ''){
+		alert('正在开发中……');
+		return;
+	}
+	
 	if ($('#myTab').tabs('exists', title)){
 		$('#myTab').tabs('select', title);
 	} else {
@@ -35,20 +41,20 @@ function addTab(title, url){
 				<div title='基本配置'>
 					<ul style="padding: 0 10px;">
 						<li><a href='#' onclick="addTab('指标配置', '${mvcPath}/zb/index')"><span>指标配置</span></a></li>
-						<li><a href='#' ><span>接口配置</span></a></li>
-						<li><a href='#' ><span>接口时限告警</span></a></li>
+						<li><a href='#' onclick="addTab('接口配置', '')"><span>接口配置</span></a></li>
+						<li><a href='#' onclick="addTab('接口时限告警', '')"><span>接口时限告警</span></a></li>
 						<li><a href='#' onclick="addTab('短信告警人配置', '${mvcPath}/smsConfig/user/index')"><span>短信告警人配置</span></a></li>
 						<li><a href='#' onclick="addTab('短信告警群组配置', '${mvcPath}/smsConfig/group/index')"><span>短信告警群组配置</span></a></li>
-						<li><a href='#' ><span>违反稽核告警配置</span></a></li>
+						<li><a href='#' onclick="addTab('违反稽核告警配置', '')"><span>违反稽核告警配置</span></a></li>
 					</ul>
 				</div>
 		
 				<div title='业务'>
 					<ul style="padding: 0 10px;">
 						<li><a href='#' onclick="addTab('任务运行概况', '${mvcPath}/task/index')"><span>任务运行概况</span></a></li>
-						<li><a href='#' ><span>程序运行分析</span></a></li>
+						<li><a href='#' onclick="addTab('程序运行分析', '"><span>程序运行分析</span></a></li>
 						<li><a href='#' onclick="addTab('指标波动性展示', '${mvcPath}/analyse/zbFluctuate')"><span>指标波动性展示</span></a></li>
-						<li><a href='#' ><span>平台健康度监控</span></a></li>
+						<li><a href='#' onclick="addTab('平台健康度监控', '')"><span>平台健康度监控</span></a></li>
 					</ul>
 				</div>
 			</div>
