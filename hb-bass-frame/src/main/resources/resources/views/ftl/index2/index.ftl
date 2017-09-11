@@ -22,8 +22,8 @@
 					<li><a class="play3" href="../hbapp/dispatch_locat.jsp?menuid=98091080&targetUrl=http://10.25.124.112:8080/COC/ci/ciIndexAction!labelIndex.ai2do" target="_blank">标签库</a></li>	
 						<!--<li><span class="play3" onclick="addTab('98091240','知识库','../hbapp/app/yx_redirect.jsp')">知识库</span></li>-->
 						<li><span class="play3" onclick="addTab('98091104','指标库','../hbapp/app/req_redirect.jsp?method=zbInfolistFrame&menuid=98091104')">指标库</span></li>
-					    <li><span class="play3" onclick="addTab('382','问题申告','../issue?menuid=382')">问题申告</span></li>
-					    <li><span class="play3" onclick="addTab('266789980','应用责任人','./applyAbility.ftl')">应用责任人</span></li>   
+					    <li><span class="play3" onclick="addTab('382','问题申告','../issue?menuid=382')">问题申告</span></li><li>
+					    <li><span class="play3" onclick="addTab('266789980','应用责任人','./applyAbility.ftl')">应用责任人</span></li>
 					</ul>
 				</div>
 				<div class="logo_quit">
@@ -128,6 +128,7 @@
 					 <input type="text" id="txtSearch" placeholder="热门搜索：累计电信 月联通4G" class="text-input"/>
 				     <span class=" icon-search" id="btnSearch" style="cursor: pointer;"></span>
 					</div>
+					<div style="margin-top: 10px;"><span style="font-size:12px;">建议使用Firefox，Chrome，IE10+浏览器</span></div>
 				</div>
 				<div class="con-bottom">
 					<div class="notice" style="margin-left: 0.7%;">
