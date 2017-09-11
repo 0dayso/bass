@@ -58,7 +58,12 @@ public class RoleAdaptController {
 		try {
 			String queryDB = request.getParameter("queryDB");
 
-			JedisCluster jedisCluster = JedisClusterUtil.getInstance().getJedisCluster();
+			JedisCluster jedisCluster = null;
+			try {
+				jedisCluster = JedisClusterUtil.getInstance().getJedisCluster();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 
 			Date date = DateUtil.getDateByIntervalDays(new Date(), -1);
 			String lastDay = DateUtil.date2String(date, "yyyy-MM-dd");
@@ -154,7 +159,9 @@ public class RoleAdaptController {
 					}
 				}
 				bocIndicatorMenus = JsonHelper.getInstance().write(indexList);
-				jedisCluster.set("indexList_" + menuId, bocIndicatorMenus);
+				if (jedisCluster != null) {
+					jedisCluster.set("indexList_" + menuId, bocIndicatorMenus);
+				}
 			} else {
 				bocIndicatorMenus = jedisCluster.get("indexList_" + menuId);
 			}
@@ -166,9 +173,13 @@ public class RoleAdaptController {
 			if ("1".equals(queryDB) || jedisCluster == null || !jedisCluster.exists("lastestOnlineReport_" + menuId)) {
 				lastestOnlineReportList = adapService.getLastOnlineReport(menuId, "", user.getId());
 				lastestOnlineReport = JsonHelper.getInstance().write(lastestOnlineReportList);
-				jedisCluster.set("lastestOnlineReport_" + menuId, lastestOnlineReport);
+				if (jedisCluster != null) {
+					jedisCluster.set("lastestOnlineReport_" + menuId, lastestOnlineReport);
+				}	
 			} else {
-				lastestOnlineReport = jedisCluster.get("lastestOnlineReport_" + menuId);
+				if (jedisCluster != null) {
+					lastestOnlineReport = jedisCluster.get("lastestOnlineReport_" + menuId);
+				}	
 			}
 			model.addAttribute("menu_id", JsonHelper.getInstance().write(Integer.parseInt(menuId)));
 			model.addAttribute("appName", null != adapMenu && null != adapMenu.getMenuName() ? adapMenu.getMenuName() : "");

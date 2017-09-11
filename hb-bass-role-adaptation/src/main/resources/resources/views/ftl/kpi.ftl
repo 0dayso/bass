@@ -320,7 +320,7 @@ margin-left: 300px;
 								<div style="float:left;"><img
 									src="${mvcPath}/hb-bass-frame/views/ftl/index2/img/index/u116.png"
 									class="u116_img" style="cursor:pointer;margin-left:0;"
-									onclick="window.parent.addTab('reportCenter_${menu_id!?trim}','报表中心(${appName})','../reportCenter/index/${menu_id!?trim}')" ;/>
+									onclick="window.parent.addTab('reportCenter_${menu_id!?trim}','报表中心(${appName!})','../reportCenter/index/${menu_id!?trim}')" ;/>
 								</div>
 							</div>
 							<div id="relaReports" class="r1073">
@@ -336,7 +336,7 @@ margin-left: 300px;
 								<div style="float:left;"><img
 									src="${mvcPath}/hb-bass-frame/views/ftl/index2/img/index/u116.png"
 									class="u116_img" style="cursor:pointer;margin-left:0;"
-									onclick="window.parent.addTab('appCenter_${menu_id!?trim}','应用中心(${appName})','../appCenter/index/${menu_id!?trim}')" />
+									onclick="window.parent.addTab('appCenter_${menu_id!?trim}','应用中心(${appName!})','../appCenter/index/${menu_id!?trim}')" />
 								</div>
 							</div>
 							<div id="relaApps" class="r1073 ">
@@ -351,7 +351,7 @@ margin-left: 300px;
 								<div><img
 									src="${mvcPath}/hb-bass-frame/views/ftl/index2/img/index/u116.png"
 									class="u116_img" style="cursor:pointer;margin-left:0;"
-									onclick="window.parent.addTab('myCollect_${menu_id!?trim}','我的收藏(${appName})','../myCollect/index/${menu_id!?trim}')" /></div>
+									onclick="window.parent.addTab('myCollect_${menu_id!?trim}','我的收藏(${appName!})','../myCollect/index/${menu_id!?trim}')" /></div>
 							</div>
 							<div id="relaColls" class="r1073">
 								
@@ -371,7 +371,7 @@ margin-left: 300px;
 						<#list lastestOnlineReport as online>
 						    <div class="r1082">
 						    <a href="#"
-						        onclick="window.parent.addTab('${online.id}','${online.name}','${online.uri}')"
+						        onclick="window.parent.addTab('${online.id!}','${online.name!}','${online.uri!}')"
 						        title="${online.name}">
 						        <div>
 						            <span class="u995_img" style="display: block; /* width: 122px;height: 84px; */margin: auto;background-color: #e5f1f8;color:#3aa0da;font-size: 60px;padding: 12px 30px;"></span>	 
@@ -1702,7 +1702,7 @@ window.onload = function(){
 
 
 function checkAuth(){
-var name='${loginUser}';
+var name='${loginUser!}';
 	if('zhaojing'==name || 'admin'==name){
 	return true;
 	}
