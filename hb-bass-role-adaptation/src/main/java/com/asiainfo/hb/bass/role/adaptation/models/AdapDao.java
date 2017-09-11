@@ -158,7 +158,7 @@ public class AdapDao extends BaseDao implements AdapService {
 		
 		
 		String sql ="select r.resource_id id,char(date(lastupdate)) dt,resource_name name,resource_desc desc from FPF_irs_resource r "
-				+ "where r.state='在用' and length(lastupdate)>0  order by lastupdate desc fetch first 30 rows only with ur";
+				+ "where r.state='在用' and length(lastupdate)>0  order by lastupdate desc fetch first 5 rows only with ur";
 		
 		return jdbcTemplate.queryForList(sql);
 		/*
