@@ -478,6 +478,7 @@ color: #2E92D3;
 /* 	 width: -webkit-calc(100% / 3 - 6px); */
     /* height: 90%; */
     width:32%;
+    min-height:207px;
     background-color: #F6FAFE;
     display: inline-block;
     /* margin-left: 0.7%; */

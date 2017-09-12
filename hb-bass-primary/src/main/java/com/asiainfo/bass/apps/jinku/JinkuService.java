@@ -817,7 +817,7 @@ public class JinkuService {
 		stringBuffer.append("</request>\r\n");
 		log.info("stringBuffer = "+stringBuffer.toString());
 		String returnXml = InterfaceClient.getInstance().execute(stringBuffer.toString(), "getTreasuryStatus", "reqMsg", "getTreasuryStatusResponse", "treasuryManagerResult");
-//		String returnXml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><response><head><responseTime>2015-03-11 08:25:28</responseTime><method>CertificationStatusResponse</method></head><body><result>1</result><resultDesc>缁忓垎鑿滃崟ID鏀瑰彉浠ュ悗瀵煎叆鐨勬柊鍦烘櫙</resultDesc><sceneId>8a9987ee3b2b4630013b2b46885902b6</sceneId><historyAppSessionId>null</historyAppSessionId><relation><policyAuthMethod>flowAuth</policyAuthMethod><policyAccessMethod>authent_type_flow:宸ュ崟;</policyAccessMethod></relation><relation><policyAuthMethod>siteAuth</policyAuthMethod><policyAccessMethod>authent_type_static:涓昏处鍙峰瘑鐮??</policyAccessMethod></relation><relation><policyAuthMethod>remoteAuth</policyAuthMethod><policyAccessMethod>authent_type_sms:sadasdas;</policyAccessMethod></relation><maxTime>2</maxTime><approvers><approver>zhoujian_jh</approver></approvers></body></response>";
+//		String returnXml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><response><head><responseTime>2017-08-24 10:44:38</responseTime><method>CertificationStatusResponse</method></head><body><result>1</result><resultDesc>经分菜单ID改变以后导入的新场景</resultDesc><sceneId>8a9987ee3b2b4630013b2b4707e90662</sceneId><historyAppSessionId>null</historyAppSessionId><relation><policyAuthMethod>flowAuth</policyAuthMethod><policyAccessMethod>authent_type_flow:工单;</policyAccessMethod></relation><relation><policyAuthMethod>siteAuth</policyAuthMethod><policyAccessMethod>authent_type_static:主账号密码;</policyAccessMethod></relation><relation><policyAuthMethod>remoteAuth</policyAuthMethod><policyAccessMethod>authent_type_sms:动态口令(短信);</policyAccessMethod></relation><maxTime>2</maxTime><approvers><approver>zhaojing</approver><approver>maojingjing</approver><approver>maowenjun</approver><approver>gaowen</approver><approver>jifenghua</approver><approver>zhuangli</approver><approver>hujuan7</approver></approvers></body></response>";
 		log.info("returnXml = "+returnXml);
 		Element root = MenuInfoBO.getInstance().parseStringToDocument(returnXml);
 		Element element = (Element) root.selectSingleNode("/response/body");
@@ -877,7 +877,7 @@ public class JinkuService {
 		stringBuffer.append("</request>\r\n");
 		log.info("stringBuffer = "+stringBuffer);
 		String returnXml = InterfaceClient.getInstance().execute(stringBuffer.toString(), "getAccount", "reqMsg", "getAccountResponse", "accountResult");
-//		String returnXml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><response><head><responseTime>2015-03-11 08:25:28</responseTime><method>ApproverSet</method></head><body><account>xuwenjie_jh</account></body></response>";
+//		String returnXml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><response><head><responseTime>2017-08-24 11:33:24</responseTime><method>ApproverSet</method></head><body><account>mengxiaoli</account></body></response>";
 		log.info("returnXml = "+returnXml);
 		Element root = MenuInfoBO.getInstance().parseStringToDocument(returnXml);
 

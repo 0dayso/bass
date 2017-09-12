@@ -193,8 +193,8 @@
 									<#list lastestOnlineReport as online>
 										<#if (online_index<7)>
 											<li><div class="cis"></div><span class="play1">
-												${online.dt}&nbsp;&nbsp;
-												<a href="javascript:;" onclick="addTab('online${online.id}','${online.name}','../report/${online.id}')" title="${online.desc}">
+												${online.dt!?trim}&nbsp;&nbsp;
+												<a href="javascript:;" onclick="addTab('online${online.id!?trim}','${online.name!?trim}','${online.uri!?trim}')" title="${online.desc!?trim}">
 													<#if (online.name?length>16)>
 														${online.name?replace(online.name?substring(16,online.name?length),"....")}
 													<#else>
