@@ -156,9 +156,10 @@ public class AdapDao extends BaseDao implements AdapService {
 	@Override
 	public List getLastOnlineReport(String mid, String sid, String userId) {
 		
-		
-		String sql ="select r.resource_id id,char(date(lastupdate)) dt,resource_name name,resource_desc desc from FPF_irs_resource r "
-				+ "where r.state='在用' and length(lastupdate)>0  order by lastupdate desc fetch first 5 rows only with ur";
+		String sql ="select r.resource_id id,create_dt dt,resource_uri uri, resource_name name," +
+				" resource_desc desc from FPF_irs_resource r "
+				+ "where r.state='在用' and menu_id=" + mid + " and type_id=2"
+				+ " order by create_dt desc fetch first 5 rows only with ur";
 		
 		return jdbcTemplate.queryForList(sql);
 		/*

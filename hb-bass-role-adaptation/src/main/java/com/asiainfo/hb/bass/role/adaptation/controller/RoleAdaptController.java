@@ -169,18 +169,6 @@ public class RoleAdaptController {
 			// 暂时不放redis
 			@SuppressWarnings("rawtypes")
 			List lastestOnlineReportList = adapService.getLastOnlineReport(menuId, "", user.getId());
-			String lastestOnlineReport = "";
-			if ("1".equals(queryDB) || jedisCluster == null || !jedisCluster.exists("lastestOnlineReport_" + menuId)) {
-				lastestOnlineReportList = adapService.getLastOnlineReport(menuId, "", user.getId());
-				lastestOnlineReport = JsonHelper.getInstance().write(lastestOnlineReportList);
-				if (jedisCluster != null) {
-					jedisCluster.set("lastestOnlineReport_" + menuId, lastestOnlineReport);
-				}	
-			} else {
-				if (jedisCluster != null) {
-					lastestOnlineReport = jedisCluster.get("lastestOnlineReport_" + menuId);
-				}	
-			}
 			model.addAttribute("menu_id", JsonHelper.getInstance().write(Integer.parseInt(menuId)));
 			model.addAttribute("appName", null != adapMenu && null != adapMenu.getMenuName() ? adapMenu.getMenuName() : "");
 			model.addAttribute("lastDay", lastDay);
