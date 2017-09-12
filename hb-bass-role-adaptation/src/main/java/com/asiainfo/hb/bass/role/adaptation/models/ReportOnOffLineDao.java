@@ -68,7 +68,8 @@ public class ReportOnOffLineDao extends CommonDao implements ReportOnOffLineServ
 		String pageSql = "select id, name, descr, to_char(create_dt,'YYYY-MM-DD HH24:MI:SS') create_dt, state from doota_ve where 1=1 ";
 		String countSql = "select count(1) from doota_ve where 1=1 ";
 		StringBuffer condition = new StringBuffer();
-		condition.append(" and state != '在用'");
+		condition.append(" and id not in (select replace(resource_uri,'/hubei-customer/ve/','') from ");
+		condition.append(" fpf_irs_resource where resource_uri like '%/hubei-customer/ve/%')");
 		if(!StringUtils.isEmpty(name)){
 			condition.append(" and name like '%").append(name).append("%'");
 		}
