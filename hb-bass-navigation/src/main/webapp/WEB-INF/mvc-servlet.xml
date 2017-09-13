@@ -15,7 +15,7 @@
 	<import resource="classpath:conf/spring/mvc-hb-bass-role-adaptation.xml" />
 	<import resource="classpath:conf/spring/mvc-webservice.xml" />
 	<!-- 1. 添加spring-mybatis 继承配置-->
-	<import resource="classpath*:conf/spring/mvc-hb-core-mybatis.xml" />
+	<!--  import resource="classpath*:conf/spring/mvc-hb-core-mybatis.xml" /-->
 	 
 
 	<mvc:resources mapping="/hbapp/**" location="/hbapp/" cache-period="0" />
