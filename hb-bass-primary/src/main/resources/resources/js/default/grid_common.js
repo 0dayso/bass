@@ -992,49 +992,49 @@ function areacombo( level , sync ) {
 		sqls.push("select county_code key, county_name value from mk.bt_area_all where area_code='#{value}' order by 1");
 	}else if(document.forms[0].college){
 		_elements.push(document.forms[0].college);
-		sqls.push("select college_id key,college_name value from nwh.college_info"+bureauSuffix+" where area_id='#{value}'");
+		sqls.push("select college_id key,college_name value from  college_info"+bureauSuffix+" where area_id='#{value}'");
 	}else if(document.forms[0].county_bureau){
 		_elements.push(document.forms[0].county_bureau);
-		sqls.push("select id key,name value from nwh.bureau_tree"+bureauSuffix+" where area_code= '#{value}' and level=2 order by 1");
+		sqls.push("select id key,name value from  bureau_tree"+bureauSuffix+" where area_code= '#{value}' and level=2 order by 1");
 	}else if(document.forms[0].entCounty){
 		_elements.push(document.forms[0].entCounty);
-		sqls.push("select country_id key,org_name value from NMK.DIM_ent_AREAORG where country_id like '#{value}%' order by seq");
+		sqls.push("select country_id key,org_name value from  DIM_ent_AREAORG where country_id like '#{value}%' order by seq");
 	}else if(document.forms[0].ent_grid_main){
 		_elements.push(document.forms[0].ent_grid_main);
-		sqls.push("select grid_id key,grid_name value from nmk.grid_tree_info where parentgrid_id = '#{value}' order by 1");
+		sqls.push("select grid_id key,grid_name value from  grid_tree_info where parentgrid_id = '#{value}' order by 1");
 	}
 	
 	
 	if(document.forms[0].channel_mc){
 		_elements.push(document.forms[0].channel_mc);
-		sqls.push("select market_id key,market_name value from (select market_id,max(market_name) market_name from nwh.res_site_kpi group by market_id) a where substr(market_id,1,8)= '#{value}' order by 1");
+		sqls.push("select market_id key,market_name value from (select market_id,max(market_name) market_name from  res_site_kpi group by market_id) a where substr(market_id,1,8)= '#{value}' order by 1");
 	/*}else if(document.forms[0].office){
 		_elements.push(document.forms[0].office);
-		sqls.push("select site_id key,site_name value from nmk.RES_SITE where substr(site_id,1,8)='#{value}' order by site_name");*/
+		sqls.push("select site_id key,site_name value from  RES_SITE where substr(site_id,1,8)='#{value}' order by site_name");*/
 	}else if(document.forms[0].marketing_center){
 		_elements.push(document.forms[0].marketing_center);
-		sqls.push("select id key,name value from nwh.bureau_tree"+bureauSuffix+" where pid= '#{value}' order by 1");
+		sqls.push("select id key,name value from  bureau_tree"+bureauSuffix+" where pid= '#{value}' order by 1");
 	}else if(document.forms[0].ent_grid_sub){
 		_elements.push(document.forms[0].ent_grid_sub);
-		sqls.push("select grid_id key,grid_name value from nmk.grid_tree_info where parentgrid_id = '#{value}' order by 1");
+		sqls.push("select grid_id key,grid_name value from  grid_tree_info where parentgrid_id = '#{value}' order by 1");
 	}
 	
 	if(document.forms[0].custmgr){
 		_elements.push(document.forms[0].custmgr);
-		sqls.push("select staff_id key,staff_id||staff_name value from NMK.DIM_ENT_STAFF_D where org_id='#{value}' order by 1");
+		sqls.push("select staff_id key,staff_id||staff_name value from  DIM_ENT_STAFF_D where org_id='#{value}' order by 1");
 	}else if(document.forms[0].town!= undefined){
 		_elements.push(document.forms[0].town);
 		//sqls.push("select region_id key,region_name value from  kpi_bureau_cfg where parent_id= '#{value}' order by 1 with ur");
-		sqls.push("select id key,name value from nwh.bureau_tree"+bureauSuffix+" where pid= '#{value}' order by 1");
+		sqls.push("select id key,name value from  bureau_tree"+bureauSuffix+" where pid= '#{value}' order by 1");
 	}else if(document.forms[0].ent_grid_micro){
 		_elements.push(document.forms[0].ent_grid_micro);
-		sqls.push("select grid_id key,grid_name value from nmk.grid_tree_info where parentgrid_id = '#{value}' order by 1");
+		sqls.push("select grid_id key,grid_name value from  grid_tree_info where parentgrid_id = '#{value}' order by 1");
 	}
 	
 	if(document.forms[0].cell){
 		_elements.push(document.forms[0].cell);
-		sqls.push("select bureau_id key,bureau_name name from nwh.dim_bureau_cfg"+bureauSuffix+" where town_code='#{value}' order by 1");
-		//sqls.push("select id key,name value from nwh.bureau_tree"+bureauSuffix+" where pid= '#{value}' order by 1 with ur");
+		sqls.push("select bureau_id key,bureau_name name from  dim_bureau_cfg"+bureauSuffix+" where town_code='#{value}' order by 1");
+		//sqls.push("select id key,name value from  bureau_tree"+bureauSuffix+" where pid= '#{value}' order by 1 with ur");
 	}
 	
 	aihb.FormHelper.comboLink({

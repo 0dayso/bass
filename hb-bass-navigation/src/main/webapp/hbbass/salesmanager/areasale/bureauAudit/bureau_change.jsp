@@ -80,7 +80,7 @@ try{
 	
 	
 	//求出该用户的areaid
-	sql = "select b.region,b.itemname from FPF_USER_USER a,mk.dim_areacity b where char(a.cityid) = char(b.site_id) and userid='"+userid+"'";
+	sql = "select b.region,b.itemname from FPF_USER_USER a, dim_areacity b where char(a.cityid) = char(b.site_id) and userid='"+userid+"'";
 	ps = conn.prepareStatement(sql);
 	rs = ps.executeQuery();
 	
@@ -207,7 +207,7 @@ function genSQL(){
 		}
 		%>		
 		
-		var sql="select '' c0, CHANGECELL_SEQ c1, (select dim.itemname from mk.dim_areacity dim where char(dim.region)=area_id) c2, LAC_DEC c3, CELLID_DEC c4, BUREAU_ID c5, case when CHANG_TYPE='ChangeCellName' then '基站名称变更' when CHANG_TYPE='ChangeCellTown' then '基站归属乡镇变更' end c6, case when CHANG_TYPE='ChangeCellTown' then (select name from nwh.bureau_tree c where c.id = OLD_VALUE) else OLD_VALUE end c7, case when CHANG_TYPE='ChangeCellTown' then (select name from nwh.bureau_tree c where c.id = NEW_VALUE) else NEW_VALUE end  c8, CREATEUSER c9,substr(char(CREATE_DATE),1,19) c9_2,  case when STATUS='waitaudit1' then '待一级审核' when STATUS='waitaudit2' then '待二级审核' when STATUS='waitaudit3' then '待三级审核' when STATUS='succ' then '审核通过'  when STATUS='fail' then '审核不通过'  end c10, substr(char(STATE_DATE),1,19) c11,case when eff_type='0' then '立即生效' when eff_type='1' then '下月生效' end c12 from BUREAU_CELL_CHANGE_INFO "
+		var sql="select '' c0, CHANGECELL_SEQ c1, (select dim.itemname from  dim_areacity dim where char(dim.region)=area_id) c2, LAC_DEC c3, CELLID_DEC c4, BUREAU_ID c5, case when CHANG_TYPE='ChangeCellName' then '基站名称变更' when CHANG_TYPE='ChangeCellTown' then '基站归属乡镇变更' end c6, case when CHANG_TYPE='ChangeCellTown' then (select name from  bureau_tree c where c.id = OLD_VALUE) else OLD_VALUE end c7, case when CHANG_TYPE='ChangeCellTown' then (select name from  bureau_tree c where c.id = NEW_VALUE) else NEW_VALUE end  c8, CREATEUSER c9,substr(char(CREATE_DATE),1,19) c9_2,  case when STATUS='waitaudit1' then '待一级审核' when STATUS='waitaudit2' then '待二级审核' when STATUS='waitaudit3' then '待三级审核' when STATUS='succ' then '审核通过'  when STATUS='fail' then '审核不通过'  end c10, substr(char(STATE_DATE),1,19) c11,case when eff_type='0' then '立即生效' when eff_type='1' then '下月生效' end c12 from BUREAU_CELL_CHANGE_INFO "
 			+ wherePiece
 			+ " and " + num + "=" + num
 			+ getwhere('STATE_DATE') 
@@ -235,7 +235,7 @@ function genSQL(){
 		}
 		%>		
 		
-		var sql="select '' c0, a.CHANGECELL_SEQ c1, (select dim.itemname from mk.dim_areacity dim where char(dim.region)=area_id) c2, LAC_DEC c3, CELLID_DEC c4, BUREAU_ID c5, case when CHANG_TYPE='ChangeCellName' then '基站名称变更' when CHANG_TYPE='ChangeCellTown' then '基站归属乡镇变更' end c6, case when CHANG_TYPE='ChangeCellTown' then (select name from nwh.bureau_tree c where c.id = OLD_VALUE) else OLD_VALUE end c7, case when CHANG_TYPE='ChangeCellTown' then (select name from nwh.bureau_tree c where c.id = NEW_VALUE) else NEW_VALUE end  c8, CREATEUSER c9,substr(char(CREATE_DATE),1,19) c9_2,  case when STATUS='waitaudit1' then '待一级审核' when STATUS='waitaudit2' then '待二级审核' when STATUS='waitaudit3' then '待三级审核' when STATUS='succ' then '审核通过'  when STATUS='fail' then '审核不通过'  end c10, substr(char(STATE_DATE),1,19) c11,case when eff_type='0' then '立即生效' when eff_type='1' then '下月生效' end c12 from BUREAU_CELL_CHANGE_INFO a,BUREAU_CELL_CHANGE_AUDIT_LOG b where a.CHANGECELL_SEQ = b.CHANGECELL_SEQ and b.OPERATOR = '<%=userid%>' "
+		var sql="select '' c0, a.CHANGECELL_SEQ c1, (select dim.itemname from  dim_areacity dim where char(dim.region)=area_id) c2, LAC_DEC c3, CELLID_DEC c4, BUREAU_ID c5, case when CHANG_TYPE='ChangeCellName' then '基站名称变更' when CHANG_TYPE='ChangeCellTown' then '基站归属乡镇变更' end c6, case when CHANG_TYPE='ChangeCellTown' then (select name from  bureau_tree c where c.id = OLD_VALUE) else OLD_VALUE end c7, case when CHANG_TYPE='ChangeCellTown' then (select name from  bureau_tree c where c.id = NEW_VALUE) else NEW_VALUE end  c8, CREATEUSER c9,substr(char(CREATE_DATE),1,19) c9_2,  case when STATUS='waitaudit1' then '待一级审核' when STATUS='waitaudit2' then '待二级审核' when STATUS='waitaudit3' then '待三级审核' when STATUS='succ' then '审核通过'  when STATUS='fail' then '审核不通过'  end c10, substr(char(STATE_DATE),1,19) c11,case when eff_type='0' then '立即生效' when eff_type='1' then '下月生效' end c12 from BUREAU_CELL_CHANGE_INFO a,BUREAU_CELL_CHANGE_AUDIT_LOG b where a.CHANGECELL_SEQ = b.CHANGECELL_SEQ and b.OPERATOR = '<%=userid%>' "
 			+ wherePiece
 			+ " and " + num + "=" + num
 			+ getwhere('STATE_DATE') 
@@ -267,7 +267,7 @@ function genSQL(){
 		}
 		%>
 		
-		var sql="select '' c0, CHANGECELL_SEQ c1, (select dim.itemname from mk.dim_areacity dim where char(dim.region)=area_id) c2, LAC_DEC c3, CELLID_DEC c4, BUREAU_ID c5, case when CHANG_TYPE='ChangeCellName' then '基站名称变更' when CHANG_TYPE='ChangeCellTown' then '基站归属乡镇变更' end c6, case when CHANG_TYPE='ChangeCellTown' then (select name from nwh.bureau_tree c where c.id = OLD_VALUE) else OLD_VALUE end c7, case when CHANG_TYPE='ChangeCellTown' then (select name from nwh.bureau_tree c where c.id = NEW_VALUE) else NEW_VALUE end  c8, CREATEUSER c9,substr(char(CREATE_DATE),1,19) c9_2,  case when STATUS='waitaudit1' then '待一级审核' when STATUS='waitaudit2' then '待二级审核' when STATUS='waitaudit3' then '待三级审核' when STATUS='succ' then '审核通过'  when STATUS='fail' then '审核不通过'  end c10, substr(char(STATE_DATE),1,19) c11,case when eff_type='0' then '立即生效' when eff_type='1' then '下月生效' end c12 ,zone_name c21,zone_code c31,town_name c22,cell_name c23 from (select a.* ,b.zone_name,b.zone_code,town_name,cell_name from BUREAU_CELL_CHANGE_INFO a left join nwh.dim_bureau_cfg b on a.LAC_DEC = b.lac_dec and a.cellid_dec = b.cellid_dec) tt  "
+		var sql="select '' c0, CHANGECELL_SEQ c1, (select dim.itemname from  dim_areacity dim where char(dim.region)=area_id) c2, LAC_DEC c3, CELLID_DEC c4, BUREAU_ID c5, case when CHANG_TYPE='ChangeCellName' then '基站名称变更' when CHANG_TYPE='ChangeCellTown' then '基站归属乡镇变更' end c6, case when CHANG_TYPE='ChangeCellTown' then (select name from  bureau_tree c where c.id = OLD_VALUE) else OLD_VALUE end c7, case when CHANG_TYPE='ChangeCellTown' then (select name from  bureau_tree c where c.id = NEW_VALUE) else NEW_VALUE end  c8, CREATEUSER c9,substr(char(CREATE_DATE),1,19) c9_2,  case when STATUS='waitaudit1' then '待一级审核' when STATUS='waitaudit2' then '待二级审核' when STATUS='waitaudit3' then '待三级审核' when STATUS='succ' then '审核通过'  when STATUS='fail' then '审核不通过'  end c10, substr(char(STATE_DATE),1,19) c11,case when eff_type='0' then '立即生效' when eff_type='1' then '下月生效' end c12 ,zone_name c21,zone_code c31,town_name c22,cell_name c23 from (select a.* ,b.zone_name,b.zone_code,town_name,cell_name from BUREAU_CELL_CHANGE_INFO a left join  dim_bureau_cfg b on a.LAC_DEC = b.lac_dec and a.cellid_dec = b.cellid_dec) tt  "
 			+ wherePiece
 			+ " and " + num + "=" + num
 			+ getwhere('STATE_DATE') 

@@ -82,7 +82,7 @@ public class ReportDao {
 			}
 			String proc = (String) timeLine.get("proc");
 			if (proc != null && proc.length() > 0) {
-				Map map = (Map) jdbcTemplate.queryForMap("select max(etl_cycle_id) task,max(dest_time) dest_time from nwh.dp_etl_com_dw where etl_progname=? with ur", new Object[] { proc });
+				Map map = (Map) jdbcTemplate.queryForMap("select max(etl_cycle_id) task,max(dest_time) dest_time from dp_etl_com_dw where etl_progname=? with ur", new Object[] { proc });
 				if (map != null) {
 					String task = String.valueOf(map.get("task"));
 					String dest_time = String.valueOf(map.get("dest_time")).trim();
@@ -108,7 +108,7 @@ public class ReportDao {
 						}
 					}
 					if("2".equals(check)){
-						Map runMap = (Map) jdbcTemplate.queryForMap("select id,name,user_id,value,etl_cycle_id,etl_begintime,etl_endtime,case when etl_state=0 then '正在运行' when etl_state=2 then '程序出错' when  etl_state=3 then '成功完成' else '状态不明' end etl_state ,dest_time,int(avg_runtime/60)+1 avg_runtime,value(creater,'无') creater from(select * from FPF_IRS_SUBJECT aa,FPF_IRS_SUBJECT_EXT bb where aa.id=bb.sid and bb.code='Proc' and status='在用') a left join  NWH.dp_etl_com_dw b on upper(a.value)=upper(b.ETL_PROGNAME) left join nwh.proc_dw c on upper(a.value)=upper(c.proc_name) where id=?", new Object[] { id });
+						Map runMap = (Map) jdbcTemplate.queryForMap("select id,name,user_id,value,etl_cycle_id,etl_begintime,etl_endtime,case when etl_state=0 then '正在运行' when etl_state=2 then '程序出错' when  etl_state=3 then '成功完成' else '状态不明' end etl_state ,dest_time,int(avg_runtime/60)+1 avg_runtime,value(creater,'无') creater from(select * from FPF_IRS_SUBJECT aa,FPF_IRS_SUBJECT_EXT bb where aa.id=bb.sid and bb.code='Proc' and status='在用') a left join  dp_etl_com_dw b on upper(a.value)=upper(b.ETL_PROGNAME) left join proc_dw c on upper(a.value)=upper(c.proc_name) where id=?", new Object[] { id });
 						if(!runMap.isEmpty()){
 							run = "1";
 							String value = runMap.get("value").toString();
@@ -128,7 +128,7 @@ public class ReportDao {
 							timeLine.put("creater", creater);
 							timeLine.put("runtime", runtime);
 						}
-						List list = jdbcTemplate.queryForList("select * from (select id,value from (select * from FPF_IRS_SUBJECT where id =?) aa ,FPF_IRS_SUBJECT_EXT bb where aa.id=bb.sid and bb.code='Proc' and status='在用') x left join (select bb.intercode,bb.DATECYCLE,bb.EXPORTSTATE,WEBSTATE,EXPORTROWS,WEBLOADROWS,char(web_time) web_time,proc_name from DM.DATA_TRANS_CONFIG_DW aa , (select a.intercode,b.DATECYCLE,EXPORTSTATE,WEBSTATE,EXPORTROWS,WEBLOADROWS,char(web_time) from (select INTERCODE,max(id) id from DM.DATA_TRANS_LOG_DW   group by INTERCODE) a   left join (select  id,INTERCODE,DATECYCLE,EXPORTSTATE,WEBSTATE,EXPORTROWS,WEBLOADROWS,char(web_time) web_time  from DM.DATA_TRANS_LOG_DW  order by INTERCODE) b on a.INTERCODE=b.intercode and a.id=b.id  ) bb where aa.intercode=bb.intercode) y on upper(x.value)=upper(y.proc_name)", new Object[] { id });
+						List list = jdbcTemplate.queryForList("select * from (select id,value from (select * from FPF_IRS_SUBJECT where id =?) aa ,FPF_IRS_SUBJECT_EXT bb where aa.id=bb.sid and bb.code='Proc' and status='在用') x left join (select bb.intercode,bb.DATECYCLE,bb.EXPORTSTATE,WEBSTATE,EXPORTROWS,WEBLOADROWS,char(web_time) web_time,proc_name from DATA_TRANS_CONFIG_DW aa , (select a.intercode,b.DATECYCLE,EXPORTSTATE,WEBSTATE,EXPORTROWS,WEBLOADROWS,char(web_time) from (select INTERCODE,max(id) id from DATA_TRANS_LOG_DW   group by INTERCODE) a   left join (select  id,INTERCODE,DATECYCLE,EXPORTSTATE,WEBSTATE,EXPORTROWS,WEBLOADROWS,char(web_time) web_time  from DATA_TRANS_LOG_DW  order by INTERCODE) b on a.INTERCODE=b.intercode and a.id=b.id  ) bb where aa.intercode=bb.intercode) y on upper(x.value)=upper(y.proc_name)", new Object[] { id });
 						if(list!=null && list.size()>0){
 							timeLine.put("fenfaList", list);
 						}
@@ -292,7 +292,7 @@ public class ReportDao {
 				if (!"0".equalsIgnoreCase(report.getRegionId())) {
 					condiPiece += " and " + dbname + "='" + bassDimHelper.areaIdMap.get(report.getRegionId()) + "'";
 				}
-				colPiece = "(select value(max(number),99999) from NMK.REP_AREA_REGION where area_code=" + dbname + ") city_order, value((select alias_area_name from (select area_code alias_area_code,area_name alias_area_name from mk.bt_area) alias_t1 where alias_area_code=" + dbname + "),case when grouping(" + dbname
+				colPiece = "(select value(max(number),99999) from REP_AREA_REGION where area_code=" + dbname + ") city_order, value((select alias_area_name from (select area_code alias_area_code,area_name alias_area_name from bt_area) alias_t1 where alias_area_code=" + dbname + "),case when grouping(" + dbname
 						+ ")=1 then '总计' else " + dbname + " end) city";
 				// colPiece="value((select alias_area_name from (select area_code alias_area_code,area_name alias_area_name from mk.bt_area) alias_t1 where alias_area_code="+dbname+"),'总计') city";
 				groupPiece = "rollup(" + dbname + ")";
@@ -550,7 +550,7 @@ public class ReportDao {
 		LOG.info("id=" + report.getId());
 		List list=new ArrayList();
 		try{
-		String sql = " select id,name,desc,kind,dy_uname from FPF_bir_subject_correlation" + " ,(" + " select a.*" + " ,case when kind='动态' and a.status='开发' then value((select area_name from mk.bt_area where int(cityid)=area_id),'省公司')||username end dy_uname from FPF_IRS_SUBJECT a" + " left join FPF_IRS_PACKAGE b on a.pid=b.id"
+		String sql = " select id,name,desc,kind,dy_uname from FPF_bir_subject_correlation" + " ,(" + " select a.*" + " ,case when kind='动态' and a.status='开发' then value((select area_name from bt_area where int(cityid)=area_id),'省公司')||username end dy_uname from FPF_IRS_SUBJECT a" + " left join FPF_IRS_PACKAGE b on a.pid=b.id"
 				+ " left join FPF_USER_USER c on b.user_id=c.userid" + " where ((kind='配置' and a.status='在用') or kind='动态') " + " ) t " + " where SOURCE=? and target=id order by value desc fetch first 30 rows only with ur";
 
 		 list = (List) jdbcTemplate.queryForList(sql, new Object[] { Integer.valueOf(report.getId()) });

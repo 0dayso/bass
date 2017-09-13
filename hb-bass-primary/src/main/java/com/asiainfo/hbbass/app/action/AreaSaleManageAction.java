@@ -783,7 +783,7 @@ public class AreaSaleManageAction extends Action {
 
 		SQLQuery sqlQuery = SQLQueryContext.getInstance().getSQLQuery("json", "JDBC_HB");
 		String result = (String) sqlQuery
-				.query("select id,name text,case when level=4 then 'true' else 'false' end leaf,case when level=1 then 'area_code='||chr(39)||id||chr(39) when level=2 then 'county_code='||chr(39)||id||chr(39) when level=3 then 'zone_code='||chr(39)||id||chr(39) when level=4 then 'town_code='||chr(39)||id||chr(39)  end url from nwh.bureau_tree where  pid='"
+				.query("select id,name text,case when level=4 then 'true' else 'false' end leaf,case when level=1 then 'area_code='||chr(39)||id||chr(39) when level=2 then 'county_code='||chr(39)||id||chr(39) when level=3 then 'zone_code='||chr(39)||id||chr(39) when level=4 then 'town_code='||chr(39)||id||chr(39)  end url from  bureau_tree where  pid='"
 						+ id + "' order by 1 with ur");
 
 		LOG.debug(result.toString().replaceAll("\"false\"", "false"));
@@ -806,9 +806,9 @@ public class AreaSaleManageAction extends Action {
 		SQLQuery sqlQuery = SQLQueryContext.getInstance().getSQLQuery("json", "JDBC_HB");
 		String result = null;
 		if (id != null && Integer.parseInt(id) <= 27) {
-			result = (String) sqlQuery.query("select id,name text,case when level=4 then 'true' else 'false' end leaf,area_code url from nwh.bureau_tree where  pid='" + id + "' order by 1 with ur ");
+			result = (String) sqlQuery.query("select id,name text,case when level=4 then 'true' else 'false' end leaf,area_code url from  bureau_tree where  pid='" + id + "' order by 1 with ur ");
 		} else {
-			result = (String) sqlQuery.query("select college_id,college_name text,'true' leaf ,college_id url from  NWH.COLLEGE_INFO where area_id in (select area_code from mk.bt_area where old_code=" + id + ") order by 2 with ur ");
+			result = (String) sqlQuery.query("select college_id,college_name text,'true' leaf ,college_id url from   COLLEGE_INFO where area_id in (select area_code from  bt_area where old_code=" + id + ") order by 2 with ur ");
 		}
 		LOG.debug(result.toString().replaceAll("\"false\"", "false"));
 
@@ -833,19 +833,19 @@ public class AreaSaleManageAction extends Action {
 		SQLQuery sqlQuery = SQLQueryContext.getInstance().getSQLQuery("json", "JDBC_HB");
 		String result = null;
 		if (id != null && Integer.parseInt(id) == -1) {
-			result = (String) sqlQuery.query("select id,name text,'false' leaf,area_code url from nwh.bureau_tree where pid='" + id + "' order by 1 with ur ");
-			LOG.debug("select id,name text,'false' leaf,area_code url from nwh.bureau_tree where pid='" + id + "' order by 1 with ur ");
+			result = (String) sqlQuery.query("select id,name text,'false' leaf,area_code url from  bureau_tree where pid='" + id + "' order by 1 with ur ");
+			LOG.debug("select id,name text,'false' leaf,area_code url from  bureau_tree where pid='" + id + "' order by 1 with ur ");
 		} else if (id != null && Integer.parseInt(id) <= 27 && Integer.parseInt(id) >= 0) {
 			if ("0".equals(cityId)) {
-				result = (String) sqlQuery.query("select id,name text,'false' leaf,area_code url from nwh.bureau_tree where pid='" + id + "' order by 1 with ur ");
-				LOG.debug("select id,name text,'false' leaf,area_code url from nwh.bureau_tree where pid='" + id + "' order by 1 with ur ");
+				result = (String) sqlQuery.query("select id,name text,'false' leaf,area_code url from  bureau_tree where pid='" + id + "' order by 1 with ur ");
+				LOG.debug("select id,name text,'false' leaf,area_code url from  bureau_tree where pid='" + id + "' order by 1 with ur ");
 			} else {
-				result = (String) sqlQuery.query("select id,name text,'false' leaf,area_code url from nwh.bureau_tree where AREA_CODE=(select area_code from mk.bt_area where area_id=" + cityId + ") and  pid='" + id + "' order by 1 with ur ");
-				LOG.debug("select id,name text,'false' leaf,area_code url from nwh.bureau_tree where AREA_CODE=(select area_code from mk.bt_area where area_id=" + cityId + ") and  pid='" + id + "' order by 1 with ur ");
+				result = (String) sqlQuery.query("select id,name text,'false' leaf,area_code url from  bureau_tree where AREA_CODE=(select area_code from  bt_area where area_id=" + cityId + ") and  pid='" + id + "' order by 1 with ur ");
+				LOG.debug("select id,name text,'false' leaf,area_code url from  bureau_tree where AREA_CODE=(select area_code from  bt_area where area_id=" + cityId + ") and  pid='" + id + "' order by 1 with ur ");
 			}
 		} else {
-			result = (String) sqlQuery.query("select college_id,college_name text,'true' leaf ,college_id url from  NWH.COLLEGE_INFO where area_id in (select area_code from mk.bt_area where old_code=" + id + ") and STATE = 1 order by 2 with ur ");
-			LOG.info("select college_id,college_name text,'true' leaf ,college_id url from  NWH.COLLEGE_INFO where area_id in (select area_code from mk.bt_area where old_code=" + id + ") and STATE = 1 order by 2 with ur ");
+			result = (String) sqlQuery.query("select college_id,college_name text,'true' leaf ,college_id url from   COLLEGE_INFO where area_id in (select area_code from  bt_area where old_code=" + id + ") and STATE = 1 order by 2 with ur ");
+			LOG.info("select college_id,college_name text,'true' leaf ,college_id url from   COLLEGE_INFO where area_id in (select area_code from  bt_area where old_code=" + id + ") and STATE = 1 order by 2 with ur ");
 		}
 		LOG.debug(result.toString().replaceAll("\"false\"", "false"));
 
@@ -872,18 +872,18 @@ public class AreaSaleManageAction extends Action {
 		String result = null;
 		if (id != null && "-1".equals(id.toString())) {
 			result = (String) sqlQuery
-					.query("select id,name text,'false' leaf,case when level=1 then 'area_code='||chr(39)||id||chr(39) when level=2 then 'county_code='||chr(39)||id||chr(39) when level=3 then 'zone_code='||chr(39)||id||chr(39) when level=4 then 'town_code='||chr(39)||id||chr(39)  end url from nwh.bureau_tree where pid='"
+					.query("select id,name text,'false' leaf,case when level=1 then 'area_code='||chr(39)||id||chr(39) when level=2 then 'county_code='||chr(39)||id||chr(39) when level=3 then 'zone_code='||chr(39)||id||chr(39) when level=4 then 'town_code='||chr(39)||id||chr(39)  end url from  bureau_tree where pid='"
 							+ id + "' order by 1 with ur ");
-			LOG.debug("select id,name text,'false' leaf,case when level=1 then 'area_code='||chr(39)||id||chr(39) when level=2 then 'county_code='||chr(39)||id||chr(39) when level=3 then 'zone_code='||chr(39)||id||chr(39) when level=4 then 'town_code='||chr(39)||id||chr(39)  end url from nwh.bureau_tree where pid='"
+			LOG.debug("select id,name text,'false' leaf,case when level=1 then 'area_code='||chr(39)||id||chr(39) when level=2 then 'county_code='||chr(39)||id||chr(39) when level=3 then 'zone_code='||chr(39)||id||chr(39) when level=4 then 'town_code='||chr(39)||id||chr(39)  end url from  bureau_tree where pid='"
 					+ id + "' order by 1 with ur ");
 		} else {
 			String sql = "";
 			if ("0".equals(cityId)) {
-				sql = "select id,name text,case when level=4 then 'true' else 'false' end leaf,case when level=1 then 'area_code='||chr(39)||id||chr(39) when level=2 then 'county_code='||chr(39)||id||chr(39) when level=3 then 'zone_code='||chr(39)||id||chr(39) when level=4 then 'town_code='||chr(39)||id||chr(39)  end url from nwh.bureau_tree where  pid='"
+				sql = "select id,name text,case when level=4 then 'true' else 'false' end leaf,case when level=1 then 'area_code='||chr(39)||id||chr(39) when level=2 then 'county_code='||chr(39)||id||chr(39) when level=3 then 'zone_code='||chr(39)||id||chr(39) when level=4 then 'town_code='||chr(39)||id||chr(39)  end url from  bureau_tree where  pid='"
 					+ id + "' order by 1 with ur";
 			} else {
-				sql = "select id,name text,case when level=4 then 'true' else 'false' end leaf,case when level=1 then 'area_code='||chr(39)||id||chr(39) when level=2 then 'county_code='||chr(39)||id||chr(39) when level=3 then 'zone_code='||chr(39)||id||chr(39) when level=4 then 'town_code='||chr(39)||id||chr(39)  end url from nwh.bureau_tree where  pid='"
-					+ id + "' and AREA_CODE=(select area_code from mk.bt_area where area_id=" + cityId + ") order by 1 with ur";
+				sql = "select id,name text,case when level=4 then 'true' else 'false' end leaf,case when level=1 then 'area_code='||chr(39)||id||chr(39) when level=2 then 'county_code='||chr(39)||id||chr(39) when level=3 then 'zone_code='||chr(39)||id||chr(39) when level=4 then 'town_code='||chr(39)||id||chr(39)  end url from  bureau_tree where  pid='"
+					+ id + "' and AREA_CODE=(select area_code from  bt_area where area_id=" + cityId + ") order by 1 with ur";
 			}
 			result = (String) sqlQuery.query(sql);
 			LOG.debug(sql);

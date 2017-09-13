@@ -17,7 +17,7 @@ boolean hasRight = false;
 try{
 	dwconn = ConnectionManage.getInstance().getDWConnection();
 	
-	String sql = "select b.site_id from BUREAU_CELL_NEWDEL_INFO a,mk.dim_areacity b where a.AREA_ID = char(b.region) and a.NEWDELCELL_SEQ = "+id+"";
+	String sql = "select b.site_id from BUREAU_CELL_NEWDEL_INFO a, dim_areacity b where a.AREA_ID = char(b.region) and a.NEWDELCELL_SEQ = "+id+"";
 	PreparedStatement ps = dwconn.prepareStatement(sql);
 	ResultSet rs = ps.executeQuery();
 	String cityid = null;
