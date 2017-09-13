@@ -53,7 +53,7 @@ public class AdapReportDao extends BaseDao implements AdapReportService{
 				_sqlSbf.append(" DESC) AS ROWSNUM,");
 				_sqlSbf.append("reportid,name,desc,uri,create_dt,num,count,favsNum,keywords from ");
 				_sqlSbf.append("(select resource_id reportid,resource_name NAME,resource_desc DESC,replace(keywords,'，',',') keywords,resource_uri uri,create_dt,value(NUM,0) NUM,count(1) over() as count,");
-				_sqlSbf.append("(select count(*) from FPF_IRS_FAVORITES where user_id=? and resource_id=a.resource_id) favsNum from FPF_IRS_RESOURCE a");
+				_sqlSbf.append("(select count(*) from FPF_IRS_FAVORITES where user_id=? and type='报表' and resource_id=a.resource_id) favsNum from FPF_IRS_RESOURCE a");
 				_sqlSbf.append(" left join (select opername,count(*) num from FPF_VISITLIST ");
 				_sqlSbf.append("where create_dt between current timestamp - 1 months and current timestamp group by opername) b on resource_id=opername ");
 				_sqlSbf.append("where menu_id=? ");
@@ -87,7 +87,7 @@ public class AdapReportDao extends BaseDao implements AdapReportService{
 		List<Map<String,Object>> list = null ;
 		try {
 			StringBuffer sql =new StringBuffer().append("select a.RESOURCE_ID RID,A.RESOURCE_NAME RNAME,A.RESOURCE_URI RURI,A.IRS_RESOURCE_SORT_ID SID,B.NAME SNAME,1 LEVEL,value(A.RESOURCE_DESC,'') RDESC,value(DATA_LAST_UPD,'') LASTUPD,RESOURCE_CYCLE CYCLE,  ")
-					.append("(select count(*) from FPF_IRS_FAVORITES where user_id=? and resource_id=a.resource_id) favsNum ")
+					.append("(select count(*) from FPF_IRS_FAVORITES where user_id=? and resource_id=a.resource_id and resource_type='报表') favsNum ")
 					.append("from FPF_IRS_RESOURCE a,FPF_IRS_RESOURCE_SORT B WHERE a.STATE='在用' and (a.type_id in (select id from FPF_IRS_RESOURCETYPE where resource_name='报表') or a.type_id in (select id from FPF_IRS_RESOURCETYPE where resource_name='自定义报表')) and  B.ID = A.IRS_RESOURCE_SORT_ID AND B.MENU_ID = char(")
 					.append(menuId)
 					.append(") ")

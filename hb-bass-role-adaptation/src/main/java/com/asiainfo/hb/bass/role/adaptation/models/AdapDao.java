@@ -42,49 +42,16 @@ public class AdapDao extends BaseDao implements AdapService {
 
 	@Override
 	public List getRelaReports(String mid, String sid, String userId) {
-		
-		 List<Map<String, Object>> list =new ArrayList<Map<String,Object>>();
 		if (mid == null || "".equals(mid)) {
 			return null;
 		}
-		try {
-			String sql = "";
-			if (Integer.parseInt(mid) != -1) {
-				sql = " select resource_id id,resource_uri uri,resource_name text,value(U_count,0) remark,ROW_NUMBER() over() num " +
-						" from FPF_IRS_RESOURCE a left join (select opername, count(*) U_count from FPF_VISITLIST " +
-						" where date(create_dt) >= (current date - 30 days) and date(create_dt) <= current date group by opername) b " +
-						" on a.resource_id=b.opername inner join(select id, name from BOC_INDICATOR_MENU where deep = 1) c " +
-						" on a.menu_id = c.id inner join (select id from FPF_IRS_RESOURCETYPE where resource_name = '报表') d " +
-						" on d.id=a.type_id where c.id = ? and state = '在用' order by remark desc FETCH FIRST 5 ROWS ONLY with ur";
-				list=jdbcTemplate.queryForList(sql, Integer.parseInt(mid));
-				return list; 
-			} else {
-				if (sid == null || "".equals(sid)) {
-					sql = "select replace(a.resource_id,' ','') id,resource_uri uri,resource_name text,type_id type, "
-							+ "menu_id,U_count remark,row_number() over() num from FPF_IRS_RESOURCE a, "
-							+ " (select opername rid, count(*) U_count from FPF_VISITLIST "
-							+ " where date(create_dt) >= (current date - 30 days) "
-							+ " and date(create_dt) <= current date group by opername) b, "
-							+ " (select f.resource_id rid, f.user_id from FPF_IRS_FAVORITES f) d "
-							+ " where state = '在用' and (a.type_id = 2 ) and b.rid = d.rid AND d.user_id = ?"
-							+ " and a.resource_id = d.rid   order by U_count desc FETCH FIRST 5 ROWS ONLY with ur";
-				} else {
-					sql = "select replace(a.resource_id,' ','') id,resource_uri uri,resource_name text,type_id type, "
-							+ "menu_id,U_count remark,row_number() over() num from FPF_IRS_RESOURCE a, "
-							+ " (select opername rid, count(*) U_count from FPF_VISITLIST "
-							+ " where date(create_dt) >= (current date - 30 days) "
-							+ " and date(create_dt) <= current date group by opername) b, "
-							+ " (select f.resource_id rid, f.user_id from FPF_IRS_FAVORITES f where f.MENU_ID=" + sid
-							+ ") d " + " where state = '在用' and (a.type_id = 2 ) and b.rid = d.rid AND d.user_id = ?"
-							+ " and a.resource_id = d.rid   order by U_count desc FETCH FIRST 5 ROWS ONLY with ur";
-				}
-				
-				return jdbcTemplate.queryForList(sql, userId);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
+		String sql = " select resource_id id,resource_uri uri,resource_name text,value(U_count,0) remark,ROW_NUMBER() over() num " +
+				" from FPF_IRS_RESOURCE a left join (select opername, count(*) U_count from FPF_VISITLIST " +
+				" where date(create_dt) >= (current date - 30 days) and date(create_dt) <= current date group by opername) b " +
+				" on a.resource_id=b.opername inner join(select id, name from BOC_INDICATOR_MENU where deep = 1) c " +
+				" on a.menu_id = c.id inner join (select id from FPF_IRS_RESOURCETYPE where resource_name = '报表') d " +
+				" on d.id=a.type_id where c.id = ? and state = '在用' order by remark desc FETCH FIRST 5 ROWS ONLY with ur";
+		return jdbcTemplate.queryForList(sql, Integer.parseInt(mid));
 	}
 
 	@Override
@@ -106,51 +73,14 @@ public class AdapDao extends BaseDao implements AdapService {
 	@Override
 	public List getRelaApps(String mid, String sid, String userId) {
 		
-		if (mid == null || "".equals(mid)) {
-			return null;
-		}
-		try {
-			String sql = "";
-			if (Integer.parseInt(mid) != -1) {
-				sql = "select t.name as text,t.uri,t.id,t.count as remark,t.menu_id,row_number() over() num from (select a.resource_id id,resource_uri uri,"
-						+ " resource_name name ,type_id type,menu_id ,value(count,0) count from FPF_IRS_RESOURCE "
-						+ " a left join (select opername,count(*) count from FPF_VISITLIST where "
-						+ " date(create_dt)>=(current date - 30 days) and date(create_dt)<=current date "
-						+ " group by opername) b on a.resource_id = b.opername inner join "
-						+ "(select id,name from BOC_INDICATOR_MENU where deep=1) c on c.id=a.menu_id inner join "
-						+ "(select id typeid,resource_type ttype from FPF_IRS_RESOURCETYPE ) d "
-						+ " on a.type_id = d.typeid where c.id=? and d.ttype='应用'and state='在用' and  a.resource_id!='app9' "
-						+ " order by count desc FETCH FIRST 5 ROWS ONLY ) t with ur";
+		String sql = "select resource_name as text,resource_uri as uri ,resource_id as id,value(count,0) as remark " +
+				" from FPF_IRS_APPLICATION a left join " +
+				" (select opername,count(*) count from FPF_VISITLIST " +
+				" where date(create_dt)>=(current date - 30 days) and date(create_dt)<=current date " +
+				" group by opername) b on a.resource_id=b.opername " +
+				" where a.menu_id=? and state='在用' order by count desc fetch first 5 rows only";
 
-				return jdbcTemplate.queryForList(sql, Integer.parseInt(mid));
-			} else {
-				if (sid == null || "".equals(sid)) {
-					sql = "select a.resource_id id,resource_uri uri,resource_name text,type_id type, "
-							+ "menu_id,count as remark,row_number() over() num from FPF_IRS_RESOURCE a, "
-							+ " (select opername rid, count(*) count from FPF_VISITLIST "
-							+ " where date(create_dt) >= (current date - 30 days) "
-							+ " and date(create_dt) <= current date group by opername) b, "
-							+ " (select f.resource_id rid, f.user_id from FPF_IRS_FAVORITES f) d "
-							+ " where state = '在用' and (a.type_id = 3 or a.type_id = 4) and b.rid = d.rid AND d.user_id = ?"
-							+ " and a.resource_id = d.rid  ";
-				} else {
-					sql = "select a.resource_id id,resource_uri uri,resource_name text,type_id type, "
-							+ "menu_id,count as remark,row_number() over() num from FPF_IRS_RESOURCE a, "
-							+ " (select opername rid, count(*) count from FPF_VISITLIST "
-							+ " where date(create_dt) >= (current date - 30 days) "
-							+ " and date(create_dt) <= current date group by opername) b, "
-							+ " (select f.resource_id rid, f.user_id from FPF_IRS_FAVORITES f where f.MENU_ID=" + sid
-							+ ") d "
-							+ " where state = '在用' and (a.type_id = 3 or a.type_id = 4) and b.rid = d.rid AND d.user_id = ?"
-							+ " and a.resource_id = d.rid  " + " order by count desc FETCH FIRST 5 ROWS ONLY with ur";
-				}
-
-				return jdbcTemplate.queryForList(sql, userId);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
+		return jdbcTemplate.queryForList(sql, Integer.parseInt(mid));
 	}
 
 	@Override
@@ -316,39 +246,18 @@ public class AdapDao extends BaseDao implements AdapService {
 
 	@Override
 	public List getRelaCollect(String mid, String sid, String userId) {
-		
-		if (mid == null) {
-			return null;
-		}
-		try {
-			if (Integer.parseInt(mid) == -1) {
-				if (sid == null || "".equals(sid)) {
-					return jdbcTemplate.queryForList("select a.resource_id id, resource_uri uri, resource_name text,"
-							+ "type_id type, menu_id,count remark, row_number() over() num"
-							+ "  from FPF_IRS_RESOURCE a,"
-							+ "  (select resource_id rid, count(*) count from FPF_IRS_FAVORITES where user_id = ?  group by resource_id) b"
-							+ " where state = '在用' and a.resource_id = b.rid"
-							+ " order by count desc FETCH FIRST 5 ROWS ONLY with ur", userId);
-				} else {
-					return jdbcTemplate.queryForList("select a.resource_id id, resource_uri uri, resource_name text,"
-							+ "type_id type, menu_id,count remark, row_number() over() num"
-							+ "  from FPF_IRS_RESOURCE a,"
-							+ "  (select resource_id rid, count(*) count from FPF_IRS_FAVORITES where user_id = ? and menu_id = "
-							+ sid + " group by resource_id) b" + " where state = '在用' and a.resource_id = b.rid"
-							+ " order by count desc FETCH FIRST 5 ROWS ONLY with ur", userId);
-				}
-			} else {
-				return jdbcTemplate.queryForList("select a.resource_id id, resource_uri uri, resource_name text,"
-						+ " type_id type, menu_id,count remark, row_number() over() num" + "  from FPF_IRS_RESOURCE a,"
-						+ " (select resource_id rid, count(*) count from FPF_IRS_FAVORITES where user_id = ? group by resource_id) b,"
-						+ " (select id, name from BOC_INDICATOR_MENU where deep = 1) c"
-						+ " where c.id = a.menu_id and c.id = ? and state = '在用'" + " and a.resource_id = b.rid"
-						+ " order by count desc FETCH FIRST 5 ROWS ONLY with ur", userId, Integer.parseInt(mid));
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
+		String sql = "select a.id, a.uri, a.text,"
+				+ " a.type, menu_id,count remark, row_number() over() num" 
+				+ "  from (select count,resource_id id, resource_uri uri, resource_name text,state, '报表' type, menu_id from FPF_IRS_RESOURCE ," +
+				" (select resource_id rid, count(*) count from FPF_IRS_FAVORITES where resource_type='报表' " +
+				" and user_id = ? group by resource_id) b where resource_id=rid " +
+				" union all " +
+				" select count, resource_id id, resource_uri uri, resource_name text, state,'应用' type, menu_id from FPF_IRS_application ," +
+				" (select resource_id rid, count(*) count from FPF_IRS_FAVORITES where resource_type='应用' " +
+				" and user_id = ? group by resource_id) b where resource_id=rid) a"
+				+ " where menu_id = ? and state = '在用' "
+				+ " order by count desc FETCH FIRST 5 ROWS ONLY with ur";
+		return jdbcTemplate.queryForList(sql, userId, userId, Integer.parseInt(mid));
 	}
 
 	@Override

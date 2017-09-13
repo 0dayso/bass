@@ -69,17 +69,17 @@ function initCollectList(collectList){
 	var collectHtml = "";
 	for(var i=0; i < collectList.length; i++){
 		collectHtml += "<tr>";
-		collectHtml += "<td class=\"num\">" + collectList[i].row_no + "</td>";
-		collectHtml += "<td class=\"coll-text\"><a href=\"#\" title='" + collectList[i].resource_name + "' data-uri='" + collectList[i].resource_uri + "' onclick=\"openRelaApps('" + collectList[i].id + "','" + collectList[i].resource_name + "',this)\">" + collectList[i].resource_name + "</a></td>";
-		collectHtml += "<td class=\"coll-text\">" + collectList[i].resource_type + "</td>";
+		collectHtml += "<td class=\"num\">" + (i+1) + "</td>";
+		collectHtml += "<td class=\"coll-text\"><a href=\"#\" title='" + collectList[i].name + "' data-uri='" + collectList[i].uri + "' onclick=\"openRelaApps('" + collectList[i].id + "','" + collectList[i].name + "',this)\">" + collectList[i].name + "</a></td>";
+		collectHtml += "<td class=\"coll-text\">" + collectList[i].type + "</td>";
 		collectHtml += "<td class=\"num\">" + collectList[i].create_dt + "</td>";
-		collectHtml += "<td class=\"num\"><a class=\"act\" href=\"#\" onclick=\"delFavorite('" + collectList[i].id + "')\">取消收藏</a></td>";
+		collectHtml += "<td class=\"num\"><a class=\"act\" href=\"#\" onclick=\"delFavorite('" + collectList[i].type + "','" + collectList[i].id + "')\">取消收藏</a></td>";
 		collectHtml += "</tr>";
 	}
 	$("#collBody").html(collectHtml);
 }
 
-function delFavorite(rid){
+function delFavorite(type, rid){
 	if(window.confirm("确定要取消收藏吗？")){
 		$.ajax({
         url: '${mvcPath}/myCollect/delCollect',
@@ -88,7 +88,8 @@ function delFavorite(rid){
         dataType: 'json',
         data: {
             rid: rid,
-            menuId: ${menuId}
+            menuId: ${menuId},
+            type: type
         },
         success: function(data, textStatus) {
             if (data.flag) {
@@ -166,9 +167,9 @@ function openRelaApps(id,title,th){
 					<input id="collName" class="inp-box">
 					<span class="sear-cond" style="margin-left:8px;">收藏类型</span>
 					<select class="sear-cond" id="resType">
-						<#list collectTypeList as type>
-							<option value='${type.key}'>${type.value}</option>
-						</#list>
+						<option value='0'>全部</option>
+						<option value='报表'>报表</option>
+						<option value='应用'>应用</option>
 					</select>
 					<span class="sear-cond" style="margin-left:8px;">周期选择</span>
 					<input id="startDate" readonly class="arrow-control inp-box date-inp">
