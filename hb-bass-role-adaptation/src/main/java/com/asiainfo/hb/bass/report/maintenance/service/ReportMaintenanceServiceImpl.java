@@ -60,4 +60,9 @@ public class ReportMaintenanceServiceImpl implements ReportMaintenanceService {
 		return result;
 	}
 
+	@Override
+	public String getReportType(String reportId) {
+		return reportMaintenanceDao.getReportType(reportId);
+	}
+
 }

@@ -46,44 +46,54 @@ public class AdapMyCollectDao extends BaseDao implements AdapMyCollectService{
 			startDate = startDate.trim();
 			endDate = endDate.trim();
 			resourceType = resourceType.trim();
-			StringBuffer _sql = new StringBuffer("select * from (select A.RESOURCE_URI RESOURCE_URI,A.name RESOURCE_NAME,A.type RESOURCE_TYPE,TO_CHAR(A.time,'YYYY-MM-DD HH24:MI:SS') CREATE_DT,A.resource_id ID,A.userId USERID,")
-								.append("A.menuId MENUID,count, ROW_NUMBER() OVER() as ROW_NO from (select t.resource_name name,q.resource_name type,p.create_dt time,p.resource_id resource_id,p.user_id userId,p.menu_id menuId,")
-								.append("t.resource_uri resource_uri,count(1) over() as count from FPF_irs_resource t,FPF_IRS_FAVORITES p,FPF_IRS_RESOURCETYPE q where t.resource_id = p.resource_id and t.menu_id = p.menu_id and t.type_id = q.id and p.user_id=? ");
-			if(menuId !=-1){
-				_sql.append("and p.menu_id=? ");
+			
+			StringBuffer sqlStr = new StringBuffer();
+			sqlStr.append("select * from ( ");
+			if(resourceType.equals("0") || resourceType.equals("报表")){
+				sqlStr.append("select b.resource_id id,resource_name name, resource_uri uri, resource_type type,")
+						.append(" TO_CHAR(a.create_dt,'YYYY-MM-DD HH24:MI:SS') CREATE_DT, a.menu_id, a.user_id ")
+						.append(" from fpf_irs_FAVORITES a left join fpf_irs_resource b on a.resource_id=b.resource_id ")
+						.append(" where a.resource_type='报表'");
 			}
+			if(resourceType.equals("0")){
+				sqlStr.append(" union all ");
+			}
+			
+			if(resourceType.equals("0") || resourceType.equals("应用")){
+				sqlStr.append("select b.resource_id id,resource_name name, resource_uri uri, resource_type type, ")
+						.append("TO_CHAR(a.create_dt,'YYYY-MM-DD HH24:MI:SS') CREATE_DT, a.menu_id, a.user_id ")
+						.append(" from fpf_irs_FAVORITES a left join fpf_irs_application b on a.resource_id=b.resource_id ")
+						.append(" where a.resource_type='应用'");
+			}
+			sqlStr.append(")");
+			sqlStr.append(" where id is not null and user_id=? and menu_id=?");
+			
 			if (!resourceName.equals("")){
-				_sql.append(" and t.resource_name like '%"+resourceName+"%' ");
+				sqlStr.append(" and name like '%"+resourceName+"%' ");
 			}
 			if (!startDate.equals("") && !endDate.equals("")){
-				_sql.append(" and date(p.create_dt) between date(\'"+startDate+"\') and date(\'"+endDate+"\') ");
+				sqlStr.append(" and date(create_dt) between date(\'"+startDate+"\') and date(\'"+endDate+"\') ");
 			}else if (!startDate.equals("")){
-				_sql.append(" and date(p.create_dt) between date(\'"+startDate+"\') and DATE(current date) ");
+				sqlStr.append(" and date(create_dt) between date(\'"+startDate+"\') and DATE(current date) ");
 			}else if (!endDate.equals("")){
-				_sql.append(" and date(p.create_dt) <= date(\'"+endDate+"\') ");
+				sqlStr.append(" and date(create_dt) <= date(\'"+endDate+"\') ");
 			}
-			if (!resourceType.equals("") && !resourceType.equals("0")){
-				_sql.append(" and q.id = "+resourceType+"");
-			}
-			_sql.append(" order by time desc) as A order by row_no)");
+			sqlStr.append(" order by create_dt desc");
 //			if (pageNumStr != null && IsNumber.isNumeric(pageNumStr.trim())){
 //				int _num = Integer.parseInt(pageNumStr.trim());
 //				_sql.append(" where ROW_NO between "+((_num-1)*10+1)+" and "+(_num*10)+" ");
 //			}else{
 //				_sql.append(" where ROW_NO between 1 and 10 ");
 //			}
-			if(menuId ==-1){
-				list = jdbcTemplate.queryForList(_sql.toString(), new Object[]{user.getId()});
-			}else{
-				list = jdbcTemplate.queryForList(_sql.toString(), new Object[]{user.getId(),menuId});
-			}
+			
+			list = jdbcTemplate.queryForList(sqlStr.toString(), new Object[]{user.getId(),menuId});
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.debug(e.getMessage());
 		}
 		return list;
 	}
-	public  Map<String,Object> deleteCollect(String rid,Integer menuId,User user) {
+	public  Map<String,Object> deleteCollect(String rid,Integer menuId,User user, String type) {
 		Map<String,Object> result = new HashMap<String,Object>();
 		String msg = "删除失败!";
 		boolean flag = false ;
@@ -92,7 +102,8 @@ public class AdapMyCollectDao extends BaseDao implements AdapMyCollectService{
 				msg= "缺少参数！";
 			}else{
 				StringBuffer sql =new StringBuffer().append("delete from FPF_IRS_FAVORITES WHERE  resource_id='")
-						.append(rid).append("' and user_id ='").append(user.getId()).append("' and menu_id=").append(menuId);
+						.append(rid).append("' and user_id ='").append(user.getId())
+						.append("' and menu_id=").append(menuId).append(" and resource_type='").append(type).append("' ");
 				logger.info("delete sql="+sql.toString());
 				jdbcTemplate.execute(sql.toString());
 				logger.info("删除我的收藏资源成功--  报表ID:" + rid);
@@ -109,16 +120,16 @@ public class AdapMyCollectDao extends BaseDao implements AdapMyCollectService{
 		result.put("flag", flag);
 		return result;
 	}
-	public  Map<String,Object> addCollect(String rid,Integer menuId,User user) {
+	public  Map<String,Object> addCollect(String rid,Integer menuId,User user, String type) {
 		Map<String,Object> result = new HashMap<String,Object>();
 		String msg = "收藏失败!";
 		boolean flag = false ;
 		try {
-			String sql = "select count(*) num from FPF_IRS_FAVORITES where USER_ID=? and RESOURCE_ID=? and MENU_ID = ?";
-			int count = jdbcTemplate.queryForObject(sql,Integer.class, new Object[]{user.getId(),rid,menuId});
+			String sql = "select count(*) num from FPF_IRS_FAVORITES where USER_ID=? and RESOURCE_ID=? and MENU_ID = ? and resource_type=?";
+			int count = jdbcTemplate.queryForObject(sql,Integer.class, new Object[]{user.getId(),rid,menuId, type});
 			if (count==0){
-				sql = "insert into FPF_IRS_FAVORITES(USER_ID,RESOURCE_ID,MENU_ID,CREATER_ID) values(?,?,?,?)" ;
-				jdbcTemplate.update(sql, new Object[]{user.getId(),rid,menuId,user.getId()});
+				sql = "insert into FPF_IRS_FAVORITES(USER_ID,RESOURCE_ID,MENU_ID,CREATER_ID, resource_type) values(?,?,?,?,?)" ;
+				jdbcTemplate.update(sql, new Object[]{user.getId(),rid,menuId,user.getId(),type});
 				msg = "收藏成功!";
 				flag = true;
 			}else{

@@ -33,6 +33,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.asiainfo.hb.core.models.BeanFactory;
@@ -42,37 +43,37 @@ import com.asiainfo.hb.web.models.ErrorPageInfoVO;
 
 @Component
 public class MenuFaultDetectionJob {
-	
+
 	public Logger LOG = Logger.getLogger(MenuFaultDetectionJob.class);
-	
+
 	String mmsUrl = "http://10.31.100.19/dacp/hbpush";
 
 	// 创建HttpClient
 	public CloseableHttpClient closeableHttpClient = null;
-	
-//	@Scheduled(cron = "0 30 7,12 * * ?")
+
+	@Scheduled(cron = "0 30 7,12 * * ?")
 	@SuppressWarnings("unchecked")
 	public void getMsgcontent() {
 		CheckUrlService checkUrlService = (CheckUrlService) BeanFactory.getBean("checkUrlService");
 		try {
-			//访问所有url
+			// 访问所有url
 			Map<String, Object> map = checkUrl(checkUrlService);
-			int count = (int) map.get("count");//访问url个数
-			int succ = (int) map.get("succ");//访问成功次数
+			int count = (int) map.get("count");// 访问url个数
+			int succ = (int) map.get("succ");// 访问成功次数
 			List<ErrorPageInfoVO> contentList = new ArrayList<ErrorPageInfoVO>();
-			if(count > 30 && succ < 3){
-				LOG.info("------------------访问"+count+"次中成功次数不足:"+succ+"次，停止访问------------------");
-			}else{
-				LOG.info("------------------访问url:"+count+"个,成功访问:"+succ+"个------------------");
+			if (count > 30 && succ < 3) {
+				LOG.info("------------------访问" + count + "次中成功次数不足:" + succ + "次，停止访问------------------");
+			} else {
+				LOG.info("------------------访问url:" + count + "个,成功访问:" + succ + "个------------------");
 				contentList = (List<ErrorPageInfoVO>) map.get("errorMsgVO");
-				//发送短信
+				// 发送短信
 				contentList = sendMessage(contentList);
-				if(contentList != null && contentList.size() > 0){
-					for(ErrorPageInfoVO error : contentList){
-						error.setSendState("1");//发送短信成功
+				if (contentList != null && contentList.size() > 0) {
+					for (ErrorPageInfoVO error : contentList) {
+						error.setSendState("1");// 发送短信成功
 					}
-					LOG.info("------------------错误URL："+contentList.size()+"个------------------");
-					checkUrlService.insertErrorUrl(contentList);//将访问错误的url和错误信息持久化
+					LOG.info("------------------错误URL：" + contentList.size() + "个------------------");
+					checkUrlService.insertErrorUrl(contentList);// 将访问错误的url和错误信息持久化
 				}
 			}
 		} catch (IOException e) {
@@ -87,30 +88,31 @@ public class MenuFaultDetectionJob {
 
 	/**
 	 * 访问所有url
+	 * 
 	 * @param checkUrlService
 	 * @return
-	 * @throws IOException 
-	 * @throws InterruptedException 
+	 * @throws IOException
+	 * @throws InterruptedException
 	 */
 	private Map<String, Object> checkUrl(CheckUrlService checkUrlService) throws IOException, InterruptedException {
 		HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
 		closeableHttpClient = httpClientBuilder.build();
 		List<ErrorPageInfoVO> checkUrls = checkUrlService.getUrlVO();
-		Map<String,Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		map = getErrorUrl(checkUrls);
 		closeableHttpClient.close();
 		return map;
 	}
-	
-	private List<ErrorPageInfoVO> sendMessage(List<ErrorPageInfoVO> contentList) throws ServletException, IOException{
+
+	private List<ErrorPageInfoVO> sendMessage(List<ErrorPageInfoVO> contentList) throws ServletException, IOException {
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		HttpPost httppost = new HttpPost(mmsUrl);
 		List<NameValuePair> params = new ArrayList<NameValuePair>(6);
 		String contacs = getPropertiesInfo();
-		String content = "无法访问的菜单有"+contentList.size()+"个，";
+		String content = "无法访问的菜单有" + contentList.size() + "个，";
 		List<ErrorPageInfoVO> list = new ArrayList<ErrorPageInfoVO>();
 		String end = "";
-		if(contentList.size() > 3){//错误url过多会导致短信过长
+		if (contentList.size() > 3) {// 错误url过多会导致短信过长
 			list.add(contentList.get(0));
 			list.add(contentList.get(1));
 			list.add(contentList.get(2));
@@ -118,48 +120,49 @@ public class MenuFaultDetectionJob {
 			contentList = list;
 			end = "等等。。详情请查看后台程序";
 		}
-		for(ErrorPageInfoVO errorPage : contentList){
-			content += "访问:‘"+errorPage.getMenuItemTitle()+"’页面失败,访问地址:"+errorPage.getUrl()+"。";
+		for (ErrorPageInfoVO errorPage : contentList) {
+			content += "访问:‘" + errorPage.getMenuItemTitle() + "’页面失败,访问地址:" + errorPage.getUrl() + "。";
 			errorPage.setSendPhoneNum(contacs);
 			errorPage.setErrorDate(new Timestamp((new Date()).getTime()));
 		}
 		content += end;
 		System.out.println(content);
-		//请求类型action。email为邮件，sms为短信，mms为彩信
+		// 请求类型action。email为邮件，sms为短信，mms为彩信
 		params.add(new BasicNameValuePair("action", "mms"));
-		//发送主题subject。短信发送不需要此属性
+		// 发送主题subject。短信发送不需要此属性
 		params.add(new BasicNameValuePair("subject", "无法访问页面彩信"));
-		//发送号码或者邮件的收件人contacts，多个则用英文分号分隔
-		params.add(new BasicNameValuePair("contacs",contacs));
-		//发送内容
+		// 发送号码或者邮件的收件人contacts，多个则用英文分号分隔
+		params.add(new BasicNameValuePair("contacs", contacs));
+		// 发送内容
 		params.add(new BasicNameValuePair("content", content));
-		//设置编码
+		// 设置编码
 		httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
-		//处理返回结果
+		// 处理返回结果
 		CloseableHttpResponse response1 = httpclient.execute(httppost);
 		HttpEntity entity = response1.getEntity();
 		EntityUtils.toString(entity);
-//		URLDecoder.decode(EntityUtils.toString(entity, "UTF-8"),"UTF-8");
+		// URLDecoder.decode(EntityUtils.toString(entity, "UTF-8"),"UTF-8");
 		return contentList;
 	}
-	
+
 	/**
 	 * 从配置文件中个读取所需电话号码
+	 * 
 	 * @return
-	 * @throws IOException 
+	 * @throws IOException
 	 */
-	private String getPropertiesInfo() throws IOException{
+	private String getPropertiesInfo() throws IOException {
 		Properties pro = new Properties();
 		InputStream in = MenuFaultDetectionJob.class.getClassLoader().getResourceAsStream("/contentInformation.properties");
 		pro.load(in);
 		Iterator<String> it = pro.stringPropertyNames().iterator();
-		String contacs  = "";
-		while(it.hasNext()){
+		String contacs = "";
+		while (it.hasNext()) {
 			contacs += pro.getProperty(it.next());
 		}
 		return contacs;
 	}
-	
+
 	/**
 	 * 获取url并访问
 	 * 
@@ -170,10 +173,10 @@ public class MenuFaultDetectionJob {
 	 * @param target
 	 *            访问地址
 	 */
-	public Map<String,Object> getErrorUrl(List<ErrorPageInfoVO> checkUrls) throws IOException, ClientProtocolException, InterruptedException {
-		int count = 0;//计算访问url个数
-		int succ = 0;//访问成功个数
-		Map<String,Object> map = new HashMap<String,Object>();
+	public Map<String, Object> getErrorUrl(List<ErrorPageInfoVO> checkUrls) throws IOException, ClientProtocolException, InterruptedException {
+		int count = 0;// 计算访问url个数
+		int succ = 0;// 访问成功个数
+		Map<String, Object> map = new HashMap<String, Object>();
 		List<ErrorPageInfoVO> list = new ArrayList<ErrorPageInfoVO>();
 		String host = InetAddress.getLocalHost().getHostAddress();
 		for (ErrorPageInfoVO checkUrl : checkUrls) {
@@ -181,12 +184,12 @@ public class MenuFaultDetectionJob {
 			HttpGet get = null;
 			URL url = null;
 			str = str.replace("..", "");
-			Matcher matcher = Pattern.compile("[\u4e00-\u9fa5]+|[\uFF00-\uFFFF]").matcher(str);//中文和大部分全角符号（不是所有）
-			while(matcher.find()){//转换url里的中文
-				str = str.replace(matcher.group(), URLEncoder.encode(matcher.group(),"gbk"));
+			Matcher matcher = Pattern.compile("[\u4e00-\u9fa5]+|[\uFF00-\uFFFF]").matcher(str);// 中文和大部分全角符号（不是所有）
+			while (matcher.find()) {// 转换url里的中文
+				str = str.replace(matcher.group(), URLEncoder.encode(matcher.group(), "gbk"));
 			}
 			if (str.startsWith("/")) {
-				url = new URL("http://"+host+":8080/hb-bass-navigation" + str);
+				url = new URL("http://" + host + ":8080/hb-bass-navigation" + str);
 			} else if (str.startsWith("http://")) {
 				url = new URL(str);
 			} else {
@@ -197,8 +200,7 @@ public class MenuFaultDetectionJob {
 			try {
 				get = new HttpGet(url.toURI());
 				// 设置request访问头,模仿游览器访问
-				get.addHeader("User-Agent",
-						"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36");
+				get.addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36");
 				LOG.info("------------------访问url:" + get.getURI().toString() + "------------------");
 				response = closeableHttpClient.execute(get);
 				LOG.info("------------------返回状态码:" + response.getStatusLine() + "------------------");
@@ -206,16 +208,18 @@ public class MenuFaultDetectionJob {
 					EntityUtils.toString(response.getEntity());
 					EntityUtils.consumeQuietly(response.getEntity());
 					StatusLine status = response.getStatusLine();
-					if(String.valueOf(status.getStatusCode()).startsWith("5") || String.valueOf(status.getStatusCode()).startsWith("4")){//获取访问错的短信发送内容
+					if (String.valueOf(status.getStatusCode()).startsWith("5") || String.valueOf(status.getStatusCode()).startsWith("4")) {// 获取访问错的短信发送内容
 						ErrorPageInfoVO errorMsg = new ErrorPageInfoVO();
 						errorMsg.setErrorCode(status.getStatusCode());
 						errorMsg.setErrorMessage(status.getReasonPhrase());
 						errorMsg.setMenuItemId(checkUrl.getMenuItemId());
 						errorMsg.setMenuItemTitle(checkUrl.getMenuItemTitle());
 						list.add(errorMsg);
-//						map.put(checkUrl.getMenuItemId(), "访问页面"+checkUrl.getMenuItemTitle()+"错误，"
-//								+ "返回错误码："+String.valueOf(status.getStatusCode())+ ",错误原因：" +status.getReasonPhrase());
-					}else{
+						// map.put(checkUrl.getMenuItemId(),
+						// "访问页面"+checkUrl.getMenuItemTitle()+"错误，"
+						// + "返回错误码："+String.valueOf(status.getStatusCode())+
+						// ",错误原因：" +status.getReasonPhrase());
+					} else {
 						succ++;
 					}
 				}
@@ -226,7 +230,7 @@ public class MenuFaultDetectionJob {
 			} catch (IllegalStateException e) {
 				LOG.error("连接池关闭！");
 				LOG.error(LogUtil.getExceptionMessage(e));
-			}  catch (URISyntaxException e) {
+			} catch (URISyntaxException e) {
 				LOG.error(LogUtil.getExceptionMessage(e));
 			} catch (Exception e) {
 				LOG.error(LogUtil.getExceptionMessage(e));
@@ -238,7 +242,7 @@ public class MenuFaultDetectionJob {
 				}
 			}
 			count++;
-			if(count > 30 && succ <3){//访问30次中成功次数不足3次，关闭连接
+			if (count > 30 && succ < 3) {// 访问30次中成功次数不足3次，关闭连接
 				map.put("count", count);
 				map.put("succ", succ);
 				map.put("errorMsgVO", null);

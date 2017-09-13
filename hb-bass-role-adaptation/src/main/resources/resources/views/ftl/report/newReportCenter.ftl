@@ -142,7 +142,8 @@
 			        dataType: 'json',
 			        data: {
 			            rid: rid,
-			            menuId: ${menuId}
+			            menuId: ${menuId},
+			            type: '报表'
 			        },
 			        success: function(data, textStatus) {
 			            if (data.flag) {

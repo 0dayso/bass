@@ -16,8 +16,8 @@ public interface AdapMyCollectService {
 	
 	public  List<Map<String,Object>> getCollect(Integer menuId,String resourceName,String startDate,
 			String endDate,String resourceType,String pageNumStr,User user);
-	public  Map<String,Object> deleteCollect(String rid,Integer menuId,User user);
-	public  Map<String,Object> addCollect(String rid,Integer menuId,User user);
+	public  Map<String,Object> deleteCollect(String rid,Integer menuId,User user, String type);
+	public  Map<String,Object> addCollect(String rid,Integer menuId,User user, String type);
 	public 	List<Map<String, Object>> getHotCollect(Integer menuId);
 	public  List<Map<String, Object>> getCollectTypes();
 }

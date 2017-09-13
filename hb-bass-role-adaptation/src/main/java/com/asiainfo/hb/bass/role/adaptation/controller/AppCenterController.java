@@ -37,30 +37,6 @@ public class AppCenterController {
     @Autowired
 	AdapMenuService aMenuService;
 
-    @RequestMapping(value = "index_bak/{menuId}")
-    public String redirectIndex_bak(@PathVariable Integer menuId, HttpServletRequest request, HttpServletResponse response,
-        @ModelAttribute(SessionKeyConstants.USER) User user, Model model) {
-        List<Map<String, Object>> applist = this.getAppData(String.valueOf(menuId), "", "", "", "1", user);
-        List<Map<String, Object>> hotapplist = this.getHotapp(menuId);
-        List<Map<String, Object>> apptypelist = appService.getAppType();
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("key", "");
-        map.put("value", "全部");
-        apptypelist.add(0, map);
-        model.addAttribute("menuid", JsonHelper.getInstance().write(menuId));
-        model.addAttribute("apptypelist",JsonHelper.getInstance().write(apptypelist));
-        model.addAttribute("hotapp", JsonHelper.getInstance().write(hotapplist));
-        model.addAttribute("applist", JsonHelper.getInstance().write(applist));
-        Object count;
-        if (applist.size() > 0) {
-            count = applist.get(0).get("count");
-        } else {
-            count = 0;
-        }
-        model.addAttribute("totalnum", JsonHelper.getInstance().write(count));
-        return "ftl/app/appCenter_bak";
-    }
-
     @RequestMapping(value = "index/{menuId}")
     public String redirectIndex(@PathVariable Integer menuId, HttpServletRequest request, HttpServletResponse response,
         @ModelAttribute(SessionKeyConstants.USER) User user, Model model) {

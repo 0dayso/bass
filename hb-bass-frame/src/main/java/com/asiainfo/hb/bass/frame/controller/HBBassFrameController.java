@@ -72,7 +72,7 @@ public class HBBassFrameController {
 	@RequestMapping(value="main")
 	public String test(HttpServletRequest request,HttpServletResponse response,@ModelAttribute(SessionKeyConstants.USER) User user,Model model){
 		List TopThreeNews = adapService.getTopThreeNews();
-		List lastestOnlineReport = adapService.getLastOnlineReport("-2", "", user.getId());
+		List lastestOnlineReport = adapService.getLastOnlineReport("-1", "", user.getId());
 		//热门kpi
 		List TopKpi=adapService.getTopKpi();
 		model.addAttribute("TopKpi",TopKpi);

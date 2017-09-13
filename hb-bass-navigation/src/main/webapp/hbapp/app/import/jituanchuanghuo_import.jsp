@@ -89,8 +89,8 @@ else
 <form name="tempForm" action=""></form>
 	<script language="JavaScript" type="text/javascript" src="${mvcPath}/hbapp/resources/js/codebase/dhtmlxvault.js"></script>
 	<script type="text/javascript" src="${mvcPath}/hbapp/resources/js/datepicker/WdatePicker.js"></script>
-	<script type="text/javascript" src="/hbbass/common2/basscommon.js" charset=utf-8></script>
-	<script type="text/javascript" src="/hbbass/portal/portal_hb.js"></script>
+	<script type="text/javascript" src="${mvcPath}/hbbass/common2/basscommon.js" charset=utf-8></script>
+	<script type="text/javascript" src="${mvcPath}/hbbass/portal/portal_hb.js"></script>
 	<script type="text/javascript" src="${mvcPath}/hbapp/resources/js/default/default.js" charset=utf-8></script>
 	<script type="text/javascript" defer=true>
 	    var fetchRows=500;

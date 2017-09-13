@@ -42,27 +42,19 @@ public class AdapAppDao extends BaseDao implements AdapAppService{
 			searchVal = java.net.URLDecoder.decode(searchVal, "UTF-8");
 			if (sid != null && !sid.trim().equals("") && IsNumber.isNumeric(sid)){
 				StringBuffer _sqlSbf = new StringBuffer("");
-				_sqlSbf.append("select c.*,(case when rowid<4 then 'hot' else 'nonhot' end) hotFlag,");
-				_sqlSbf.append("(case when timerows<4 then 'new' else 'old' end) newFlag  from ");
-				_sqlSbf.append("(select rownumber() over(order by value(num,0) desc) as ROWID,");
-				_sqlSbf.append("rownumber() over(order by create_dt desc) as TIMEROWS,count(1) over() as count,");
-				_sqlSbf.append("a.resource_id,resource_uri,resource_name, menu_id,data_last_upd Lastupdate,");
-				_sqlSbf.append("resource_desc,creater_id,resource_img,value(num,0) num,");
-				_sqlSbf.append("(select count(*) from FPF_IRS_FAVORITES where USER_ID='"+user.getId()+"' and resource_id = a.resource_id )  isMyCollect from FPF_IRS_RESOURCE a ");
-				_sqlSbf.append("left join (select resource_id ");
-				_sqlSbf.append(" ,count(*) num from FPF_IRS_FAVORITES group by resource_id ) b");
-				_sqlSbf.append(" on a.resource_id=b.resource_id where a.type_id in ");
-				if(appType !=null && !"".equals(appType.trim())){
-					_sqlSbf.append(appType);
-				}else{
-					_sqlSbf.append(" (select id from FPF_IRS_RESOURCETYPE where resource_type='应用')");
-				}
+				_sqlSbf.append("select rownumber() over(order by value(num,0) desc) as ROWID,");
+				_sqlSbf.append(" rownumber() over(order by create_dt desc) as TIMEROWS, a.resource_id, a.resource_name,");
+				_sqlSbf.append(" a.resource_uri, a.create_dt ,(select count(1) from FPF_IRS_FAVORITES c ");
+				_sqlSbf.append(" where c.resource_id=a.resource_id and resource_type='应用' and user_id='" + user.getId() + "') isMyCollect, num ");
+				_sqlSbf.append(" from FPF_IRS_APPLICATION  a ");
+				_sqlSbf.append(" left join (select resource_id ,count(*) num from FPF_IRS_FAVORITES where resource_type='应用' group by resource_id ) b ");
+				_sqlSbf.append(" on a.resource_id=b.resource_id ");
+				_sqlSbf.append(" where a.menu_id="+Integer.parseInt(sid));
 				
-				_sqlSbf.append("  and menu_id="+Integer.parseInt(sid));
 				if (searchVal != null && !searchVal.trim().equals("")){
 					_sqlSbf.append(" and resource_name like '%"+searchVal.trim()+"%' ");
 				}
-				_sqlSbf.append(" ) c ");
+				
 //				_sqlSbf.append(" where ");
 //				_sqlSbf.append(getOrderBy(orderType));
 //				if (pageNum != null && IsNumber.isNumeric(pageNum.trim())){
@@ -86,9 +78,9 @@ public class AdapAppDao extends BaseDao implements AdapAppService{
 			return null;
 		}
 		StringBuffer sql=new StringBuffer().append("select c.* from (select rownumber() over(order by value(num,0) desc) as ROWID,a.resource_id,resource_uri ")
-							.append(",resource_name, menu_id,data_last_upd Lastupdate,resource_desc,creater_id,resource_img,value(num,0) num from FPF_IRS_RESOURCE ")
-							.append(" a left join (select resource_id,count(*) num from FPF_IRS_FAVORITES group by resource_id) b on a.resource_id ")
-							.append("=b.resource_id where a.type_id in (select id from FPF_IRS_RESOURCETYPE where resource_type='应用') and menu_id ")
+							.append(",resource_name, value(num,0) num from FPF_IRS_application ")
+							.append(" a left join (select resource_id,count(*) num from FPF_IRS_FAVORITES where resource_type='应用' group by resource_id) b on a.resource_id ")
+							.append("=b.resource_id where menu_id ")
 							.append("= ? ) c where rowid between 1 and 4");
 		return jdbcTemplate.queryForList(sql.toString() , menuId);
 	}
@@ -132,7 +124,7 @@ public class AdapAppDao extends BaseDao implements AdapAppService{
 	
 	@Override
 	public Map<String, Object> getTopicDetail(String resId) {
-		String sql = "select a.resource_name name,a.resource_desc desc, max(b.deep) deep from fpf_irs_resource a " +
+		String sql = "select a.resource_name name,a.resource_desc desc, max(b.deep) deep from fpf_irs_application a " +
 				" left join fpf_irs_specialtopics b on a.resource_id=b.resource_id " +
 				" where a.resource_id =? group by (a.resource_name, a.resource_desc)";
 		return this.jdbcTemplate.queryForMap(sql, new Object[]{resId});
@@ -143,7 +135,7 @@ public class AdapAppDao extends BaseDao implements AdapAppService{
 	public List<Map<String, Object>> getSubTopics(String resId) {
 		String sql = "select a.id,a.pid,a.deep,a.SPECIALTOPIC_NAME sname,b.resource_id rid," +
 				" b.resource_uri uri,b.resource_name rname,a.icon icon from fpf_irs_specialtopics a " +
-				" left join  fpf_irs_resource b on a.resource_sub_id = b.resource_id " +
+				" left join  fpf_irs_application b on a.resource_sub_id = b.resource_id " +
 				" where a.state ='在用' and a.resource_id =?  order by deep desc, pid, id";
 		Map<String ,Object> temp = new HashMap<String, Object>();
 		Map<String ,Object> temp1 = new HashMap<String, Object>();

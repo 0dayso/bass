@@ -1322,7 +1322,7 @@ aihb.Util = {
 		_content.style.cssText="position:absolute;left:20%;top:20%;padding: 3 px 10 px 5 px 10 px;z-index:100;background-color: #EFF5FB;border:1px solid #c3daf9;";
 		var _close=$C("div");
 		_close.style.cssText="text-align:right;margin-bottom:2px;";
-		_close.innerHTML='<img src=\'/hb-bass-navigation/hbapp/resources/image/default/tab-close.gif\' style="cursor: hand;" onclick="{this.parentNode.parentNode.parentNode.style.display=\'none\';}"></img>';
+		_close.innerHTML='<img id=\'closeImg\' src=\'/hb-bass-navigation/hbapp/resources/image/default/tab-close.gif\' style="cursor: hand;" onclick="{this.parentNode.parentNode.parentNode.style.display=\'none\';}"></img>';
 		_content.appendChild(_close);
 		_content.appendChild(options.content);
 		

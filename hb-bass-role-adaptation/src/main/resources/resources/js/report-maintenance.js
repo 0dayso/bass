@@ -21,6 +21,14 @@ function w4(s){
         return new Date();  
     }   
 }
+function monthFormat(date) {
+	var y = date.getFullYear();
+	var m = date.getMonth() + 1;
+	var d = date.getDate();
+	var h = date.getHours();
+	var minute = date.getMinutes();
+	return(d < 10 ? ('0' + d) : d) + ' ' + (h < 10 ? ('0' + h) : h) + ":" + (minute < 10 ? ('0' + minute) : minute);
+}
 var myview = $.extend({}, $.fn.datagrid.defaults.view, {
 	onAfterRender: function(target) {
 		$.fn.datagrid.defaults.view.onAfterRender.call(this, target);
@@ -83,7 +91,18 @@ function check(){
 		return false;
 	}
 	
-	if($("#expectationDate").datetimebox('getValue').length==0){
+	var expectationDate;
+	var t = $("input[name='type']:checked").val();
+	
+	if(t==0){
+		expectationDate = $("#time0").timespinner('getValue');
+	}else if(t==1){
+		expectationDate = $("#time1").combobox('getValue');
+	}else if(t==2){
+		expectationDate = $("#time2").datetimebox('getValue');
+	}
+	
+	if(!expectationDate){
 		$.messager.alert('报表维护信息',"您必须填写期望日期",'error');
 		return false;
 	}
@@ -100,7 +119,17 @@ function getSaveData(){
 	data.levelVal = $("#level").combobox('getValue')||'';
 	data.onlineVal = $("#online").combobox('getValue')||'';
 	data.maintenanceVal = $("#maintenance").combobox('getValue')||'';
-	data.expectationDate = $("#expectationDate").datebox('getValue')||'';
+	var expectationDate;
+	var t = $("input[name='type']:checked").val();
+	
+	if(t==0){
+		expectationDate = $("#time0").timespinner('getValue');
+	}else if(t==1){
+		expectationDate = $("#time1").combobox('getValue');
+	}else if(t==2){
+		expectationDate = $("#time2").datetimebox('getValue');
+	}
+	data.expectationDate = expectationDate||'';
 	return data;
 }
 function getSelectRow(){
@@ -144,6 +173,7 @@ function getQueryData(){
 	if(onlineVal && onlineVal!='-1'){
 		data.onlineVal = onlineVal;
 	}
+	
 	var maintenanceVal =  $("#q_maintenance").combobox('getValue');
 	if(maintenanceVal && maintenanceVal!='-1'){
 		data.maintenanceVal = maintenanceVal;
@@ -160,7 +190,7 @@ function loadData(row){
 	$('#level').combobox('setValue',row.levelVal);
 	$('#online').combobox('setValue',row.onlineVal);
 	$('#maintenance').combobox('setValue',row.maintenanceVal);
-	$('#expectationDate').datetimebox('setValue', row.expectationDate);
+	setExpectationDate(row);
 }
 function clean(){
 	$("#id").val('');
@@ -174,16 +204,73 @@ function clean(){
 	$('#maintenance').combobox('setValue','0');
 	setExpectationDate();
 }
-function setExpectationDate(){
-	var d = new Date();
-	var y = d.getFullYear();
-    var m = d.getMonth()+1;
-    var day = d.getDay();
-    var h = d.getHours();
-	$('#expectationDate').datetimebox('setValue', y+"-"+m+"-"+d+" "+h +":00:00");
+function setExpectationDate(data){
+	if(data && data.expectationDate){
+		//修改
+		//getAjaxType(data.reportId)
+		var expectationDate = data.expectationDate;
+		var length = expectationDate.length;
+		if(length==5){
+			$("input[name='type']").get(0).checked=true;
+			$("#time0").timespinner('setValue',expectationDate);
+			$("#date_div0").css("display","block");
+		}
+		if(length>=1 && length<=2){// 月报表   日
+			$("input[name='type']").get(1).checked=true;
+			$("#time1").combobox('setValue',expectationDate);
+			$("#date_div1").css("display","block");
+		}
+		if(length==8){
+			$("input[name='type']").get(2).checked=true;
+			$("#time2").datetimebox('setValue',expectationDate);
+			$("#date_div2").css("display","block");
+		}
+	}else{ // 清除数据
+		$("input[name='type'][value=0]").attr("checked",false); 
+		$("#time0").timespinner('setValue','');
+		$("input[name='type'][value=1]").attr("checked",false); 
+		$("#time1").combobox('setValue','');
+		$("input[name='type'][value=2]").attr("checked",false); 
+		$("#time2").datetimebox('setValue','');
+	}
+}
+
+//ajax校验报表ID的报表类型
+function getAjaxType(reportId){
+	$.ajax({
+		url : mvcPath+'/report/maintenance/getReportType',
+		type:"post",
+		data:{
+			reportId: reportId
+		},
+		success:function(data){
+			if(data){
+				if(data=='day'){
+					$("input[name='type']").get(0).checked=true;
+				}else if(data=='month'){
+					$("input[name='type']").get(2).checked=true;
+				}
+			}
+		}
+	});
 }
 $(function(){	
 	setExpectationDate();
+	//失去焦点判断报表类型
+	$("input",$("#reportId").next("span")).blur(function(){  
+		var reportId = $(this).val();
+		if(reportId){
+			getAjaxType(reportId);
+		}
+	});
+	//单选按钮点击事件
+	$(":radio").click(function() {
+		var v = $(this).val();
+		$("#date_div0").css("display","none");
+		$("#date_div1").css("display","none");
+		$("#date_div2").css("display","none");
+		$("#date_div"+v).css("display","block");
+	});
 	$('#level').combobox({
 		data: [{
 				"id": "0",
@@ -341,6 +428,12 @@ $(function(){
 				$('#addReportWind').dialog({title:'新增报表维护信息'});
 				$('#addReportWind').dialog('open');
 				$("#addReportWind").dialog("move",{top:$(document).scrollTop() + ($(window).height()-400) * 0.3});
+				$("#date_div0").css("display","none");
+				$("#date_div1").css("display","none");
+				$("#date_div2").css("display","none");
+				$("input[name='type'][value=0]").attr("checked",false); 
+				$("input[name='type'][value=1]").attr("checked",false); 
+				$("input[name='type'][value=2]").attr("checked",false); 
 			}
 		},'-',{
 			text:'修改',
@@ -351,6 +444,9 @@ $(function(){
 					$('#addReportWind').dialog({title:'修改报表维护信息'});
 					$('#addReportWind').dialog('open');
 					$("#addReportWind").dialog("move",{top:$(document).scrollTop() + ($(window).height()-400) * 0.3});
+					$("#date_div0").css("display","none");
+					$("#date_div1").css("display","none");
+					$("#date_div2").css("display","none");
 					loadData(row);
 				}
 			}
@@ -383,7 +479,7 @@ $(function(){
 	
 	$('#addReportWind').dialog({
 		width: 400,
-		height: 450,
+		height: 470,
 		modal: true,
 		closed: true,
 		closable: true,

@@ -51,7 +51,7 @@ function initAppInfo(appList){
 
 function queryAppInfo(){
 	var appName = $("#appName").val();
-	var appType = $("#appType").val();
+	//var appType = $("#appType").val();
 	var orderType = $(".order-act").attr("value");
 	$.ajax({
         url: '${mvcPath}/appCenter/getAppInfo',
@@ -61,7 +61,7 @@ function queryAppInfo(){
         data: {
             menuId: ${menuId},
             appName: appName,
-            appType: appType,
+            appType: '',
             orderType: orderType
         },
         success: function(data) {
@@ -79,7 +79,8 @@ function addFavorite(rid){
         dataType: 'json',
         data: {
             rid: rid,
-            menuId: ${menuId}
+            menuId: ${menuId},
+            type: '应用'
         },
         success: function(data, textStatus) {
             if (data.flag) {
@@ -154,12 +155,12 @@ function openRelaApps(id,title,th){
 					<span class="icon-search ser-btn" onclick="queryAppInfo()"></span>
 				</div>
 				<span class="sear-cond" style="position:absolute; right:3%;">
-					<span>类型</span>
+					<!--<span>类型</span>
 					<select class="sear-cond" id="appType" onChange="queryAppInfo()">
 					<#list apptypelist as apptype>
 						<option value="${apptype.key}">${apptype.value}</option>
 					</#list>
-					</select>
+					</select>-->
 					<span style="padding-left:8px;">排列:</span>
 					<span class="order-type order-act" value="ROWID">相关性</span>
 					<span style="padding:0 3px;">|</span>

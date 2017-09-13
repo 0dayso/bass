@@ -10,4 +10,7 @@ public interface ReportMaintenanceService {
 	Map<String, Object> saveOrUpdateReportMaintenance(ReportMaintenance reportMaintenance);
 	
 	Map<String, Object> delete(String id);
+	
+	
+	String getReportType(String reportId);
 }
