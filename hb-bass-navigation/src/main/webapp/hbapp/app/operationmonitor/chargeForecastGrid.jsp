@@ -43,7 +43,9 @@ else
 		return datas[0];
 	}	
 	cellfunc[1]=function(datas,options){
-		if(datas[0].length==8){
+		console.log(datas);
+		console.log(options);
+		if(datas[0].length==6){
 			return "预测收入：<font color=red>"+numberFormatDigit2(datas,options)+"</font>";
 		}
 		return numberFormatDigit2(datas,options);
@@ -71,7 +73,8 @@ else
 	}
   </script>
   <body onload='chargeAlert()'>
-   	<div id="grid" class="content" style="width: 100%;">
+  
+   	<div id="grid" class="content" style="width: 100%;;">
     	<div id="showResult" ></div>
            <div id="title_div" style="display:none;">
            	<table id="resultTable" align="center" width="100%" class="grid-tab-blue" cellspacing="1" cellpadding="0" border="0">

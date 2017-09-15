@@ -103,7 +103,7 @@ function changetab(id)
 					<tr>
 						<td>
 							<iframe frameborder=0 scrolling="no" width=100% height=100% id=f1 name=f1 src="chargeForecastGrid.jsp" isload="1"></iframe>
-							<iframe frameborder=0 scrolling="no" width=100% height=100% id=f2 name=f2 isload="0" style="display:none"></iframe>
+							<iframe frameborder=0 scrolling="no" width=100% height="400px" id=f2 name=f2 isload="0" style="display:none"></iframe>
 						</td>
 					</tr>
 					</table>

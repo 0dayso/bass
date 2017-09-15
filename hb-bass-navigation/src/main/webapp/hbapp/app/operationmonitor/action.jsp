@@ -54,7 +54,7 @@ try{
 		StringBuilder sb = new StringBuilder();
 		
 		lastDate = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
-		String currentyyyyMM=sdf.format(cal.getTime())+(lastDate-1);
+		String currentyyyyMM=sdf.format(cal.getTime());
 		String yearStr = String.valueOf(cal.get(Calendar.YEAR));
 		String preyyyyMM = "";
 		for (int i = 0; i < 12; i++) {
@@ -62,16 +62,16 @@ try{
 			lastDate = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 			
 			String yyyyMM = sdf.format(cal.getTime());
-			if(i==0)preyyyyMM=yyyyMM+lastDate;
+			if(i==0)preyyyyMM=yyyyMM;
 			if(sb1.length()>0)sb1.append(",");
-			sb1.append("'").append(yyyyMM+lastDate).append("'");
+			sb1.append("'").append(yyyyMM).append("'");
 			
 			if(yyyyMM.startsWith(yearStr)){
 				if(sb.length()>0)sb.append(",");
-				sb.append("'").append(yyyyMM+lastDate).append("'");
+				sb.append("'").append(yyyyMM).append("'");
 			}
 			if(sb2.length()>0)sb2.append(",");
-			sb2.append("'").append(yyyyMM+(lastDate-1)).append("'");
+			sb2.append("'").append(yyyyMM).append("'");
 		}
 		
 		StringBuilder sql = ChargeForecast.chargeForecastSql(sb1, sb2, sb, currentyyyyMM);

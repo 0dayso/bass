@@ -66,7 +66,7 @@ public class ChargeForecast {
 	public static List chargeForecastList(String timeid) throws Exception {
 
 		SQLQuery sqlQuery = SQLQueryContext.getInstance().getSQLQuery("list");
-		String sql = "select 1 from kpi_total_daily where zb_code='K10001' and channel_code='HB' and time_id='"
+		String sql = "select 1 from kpi_comp_cd005_m_vertical where kpi_code='MCD005L00001' and dim_code='PROV_ID' and dim_val='HB' and op_time='"
 				+ timeid + "' with ur";
 		log.debug("SQL=" + sql);
 		List list = (List) sqlQuery.query(sql);
@@ -78,16 +78,16 @@ public class ChargeForecast {
 			throws Exception {
 
 		StringBuilder sql = new StringBuilder(
-				"select @col1@,decimal(sum(value),16,2)/10000 from kpi_total_daily where zb_code='K10001' and channel_code='HB' and time_id in (");
+				"select @col1@,decimal(sum(kpi_val),16,2) from kpi_comp_cd005_m_vertical where kpi_code='MCD005L00001' and dim_code='PROV_ID' and dim_val='HB' and op_time in (");
 		sql.append(sb.length() == 0 ? "''" : sb.toString());
-		sql.append(")  group by time_id union all select '@col2@',decimal(t1.va,16,2)/t2.va*t3.va/10000 from ");
+		sql.append(")  group by op_time union all select '@col2@',decimal(t1.va,16,2)/t2.va*t3.va from ");
 
-		sql.append("(select sum(value) va from kpi_total_daily where zb_code='K10001' and channel_code='HB' and time_id in (");
+		sql.append("(select sum(kpi_val) va from kpi_comp_cd005_m_vertical where kpi_code='MCD005L00001' and dim_code='PROV_ID' and dim_val='HB' and op_time  in (");
 		sql.append(sb1.toString()).append("))t1");
 
-		sql.append(",(select sum(value) va from kpi_total_daily where zb_code='K10001' and channel_code='HB' and time_id in (");
+		sql.append(",(select sum(kpi_val) va from kpi_comp_cd005_m_vertical where kpi_code='MCD005L00001' and dim_code='PROV_ID' and dim_val='HB' and op_time  in (");
 		sql.append(sb2.toString()).append("))t2");
-		sql.append(",(select value va from kpi_total_daily where zb_code='K10001' and channel_code='HB' and time_id='");
+		sql.append(",(select kpi_val va from kpi_comp_cd005_m_vertical where kpi_code='MCD005L00001' and dim_code='PROV_ID' and dim_val='HB' and op_time='");
 		sql.append(currentyyyyMM).append("' ) t3 order by 1 with ur");
 		log.debug("SQL=" + sql);
 		return sql;
@@ -97,7 +97,7 @@ public class ChargeForecast {
 			String currentyyyyMM) throws Exception {
 
 		String sqlStr = sql.toString()
-				.replaceAll("@col1@", "substr(time_id,1,6)")
+				.replaceAll("@col1@", "substr(op_time,1,6)")
 				.replaceAll("@col2@", currentyyyyMM);
 		log.debug("sqlStr=" + sqlStr);
 		return sqlStr;
@@ -108,7 +108,7 @@ public class ChargeForecast {
 
 		String sqlStr = sql
 				.toString()
-				.replaceAll("@col1@", "substr(time_id,3,4),'收入(万元)'")
+				.replaceAll("@col1@", "substr(op_time,3,4),'收入(万元)'")
 				.replaceAll("@col2@",
 						currentyyyyMM.substring(2, 6) + "','收入(万元)");
 		SQLQuery sqlQuery = SQLQueryContext.getInstance().getSQLQuery("list");
@@ -127,19 +127,20 @@ public class ChargeForecast {
 
 		StringBuilder sql2 = new StringBuilder();
 		sql2.append(
-				"select (select area_name from mk.bt_area where area_code=t1.channel_code),decimal(t1.va,16,4)*decimal(t2.va,16,4)/decimal(t3.va,16,4)/10000 ,t4.va/10000 from (select channel_code,value va from  kpi_total_daily where zb_code='K10001' and time_id ='")
+				"select a.area_name area_name,decimal(t1.va,16,4)*decimal(t2.va,16,4)/decimal(t3.va,16,4) ,t4.va from (select dim_val,kpi_val va from  kpi_comp_cd005_m_vertical where kpi_code='MCD005L00001' and op_time ='")
 				.append(currentyyyyMM)
-				.append("' and parent_channel_code='HB') t1,")
-				.append("(select channel_code,sum(value) va from kpi_total_daily where zb_code='K10001' and time_id in (")
+				.append("') t1,")
+				.append("(select dim_val,sum(kpi_val) va from kpi_comp_cd005_m_vertical where kpi_code='MCD005L00001' and op_time in (")
 				.append(sb1.toString())
-				.append(") and parent_channel_code='HB' group by channel_code) t2,")
-				.append("(select channel_code,sum(value) va from kpi_total_daily where zb_code='K10001' and time_id in (")
+				.append(") group by dim_val) t2,")
+				.append("(select dim_val,sum(kpi_val) va from kpi_comp_cd005_m_vertical where kpi_code='MCD005L00001' and op_time in (")
 				.append(sb2.toString())
-				.append(") and parent_channel_code='HB' group by channel_code) t3, ")
-				.append("(select channel_code,sum(value) va from kpi_total_daily where zb_code='K10001' and time_id ='")
+				.append(") group by dim_val) t3, ")
+				.append("(select dim_val,sum(kpi_val) va from kpi_comp_cd005_m_vertical where kpi_code='MCD005L00001' and op_time ='")
 				.append(preyyyyMM)
-				.append("' and parent_channel_code='HB' group by channel_code) t4 ")
-				.append(" where t1.channel_code=t2.channel_code and t2.channel_code=t3.channel_code and t4.channel_code=t3.channel_code  order by 2 desc with ur");
+				.append("' group by dim_val) t4 ")
+				.append(",mk.bt_area  a ")
+				.append(" where a.area_code=t1.dim_val  and t1.dim_val=t2.dim_val and t2.dim_val=t3.dim_val and t4.dim_val=t3.dim_val  order by 2 desc with ur");
 		log.debug("sql2=" + sql2);
 		return sql2;
 	}
