@@ -42,7 +42,7 @@ function openAddDialog(){
 	$('#addExCode').textbox('setValue','');
 	$('#addExName').textbox('setValue','');
 	$('#addDeveloperName').textbox('setValue','');
-	$('#addDeveloperName').val('');
+	$('#addDeveloper').val('');
 	$('#addExCode').textbox('textbox').attr('disabled',false);
 	$("#optType").val("add");
 	$('#addExDialog').dialog('open');
@@ -56,7 +56,7 @@ function openUpdateDevDialog(){
 	$('#addExCode').textbox('setValue',row.ex_code);
 	$('#addExName').textbox('setValue',row.ex_name);
 	$('#addDeveloperName').textbox('setValue',row.developer_name);
-	$('#addDeveloperName').val(row.developer);
+	$('#addDeveloper').val(row.developer);
 	$('#addExCode').textbox('textbox').attr('disabled',true);
 	
 	$('#addExDialog').panel({title: "修改开发人"});

@@ -42,7 +42,7 @@ function openAddDialog(){
 	$('#addZbCode').textbox('setValue','');
 	$('#addZbName').textbox('setValue','');
 	$('#addDeveloperName').textbox('setValue','');
-	$('#addDeveloperName').val('');
+	$('#addDeveloper').val('');
 	$('#addZbCode').textbox('textbox').attr('disabled',false);
 	$("#optType").val("add");
 	$('#addZbDialog').dialog('open');
@@ -56,7 +56,7 @@ function openUpdateDevDialog(){
 	$('#addZbCode').textbox('setValue',row.zb_code);
 	$('#addZbName').textbox('setValue',row.zb_name);
 	$('#addDeveloperName').textbox('setValue',row.developer_name);
-	$('#addDeveloperName').val(row.developer);
+	$('#addDeveloper').val(row.developer);
 	$('#addZbCode').textbox('textbox').attr('disabled',true);
 	
 	$('#addZbDialog').panel({title: "修改开发人"});

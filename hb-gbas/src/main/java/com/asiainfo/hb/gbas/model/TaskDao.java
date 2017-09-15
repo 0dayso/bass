@@ -17,7 +17,7 @@ public class TaskDao extends CommonDao{
 	
 	public Map<String, Object> getTaskList(Map<String, Object> params, HttpServletRequest req){
 		mLog.debug("------>getTaskList");
-		String rowSql = "select type,gbas_code, cycle, etl_cycle_id, etl_status,to_char(dispatch_time,'YYYY-MM-DD HH24:MI:SS') dispatch_time," +
+		String rowSql = "select id, type,gbas_code, cycle, etl_cycle_id, etl_status,to_char(dispatch_time,'YYYY-MM-DD HH24:MI:SS') dispatch_time," +
 				" to_char(exec_start_time,'YYYY-MM-DD HH24:MI:SS') exec_start_time, to_char(exec_end_time,'YYYY-MM-DD HH24:MI:SS') exec_end_time " +
 				" from gbas.run_dispatch where 1=1 ";
 		String countSql = "select count(1) from gbas.run_dispatch where 1=1 ";
@@ -75,5 +75,15 @@ public class TaskDao extends CommonDao{
 		map.put("edges", edgeList);
 		return map;
 	}
-
+	
+	public void updateStatus(String id, String status){
+		String sql = "update gbas.run_dispatch set etl_status=? where id=?";
+		this.dwJdbcTemplate.update(sql, new Object[]{status, id});
+	}
+	
+	public List<Map<String, Object>> queryLog(String id){
+		String sql = "select type, gbas_code, to_char(err_time,'YYYY-MM-DD HH24:MI:SS') err_time, " +
+				"err_msg from gbas.err_msg_log where type_id=? order by err_time desc";
+		return this.dwJdbcTemplate.queryForList(sql, id);
+	}
 }

@@ -57,7 +57,7 @@ function resetCodeOption(){
 	var codes = new Array();
 	if(type == 'zb'){
 		codes = gbasList.zbList;
-	}else if(type == 'ex'){
+	}else if(type == 'export'){
 		codes = gbasList.exList;
 	}
 	
@@ -273,7 +273,7 @@ function formatType(value){
 	if(value == "zb"){
 		return "指标";
 	}
-	if(value == "ex"){
+	if(value == "export"){
 		return "接口";
 	}
 	return value;
@@ -286,7 +286,7 @@ function formatType(value){
 			<label>类型</label>
 			<select id="type" class="easyui-combobox" data-options="editable:false,panelHeight:'auto'" style="height:30px;width:100px;">
 				<option value='zb'>指标</option>
-				<option value='ex'>接口</option>
+				<option value='export'>接口</option>
 			</select>
 			<label style="margin-left:15px;">周期</label>
 			<select id="cycle" class="easyui-combobox" data-options="editable:false,panelHeight:'auto'" style="height:30px;width:100px;">
