@@ -22,10 +22,11 @@ public class AnalyseDao extends CommonDao{
 	 */
 	public Map<String, Object> getGbasList(){
 		mLog.debug("------>getGbasList");
-		String zbSql = "select zb_code code, zb_name name, cycle from gbas.zb_def";
-		
+		String zbSql = "select zb_code code, zb_name name, cycle from gbas.zb_def where status=1";
+		String exSql = "select ex_code code, ex_name name, cycle from gbas.ex_def where status=1";
 		Map<String, Object> resMap= new HashMap<String, Object>();
 		resMap.put("zbList", this.dwJdbcTemplate.queryForList(zbSql));
+		resMap.put("exList", this.dwJdbcTemplate.queryForList(exSql));
 		return resMap;
 	}
 	
