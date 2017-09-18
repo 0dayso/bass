@@ -6,6 +6,7 @@
 <%@page import="java.util.Calendar"%>
 <%@page import="java.util.GregorianCalendar"%>
 <%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.text.ParseException"%>
 <%@page import="com.asiainfo.bass.apps.jsp.sql.ChargeForecast"%>
 <%!static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger("JSPOMAction");%>
 <%
@@ -37,30 +38,26 @@ try{
 	else if ("chargeForecast".equalsIgnoreCase(method))
 	{
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
-		Calendar cal = GregorianCalendar.getInstance();
-		int lastDate = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
-		if(lastDate==cal.get(Calendar.DATE)){
-			String timeid = sdf.format(cal.getTime())+(lastDate-1);
-			List list = ChargeForecast.chargeForecastList(timeid);
-			if(list.size()==0){
-				cal.add(Calendar.MONTH, -1);
-			}
-		}else {
-			cal.add(Calendar.MONTH, -1);
-		}
-		
+        Calendar cal = GregorianCalendar.getInstance();
+        String month = ChargeForecast.chargeForecastList();
+        try {
+        		cal.setTime(sdf.parse(month));
+        } catch (ParseException e) {
+            //e.printStackTrace();
+        }
+        
+        String currentyyyyMM = sdf.format(cal.getTime());
+        session.setAttribute("currentyyyyMM",currentyyyyMM);
+        cal.set(Calendar.MONTH, cal.get(Calendar.MONTH)-10);
+        //12个月前的年月
+        String beginDate = sdf.format(cal.getTime());
 		StringBuilder sb1 = new StringBuilder();
 		StringBuilder sb2 = new StringBuilder();
 		StringBuilder sb = new StringBuilder();
-		
-		lastDate = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
-		String currentyyyyMM=sdf.format(cal.getTime());
 		String yearStr = String.valueOf(cal.get(Calendar.YEAR));
 		String preyyyyMM = "";
 		for (int i = 0; i < 12; i++) {
 			cal.add(Calendar.MONTH, -1);
-			lastDate = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
-			
 			String yyyyMM = sdf.format(cal.getTime());
 			if(i==0)preyyyyMM=yyyyMM;
 			if(sb1.length()>0)sb1.append(",");
@@ -74,8 +71,8 @@ try{
 			sb2.append("'").append(yyyyMM).append("'");
 		}
 		
-		StringBuilder sql = ChargeForecast.chargeForecastSql(sb1, sb2, sb, currentyyyyMM);
-		
+		//StringBuilder sql = ChargeForecast.chargeForecastSql(sb1, sb2, sb, month);
+		StringBuilder sql = ChargeForecast.createNewSQL(beginDate,currentyyyyMM);
 		String type = request.getParameter("type");
 		if("grid".equalsIgnoreCase(type)){
 			String sqlStr= ChargeForecast.chargeForecastSql(sql, currentyyyyMM);
@@ -86,7 +83,9 @@ try{
 			request.getRequestDispatcher("../../resources/old/translateData.jsp").forward(request,response);
 		}else if("city".equalsIgnoreCase(type)){
 			StringBuilder sql2 = new StringBuilder();
-			sql2 = ChargeForecast.chargeForecastCity(sb1, sb2, currentyyyyMM, preyyyyMM);
+			String lastMonth = "201707";
+			String currentMonth = "201708";
+			sql2 = ChargeForecast.chargeForecastCityNew(lastMonth,currentyyyyMM);
 			log.debug(sql2);
 			out.print("{\"date\": \""+currentyyyyMM.substring(0,6)+"\",\"sql\":\""+sql2.toString()+"\"}");
 		}

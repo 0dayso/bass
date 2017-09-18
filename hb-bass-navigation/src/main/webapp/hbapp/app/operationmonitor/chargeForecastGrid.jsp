@@ -45,7 +45,7 @@ else
 	cellfunc[1]=function(datas,options){
 		console.log(datas);
 		console.log(options);
-		if(datas[0].length==6){
+		if(datas[0].length==6 && options.rownum ==10){
 			return "预测收入：<font color=red>"+numberFormatDigit2(datas,options)+"</font>";
 		}
 		return numberFormatDigit2(datas,options);

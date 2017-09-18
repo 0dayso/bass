@@ -38,7 +38,7 @@ public class SQLQueryContext {
 	}
 
 	public SQLQuery getSQLQuery(String sqlQueryName, String dataSourceName) {
-		return getSQLQuery(sqlQueryName, dataSourceName, true);
+		return getSQLQuery(sqlQueryName, dataSourceName, false);
 	}
 
 	public SQLQuery getSQLQuery(String sqlQueryName, String dataSourceName, boolean isCached) {
