@@ -57,6 +57,8 @@ function resetCodeOption(){
 	var codes = new Array();
 	if(type == 'zb'){
 		codes = gbasList.zbList;
+	}else if(type == 'export'){
+		codes = gbasList.exList;
 	}
 	
 	var html = "";

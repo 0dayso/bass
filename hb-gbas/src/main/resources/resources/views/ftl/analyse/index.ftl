@@ -17,23 +17,31 @@
 var cycle = '${cycle}';
 $(function(){
 	getTemplAnalyseData();
+	if(cycle == 'monthly'){
+		initMonthPicker($("#startDate"));
+		initMonthPicker($("#endDate"));
+	}
 });
 
 function getTemplAnalyseData(){
+	var startTime = $("#startDate").datebox("getValue");
+	var endTime = $("#endDate").datebox("getValue");
 	loadMask();
 	$.ajax({
 		url: "${mvcPath}/analyse/getTemplAnalyse",
 		type:"post",
 		dataType: 'json',
 		data: {
-			cycle : cycle
+			cycle : cycle,
+			startTime: startTime,
+			endTime: endTime
 		},
 		success: function(data, textStatus) {
 			if(data.length == 0){
 				unMask();
 				return false;
 			}
-			
+			$("#templAna").html("");
 			var charHtml = "";
 			for(var i=0; i<data.length; i++){
 				charHtml = "<div class='item-box'><div class='item-title'>" + data[i].name + "</div>"
@@ -87,6 +95,13 @@ function initChar(data, id) {
 </script>
 </head>
 <body class='wrap'>
+	<div style="margin-bottom: 8px;">
+		<label>时间周期：</label>
+		<input id="startDate" name="startDate" editable="false" class="easyui-datebox form-inp" style="width:150px;height:30px;">
+		<label>~</label>
+		<input id="endDate" name="endDate" editable="false" class="easyui-datebox form-inp" style="width:150px;height:30px;">
+		<input class="qry-btn mar-l5" onclick="getTemplAnalyseData()" type="button" value='查询'>
+	</div>
 	<div class="ana-box">
 		<div class="ana-title">指标展示</div>
 		<div id="templAna" class="ana-content"></div>

@@ -53,7 +53,9 @@ public class AnalyseController {
 	@ResponseBody
 	public Object getTemplAnalyse(HttpServletRequest req, HttpSession session) throws Exception{
 		String cycle = req.getParameter("cycle");
-		mLog.info("---getTemplAnalyse---,cycle=" + cycle);
+		String startTime = req.getParameter("startTime");
+		String endTime = req.getParameter("endTime");
+		mLog.info("---getTemplAnalyse---,cycle=" + cycle + ", startTime:" + startTime + ",endTime:" + endTime);
 		String userId = (String) session.getAttribute("loginname");
 		List<Map<String, Object>> templateList = mAnalyseDao.getTemplateExt(userId, cycle);
 		String sdfPattern;
@@ -62,7 +64,7 @@ public class AnalyseController {
 		}else{
 			sdfPattern = "yyyyMM"; 
 		}
-		JSONArray dateList = initDate("", "", sdfPattern);
+		JSONArray dateList = initDate(startTime, endTime, sdfPattern);
 		mLog.info("dateList.size=" + dateList.size());
 		
 		List<Map<String, Object>> resList = new ArrayList<Map<String, Object>>();
@@ -105,8 +107,6 @@ public class AnalyseController {
 		mLog.info("---getGbasData---cycle:" + cycle + ";startTime:" + startTime
 				+ ";endTime:" + endTime + ";gbasCodes:" + gbasCodes + ";type:" + type);
 		
-		startTime = startTime.replace("-", "");
-		endTime = endTime.replace("-", "");
 		String sdfPattern;
 		if("daily".equals(cycle)){
 			sdfPattern = "yyyyMMdd";    
@@ -242,6 +242,13 @@ public class AnalyseController {
 		SimpleDateFormat sdf = new SimpleDateFormat(sdfPattern);
 		Date startDate = null;
 		Date endDate = null;
+		if(startTime != null){
+			startTime = startTime.replace("-", "");
+		}
+		if(endTime != null){
+			endTime = endTime.replace("-", "");
+		}
+		
 		if(StringUtils.isEmpty(startTime)){
 			if(StringUtils.isEmpty(endTime)){
 				endTime = DateUtil.getCurrentDate(sdfPattern);

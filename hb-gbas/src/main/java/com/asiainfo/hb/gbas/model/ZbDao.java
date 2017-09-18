@@ -24,7 +24,6 @@ public class ZbDao extends CommonDao{
 		
 		this.dwJdbcTemplate.update(sql, new Object[]{zbDef.getZbCode(), zbDef.getZbName(), zbDef.getStatus(), zbDef.getCreater(), zbDef.getCreaterName(),
 				zbDef.getDeveloper(), zbDef.getDeveloperName()});
-		//insertRelation(zbDef.getZbCode(), zbDef.getGbasDepend());
 		return true;
 	}
 	
@@ -47,7 +46,7 @@ public class ZbDao extends CommonDao{
 				",offline_date='" + zbDef.getOfflineDate() + "',remark=?,developer=?,manager=?,developer_name=?, manager_name=?," +
 				" priority=?,expect_end_day=? ,expect_end_time=? where zb_code=?";
 		if("".equals(zbDef.getPriority())){
-			zbDef.setPriority(null);
+			zbDef.setPriority("99");
 		}
 		if("".equals(zbDef.getExpectEndDay())){
 			zbDef.setExpectEndDay(null);
@@ -80,13 +79,6 @@ public class ZbDao extends CommonDao{
 		
 	}
 	
-	public void deleteZb(String zbCode){
-		mLog.debug("-----deleteZb-----zbCode:" + zbCode);
-		String sql = "delete from gbas.zb_def where zb_code=?";
-		this.dwJdbcTemplate.update(sql, new Object[]{zbCode});
-	}
-	
-
 	public Map<String, Object> getZbList(ZbDef zbDef, HttpServletRequest req){
 		mLog.debug("-----getZbList-----");
 		String pageSql = "select * from gbas.zb_def where 1=1 ";
@@ -113,36 +105,6 @@ public class ZbDao extends CommonDao{
 			return false;
 		}
 		return true;
-	}
-	
-	public Map<String, Object> getUserList(String name, String id, String cityId, HttpServletRequest req){
-		mLog.debug("------>getUserList");
-		String sql = "select userid, username, AREA_name areaname from st.fpf_user_user a " +
-				" left join st.FPF_BT_AREA b on a.cityid=b.AREA_ID where 1=1 ";
-		String countSql = "select count(1) from st.fpf_user_user where 1=1 ";
-		String condition = "";
-		if(isNotNull(name)){
-			condition += " and username like '%" + name + "%'";
-		}
-		if(isNotNull(id)){
-			condition += " and userid like '%" + id + "%'";
-		}
-		if(isNotNull(cityId)){
-			condition += " and cityid=" + cityId;
-		}
-		
-		int[] pageParam = this.pageParam(req);
-		
-		return queryPage(jdbcTemplate, null, sql+condition , countSql + condition, pageParam[0], pageParam[1], "userId");
-	}
-	
-	public int checkIsAdmin(String userId){
-		String sql = "select * from gbas.manager where user_id =?";
-		List<Map<String, Object>> list = this.dwJdbcTemplate.queryForList(sql, new Object[]{userId});
-		if(list != null && list.size() != 0){
-			return 1;
-		}
-		return 0;
 	}
 	
 }

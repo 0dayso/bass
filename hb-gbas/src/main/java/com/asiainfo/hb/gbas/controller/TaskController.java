@@ -1,6 +1,7 @@
 package com.asiainfo.hb.gbas.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -55,5 +56,21 @@ public class TaskController {
 		model.addAttribute("nodeData", JsonHelper.getInstance().write(mTaskDao.getNodeData(gbasCode)));
 		return "ftl/task/execCondition";
 	}
+	
+	@RequestMapping("/updateStatus")
+	@ResponseBody
+	public void updateStatus(HttpServletRequest req){
+		String id = req.getParameter("id");
+		String status = req.getParameter("status");
+		mLog.info("------>updateStatus; id=" + id + ", status=" + status);
+		mTaskDao.updateStatus(id, status);
+	}
 
+	@RequestMapping("/getLog")
+	@ResponseBody
+	public List<Map<String, Object>> getLog(HttpServletRequest req){
+		String id = req.getParameter("id");
+		mLog.debug("------>getLog; id=" + id);
+		return mTaskDao.queryLog(id);
+	}
 }

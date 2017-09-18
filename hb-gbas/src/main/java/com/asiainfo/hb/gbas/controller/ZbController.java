@@ -96,13 +96,6 @@ public class ZbController {
 		String status = req.getParameter("status");
 		mZbDao.updateStatus(zbCode, status);
 	}
-
-	@RequestMapping("/deleteZbDef")
-	@ResponseBody
-	public void deleteZbDef(HttpServletRequest req){
-		String zbCode = req.getParameter("zbCode");
-		mZbDao.deleteZb(zbCode);
-	}
 	
 	@RequestMapping("/checkZbCode")
 	@ResponseBody

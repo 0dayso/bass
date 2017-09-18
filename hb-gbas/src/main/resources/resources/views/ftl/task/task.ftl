@@ -9,6 +9,7 @@
 <script src="${mvcPath}/resources/js/jquery-1.8.3.min.js"></script>
 <script src="${mvcPath}/resources/js/jquery-easyui-1.5.1/jquery.easyui.min.js"></script>
 <script src="${mvcPath}/resources/js/jquery-easyui-1.5.1/locale/easyui-lang-zh_CN.js"></script>
+<script src="${mvcPath}/resources/js/common.js"></script>
 <script>
 
 function viewExecCondition(){
@@ -30,6 +31,50 @@ function viewExecCondition(){
 
 function viewDependCondition(){
 	alert(111);
+}
+
+function viewLog(){
+	var rows = $('#runTable').datagrid('getSelections');
+	if(rows.length != 1){
+		$.messager.alert('提示','请选择一条任务信息','info');
+		return;
+	}
+	
+	var options = $('#logTable').datagrid('options');
+    options.url = '${mvcPath}/task/getLog';
+    options.queryParams = {
+		id: rows[0].id
+	};
+    $('#logTable').datagrid(options);
+    $("#logContainer").window('open');
+}
+
+function updateStatus(status, content){
+	var rows = $('#runTable').datagrid('getSelections');
+	if(rows.length != 1){
+		$.messager.alert('提示','请选择一条任务信息','info');
+		return;
+	}
+	
+	$.messager.confirm('提示', '您确定要' + content + '吗?', function(r){
+		if (r){
+			$.ajax({
+				type: "POST"
+				,url: "${mvcPath}/task/updateStatus"
+				,data: {
+					id: rows[0].id,
+					status: status
+				}
+				,dataType : "json"
+				,success: function(data){
+					var wind = $.messager.alert('提示', content + '申请提交成功','info');
+					wind.window({onBeforeClose:function(){
+						queryTask();
+					}});
+				}
+			});
+		}
+	});
 }
 
 function formatCycle(value){
@@ -104,6 +149,7 @@ function queryTask(){
 		<thead>
 			<tr>
 				<!--<th field="itemId" checkbox="true"></th>-->
+				<th data-options="field:'id',width:50,hidden: true,">类型</th>
 				<th data-options="field:'type',width:50,formatter:formatType">类型</th>
 				<th data-options="field:'gbas_code',width:60">程序名称</th>
 				<th data-options="field:'cycle',width:40,formatter:formatCycle">周期</th>
@@ -135,7 +181,12 @@ function queryTask(){
 			<select id="qryStatus" class="easyui-combobox" data-options="editable:false,panelHeight:'auto'" style="height: 27px; width: 100px;">
 				<option value="">---请选择---</option>
 				<option value="0">等待</option>
-				<option value="1">开始执行</option>
+				<option value="1">强制开始执行</option>
+				<option value="2">数据依赖已满足</option>
+				<option value="3">开始执行指标计算</option>
+				<option value="4">指标计算完成</option>
+				<option value="5">强规则稽核失败</option>
+				<option value="6">完成</option>
 			</select>
 			<span>程序名称</span>
 			<input id="qryName" class="easyui-textbox" style="height: 27px; width: 160px;">
@@ -145,13 +196,26 @@ function queryTask(){
 			<a href="#" class="easyui-linkbutton" iconCls="icon-branch" onclick="viewExecCondition()">查看执行条件</a>
 			<a href="#" class="easyui-linkbutton" iconCls="icon-list" onclick="viewDependCondition()">查看依赖条件</a>
 			<a href="#" class="easyui-linkbutton" iconCls="icon-tip" onclick="viewLog()">查看日志</a>
-			<a href="#" class="easyui-linkbutton" iconCls="icon-do" onclick="run()">强制执行</a>
-			<a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="stop()">强制停止</a>
+			<a href="#" class="easyui-linkbutton" iconCls="icon-do" onclick="updateStatus('1', '强制执行')">强制执行</a>
+			<a href="#" class="easyui-linkbutton" iconCls="icon-redo" onclick="updateStatus('0', '重新执行')">重新执行</a>
 		</div>
 	</div>
 	
 	<div id="execCond">
 		<div id="dataSvg"></div>
+	</div>
+	
+	<div id="logContainer" title="日志查看" class="easyui-window" 
+		data-options="modal:true, closed:true,width: 700, height:450">
+		<table id="logTable" class="easyui-datagrid" style="height:auto;"
+		    data-options="fit:true,fitColumns:true,pagination : false,rownumbers:true,nowrap:false,">
+		    <thead>
+				<tr>
+					<th data-options="field:'err_time',width:30">报错时间</th>
+					<th data-options="field:'err_msg',width:100">报错信息</th>
+				</tr>
+		    </thead>
+		</table>
 	</div>
 </body>
 </html>

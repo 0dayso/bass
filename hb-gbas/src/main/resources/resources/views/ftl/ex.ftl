@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>指标管理</title>
+<title>接口管理</title>
 <link rel="stylesheet" type="text/css" href="${mvcPath}/resources/js/jquery-easyui-1.5.1/themes/bootstrap/easyui.css"/>
 <link rel="stylesheet" type="text/css" href="${mvcPath}/resources/js/jquery-easyui-1.5.1/themes/icon.css">
 <link rel="stylesheet" type="text/css" href="${mvcPath}/resources/css/gbas.css">
@@ -11,26 +11,26 @@
 <script src="${mvcPath}/resources/js/jquery-easyui-1.5.1/locale/easyui-lang-zh_CN.js"></script>
 <script>
 $(function(){
-	$("input",$("#addZbCode").next("span")).blur(function(){
-	    checkZbCode();  
+	$("input",$("#addExCode").next("span")).blur(function(){
+	    checkExCode();  
 	});
 });
 
-function checkZbCode(){
-	var zbCode = $('#addZbCode').textbox('getValue');
+function checkExCode(){
+	var exCode = $('#addExCode').textbox('getValue');
 	$.ajax({
 		type: "POST"
-		,url: "${mvcPath}/zb/checkZbCode"
+		,url: "${mvcPath}/ex/checkExCode"
 		,data: {
-			zbCode: zbCode
+			exCode: exCode
 		}
 		,async:false
 		,dataType : "json"
 		,success: function(data){
 			if(!data){
-				var wind = $.messager.alert('提示','此指标编码已存在，请重新填入','info');
+				var wind = $.messager.alert('提示','此接口编码已存在，请重新填入','info');
 				wind.window({onBeforeClose:function(){
-					$('#addZbCode').textbox('setValue','');
+					$('#addExCode').textbox('setValue','');
 				}});
 			}
 		}
@@ -38,14 +38,14 @@ function checkZbCode(){
 }
 
 function openAddDialog(){
-	$('#addZbDialog').panel({title: "新增指标"});
-	$('#addZbCode').textbox('setValue','');
-	$('#addZbName').textbox('setValue','');
+	$('#addExDialog').panel({title: "新增接口"});
+	$('#addExCode').textbox('setValue','');
+	$('#addExName').textbox('setValue','');
 	$('#addDeveloperName').textbox('setValue','');
 	$('#addDeveloper').val('');
-	$('#addZbCode').textbox('textbox').attr('disabled',false);
+	$('#addExCode').textbox('textbox').attr('disabled',false);
 	$("#optType").val("add");
-	$('#addZbDialog').dialog('open');
+	$('#addExDialog').dialog('open');
 }
 
 function openUpdateDevDialog(){
@@ -53,26 +53,26 @@ function openUpdateDevDialog(){
 	if(row == null){
 		return;
 	}
-	$('#addZbCode').textbox('setValue',row.zb_code);
-	$('#addZbName').textbox('setValue',row.zb_name);
+	$('#addExCode').textbox('setValue',row.ex_code);
+	$('#addExName').textbox('setValue',row.ex_name);
 	$('#addDeveloperName').textbox('setValue',row.developer_name);
 	$('#addDeveloper').val(row.developer);
-	$('#addZbCode').textbox('textbox').attr('disabled',true);
+	$('#addExCode').textbox('textbox').attr('disabled',true);
 	
-	$('#addZbDialog').panel({title: "修改开发人"});
-	$('#addZbDialog').dialog('open');
+	$('#addExDialog').panel({title: "修改开发人"});
+	$('#addExDialog').dialog('open');
 	$("#optType").val("updateDev");
 }
 
-function saveZb(){
-	var zbCode = $('#addZbCode').textbox('getValue').trim();
-	if(zbCode.length == 0){
-		$.messager.alert('提示','指标编码不能为空','info');
+function saveEx(){
+	var exCode = $('#addExCode').textbox('getValue').trim();
+	if(exCode.length == 0){
+		$.messager.alert('提示','接口编码不能为空','info');
 		return;
 	}
-	var zbName = $('#addZbName').textbox('getValue').trim();
-	if(zbName.length == 0){
-		$.messager.alert('提示','指标名称不能为空','info');
+	var exName = $('#addExName').textbox('getValue').trim();
+	if(exName.length == 0){
+		$.messager.alert('提示','接口名称不能为空','info');
 		return;
 	}
 	var developerName = $('#addDeveloperName').textbox('getValue');
@@ -81,10 +81,10 @@ function saveZb(){
 	
 	$.ajax({
 		type: "POST"
-		,url: "${mvcPath}/zb/saveZbDef"
+		,url: "${mvcPath}/ex/saveExDef"
 		,data: {
-			zbCode: zbCode,
-			zbName: zbName,
+			exCode: exCode,
+			exName: exName,
 			developerName: developerName,
 			developer: developer,
 			optType: optType
@@ -93,8 +93,8 @@ function saveZb(){
 		,success: function(data){
 			var wind = $.messager.alert('提示','提交成功','info');
 			wind.window({onBeforeClose:function(){
-				queryZb();
-				$('#addZbDialog').dialog('close');
+				queryEx();
+				$('#addExDialog').dialog('close');
 			}});
 		}
 	});
@@ -102,14 +102,12 @@ function saveZb(){
 
 function enableIdRelInput(){
 	//$('#cycle').combobox({disabled: false});
-	$('#zbCode').textbox('textbox').attr('disabled',false);
+	$('#exCode').textbox('textbox').attr('disabled',false);
 }
 
 function clearFormValue(){
-	$('#zbDefForm').form('clear');
+	$('#exDefForm').form('clear');
 	$('#cycle').combobox('setValue','daily');
-	$('#zbType').combobox('setValue','一经');
-	$('#ruleType').combobox('setValue','0');
 	$('#compOper').combobox('setValue','>');
 	$('#dependType').combobox('setValue','1');
 	$('#offlineDate').textbox('setValue','2999-12-31');
@@ -125,29 +123,29 @@ function openEditDialog(){
 	}
 	
 	if(${isAdmin} != 1 && row.developer != '${userId}'){
-		$.messager.alert('提示','您没有权限修改此指标','info');
+		$.messager.alert('提示','您没有权限修改此接口','info');
 		return;
 	}
 
 	setFormValue(row);
 	disableIdRelInput();
 	$("#optType").val("edit");
-	$('#zbDialog').panel({title: "修改指标"});
-	$('#zbDialog').dialog('open');
+	$('#exDialog').panel({title: "修改接口"});
+	$('#exDialog').dialog('open');
 }
 
 function disableIdRelInput(){
 	//$('#cycle').combobox({disabled: true});
-	$('#zbCode').textbox('textbox').attr('disabled',true);
+	$('#exCode').textbox('textbox').attr('disabled',true);
 }
 
 function setFormValue(data){
-	$('#zbCode').textbox('setValue',data.zb_code);
+	$('#exCode').textbox('setValue',data.ex_code);
 	$('#cycle').combobox('setValue',data.cycle);
 	$('#boiCode').textbox('setValue',data.boi_code);
-	$('#zbName').textbox('setValue',data.zb_name);
+	$('#exName').textbox('setValue',data.ex_name);
+	$('#exId').textbox('setValue',data.ex_id);
 	$('#remark').textbox('setValue',data.remark);
-	$('#zbType').combobox('setValue',data.zb_type);
 	
 	$('#ruleType').combobox('setValue',data.rule_type);
 	$('#compOper').combobox('setValue',data.comp_oper);
@@ -157,7 +155,7 @@ function setFormValue(data){
 	
 	$('#procDepend').textbox('setValue',data.proc_depend);
 	$('#gbasDepend').textbox('setValue',data.gbas_depend);
-	$('#zbDef').textbox('setValue',data.zb_def);
+	$('#exDef').textbox('setValue',data.ex_def);
 	$('#onlineDate').textbox('setValue',data.online_date);
 	if(data.offline_date == null || data.offline_date.length == 0){
 		$('#offlineDate').textbox('setValue','2999-12-31');
@@ -182,7 +180,7 @@ function updateStatus(status, content){
 	}
 	
 	if(${isAdmin} != 1 && row.developer != '${userId}'){
-		$.messager.alert('提示','您没有权限提交此指标','info');
+		$.messager.alert('提示','您没有权限提交此接口','info');
 		return;
 	}
 	
@@ -190,16 +188,16 @@ function updateStatus(status, content){
 		if (r){
 			$.ajax({
 				type: "POST"
-				,url: "${mvcPath}/zb/updateStatus"
+				,url: "${mvcPath}/ex/updateStatus"
 				,data: {
-					zbCode: row.zb_code,
+					exCode: row.ex_code,
 					status: status
 				}
 				,dataType : "json"
 				,success: function(data){
 					var wind = $.messager.alert('提示', content + '成功','info');
 					wind.window({onBeforeClose:function(){
-						queryZb();
+						queryEx();
 					}});
 				}
 			});
@@ -208,9 +206,9 @@ function updateStatus(status, content){
 }
 
 function checkSelect(){
-	var rows = $('#zbTable').datagrid('getSelections');
+	var rows = $('#exTable').datagrid('getSelections');
 	if(rows.length != 1){
-		$.messager.alert('提示','请选择一条指标信息','info');
+		$.messager.alert('提示','请选择一条接口信息','info');
 		return null;
 	}
 	return rows[0];
@@ -242,20 +240,18 @@ function statusReplace(value){
 	return value;
 }
 
-function queryZb(){
-	var zbType = $("#qryZbType").combobox("getValue").trim();
-	var zbCycle = $("#qryCycle").combobox("getValue").trim();
+function queryEx(){
+	var exCycle = $("#qryCycle").combobox("getValue").trim();
 	var status = $("#qryStatus").combobox("getValue").trim();
-	var zbName = $("#qryZbName").textbox("getValue").trim();
-	var zbCode = $("#qryZbCode").textbox("getValue").trim();
+	var exName = $("#qryExName").textbox("getValue").trim();
+	var exCode = $("#qryExCode").textbox("getValue").trim();
 	var developer = $("#qryDeveloper").textbox("getValue").trim();
 	
-	$("#zbTable").datagrid("load", {
-		zbType : zbType,
-		zbCycle : zbCycle,
+	$("#exTable").datagrid("load", {
+		exCycle : exCycle,
 		status : status,
-		zbName : zbName,
-		zbCode : zbCode,
+		exName : exName,
+		exCode : exCode,
 		developer: developer
 	});
 }
@@ -307,29 +303,25 @@ function userSelect(){
 </script>
 </head>
 <body>
-	<table id="zbTable" class="easyui-datagrid" title="指标信息" style="height:auto;"
+	<table id="exTable" class="easyui-datagrid" title="接口信息" style="height:auto;"
 			data-options="fit:true, fitColumns : true, striped:true, pagination : true, pageSize : 10, pageList : [10, 20, 30, 50],
 				rownumbers:true, singleSelect:true, checkOnSelect : false,
-				url:'${mvcPath}/zb/getZbList',toolbar:'#tb'">
+				url:'${mvcPath}/ex/getExList',toolbar:'#tb'">
 		<thead>
 			<tr>
 				<!--<th field="itemId" checkbox="true"></th>-->
-				<th data-options="field:'zb_type',width:60">类型</th>
 				<th data-options="field:'cycle',width:60,formatter:cycleReplace">周期</th>
+				<th data-options="field:'ex_code',width:80">编码</th>
+				<th data-options="field:'ex_name',width:120">名称</th>
+				<th data-options="field:'ex_id',width:80">接口ID</th>
 				<th data-options="field:'boi_code',width:80,hidden:'true'">一经接口号</th>
-				<th data-options="field:'zb_code',width:80">编码</th>
-				<th data-options="field:'zb_name',width:120">名称</th>
 				<th data-options="field:'remark',width:180">描述</th>
 				
-				<th data-options="field:'rule_type',width:80,hidden:'true'">规则类型</th>
-				<th data-options="field:'rule_def',width:80,hidden:'true'">规则配置</th>
-				<th data-options="field:'comp_oper',width:80,hidden:'true'">比较运算符</th>
-				<th data-options="field:'comp_val',width:80,hidden:'true'">阈值</th>
 				<th data-options="field:'depend_type',width:80,hidden:'true'">依赖类型</th>
 				
 				<th data-options="field:'proc_depend',width:80,hidden:'true'">依赖程序</th>
 				<th data-options="field:'gbas_depend',width:80,hidden:'true'">依赖的gbas指标,规则,接口</th>
-				<th data-options="field:'zb_def',width:80,hidden:'true'">指标SQL</th>
+				<th data-options="field:'ex_def',width:80,hidden:'true'">接口SQL</th>
 				<th data-options="field:'status',width:60,formatter:statusReplace">状态</th>
 				<th data-options="field:'online_date',width:100">上线日期</th>
 				<th data-options="field:'offline_date',width:100">下线日期</th>
@@ -348,12 +340,6 @@ function userSelect(){
 	
 	<div id="tb" style="padding:5px;height:auto">
 		<div style="padding: 3px;">
-			<span>类型</span>
-			<select id="qryZbType" class="easyui-combobox" data-options="editable:false,panelHeight:'auto'" style="height: 27px; width: 100px;">
-				<option value="">---请选择---</option>
-				<option value="一经">一经</option>
-				<option value="省内">省内</option>
-			</select>
 			<span>周期</span>
 			<select id="qryCycle" class="easyui-combobox" data-options="editable:false,panelHeight:'auto'" style="height: 27px; width: 100px;">
 				<option value="">---请选择---</option>
@@ -368,20 +354,20 @@ function userSelect(){
 				<option value="2">待上线</option>
 				<option value="3">下线</option>
 			</select>
-			<span>指标名称</span>
-			<input id="qryZbName" class="easyui-textbox" style="height: 27px; width: 150px;">
-			<span>指标编码</span>
-			<input id="qryZbCode" class="easyui-textbox" style="height: 27px; width: 150px;">
+			<span>接口名称</span>
+			<input id="qryExName" class="easyui-textbox" style="height: 27px; width: 150px;">
+			<span>接口编码</span>
+			<input id="qryExCode" class="easyui-textbox" style="height: 27px; width: 150px;">
 			<span>开发者</span>
 			<input id="qryDeveloper" class="easyui-textbox" style="height: 27px; width: 150px;">
-			<a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="queryZb()">查询</a>
+			<a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="queryEx()">查询</a>
 		</div>
 		<div>
 			<#if isAdmin == 1>
 				<a href="#" class="easyui-linkbutton" iconCls="icon-add" onclick="openAddDialog()">新增</a>
 				<a href="#" class="easyui-linkbutton" iconCls="icon-user" onclick="openUpdateDevDialog()">修改开发人</a>
 			</#if>
-				<a href="#" class="easyui-linkbutton" iconCls="icon-edit" onclick="openEditDialog()">修改指标</a>
+				<a href="#" class="easyui-linkbutton" iconCls="icon-edit" onclick="openEditDialog()">修改接口</a>
 				<a href="#" class="easyui-linkbutton" iconCls="icon-submit" onclick="updateStatus('2','提交申请')">提交申请</a>
 			<#if isAdmin == 1>
 				<a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="updateStatus('1','上线')">上线</a>
@@ -390,8 +376,8 @@ function userSelect(){
 		</div>
 	</div>
 	
-	<!--新增指标结束-->
-	<div id="addZbDialog" class="easyui-dialog" title="新增指标" data-options="
+	<!--新增接口结束-->
+	<div id="addExDialog" class="easyui-dialog" title="新增接口" data-options="
 			modal:true,
 			closed:true,
 			width:430,
@@ -399,22 +385,22 @@ function userSelect(){
 			buttons: [{
 					text:'提交',
 					handler:function(){
-						saveZb();
+						saveEx();
 					}
 				},{
 					text:'取消',
 					handler:function(){
-						$('#addZbDialog').dialog('close');
+						$('#addExDialog').dialog('close');
 					}
 				}]">
 			<div class="mar-8" style="height:100px;">
 				<div class="mar-b15">
-					<div class="inp-lab"><span style="color:red;">*</span>指标编码:</div>
-					<input id="addZbCode" name="addZbCode" class="easyui-textbox form-inp" missingMessage="指标编码为必填项" data-options="required:true" style="width:75%;height:32px;">
+					<div class="inp-lab"><span style="color:red;">*</span>接口编码:</div>
+					<input id="addExCode" name="addExCode" class="easyui-textbox form-inp" missingMessage="接口编码为必填项" data-options="required:true" style="width:75%;height:32px;">
 				</div>
 				<div class="mar-b15">
-					<div class="inp-lab"><span style="color:red;">*</span>指标名称:</div>
-					<input id="addZbName" name="addZbName" class="easyui-textbox form-inp" missingMessage="指标名称为必填项" data-options="required:true" style="width:75%;height:32px;">
+					<div class="inp-lab"><span style="color:red;">*</span>接口名称:</div>
+					<input id="addExName" name="addExName" class="easyui-textbox form-inp" missingMessage="接口名称为必填项" data-options="required:true" style="width:75%;height:32px;">
 				</div>
 				<div class="mar-b15">
 					<div class="inp-lab">开发人:</div>
@@ -425,9 +411,9 @@ function userSelect(){
 			</div>
 		
 	</div>
-	<!--新增指标结束-->	
-	<!--修改指标-->		
-	<div id="zbDialog" class="easyui-dialog" title="修改指标" data-options="
+	<!--新增接口结束-->	
+	<!--修改接口-->		
+	<div id="exDialog" class="easyui-dialog" title="修改接口" data-options="
 			modal:true,
 			closed:true,
 			width:430,
@@ -435,16 +421,16 @@ function userSelect(){
 			buttons: [{
 					text:'提交',
 					handler:function(){
-						$('#zbDefForm').form('submit', {
-							url: '${mvcPath}/zb/saveZbDef',
+						$('#exDefForm').form('submit', {
+							url: '${mvcPath}/ex/saveExDef',
 							onSubmit: function(param){
 								return $(this).form('enableValidation').form('validate');
 							},
 							success:function(data){
 								var wind = $.messager.alert('提示','提交成功','info');
 								wind.window({onBeforeClose:function(){
-									queryZb();
-									$('#zbDialog').dialog('close');
+									queryEx();
+									$('#exDialog').dialog('close');
 								}});
    							}
    							
@@ -453,72 +439,38 @@ function userSelect(){
 				},{
 					text:'取消',
 					handler:function(){
-						$('#zbDialog').dialog('close');
+						$('#exDialog').dialog('close');
 					}
 				}]">
-		<form id="zbDefForm">
+		<form id="exDefForm">
 			<input id="optType" name="optType" type="hidden">
 			<div class="mar-8" style="height:100px;">
 				<div class="mar-b15">
-					<div class="inp-lab"><span style="color:red;">*</span>指标编码:</div>
-					<input id="zbCode" name="zbCode" class="easyui-textbox form-inp" missingMessage="指标编码为必填项" data-options="required:true" style="width:75%;height:32px;">
+					<div class="inp-lab"><span style="color:red;">*</span>接口编码:</div>
+					<input id="exCode" name="exCode" class="easyui-textbox form-inp" missingMessage="接口编码为必填项" data-options="required:true" style="width:75%;height:32px;">
 				</div>
 				<div class="mar-b15">
-					<div class="inp-lab"><span style="color:red;">*</span>指标名称:</div>
-					<input id="zbName" name="zbName" class="easyui-textbox form-inp" missingMessage="指标名称为必填项" data-options="required:true" style="width:75%;height:32px;">
+					<div class="inp-lab"><span style="color:red;">*</span>接口名称:</div>
+					<input id="exName" name="exName" class="easyui-textbox form-inp" missingMessage="接口名称为必填项" data-options="required:true" style="width:75%;height:32px;">
 				</div>
 				<div class="mar-b15">
 					<div class="inp-lab"><span style="color:red;">*</span>一经接口号:</div>
 					<input id="boiCode" name="boiCode" class="easyui-textbox form-inp" missingMessage="一经接口号为必填项" data-options="required:true,prompt:'多个接口号用;分割'" style="width:75%;height:32px;">
 				</div>
 				<div class="mar-b15">
-					<div class="inp-lab"><span style="color:red;">*</span>指标类型:</div>
-					<select id="zbType" name="zbType" class="easyui-combobox form-inp" missingMessage="指标类型为必选项" data-options="required:true,editable:false,panelHeight:'auto'" style="width:75%;height:32px;">
-						<option value="一经">一经</option>
-						<option value="省内">省内</option>
-					</select>
+					<div class="inp-lab"><span style="color:red;">*</span>接口ID:</div>
+					<input id="exId" name="exId" class="easyui-numberbox form-inp" missingMessage="接口ID为必填项" data-options="required:true," style="width:75%;height:32px;">
 				</div>
 				<div class="mar-b15">
-					<div class="inp-lab"><span style="color:red;">*</span>指标周期:</div>
-					<select id="cycle" name="cycle" class="easyui-combobox form-inp" missingMessage="指标周期为必选项" data-options="required:true,editable:false,panelHeight:'auto'" style="width:75%;height:32px;">
+					<div class="inp-lab"><span style="color:red;">*</span>接口周期:</div>
+					<select id="cycle" name="cycle" class="easyui-combobox form-inp" missingMessage="接口周期为必选项" data-options="required:true,editable:false,panelHeight:'auto'" style="width:75%;height:32px;">
 						<option value="daily">日</option>
 						<option value="monthly">月</option>
 					</select>
 				</div>
 				<div class="mar-b15">
-					<div class="inp-lab"><span style="color:red;">*</span>指标描述:</div>
-					<input id="remark" name="remark" class="easyui-textbox form-inp" missingMessage="指标描述为必填项" data-options="required:true,multiline:true" style="width:75%;height:60px;">
-				</div>
-				<div class="mar-b15">
-					<div class="inp-lab"><span style="color:red;">*</span>指标sql:</div>
-					<input id="zbDef" name="zbDef" class="easyui-textbox form-inp" missingMessage="指标sql为必填项" data-options="required:true,multiline:true" style="width:75%;height:60px;">
-				</div>
-				<div class="mar-b15">
-					<div class="inp-lab"><span style="color:red;">*</span>规则类型:</div>
-					<select id="ruleType" name="ruleType" class="easyui-combobox form-inp" missingMessage="规则类型为必选项" data-options="required:true,editable:false,panelHeight:'auto'" style="width:75%;height:32px;">
-						<option value="0">弱规则</option>
-						<option value="1">强规则</option>
-					</select>
-				</div>
-				<div class="mar-b15">
-					<div class="inp-lab"><span style="color:red;">*</span>规则配置:</div>
-					<input id="ruleDef" name="ruleDef" class="easyui-textbox form-inp" missingMessage="规则配置为必填项" data-options="required:true,multiline:true" style="width:75%;height:60px;">
-				</div>
-				<div class="mar-b15">
-					<div class="inp-lab"><span style="color:red;">*</span>比较运算符:</div>
-					<select id="compOper" name="compOper" class="easyui-combobox form-inp" missingMessage="比较运算符为必选项项" data-options="required:true,editable:false,panelHeight:'auto'" style="width:75%;height:32px;">
-						<option value="&gt;">&gt;</option>
-						<option value="&lt;">&lt;</option>
-						<option value="&gt;=">&gt;=</option>
-						<option value="&lt;=">&lt;=</option>
-						<option value="==">==</option>
-						<option value="!=">!=</option>
-					</select>
-				</div>
-				<div class="mar-b15">
-					<div class="inp-lab"><span style="color:red;">*</span>阈值:</div>
-					<input id="compVal" name="compVal" class="easyui-numberbox form-inp"  missingMessage="阈值为必填项" 
-						data-options="required:true,precision:2,decimalSeparator:'.'" style="width:75%;height:32px;">
+					<div class="inp-lab"><span style="color:red;">*</span>接口描述:</div>
+					<input id="remark" name="remark" class="easyui-textbox form-inp" missingMessage="接口描述为必填项" data-options="required:true,multiline:true" style="width:75%;height:60px;">
 				</div>
 				<div class="mar-b15">
 					<div class="inp-lab"><span style="color:red;">*</span>依赖类型:</div>
