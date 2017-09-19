@@ -231,7 +231,20 @@ function exportCsv(){
 	}else{
 		sqlStr= pp[0].childNodes[0].value;
 	}
-	$.ajax({
+	//window.open("/hb-bass-navigation/doSql/export?sqlStr="+sqlStr);
+	var form=$("<form>");//定义一个form表单  
+    form.attr("style","display:none");  
+    form.attr("target","");  
+    form.attr("method","post");  
+    form.attr("action","/hb-bass-navigation/doSql/export?sqlStr="+sqlStr);  
+    var input1=$("<input>");  
+    input1.attr("type","hidden");  
+    input1.attr("name","exportData");  
+    input1.attr("value",(new Date()).getMilliseconds());  
+    $("body").append(form);//将表单放置在web中  
+    form.append(input1);  
+    form.submit();//表单提交   
+	/* $.ajax({
 		type : "GET",
 		url : '/hb-bass-navigation/doSql/export',
 		data : {
@@ -246,7 +259,7 @@ function exportCsv(){
 			alert("导出数据失败!")
 			
 		}
-	});
+	}); */
 	
 	
 }

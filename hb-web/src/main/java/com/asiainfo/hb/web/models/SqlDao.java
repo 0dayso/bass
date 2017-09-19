@@ -173,7 +173,7 @@ public class SqlDao extends CommonDao {
     
     public String generateFilename(){  
         String filename = "";  
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");  
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");  
         filename += "data_";  
         filename += sdf.format(new Date());  
         filename += ".csv";  

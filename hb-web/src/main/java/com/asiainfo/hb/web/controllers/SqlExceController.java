@@ -2,7 +2,11 @@
 package com.asiainfo.hb.web.controllers;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
@@ -115,8 +119,8 @@ public class SqlExceController {
 	}
 
 	@RequestMapping(value = "/export")
-	@ResponseBody
-	public String exportToCsv(HttpServletRequest request, HttpServletResponse response, Model model, HttpSession session) {
+	//@ResponseBody
+	public void exportToCsv(HttpServletRequest request, HttpServletResponse response, Model model, HttpSession session) {
 		String sqlStr=request.getParameter("sqlStr");
 		String fileName = sqlDao.generateFilename();
 
@@ -130,13 +134,38 @@ public class SqlExceController {
 		LOG.debug("filePath:" + filePath);
 	
 		LOG.debug("-------ExportFile---------");
+		
 		try {
 			sqlDao.genCsvFile(sqlStr, filePath);
+			file = new File(filePath);
+			response.reset();
+			response.setContentType("octet-stream; charset=UTF-8");
+			response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(file.getName(), "UTF-8"));
+			response.setContentLength((int) file.length());
+			byte[] buffer = new byte[10240];
+			OutputStream out = response.getOutputStream();
+			InputStream in = null;
+			try {
+				in = new FileInputStream(file);
+				int r = 0;
+				while ((r = in.read(buffer, 0, buffer.length)) != -1) {
+					out.write(buffer, 0, r);
+				}
+
+				out.flush();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+				if (in != null)
+					in.close();
+				if (out != null)
+					out.close();
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		return "SUCCESS" ;
+		//return "SUCCESS" ;
 	}
 	
 }
