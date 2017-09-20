@@ -181,6 +181,7 @@ public class RoleAdaptController {
 		return "ftl/kpi";
 	}
 
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/roleAdaptParam")
 	@ResponseBody
 	public Map<String, Object> getRoleAdaptParam(HttpServletRequest request, HttpServletResponse response, @ModelAttribute(SessionKeyConstants.USER) User user, Model model) {
@@ -188,7 +189,8 @@ public class RoleAdaptController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("cityList", adapService.getCity(""));
 		map.put("relaReports", adapService.getRelaReports(menuId, "", user.getId()));
-		map.put("relaApps", adapService.getRelaApps(menuId, "", user.getId()));
+		List relaAppList = adapService.getRelaApps(menuId, "", user.getId());
+		map.put("relaApps", relaAppList);
 		map.put("relaColls", adapService.getRelaCollect(menuId, "", user.getId()));
 		return map;
 	}
