@@ -390,7 +390,7 @@ function userSelect(){
 		</div>
 	</div>
 	
-	<!--新增指标结束-->
+	<!--新增指标开始-->
 	<div id="addZbDialog" class="easyui-dialog" title="新增指标" data-options="
 			modal:true,
 			closed:true,

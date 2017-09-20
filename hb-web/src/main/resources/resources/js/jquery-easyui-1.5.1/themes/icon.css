@@ -64,6 +64,9 @@
 .icon-user{
 	background:url('icons/user.png') no-repeat center center;
 }
+.icon-setting{
+	background:url('icons/setting.png') no-repeat center center;
+}
 .icon-submit{
 	background:url('icons/submit.png') no-repeat center center;
 }

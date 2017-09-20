@@ -42,6 +42,7 @@ function addTab(title, url){
 					<ul style="padding: 0 10px;">
 						<li><a href='#' onclick="addTab('指标配置', '${mvcPath}/zb/index')"><span>指标配置</span></a></li>
 						<li><a href='#' onclick="addTab('接口配置', '${mvcPath}/ex/index')"><span>接口配置</span></a></li>
+						<li><a href='#' onclick="addTab('接口导出配置', '${mvcPath}/exportConfig/index')"><span>接口导出配置</span></a></li>
 						<li><a href='#' onclick="addTab('接口时限告警', '')"><span>接口时限告警</span></a></li>
 						<li><a href='#' onclick="addTab('短信告警人配置', '${mvcPath}/smsConfig/user/index')"><span>短信告警人配置</span></a></li>
 						<li><a href='#' onclick="addTab('短信告警群组配置', '${mvcPath}/smsConfig/group/index')"><span>短信告警群组配置</span></a></li>

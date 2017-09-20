@@ -3,6 +3,7 @@ package com.asiainfo.hb.gbas.model;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -54,19 +55,17 @@ public class TaskDao extends CommonDao{
 	public Map<String, Object> getNodeData(String gbasCode){
 		mLog.debug("------>getNodeData");
 		Map<String, Object> map = new HashMap<String, Object>();
-		
 		String nodeSql = "WITH PPL (proc, proc_dep) AS  ( " +
 				"SELECT proc, proc_dep FROM gbas.proc_deps WHERE proc='" + gbasCode + "' " +
 				"UNION ALL " +
 				"SELECT child.proc,child.proc_dep FROM PPL parent,gbas.proc_deps child WHERE child.proc =parent.proc_dep) " +
 				"SELECT distinct(proc) proc FROM (select proc from ppl union all select proc_dep proc from ppl)";
-		
+		mLog.debug("nodeSql" + nodeSql);
 		String edgeSql = "WITH PPL (proc, proc_dep) AS  ( " +
 				"SELECT proc, proc_dep FROM gbas.proc_deps WHERE proc='" + gbasCode + "' " +
 				"UNION ALL " +
 				"SELECT child.proc,child.proc_dep FROM PPL parent,gbas.proc_deps child WHERE child.proc =parent.proc_dep) " +
 				"SELECT proc, proc_dep FROM PPL";
-		mLog.debug("nodeSql:" + nodeSql);
 		mLog.debug("edgeSql:" + edgeSql);
 		List<Map<String, Object>> nodeList = this.dwJdbcTemplate.queryForList(nodeSql);
 		List<Map<String, Object>> edgeList = this.dwJdbcTemplate.queryForList(edgeSql);
@@ -74,6 +73,18 @@ public class TaskDao extends CommonDao{
 		map.put("nodes", nodeList);
 		map.put("edges", edgeList);
 		return map;
+	}
+	
+	public List<Map<String, Object>> getDepsProcStatus(String gbasCode, String etlCycle){
+		String statusSql = " WITH PPL (proc, proc_dep) AS  ( " +
+				" SELECT proc, proc_dep FROM gbas.proc_deps WHERE proc=? " +
+				 "UNION ALL " +
+				" SELECT child.proc,child.proc_dep FROM PPL parent,gbas.proc_deps child WHERE child.proc =parent.proc_dep) " +
+				" select a.proc proc, b.etl_state status from " +
+				" (SELECT distinct(proc) proc FROM (select proc from ppl union all select proc_dep proc from ppl)) a " +
+				" left join (select * from nwh.DP_ETL_COM where etl_state=3 and etl_cycle_id=?) b on a.proc=b.etl_progname" +
+				" where proc != ?";
+		return this.dwJdbcTemplate.queryForList(statusSql, new Object[]{gbasCode, etlCycle, gbasCode});
 	}
 	
 	public void updateStatus(String id, String status){

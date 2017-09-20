@@ -164,3 +164,14 @@ a {
 	line-height: 28px;
 	text-decoration: underline;
 }
+
+.detail-box{
+	border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 3px;
+    margin: 5px;
+    line-height: 22px;
+    height: 88px;
+    overflow: auto;
+}
+

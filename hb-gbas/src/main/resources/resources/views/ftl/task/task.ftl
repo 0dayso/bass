@@ -30,7 +30,21 @@ function viewExecCondition(){
 }
 
 function viewDependCondition(){
-	alert(111);
+	var rows = $('#runTable').datagrid('getSelections');
+	if(rows.length != 1){
+		$.messager.alert('提示','请选择一条任务信息','info');
+		return;
+	}
+	
+	var options = $('#statusTable').datagrid('options');
+    options.url = '${mvcPath}/task/getDepsProcStatus';
+    options.queryParams = {
+		etlCycle: rows[0].etl_cycle_id,
+		gbasCode: rows[0].gbas_code
+		
+	};
+    $('#statusTable').datagrid(options);
+    $("#statusContainer").window('open');
 }
 
 function viewLog(){
@@ -125,6 +139,13 @@ function formatType(value){
 	return value;
 }
 
+function formatStatusIcon(value){
+	if(value == 3){
+		return "<span><img src='${mvcPath}/resources/images/ok.png'></img></span>";
+	}
+	return "<span><img src='${mvcPath}/resources/images/cancel.png'></img></span>";
+}
+
 function queryTask(){
 	var type = $("#qryType").combobox("getValue").trim();
 	var cycle = $("#qryCycle").combobox("getValue").trim();
@@ -205,10 +226,11 @@ function queryTask(){
 		<div id="dataSvg"></div>
 	</div>
 	
+	<!--查看日志开始-->
 	<div id="logContainer" title="日志查看" class="easyui-window" 
 		data-options="modal:true, closed:true,width: 700, height:450">
 		<table id="logTable" class="easyui-datagrid" style="height:auto;"
-		    data-options="fit:true,fitColumns:true,pagination : false,rownumbers:true,nowrap:false,">
+		    data-options="fit:true,fitColumns:true,pagination : false,singleSelect:true,rownumbers:true,nowrap:false,">
 		    <thead>
 				<tr>
 					<th data-options="field:'err_time',width:30">报错时间</th>
@@ -217,5 +239,22 @@ function queryTask(){
 		    </thead>
 		</table>
 	</div>
+	<!--查看日志结束-->
+	
+	<!--查看依赖条件开始-->
+	<div id="statusContainer" title="依赖条件" class="easyui-window" 
+		data-options="modal:true, closed:true,width: 500, height:450">
+		<table id="statusTable" class="easyui-datagrid" style="height:auto;"
+		    data-options="fit:true,fitColumns:true,pagination : false,singleSelect:true,rownumbers:true,">
+		    <thead>
+				<tr>
+					<th data-options="field:'proc',width:40">名称</th>
+					<th data-options="field:'status',width:20, formatter:formatStatusIcon,align:'center'">检测通过</th>
+				</tr>
+		    </thead>
+		</table>
+	</div>
+	<!--查看依赖条件结束-->
+	
 </body>
 </html>

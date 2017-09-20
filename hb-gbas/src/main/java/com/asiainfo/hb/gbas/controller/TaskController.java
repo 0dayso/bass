@@ -73,4 +73,12 @@ public class TaskController {
 		mLog.debug("------>getLog; id=" + id);
 		return mTaskDao.queryLog(id);
 	}
+	
+	@RequestMapping("/getDepsProcStatus")
+	@ResponseBody
+	public List<Map<String, Object>> getDepsProcStatus(HttpServletRequest req){
+		String etlCycle = req.getParameter("etlCycle");
+		String gbasCode = req.getParameter("gbasCode");
+		return mTaskDao.getDepsProcStatus(gbasCode, etlCycle);
+	}
 }
