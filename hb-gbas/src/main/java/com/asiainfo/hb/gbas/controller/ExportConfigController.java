@@ -41,7 +41,9 @@ public class ExportConfigController {
 	@RequestMapping("/getConfigList")
 	@ResponseBody
 	public Map<String, Object> getConfigList(HttpServletRequest req){
-		return mExportDao.getConfigList(req);
+		String remark = req.getParameter("remark");
+		String sql = req.getParameter("sql");
+		return mExportDao.getConfigList(req, remark, sql);
 	}
 	
 	@RequestMapping("/getTaskParam")

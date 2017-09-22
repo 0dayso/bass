@@ -16,12 +16,22 @@ public class ExportConfigDao extends CommonDao{
 	
 	private Logger mLog = LoggerFactory.getLogger(ExportConfigDao.class);
 	
-	public Map<String, Object> getConfigList(HttpServletRequest req){
+	public Map<String, Object> getConfigList(HttpServletRequest req, String remark, String sqlDesc){
 		String pageSql = "select * from boi.task_config where task_id is not null";
 		String countSql = "select count(1) from boi.task_config where task_id is not null";
 		
+		StringBuffer condition = new StringBuffer();
+		if(isNotNull(remark)){
+			condition.append(" and remark like '%").append(remark).append("%'");
+		}
+		
+		if(isNotNull(sqlDesc)){
+			condition.append(" and sql_describe like '%").append(sqlDesc).append("%'");
+		}
+		
 		int[] pageParam = this.pageParam(req);
-		return queryPage(dwJdbcTemplate, null, pageSql, countSql, pageParam[0], pageParam[1], " task_id desc");
+		return queryPage(dwJdbcTemplate, null, pageSql + condition.toString(), countSql + condition.toString(),
+				pageParam[0], pageParam[1], " task_id desc");
 	}
 	
 	public List<Map<String, Object>> getTaskParam(String taskId){

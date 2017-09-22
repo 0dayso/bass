@@ -167,11 +167,22 @@ function delConfig(){
 				,success: function(data){
 					var wind = $.messager.alert('提示','删除成功','info');
 					wind.window({onBeforeClose:function(){
-						$('#configTable').datagrid('reload');
+						//$('#configTable').datagrid('reload');
+						queryConfig();
 					}});
 				}
 			});
 		}
+	});
+}
+
+function queryConfig(){
+	var remark = $("#qryRemark").textbox("getValue").trim();
+	var sql = $("#qrySql").textbox("getValue").trim();
+	
+	$("#configTable").datagrid("load", {
+		remark : remark,
+		sql : sql
 	});
 }
 </script>
@@ -202,6 +213,13 @@ function delConfig(){
 	</table>
 	
 	<div id="tb" style="padding:5px;height:auto">
+		<div style="padding: 3px;">
+			<span>REMARK</span>
+			<input id="qryRemark" class="easyui-textbox" style="height: 27px; width: 160px;">
+			<span>SQL_DESCRIBE</span>
+			<input id="qrySql" class="easyui-textbox" style="height: 27px; width: 160px;">
+			<a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="queryConfig()">查询</a>
+		</div>
 		<div>
 			<a href="#" class="easyui-linkbutton" iconCls="icon-add" onclick="openAddDialog()">新增</a>
 			<a href="#" class="easyui-linkbutton" iconCls="icon-edit" onclick="openEditDialog()">修改</a>
@@ -255,7 +273,8 @@ function delConfig(){
 							success:function(data){
 								var wind = $.messager.alert('提示','提交成功','info');
 								wind.window({onBeforeClose:function(){
-									$('#configTable').datagrid('reload');
+									//$('#configTable').datagrid('reload');
+									queryConfig();
 									$('#configDialog').dialog('close');
 								}});
    							}
