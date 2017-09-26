@@ -212,7 +212,6 @@ $(function(){
 		valueField: 'id',
 		textField: 'text',
 		onSelect: function(record){
-			console.log(record);
 			codeType = record.id;
 			selectKpiList();
 		}
@@ -224,7 +223,6 @@ $(function(){
 		valueField: 'id',
 		textField: 'text',
 		onSelect: function(record){
-			console.log(record);
 			category = record.id;
 			selectKpiList();
 		}
@@ -342,7 +340,6 @@ function initAppValues(){
 		method: 'post',
 		success:function(data){
 			$("#appValues").empty();
-			console.log(data);
 			for (var i = 0; i < data.length; i++) {
 				$("#appValues").append("<option value="+data[i].id+" code='"+data[i].kpicode+"' title='"+data[i].text+"'>"+data[i].text+"</option>");
 			}

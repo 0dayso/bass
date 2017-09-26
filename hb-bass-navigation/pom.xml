@@ -39,12 +39,12 @@
 			<version>${hb.version}</version>
 			<type>jar</type>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.asiainfo.hb</groupId>
 			<artifactId>hb-webservice</artifactId>
 			<version>${hb.version}</version>
 			<type>jar</type>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>com.asiainfo.hb</groupId>
 			<artifactId>hb-ftp</artifactId>

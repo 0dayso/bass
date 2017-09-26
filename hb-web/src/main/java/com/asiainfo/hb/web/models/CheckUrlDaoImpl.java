@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.asiainfo.hb.core.models.JdbcTemplate;
+import com.asiainfo.hb.core.util.IdGen;
 
 /**
  * 访问错误的url
@@ -42,8 +43,8 @@ public class CheckUrlDaoImpl implements CheckUrlDao{
 	 * 新增访问错误的url记录
 	 */
 	public int[] insertErrorUrl(final List<ErrorPageInfoVO> checkUrl){
-		return jdbcTemplate.batchUpdate("insert into ST.FPF_ERROR_PAGE_INFO(menuItemId,menuItemTitle,url,errorCode,errorMessage,errorDate,sendPhoneNum,sendState) "
-				+ "values(?,?,?,?,?,?,?,?)", new BatchPreparedStatementSetter(){
+		return jdbcTemplate.batchUpdate("insert into ST.FPF_ERROR_PAGE_INFO(errorPageId,menuItemId,menuItemTitle,url,errorCode,errorMessage,errorDate,sendPhoneNum,sendState) "
+				+ "values(?,?,?,?,?,?,?,?,?)", new BatchPreparedStatementSetter(){
 
 					@Override
 					public int getBatchSize() {
@@ -53,14 +54,15 @@ public class CheckUrlDaoImpl implements CheckUrlDao{
 					@Override
 					public void setValues(PreparedStatement ps, int i) throws SQLException {
 						ErrorPageInfoVO check = checkUrl.get(i);
-						ps.setString(1, check.getMenuItemId());
-						ps.setString(2, check.getMenuItemTitle());
-						ps.setString(3, check.getUrl());
-						ps.setInt(4, check.getErrorCode());
-						ps.setString(5, check.getErrorMessage());
-						ps.setTimestamp(6, check.getErrorDate());
-						ps.setString(7, check.getSendPhoneNum());
-						ps.setString(8, check.getSendState());
+						ps.setString(1, IdGen.genId());
+						ps.setString(2, check.getMenuItemId());
+						ps.setString(3, check.getMenuItemTitle());
+						ps.setString(4, check.getUrl());
+						ps.setInt(5, check.getErrorCode());
+						ps.setString(6, check.getErrorMessage());
+						ps.setTimestamp(7, check.getErrorDate());
+						ps.setString(8, check.getSendPhoneNum());
+						ps.setString(9, check.getSendState());
 					}
 				});
 	}
