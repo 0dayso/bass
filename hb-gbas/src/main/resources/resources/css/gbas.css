@@ -165,6 +165,11 @@ a {
 	text-decoration: underline;
 }
 
+.datagrid-row-selected {
+  background: #ffe48d;
+  color: #000;
+}
+
 .detail-box{
 	border: 1px solid #ccc;
     border-radius: 4px;
@@ -175,3 +180,7 @@ a {
     overflow: auto;
 }
 
+.oper{
+	text-decoration: underline;
+	color: blue;
+}

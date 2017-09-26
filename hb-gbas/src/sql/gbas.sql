@@ -70,3 +70,61 @@ exec_end_time               datetime,   /*执行完成时间*/
 err_time                           datetime,   /*报错时间*/
 err_msg         varchar(512)  /*报错信息*/
 )
+
+--指标分析
+CREATE TABLE "GBAS"."ANALYSE_TEMPLATE"
+ ("ID"                  INTEGER,
+  "NAME"                VARCHAR(50),
+  "CYCLE"               VARCHAR(10),
+  "TYPE"                VARCHAR(10),
+  "IS_FIRST_PAGE_SHOW"  VARCHAR(2),
+  "CREATER_ID"          VARCHAR(20),
+  "CREATE_TIME"         TIMESTAMP       DEFAULT CURRENT TIMESTAMP
+ );
+ 
+ CREATE TABLE "GBAS"."ANALYSE_TEMPLATE_EXT"
+ ("ID"         INTEGER,
+  "GBAS_CODE"  VARCHAR(32)
+ );
+ 
+ --管理员配置表
+ CREATE TABLE "GBAS"."MANAGER"
+ ("USER_ID"    VARCHAR(32),
+  "USER_NAME"  VARCHAR(32)
+ )
+
+ CREATE TABLE "GBAS"."PROC_DEPS"
+ ("PROC"      VARCHAR(512),
+  "PROC_DEP"  VARCHAR(512)
+ );
+ 
+ --告警人配置表
+ CREATE TABLE "NWH"."PROC_ALARM_USER"
+ ("ID"           INTEGER,
+  "USER_NAME"    VARCHAR(20),
+  "ACC_NBR"      VARCHAR(20),
+  "USER_REMARK"  VARCHAR(60)
+ );
+ 
+--文档信息ID序列
+create sequence gbas.doc_manage_id as int start WITH 1 INCREMENT BY 1 MINVALUE 1 NO MAXVALUE NO CYCLE NO CACHE ORDER;
+
+CREATE TABLE "GBAS"."DOC_MANAGE"
+ ("ID"            INTEGER         NOT NULL,
+  "NAME"          VARCHAR(50),
+  "DESC"          VARCHAR(100),
+  "CREATOR"       VARCHAR(30),
+  "CREATOR_NAME"  VARCHAR(30)
+ );
+ 
+ CREATE TABLE "GBAS"."DOC_VERSION"
+ ("DOC_ID"       INTEGER,
+  "VERSION"      VARCHAR(20),
+  "CONTENT"      CLOB(512000)      NOT LOGGED  NOT COMPACT  INLINE LENGTH 140,
+  "CREATE_TIME"  TIMESTAMP,
+  "UPDATE_TIME"  TIMESTAMP,
+  "CREATOR"      VARCHAR(30),
+  "CREATOR_NAME" VARCHAR(30),
+  "UPDATOR"      VARCHAR(30),
+  "UPDATOR_NAME" VARCHAR(30)
+ );

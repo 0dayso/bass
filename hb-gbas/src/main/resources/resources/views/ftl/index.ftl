@@ -28,6 +28,12 @@ function addTab(title, url){
 		});
 	}
 }
+
+function tabClose(){
+    var tab=$('#myTab').tabs('getSelected');//获取当前选中tabs
+    var index = $('#myTab').tabs('getTabIndex',tab);//获取当前选中tabs的index
+    $('#myTab').tabs('close',index);//关闭对应index的tabs
+}  
 </script>
 </head>
 <body class="easyui-layout">
@@ -47,6 +53,7 @@ function addTab(title, url){
 						<li><a href='#' onclick="addTab('短信告警人配置', '${mvcPath}/smsConfig/user/index')"><span>短信告警人配置</span></a></li>
 						<li><a href='#' onclick="addTab('短信告警群组配置', '${mvcPath}/smsConfig/group/index')"><span>短信告警群组配置</span></a></li>
 						<!--<li><a href='#' onclick="addTab('违反稽核告警配置', '')"><span>违反稽核告警配置</span></a></li>-->
+						<li><a href='#' onclick="addTab('文档管理', '${mvcPath}/docManage/index')"><span>文档管理</span></a></li>
 					</ul>
 				</div>
 		
