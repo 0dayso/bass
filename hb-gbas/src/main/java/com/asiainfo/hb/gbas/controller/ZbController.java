@@ -97,6 +97,11 @@ public class ZbController {
 		mZbDao.updateStatus(zbCode, status);
 	}
 	
+	/**
+	 * 验证指标唯一性
+	 * @param req
+	 * @return
+	 */
 	@RequestMapping("/checkZbCode")
 	@ResponseBody
 	public boolean checkZbCode(HttpServletRequest req){

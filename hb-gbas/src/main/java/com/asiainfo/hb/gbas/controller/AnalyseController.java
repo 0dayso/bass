@@ -42,6 +42,12 @@ public class AnalyseController {
 	@Autowired
 	private AnalyseDao mAnalyseDao;
 	
+	/**
+	 * 指标分析大屏展示，cycle：daily/monthly
+	 * @param model
+	 * @param cycle
+	 * @return
+	 */
 	@RequestMapping("/index/{cycle}")
 	public String index(Model model, @PathVariable String cycle){
 		mLog.debug("---index---,cycle=" + cycle);

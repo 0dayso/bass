@@ -32,6 +32,12 @@ public class ExController {
 	@Autowired
 	private ExDao mExDao;
 	
+	/**
+	 * 接口管理页面入口
+	 * @param session
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("/index")
 	public String index(HttpSession session, Model model){
 		User user = (User) session.getAttribute(SessionKeyConstants.USER);
@@ -93,6 +99,11 @@ public class ExController {
 		mExDao.updateStatus(exCode, status);
 	}
 
+	/**
+	 * 查询接口code是否唯一
+	 * @param req
+	 * @return
+	 */
 	@RequestMapping("/checkExCode")
 	@ResponseBody
 	public boolean checkExCode(HttpServletRequest req){

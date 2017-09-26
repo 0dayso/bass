@@ -31,6 +31,10 @@ public class TaskController {
 	@Autowired
 	private TaskDao mTaskDao;
 	
+	/**
+	 * 任务运行概况页面入口
+	 * @return
+	 */
 	@RequestMapping("/index")
 	public String index(){
 		mLog.debug("---index---");
@@ -49,6 +53,12 @@ public class TaskController {
 		return mTaskDao.getTaskList(param, req);
 	}
 	
+	/**
+	 * 查看执行条件页面入口
+	 * @param req
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("/execCondition")
 	public String execCondition(HttpServletRequest req, Model model){
 		String gbasCode = req.getParameter("gbasCode");
@@ -57,6 +67,10 @@ public class TaskController {
 		return "ftl/task/execCondition";
 	}
 	
+	/**
+	 * 修改任务状态，强制执行和重新执行只该状态，后台监控执行
+	 * @param req
+	 */
 	@RequestMapping("/updateStatus")
 	@ResponseBody
 	public void updateStatus(HttpServletRequest req){

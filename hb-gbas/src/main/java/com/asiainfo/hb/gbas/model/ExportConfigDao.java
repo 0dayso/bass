@@ -17,6 +17,7 @@ public class ExportConfigDao extends CommonDao{
 	private Logger mLog = LoggerFactory.getLogger(ExportConfigDao.class);
 	
 	public Map<String, Object> getConfigList(HttpServletRequest req, String remark, String sqlDesc){
+		mLog.debug("--->getConfigList");
 		String pageSql = "select * from boi.task_config where task_id is not null";
 		String countSql = "select count(1) from boi.task_config where task_id is not null";
 		
@@ -35,11 +36,13 @@ public class ExportConfigDao extends CommonDao{
 	}
 	
 	public List<Map<String, Object>> getTaskParam(String taskId){
+		mLog.debug("--->getTaskParam");
 		String sql = "select * from boi.task_param where task_id=" + taskId + " order by param_order";
 		return this.dwJdbcTemplate.queryForList(sql);
 	}
 	
 	public void saveTaskParam(String taskId, JSONArray datas){
+		mLog.debug("--->saveTaskParam");
 		String delSql = "delete from boi.task_param where task_id=" + taskId;
 		this.dwJdbcTemplate.batchUpdate(delSql);
 		int nextId = this.dwJdbcTemplate.queryForObject("select value(max(tp_id), 0) from boi.task_param", Integer.class);
@@ -54,8 +57,13 @@ public class ExportConfigDao extends CommonDao{
 		this.dwJdbcTemplate.batchUpdate(insertSqls.toArray(new String[insertSqls.size()]));
 	}
 
-	
+	/**
+	 * 查询SQL执行返回列数
+	 * @param taskId
+	 * @return
+	 */
 	public Integer getTaskParamColumnCount(String taskId){
+		mLog.debug("--->getTaskParamColumnCount,taskId=" + taskId);
 		String lastDay = DateUtil.getPreDate("yyyyMMdd");
 		String lastMon = DateUtil.getLastMonth();
 		String sql = "select sql_describe from boi.task_config where task_id=" + taskId;
@@ -76,6 +84,7 @@ public class ExportConfigDao extends CommonDao{
 	}
 	
 	public void saveTaskConfig(TaskConfig config){
+		mLog.debug("--->saveTaskConfig");
 		String sql = "insert into boi.task_config (task_id, sql_describe, remark, unit_code, file_standby, " +
 				"filter_type, status, task_type, execpath, execname, ftp_flag, createsh) values" +
 				" (?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -87,6 +96,7 @@ public class ExportConfigDao extends CommonDao{
 	}
 	
 	public void updateTaskConfig(TaskConfig config){
+		mLog.debug("--->updateTaskConfig");
 		String sql = "update boi.task_config set sql_describe=?, remark=?, unit_code=?, file_standby=?, filter_type=?" +
 				", status=?, task_type=?, execpath=?, execname=?, ftp_flag=?, createsh=? where task_id=?";
 		this.dwJdbcTemplate.update(sql, new Object[]{config.getSqlDescribe(), config.getRemark(), config.getUnitCode(),
@@ -95,6 +105,7 @@ public class ExportConfigDao extends CommonDao{
 	}
 	
 	public void delTaskConfig(String taskId){
+		mLog.debug("--->delTaskConfig");
 		String sql = "delete from boi.task_config where task_id=" + taskId;
 		String paramSql = "delete from boi.task_param where task_id=" + taskId;
 		this.dwJdbcTemplate.update(sql);

@@ -76,6 +76,7 @@ public class TaskDao extends CommonDao{
 	}
 	
 	public List<Map<String, Object>> getDepsProcStatus(String gbasCode, String etlCycle){
+		mLog.debug("--->getDepsProcStatus");
 		String statusSql = " WITH PPL (proc, proc_dep) AS  ( " +
 				" SELECT proc, proc_dep FROM gbas.proc_deps WHERE proc=? " +
 				 "UNION ALL " +
@@ -88,11 +89,13 @@ public class TaskDao extends CommonDao{
 	}
 	
 	public void updateStatus(String id, String status){
+		mLog.debug("--->updateStatus");
 		String sql = "update gbas.run_dispatch set etl_status=? where id=?";
 		this.dwJdbcTemplate.update(sql, new Object[]{status, id});
 	}
 	
 	public List<Map<String, Object>> queryLog(String id){
+		mLog.debug("--->queryLog");
 		String sql = "select type, gbas_code, to_char(err_time,'YYYY-MM-DD HH24:MI:SS') err_time, " +
 				"err_msg from gbas.err_msg_log where type_id=? order by err_time desc";
 		return this.dwJdbcTemplate.queryForList(sql, id);
