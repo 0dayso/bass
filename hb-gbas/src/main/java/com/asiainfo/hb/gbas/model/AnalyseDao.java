@@ -44,6 +44,7 @@ public class AnalyseDao extends CommonDao{
 		StringBuffer sql = new StringBuffer();
 		sql.append("select * from gbas.").append(tableName);
 		sql.append(" where time_id between ").append(startTime).append(" and ").append(endTime);
+		sql.append(" and gbas_code in (").append(gbasCodes).append(")");
 		mLog.debug("sql:" + sql.toString());
 		return this.dwJdbcTemplate.queryForList(sql.toString());
 	}
@@ -77,7 +78,12 @@ public class AnalyseDao extends CommonDao{
 	 */
 	public String getGbasNameByCode(String gbasCode, String type){
 		mLog.debug("------>getGbasNameByCode, gbasCode:"+gbasCode+"; type:" + type);
-		String sql = "select max(zb_name) name from gbas.zb_def where zb_code=?";
+		String sql = "";
+		if(type.equals("zb")){
+			sql = "select max(zb_name) name from gbas.zb_def where zb_code=?";
+		}else{
+			sql = "select max(ex_name) name from gbas.ex_def where ex_code=?";
+		}
 		String name = "";
 		Map<String, Object> map = this.dwJdbcTemplate.queryForMap(sql, new Object[]{gbasCode});
 		if(!map.isEmpty()){
