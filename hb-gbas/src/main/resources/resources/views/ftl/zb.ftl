@@ -9,6 +9,7 @@
 <script src="${mvcPath}/resources/js/jquery-1.8.3.min.js"></script>
 <script src="${mvcPath}/resources/js/jquery-easyui-1.5.1/jquery.easyui.min.js"></script>
 <script src="${mvcPath}/resources/js/jquery-easyui-1.5.1/locale/easyui-lang-zh_CN.js"></script>
+<script src="${mvcPath}/resources/js/common.js"></script>
 <script>
 $(function(){
 	$("input",$("#addZbCode").next("span")).blur(function(){
@@ -91,6 +92,10 @@ function saveZb(){
 		}
 		,dataType : "json"
 		,success: function(data){
+			if(data.flag == -1){
+				$.messager.alert('错误', data.msg,'error');
+				return false;
+			}
 			var wind = $.messager.alert('提示','提交成功','info');
 			wind.window({onBeforeClose:function(){
 				queryZb();
@@ -188,6 +193,7 @@ function updateStatus(status, content){
 	
 	$.messager.confirm('提示', '您确定要' + content + '吗?', function(r){
 		if (r){
+			loadMask();
 			$.ajax({
 				type: "POST"
 				,url: "${mvcPath}/zb/updateStatus"
@@ -197,10 +203,18 @@ function updateStatus(status, content){
 				}
 				,dataType : "json"
 				,success: function(data){
+					unMask();
+					if(data.flag == '-1'){
+						$.messager.alert('错误', data.msg, 'error');
+						return false;
+					}
 					var wind = $.messager.alert('提示', content + '成功','info');
 					wind.window({onBeforeClose:function(){
 						queryZb();
 					}});
+				},
+				error:function(data, textStatus){
+					unMask();
 				}
 			});
 		}
@@ -441,6 +455,11 @@ function userSelect(){
 								return $(this).form('enableValidation').form('validate');
 							},
 							success:function(data){
+								data = JSON.parse(data);
+								if(data.flag == '-1'){
+									$.messager.alert('错误', data.msg, 'error');
+									return false;
+								}
 								var wind = $.messager.alert('提示','提交成功','info');
 								wind.window({onBeforeClose:function(){
 									queryZb();

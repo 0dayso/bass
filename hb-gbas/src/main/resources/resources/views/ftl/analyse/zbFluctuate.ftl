@@ -107,6 +107,11 @@ function queryGbasData(){
 			type: type
 		},
 		success: function(data, textStatus) {
+			if(data.flag == -1){
+				$.messager.alert('错误', data.msg,'error');
+				unMask();
+				return false;
+			}
 			showChar(data);
 			unMask();
 		},
@@ -188,6 +193,10 @@ function saveTemplate(){
 			gbasCode: gbasCodes.toString()
 		},
 		success: function(data, textStatus) {
+			if(data.flag == -1){
+				$.messager.alert('错误', data.msg,'error');
+				return false;
+			}
 			var wind = $.messager.alert('提示','保存成功','info');
 			wind.window({onBeforeClose:function(){
 				$('#addDialog').dialog('close');
@@ -238,6 +247,10 @@ function tempplateOper(operType){
 			ids: idArr.toString()
 		},
 		success: function(data, textStatus) {
+			if(data.flag == -1){
+				$.messager.alert('错误', data.msg,'error');
+				return false;
+			}
 			var wind = $.messager.alert('提示','操作成功','info');
 			wind.window({onBeforeClose:function(){
 				queryTemplate();

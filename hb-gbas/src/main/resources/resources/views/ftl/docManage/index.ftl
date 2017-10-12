@@ -52,6 +52,10 @@ function delDoc(){
 				},
 				dataType : "json",
 				success: function(data){
+					if(data.flag == -1){
+						$.messager.alert('错误', data.msg,'error');
+						return false;
+					}
 					var wind = $.messager.alert('提示','删除成功','info');
 					wind.window({onBeforeClose:function(){
 						queryDoc();
@@ -148,6 +152,11 @@ function openDocEditPage(docId, version){
 								return $(this).form('enableValidation').form('validate');
 							},
 							success:function(data){
+								data = JSON.parse(data);
+								if(data.flag == -1){
+									$.messager.alert('错误', data.msg,'error');
+									return false;
+								}
 								var wind = $.messager.alert('提示','提交成功','info');
 								wind.window({onBeforeClose:function(){
 									queryDoc();

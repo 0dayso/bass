@@ -70,6 +70,10 @@ function saveAlarmUser(){
 		},
 		dataType : "json",
 		success: function(data){
+			if(data.flag == -1){
+				$.messager.alert('错误', data.msg,'error');
+				return false;
+			}
 			var wind = $.messager.alert('提示','提交成功','info');
 			wind.window({onBeforeClose:function(){
 				$("#userDialog").dialog("close");
@@ -100,6 +104,10 @@ function delUser(){
 				},
 				dataType : "json",
 				success: function(data){
+					if(data.flag == -1){
+						$.messager.alert('错误', data.msg,'error');
+						return false;
+					}
 					var wind = $.messager.alert('提示','删除成功','info');
 					wind.window({onBeforeClose:function(){
 						queryUser();

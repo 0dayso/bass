@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asiainfo.hb.core.models.JsonHelper;
 import com.asiainfo.hb.core.util.DateUtil;
+import com.asiainfo.hb.core.util.LogUtil;
 import com.asiainfo.hb.gbas.model.AnalyseDao;
 
 /**
@@ -50,7 +51,7 @@ public class AnalyseController {
 	 */
 	@RequestMapping("/index/{cycle}")
 	public String index(Model model, @PathVariable String cycle){
-		mLog.debug("---index---,cycle=" + cycle);
+		mLog.debug("--->index, cycle:{}", cycle);
 		model.addAttribute("cycle", cycle);
 		return "ftl/analyse/index";
 	}
@@ -61,32 +62,44 @@ public class AnalyseController {
 		String cycle = req.getParameter("cycle");
 		String startTime = req.getParameter("startTime");
 		String endTime = req.getParameter("endTime");
-		mLog.info("---getTemplAnalyse---,cycle=" + cycle + ", startTime:" + startTime + ",endTime:" + endTime);
+		mLog.info("--->getTemplAnalyse, cycle:{}, startTime:{} ,endTime:{}", new Object[]{cycle, startTime, endTime});
 		String userId = (String) session.getAttribute("loginname");
-		List<Map<String, Object>> templateList = mAnalyseDao.getTemplateExt(userId, cycle);
-		String sdfPattern;
-		if("daily".equals(cycle)){
-			sdfPattern = "yyyyMMdd";    
-		}else{
-			sdfPattern = "yyyyMM"; 
-		}
-		JSONArray dateList = initDate(startTime, endTime, sdfPattern);
-		mLog.info("dateList.size=" + dateList.size());
-		
 		List<Map<String, Object>> resList = new ArrayList<Map<String, Object>>();
-		Map<String, Object> temp = null;
-		for(Map<String, Object> map: templateList){
-			temp = new HashMap<String, Object>();
-			temp.put("name", (String)map.get("name"));
-			String codes = (String) map.get("codes");
-			codes = codes.substring(0, codes.length() - 1);
-			String[] codeArr = codes.split(",");
-			if(codeArr.length == 1){
-				temp.put("anaData", getOneGbasData(dateList, codes, cycle));
+		try {
+			List<Map<String, Object>> templateList = mAnalyseDao.getTemplateExt(userId, cycle);
+			String sdfPattern;
+			if("daily".equals(cycle)){
+				sdfPattern = "yyyyMMdd";    
 			}else{
-				temp.put("anaData", getMultGbasData(dateList, codeArr, cycle, (String)map.get("type")));
+				sdfPattern = "yyyyMM"; 
 			}
-			resList.add(temp);
+			JSONArray dateList = initDate(startTime, endTime, sdfPattern);
+			mLog.info("dateList.size=" + dateList.size());
+			
+			Map<String, Object> temp = null;
+			for(Map<String, Object> map: templateList){
+				temp = new HashMap<String, Object>();
+				temp.put("name", (String)map.get("name"));
+				String codes = (String) map.get("codes");
+				codes = codes.substring(0, codes.length() - 1);
+				String[] codeArr = codes.split(",");
+				if(codeArr.length == 1){
+					temp.put("anaData", getOneGbasData(dateList, codes, cycle));
+				}else{
+					temp.put("anaData", getMultGbasData(dateList, codeArr, cycle, (String)map.get("type")));
+				}
+				resList.add(temp);
+			}
+		} catch (Exception e) {
+			mLog.error(LogUtil.getExceptionMessage(e));
+			JSONObject obj = new JSONObject();
+			if(null != e.getCause()){
+				obj.put("msg", e.getCause().getMessage());
+			}else{
+				obj.put("msg", e.toString());
+			}
+			obj.put("flag", "-1");
+			return obj;
 		}
 		return resList;
 	}
@@ -97,21 +110,20 @@ public class AnalyseController {
 	 */
 	@RequestMapping("/zbFluctuate")
 	public String zbFluctuate(Model model){
-		mLog.debug("---zbFluctuate---");
+		mLog.debug("--->zbFluctuate");
 		model.addAttribute("gbasList", JsonHelper.getInstance().write(mAnalyseDao.getGbasList()));
 		return "ftl/analyse/zbFluctuate";
 	}
 	
 	@RequestMapping("/getGbasData")
 	@ResponseBody
-	public Map<String, Object> getGbasData(HttpServletRequest req) throws Exception{
+	public Object getGbasData(HttpServletRequest req) throws Exception{
 		String cycle = req.getParameter("cycle");
 		String startTime = req.getParameter("startTime");
 		String endTime = req.getParameter("endTime");
 		String gbasCodes = req.getParameter("gbasCodes");
 		String type = req.getParameter("type");
-		mLog.info("---getGbasData---cycle:" + cycle + ";startTime:" + startTime
-				+ ";endTime:" + endTime + ";gbasCodes:" + gbasCodes + ";type:" + type);
+		mLog.info("--->getGbasData, cycle:{}; startTime:{}; endTime:{}; gbasCodes:{}; type:{}", new Object[]{cycle, startTime, endTime, gbasCodes, type});
 		
 		String sdfPattern;
 		if("daily".equals(cycle)){
@@ -119,12 +131,24 @@ public class AnalyseController {
 		}else{
 			sdfPattern = "yyyyMM"; 
 		}
-		JSONArray dateList = initDate(startTime, endTime, sdfPattern);
-		String[] codeArr = gbasCodes.split(",");
-		if(codeArr.length == 1){
-			return getOneGbasData(dateList, gbasCodes, cycle);
-		}else{
-			return getMultGbasData(dateList, codeArr, cycle, type);
+		try {
+			JSONArray dateList = initDate(startTime, endTime, sdfPattern);
+			String[] codeArr = gbasCodes.split(",");
+			if(codeArr.length == 1){
+				return getOneGbasData(dateList, gbasCodes, cycle);
+			}else{
+				return getMultGbasData(dateList, codeArr, cycle, type);
+			}
+		} catch (Exception e) {
+			mLog.error(LogUtil.getExceptionMessage(e));
+			JSONObject res = new JSONObject();
+			if(null != e.getCause()){
+				res.put("msg", e.getCause().getMessage());
+			}else{
+				res.put("msg", e.toString());
+			}
+			res.put("flag", "-1");
+			return res;
 		}
 	}
 	
@@ -137,7 +161,8 @@ public class AnalyseController {
 	 * @return
 	 */
 	private Map<String, Object> getMultGbasData(JSONArray dateList, String[] codeArr, String cycle, String type){
-		mLog.debug("---getMultGbasData---,dateList.size:" + dateList.size() + ";codeArr:" + codeArr + ";cycle:" + cycle + ";type:" + type);
+		mLog.debug("--->getMultGbasData, dateList.size:{}; codeArr:{}; cycle:{}; type:{}",
+				new Object[]{dateList.size(), codeArr, cycle, type});
 		String codes = "";
 		for(String code: codeArr){
 			codes += "'" + code + "',";
@@ -191,7 +216,7 @@ public class AnalyseController {
 	 * @return
 	 */
 	private Map<String, Object> getOneGbasData(JSONArray dateList, String gbasCode, String cycle){
-		mLog.debug("---getOneGbasData---, dateList.size:" + dateList.size() + ";gbasCode:" + gbasCode + ";cycle:" + cycle);
+		mLog.debug("--->getOneGbasData, dateList.size:{}; gbasCode:{}; cycle:{}", new Object[]{dateList.size(), gbasCode, cycle});
 		Map<String, Object> res = new HashMap<String, Object>();
 		List<Map<String, Object>> list = mAnalyseDao.getOneGbasData(cycle, dateList.get(0).toString(),
 				dateList.get(dateList.size() - 1).toString(), gbasCode);
@@ -297,40 +322,66 @@ public class AnalyseController {
 	
 	@RequestMapping("/saveTemplate")
 	@ResponseBody
-	public boolean saveTemplate(HttpServletRequest req, HttpSession session){
+	public Object saveTemplate(HttpServletRequest req, HttpSession session){
 		String userId = (String) session.getAttribute("loginname");
 		String name = req.getParameter("name");
 		String cycle = req.getParameter("cycle");
 		String type = req.getParameter("type");
 		String gbasCode = req.getParameter("gbasCode");
 		String isFirstPageShow = req.getParameter("isFirstPageShow");
-		mLog.info("---saveTemplate---,name:" + name + ";cycle:" + cycle +";type:" + type + ";gbasCode:" + gbasCode + ";isFirstPageShow:" + isFirstPageShow);
-		mAnalyseDao.saveTemplate(name, cycle, type, gbasCode, isFirstPageShow, userId);
-		return true;
+		mLog.info("--->saveTemplate, name:{}; cycle:{}; type:{}; gbasCode:{}; isFirstPageShow:{}", new Object[]{name, cycle, type, gbasCode, isFirstPageShow});
+		JSONObject res = new JSONObject();
+		try {
+			mAnalyseDao.saveTemplate(name, cycle, type, gbasCode, isFirstPageShow, userId);
+		} catch (Exception e) {
+			mLog.error(LogUtil.getExceptionMessage(e));
+			if(null != e.getCause()){
+				res.put("msg", e.getCause().getMessage());
+			}else{
+				res.put("msg", e.toString());
+			}
+			res.put("flag", "-1");
+		}
+		return res;
 	}
-	
 	
 	@RequestMapping("/getTemplate")
 	@ResponseBody
 	public List<Map<String, Object>> getTemplate(HttpServletRequest req, HttpSession session){
 		String userId = (String) session.getAttribute("loginname");
 		String name = req.getParameter("name");
-		return mAnalyseDao.getTemplate(userId, name);
+		try {
+			return mAnalyseDao.getTemplate(userId, name);
+		} catch (Exception e) {
+			mLog.error(LogUtil.getExceptionMessage(e));
+		}
+		return new ArrayList<Map<String, Object>>();
 	}
 	
 	@RequestMapping("/templageOper")
 	@ResponseBody
-	public boolean templageOper(HttpServletRequest req){
+	public Object templageOper(HttpServletRequest req){
 		String ids = req.getParameter("ids");
 		String operType = req.getParameter("operType");
-		mLog.info("---templageOper---,ids:" + ids + ";operType:" + operType);
-		if(operType.equals("setShow")){
-			mAnalyseDao.updateTemplate(ids, "1");
-		}else if(operType.equals("cancelShow")){
-			mAnalyseDao.updateTemplate(ids, "0");
-		}else if(operType.equals("del")){
-			mAnalyseDao.deleteTemplate(ids);
+		mLog.info("--->templageOper, ids:{}; operType:{}", new Object[]{ids, operType});
+		JSONObject res = new JSONObject();
+		try {
+			if(operType.equals("setShow")){
+				mAnalyseDao.updateTemplate(ids, "1");
+			}else if(operType.equals("cancelShow")){
+				mAnalyseDao.updateTemplate(ids, "0");
+			}else if(operType.equals("del")){
+				mAnalyseDao.deleteTemplate(ids);
+			}
+		} catch (Exception e) {
+			mLog.error(LogUtil.getExceptionMessage(e));
+			if(null != e.getCause()){
+				res.put("msg", e.getCause().getMessage());
+			}else{
+				res.put("msg", e.toString());
+			}
+			res.put("flag", "-1");
 		}
-		return true;
+		return res;
 	}
 }

@@ -1,10 +1,13 @@
 package com.asiainfo.hb.gbas.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import net.sf.json.JSONObject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asiainfo.hb.core.util.LogUtil;
 import com.asiainfo.hb.gbas.model.ZbDao;
 import com.asiainfo.hb.gbas.model.ZbDef;
 import com.asiainfo.hb.web.SessionKeyConstants;
@@ -53,48 +57,80 @@ public class ZbController {
 		String zbCode = req.getParameter("zbCode");
 		String developer = req.getParameter("developer");
 		
-		ZbDef zbDef = new ZbDef();
-		zbDef.setZbType(zbType);
-		zbDef.setCycle(zbCycle);
-		zbDef.setStatus(status);
-		zbDef.setZbName(zbName);
-		zbDef.setZbCode(zbCode);
-		zbDef.setDeveloperName(developer);
-		
-		mLog.debug("参数：zbType=" + zbType + ",zbCycle=" +
-					zbCycle + ",status=" + status + ",zbName=" + zbName + ",zbCode=" + zbCode);
-		
-		return mZbDao.getZbList(zbDef, req);
+		try {
+			ZbDef zbDef = new ZbDef();
+			zbDef.setZbType(zbType);
+			zbDef.setCycle(zbCycle);
+			zbDef.setStatus(status);
+			zbDef.setZbName(zbName);
+			zbDef.setZbCode(zbCode);
+			zbDef.setDeveloperName(developer);
+			
+			mLog.debug("参数：zbType:{}, zbCycle:{}, status:{}, zbName:{}, zbCode:{}", new Object[]{zbType, zbCycle, status, zbName, zbCode});
+			
+			return mZbDao.getZbList(zbDef, req);
+		} catch (Exception e) {
+			mLog.error(LogUtil.getExceptionMessage(e));
+		}
+		return new HashMap<String, Object>();
 	}
 	
 	
 	@RequestMapping(value="/saveZbDef")
 	@ResponseBody
-	public boolean saveZbDef(HttpServletResponse resp, HttpServletRequest req,ZbDef zbDef, HttpSession session){
+	public Object saveZbDef(HttpServletResponse resp, HttpServletRequest req,ZbDef zbDef, HttpSession session){
 		String optType = req.getParameter("optType");
-		if("edit".equals(optType)){
-			mZbDao.updateZb(zbDef);
-			return true;
+		mLog.debug("optType:{}", optType);
+		JSONObject res = new JSONObject();
+		try {
+			if("edit".equals(optType)){
+				mZbDao.updateZb(zbDef);
+				return res;
+			}
+			
+			if("updateDev".equals(optType)){
+				mZbDao.updateDevelop(zbDef);
+				return res;
+			}
+			
+			User user = (User) session.getAttribute(SessionKeyConstants.USER);
+			zbDef.setCreater(user.getId());
+			zbDef.setCreaterName(user.getName());
+			zbDef.setStatus("0");
+			mZbDao.saveZbDef(zbDef);
+		} catch (Exception e) {
+			mLog.error(LogUtil.getExceptionMessage(e));
+			if(null != e.getCause()){
+				res.put("msg", e.getCause().getMessage());
+			}else{
+				res.put("msg", e.toString());
+			}
+			res.put("flag", "-1");
 		}
-		
-		if("updateDev".equals(optType)){
-			mZbDao.updateDevelop(zbDef);
-			return true;
-		}
-		
-		User user = (User) session.getAttribute(SessionKeyConstants.USER);
-		zbDef.setCreater(user.getId());
-		zbDef.setCreaterName(user.getName());
-		zbDef.setStatus("0");
-		return mZbDao.saveZbDef(zbDef);
+		return res;
 	}
 	
 	@RequestMapping("/updateStatus")
 	@ResponseBody
-	public void updateStatus(HttpServletRequest req){
-		String zbCode = req.getParameter("zbCode");
-		String status = req.getParameter("status");
-		mZbDao.updateStatus(zbCode, status);
+	public Object updateStatus(HttpServletRequest req){
+		JSONObject res = new JSONObject();
+		try {
+			String zbCode = req.getParameter("zbCode");
+			String status = req.getParameter("status");
+			
+			mLog.debug("zbCode:{}, status:{}", new Object[]{zbCode, status});
+			
+			mZbDao.updateStatus(zbCode, status);
+		} catch (Exception e) {
+			mLog.error(LogUtil.getExceptionMessage(e));
+			res.put("flag", "-1");
+			if(null != e.getCause()){
+				res.put("msg", e.getCause().getMessage());
+			}else{
+				res.put("msg", e.toString());
+			}
+		}
+		return res;
 	}
 	
 	/**
@@ -115,7 +151,13 @@ public class ZbController {
 		String name = req.getParameter("userName");
 		String id = req.getParameter("userId");
 		String cityId = req.getParameter("cityId");
-		return mZbDao.getUserList(name, id, cityId, req);
+		mLog.debug("name:{}, id:{}, cityId:{}", new Object[]{name, id, cityId});
+		try {
+			return mZbDao.getUserList(name, id, cityId, req);
+		} catch (Exception e) {
+			mLog.error(LogUtil.getExceptionMessage(e));
+		}
+		return new HashMap<String, Object>();
 	}
 	
 }

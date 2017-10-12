@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import com.asiainfo.hb.core.util.DateUtil;
+import com.asiainfo.hb.core.util.LogUtil;
 
 @Repository
 public class ExportConfigDao extends CommonDao{
@@ -77,7 +78,7 @@ public class ExportConfigDao extends CommonDao{
 				int columnCount = this.dwJdbcTemplate.queryForRowSet(sqlDesc, null, null).getMetaData().getColumnCount();
 				return columnCount;
 			} catch (Exception e) {
-				mLog.error("查询字段配置列数出错，" + e.toString());
+				mLog.error("查询字段配置列数出错，" + LogUtil.getExceptionMessage(e));
 			}
 		}
 		return 0;

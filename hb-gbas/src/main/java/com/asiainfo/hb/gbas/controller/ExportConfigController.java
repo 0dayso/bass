@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asiainfo.hb.core.util.LogUtil;
 import com.asiainfo.hb.gbas.model.ExportConfigDao;
 import com.asiainfo.hb.gbas.model.TaskConfig;
 
@@ -43,18 +45,30 @@ public class ExportConfigController {
 	public Map<String, Object> getConfigList(HttpServletRequest req){
 		String remark = req.getParameter("remark");
 		String sql = req.getParameter("sql");
-		return mExportDao.getConfigList(req, remark, sql);
+		mLog.debug("remark:{}, sql:{}", new Object[]{remark, sql});
+		try {
+			return mExportDao.getConfigList(req, remark, sql);
+		} catch (Exception e) {
+			mLog.error(LogUtil.getExceptionMessage(e));
+		}
+		return new HashMap<String, Object>();
 	}
 	
 	@RequestMapping("/getTaskParam")
 	@ResponseBody
 	public List<Map<String, Object>> getTaskParam(HttpServletRequest req){
 		String taskId = req.getParameter("taskId");
-		List<Map<String, Object>> list = mExportDao.getTaskParam(taskId);
-		if(list != null && list.size() > 0){
-			return list;
+		try {
+			List<Map<String, Object>> list = mExportDao.getTaskParam(taskId);
+			if(list != null && list.size() > 0){
+				mLog.info("已配置导出字段，taskId:{}", taskId);
+				return list;
+			}
+			return this.initParam(taskId);
+		} catch (Exception e) {
+			mLog.error(LogUtil.getExceptionMessage(e));
 		}
-		return this.initParam(taskId);
+		return new ArrayList<Map<String, Object>>();
 	}
 	
 	private List<Map<String, Object>> initParam(String taskId){
@@ -74,17 +88,29 @@ public class ExportConfigController {
 
 	@RequestMapping("/saveTaskParam")
 	@ResponseBody
-	public void saveTaskParam(HttpServletRequest req){
+	public Object saveTaskParam(HttpServletRequest req){
 		String taskId = req.getParameter("taskId");
 		String datas = req.getParameter("rows");
-		mLog.info("------>saveTaskParam; taskId=" + taskId);
-		JSONArray arr = JSONArray.fromObject(datas);
-		mExportDao.saveTaskParam(taskId, arr);
+		mLog.info("------>saveTaskParam; taskId:{}", taskId);
+		JSONObject res = new JSONObject();
+		try {
+			JSONArray arr = JSONArray.fromObject(datas);
+			mExportDao.saveTaskParam(taskId, arr);
+		} catch (Exception e) {
+			mLog.error(LogUtil.getExceptionMessage(e));
+			if(null != e.getCause()){
+				res.put("msg", e.getCause().getMessage());
+			}else{
+				res.put("msg", e.toString());
+			}
+			res.put("flag", "-1");
+		}
+		return res;
 	}
 	
 	@RequestMapping("/saveTaskConfig")
 	@ResponseBody
-	public void saveTaskConfig(HttpServletRequest req, TaskConfig config){
+	public Object saveTaskConfig(HttpServletRequest req, TaskConfig config){
 		if("".equals(config.getFilterType())){
 			config.setFilterType(null);
 		}
@@ -97,19 +123,43 @@ public class ExportConfigController {
 			config.setTaskType(null);
 		}
 		
-		if(StringUtils.isEmpty(config.getTaskId())){
-			mExportDao.saveTaskConfig(config);
-			return;
+		JSONObject res = new JSONObject();
+		try {
+			if(StringUtils.isEmpty(config.getTaskId())){
+				mExportDao.saveTaskConfig(config);
+				return res;
+			}
+			
+			mExportDao.updateTaskConfig(config);
+		} catch (Exception e) {
+			mLog.error(LogUtil.getExceptionMessage(e));
+			if(null != e.getCause()){
+				res.put("msg", e.getCause().getMessage());
+			}else{
+				res.put("msg", e.toString());
+			}
+			res.put("flag", "-1");
 		}
-		
-		mExportDao.updateTaskConfig(config);
+		return res;
 	}
 	
 	@RequestMapping("/delTaskConfig")
 	@ResponseBody
-	public void delTaskConfig(HttpServletRequest req){
-		String taskId = req.getParameter("taskId");
-		mExportDao.delTaskConfig(taskId);
+	public Object delTaskConfig(HttpServletRequest req){
+		JSONObject res = new JSONObject();
+		try {
+			String taskId = req.getParameter("taskId");
+			mExportDao.delTaskConfig(taskId);
+		} catch (Exception e) {
+			mLog.error(LogUtil.getExceptionMessage(e));
+			if(null != e.getCause()){
+				res.put("msg", e.getCause().getMessage());
+			}else{
+				res.put("msg", e.toString());
+			}
+			res.put("flag", "-1");
+		}
+		return res;
 	}
 	
 }

@@ -1,10 +1,14 @@
 package com.asiainfo.hb.gbas.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import net.sf.json.JSONObject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +19,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asiainfo.hb.core.util.LogUtil;
 import com.asiainfo.hb.gbas.model.DocManageDao;
 import com.asiainfo.hb.web.SessionKeyConstants;
 import com.asiainfo.hb.web.models.User;
@@ -52,7 +57,7 @@ public class DocManageController {
 	public String markdown(Model model, HttpServletRequest req){
 		String docId = req.getParameter("docId");
 		String version = req.getParameter("version");
-		mLog.info("--->markdown,docId=" + docId + ",version=" + version);
+		mLog.info("--->markdown, docId:{}, version:{}", new Object[]{docId, version});
 		Map<String, Object> map = mDocManageDao.getMdContent(docId, version);
 		model.addAttribute("content", map.get("content"));
 		model.addAttribute("docId", docId);
@@ -70,8 +75,13 @@ public class DocManageController {
 	public Map<String, Object> getDocInfoList(HttpServletRequest req){
 		String name = req.getParameter("name");
 		String userName = req.getParameter("userName");
-		mLog.debug("--->getDocInfoList, name=" + name + ",userName=" + userName);
-		return mDocManageDao.getDocInfoList(name, userName, req);
+		mLog.debug("--->getDocInfoList, name:{}, userName:{}", new Object[]{name, userName});
+		try {
+			return mDocManageDao.getDocInfoList(name, userName, req);
+		} catch (Exception e) {
+			mLog.error(LogUtil.getExceptionMessage(e));
+		}
+		return new HashMap<String, Object>();
 	}
 	
 	/**
@@ -81,26 +91,50 @@ public class DocManageController {
 	 */
 	@RequestMapping("/saveDocInfo")
 	@ResponseBody
-	public void saveDocInfo(HttpServletRequest req, HttpSession session){
+	public Object saveDocInfo(HttpServletRequest req, HttpSession session){
 		String name = req.getParameter("name");
 		String desc = req.getParameter("desc");
 		String docId = req.getParameter("docId");
-		mLog.info("--->saveDocInfo,docId" + docId + ",name=" + name + ",desc=" + desc);
-		if(StringUtils.isEmpty(docId)){
-			User user = (User) session.getAttribute(SessionKeyConstants.USER);
-			mDocManageDao.saveDocInfo(name, desc, user);
-			return;
+		mLog.info("--->saveDocInfo, docId:{}, name:{}, desc:{}", new Object[]{docId, name, desc});
+		JSONObject res = new JSONObject();
+		try {
+			if(StringUtils.isEmpty(docId)){
+				User user = (User) session.getAttribute(SessionKeyConstants.USER);
+				mDocManageDao.saveDocInfo(name, desc, user);
+				return res;
+			}
+			
+			mDocManageDao.updateDocInfo(docId, name, desc);
+		} catch (Exception e) {
+			mLog.error(LogUtil.getExceptionMessage(e));
+			if(null != e.getCause()){
+				res.put("msg", e.getCause().getMessage());
+			}else{
+				res.put("msg", e.toString());
+			}
+			res.put("flag", "-1");
 		}
-		
-		mDocManageDao.updateDocInfo(docId, name, desc);
+		return res;
 	}
 	
 	@RequestMapping("/delDoc")
 	@ResponseBody
-	public void delDoc(HttpServletRequest req){
+	public Object delDoc(HttpServletRequest req){
 		String docId = req.getParameter("docId");
-		mLog.info("--->delDoc, docId=" + docId);
-		mDocManageDao.delDoc(docId);
+		mLog.info("--->delDoc, docId:{}", docId);
+		JSONObject res = new JSONObject();
+		try {
+			mDocManageDao.delDoc(docId);
+		} catch (Exception e) {
+			mLog.error(LogUtil.getExceptionMessage(e));
+			if(null != e.getCause()){
+				res.put("msg", e.getCause().getMessage());
+			}else{
+				res.put("msg", e.toString());
+			}
+			res.put("flag", "-1");
+		}
+		return res;
 	}
 	
 	/**
@@ -110,13 +144,25 @@ public class DocManageController {
 	 */
 	@RequestMapping("/saveMdContent")
 	@ResponseBody
-	public void saveMdContent(HttpServletRequest req, HttpSession session){
+	public Object saveMdContent(HttpServletRequest req, HttpSession session){
 		String content = req.getParameter("content");
 		String version = req.getParameter("version");
 		String docId = req.getParameter("docId");
 		User user = (User)session.getAttribute(SessionKeyConstants.USER);
-		mLog.info("--->saveMdContent, docId=" + docId + ",version=" + version + ", userId=" + user.getId());
-		mDocManageDao.updateContent(docId, content, user, version);
+		mLog.info("--->saveMdContent, docId:{}, version:{}, userId:{}", new Object[]{docId, version, user.getId()});
+		JSONObject res = new JSONObject();
+		try {
+			mDocManageDao.updateContent(docId, content, user, version);
+		} catch (Exception e) {
+			mLog.error(LogUtil.getExceptionMessage(e));
+			if(null != e.getCause()){
+				res.put("msg", e.getCause().getMessage());
+			}else{
+				res.put("msg", e.toString());
+			}
+			res.put("flag", "-1");
+		}
+		return res;
 	}
 	
 	/**
@@ -126,19 +172,36 @@ public class DocManageController {
 	 */
 	@RequestMapping("/submitMdContent")
 	@ResponseBody
-	public void submitMdContent(HttpServletRequest req, HttpSession session){
+	public Object submitMdContent(HttpServletRequest req, HttpSession session){
 		String docId = req.getParameter("docId");
 		String content = req.getParameter("content");
 		User user = (User)session.getAttribute(SessionKeyConstants.USER);
-		mLog.info("--->submitMdContent,docId=" + docId + ",userId=" + user.getId());
-		mDocManageDao.saveContent(docId, content, user);
+		mLog.info("--->submitMdContent, docId:{}, userId:{}", new Object[]{docId, user.getId()});
+		JSONObject res = new JSONObject();
+		try {
+			mDocManageDao.saveContent(docId, content, user);
+		} catch (Exception e) {
+			mLog.error(LogUtil.getExceptionMessage(e));
+			if(null != e.getCause()){
+				res.put("msg", e.getCause().getMessage());
+			}else{
+				res.put("msg", e.toString());
+			}
+			res.put("flag", "-1");
+		}
+		return res;
 	}
 	
 	@RequestMapping("/getVersionList")
 	@ResponseBody
 	public List<Map<String, Object>> getVersionList(HttpServletRequest req){
 		String docId = req.getParameter("docId");
-		return mDocManageDao.getVersionList(docId);
+		try {
+			return mDocManageDao.getVersionList(docId);
+		} catch (Exception e) {
+			mLog.error(LogUtil.getExceptionMessage(e));
+		}
+		return new ArrayList<Map<String, Object>>();
 	}
 
 }

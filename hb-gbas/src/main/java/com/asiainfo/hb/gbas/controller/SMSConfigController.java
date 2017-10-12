@@ -1,9 +1,13 @@
 package com.asiainfo.hb.gbas.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+
+import net.sf.json.JSONObject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +17,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.asiainfo.hb.core.util.LogUtil;
 import com.asiainfo.hb.gbas.model.SMSConfigDao;
 
 /**
@@ -52,9 +57,14 @@ public class SMSConfigController {
 	@RequestMapping("/getAlarmUserList")
 	@ResponseBody
 	public Map<String, Object> getAlarmUserList(HttpServletRequest req){
-		String name = req.getParameter("userName");
-		String num = req.getParameter("num");
-		return mConfigDao.getAlarmUserList(name, num, req);
+		try {
+			String name = req.getParameter("userName");
+			String num = req.getParameter("num");
+			return mConfigDao.getAlarmUserList(name, num, req);
+		} catch (Exception e) {
+			mLog.error(LogUtil.getExceptionMessage(e));
+		}
+		return new HashMap<String, Object>();
 	}
 	
 	/**
@@ -63,17 +73,29 @@ public class SMSConfigController {
 	 */
 	@RequestMapping("/saveAlarmUser")
 	@ResponseBody
-	public void saveAlarmUser(HttpServletRequest req){
+	public Object saveAlarmUser(HttpServletRequest req){
 		String id = req.getParameter("alarmId");
 		String name = req.getParameter("userName");
 		String accNbr = req.getParameter("accNbr");
 		String remark = req.getParameter("userRemark");
-		mLog.info("---saveAlarmUser---,id:" + id + ";name:" + name + ";accNbr:" + accNbr + ";remark:" + remark);
-		if(StringUtils.isEmpty(id)){
-			mConfigDao.addUser(name, accNbr, remark);
-			return;
+		mLog.info("--->saveAlarmUser,id:{}; name:{}; accNbr:{}; remark:{}", new Object[]{id, name, accNbr, remark});
+		JSONObject res = new JSONObject();
+		try {
+			if(StringUtils.isEmpty(id)){
+				mConfigDao.addUser(name, accNbr, remark);
+				return res;
+			}
+			mConfigDao.updateUser(id, name, accNbr, remark);
+		} catch (Exception e) {
+			mLog.error(LogUtil.getExceptionMessage(e));
+			if(null != e.getCause()){
+				res.put("msg", e.getCause().getMessage());
+			}else{
+				res.put("msg", e.toString());
+			}
+			res.put("flag", "-1");
 		}
-		mConfigDao.updateUser(id, name, accNbr, remark);
+		return res;
 	}
 	
 	/**
@@ -82,10 +104,22 @@ public class SMSConfigController {
 	 */
 	@RequestMapping("/delAlarmUser")
 	@ResponseBody
-	public void delAlarmUser(HttpServletRequest req){
+	public Object delAlarmUser(HttpServletRequest req){
 		String ids = req.getParameter("alarmsIds");
-		mLog.info("---delAlarmUser---,ids:" + ids);
-		mConfigDao.delUser(ids);
+		mLog.info("---delAlarmUser---,ids:{}", ids);
+		JSONObject res = new JSONObject();
+		try {
+			mConfigDao.delUser(ids);
+		} catch (Exception e) {
+			mLog.error(LogUtil.getExceptionMessage(e));
+			if(null != e.getCause()){
+				res.put("msg", e.getCause().getMessage());
+			}else{
+				res.put("msg", e.toString());
+			}
+			res.put("flag", "-1");
+		}
+		return res;
 	}
 
 	/**
@@ -100,7 +134,12 @@ public class SMSConfigController {
 		String groupName = req.getParameter("groupName");
 		String userName = req.getParameter("userName");
 		String num = req.getParameter("num");
-		return mConfigDao.getAlarmGroup(groupId, groupName, userName, num);
+		try {
+			return mConfigDao.getAlarmGroup(groupId, groupName, userName, num);
+		} catch (Exception e) {
+			mLog.error(LogUtil.getExceptionMessage(e));
+		}
+		return new ArrayList<Map<String, Object>>();
 	}
 	
 	/**
@@ -112,7 +151,13 @@ public class SMSConfigController {
 	@ResponseBody
 	public List<Map<String, Object>> getUserByGroupId(HttpServletRequest req){
 		String groupId = req.getParameter("groupId");
-		return mConfigDao.getUserByGroupId(groupId);
+		mLog.debug("groupId:{}", groupId);
+		try {
+			return mConfigDao.getUserByGroupId(groupId);
+		} catch (Exception e) {
+			mLog.error(LogUtil.getExceptionMessage(e));
+		}
+		return new ArrayList<Map<String, Object>>();
 	}
 	
 	/**
@@ -121,18 +166,30 @@ public class SMSConfigController {
 	 */
 	@RequestMapping("/saveAlarmGroup")
 	@ResponseBody
-	public void saveAlarmGroup(HttpServletRequest req){
+	public Object saveAlarmGroup(HttpServletRequest req){
 		String operType = req.getParameter("operType");
 		String groupId = req.getParameter("groupId");
 		String groupName = req.getParameter("groupName");
 		String groupType = req.getParameter("groupType");
-		mLog.info("---saveAlarmGroup---,operType:" + groupType + "; groupId:" + groupId + "; groupName:" + groupName + "; groupType:" + groupType);
-		if(operType.equals("edit")){
-			mConfigDao.updateAlarmGroup(groupId, groupName, groupType);
-			return;
+		mLog.info("---saveAlarmGroup---,operType:{}; groupId:{}; groupName:{}; groupType:{}", new Object[]{operType, groupId, groupName, groupType});
+		JSONObject res = new JSONObject();
+		try {
+			if(operType.equals("edit")){
+				mConfigDao.updateAlarmGroup(groupId, groupName, groupType);
+				return res;
+			}
+			String userIds = req.getParameter("userIds");
+			mConfigDao.addAlarmGroup(groupId, groupName, groupType, userIds);
+		} catch (Exception e) {
+			mLog.error(LogUtil.getExceptionMessage(e));
+			if(null != e.getCause()){
+				res.put("msg", e.getCause().getMessage());
+			}else{
+				res.put("msg", e.toString());
+			}
+			res.put("flag", "-1");
 		}
-		String userIds = req.getParameter("userIds");
-		mConfigDao.addAlarmGroup(groupId, groupName, groupType, userIds);
+		return res;
 	}
 	
 	/**
@@ -144,7 +201,7 @@ public class SMSConfigController {
 	@ResponseBody
 	public boolean checkGroupId(HttpServletRequest req){
 		String groupId = req.getParameter("groupId");
-		mLog.debug("---checkGroupId---, groupId:" + groupId);
+		mLog.debug("---checkGroupId---, groupId:{}", groupId);
 		return mConfigDao.checkGroupId(groupId);
 	}
 	
@@ -154,9 +211,21 @@ public class SMSConfigController {
 	 */
 	@RequestMapping("/delAlarmGroup")
 	@ResponseBody
-	public void delAlarmGroup(HttpServletRequest req){
+	public Object delAlarmGroup(HttpServletRequest req){
 		String groupId = req.getParameter("groupId");
-		mConfigDao.delAlartGroup(groupId);
+		JSONObject res = new JSONObject();
+		try {
+			mConfigDao.delAlartGroup(groupId);
+		} catch (Exception e) {
+			mLog.error(LogUtil.getExceptionMessage(e));
+			if(null != e.getCause()){
+				res.put("msg", e.getCause().getMessage());
+			}else{
+				res.put("msg", e.toString());
+			}
+			res.put("flag", "-1");
+		}
+		return res;
 	}
 	
 	/**
@@ -170,7 +239,12 @@ public class SMSConfigController {
 		String groupId = req.getParameter("groupId");
 		String userName = req.getParameter("userName");
 		String num = req.getParameter("num");
-		return mConfigDao.getNotInUserList(userName, num, groupId);
+		try {
+			return mConfigDao.getNotInUserList(userName, num, groupId);
+		} catch (Exception e) {
+			mLog.error(LogUtil.getExceptionMessage(e));
+		}
+		return new ArrayList<Map<String, Object>>();
 	}
 	
 	/**
@@ -179,7 +253,7 @@ public class SMSConfigController {
 	 */
 	@RequestMapping("/delGroupUser")
 	@ResponseBody
-	public void delGroupUser(HttpServletRequest req){
+	public Object delGroupUser(HttpServletRequest req){
 		String groupId = req.getParameter("groupId");
 		String nums = req.getParameter("nums");
 		String[] numArr = nums.split(",");
@@ -191,7 +265,19 @@ public class SMSConfigController {
 			accNbrs += "'" + num + "'";
 		}
 		
-		mConfigDao.delGroupUser(groupId, accNbrs);
+		JSONObject res = new JSONObject();
+		try {
+			mConfigDao.delGroupUser(groupId, accNbrs);
+		} catch (Exception e) {
+			mLog.error(LogUtil.getExceptionMessage(e));
+			if(null != e.getCause()){
+				res.put("msg", e.getCause().getMessage());
+			}else{
+				res.put("msg", e.toString());
+			}
+			res.put("flag", "-1");
+		}
+		return res;
 	}
 	
 }

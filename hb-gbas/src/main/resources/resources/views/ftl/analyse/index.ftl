@@ -37,6 +37,11 @@ function getTemplAnalyseData(){
 			endTime: endTime
 		},
 		success: function(data, textStatus) {
+			if(data.flag == -1){
+				$.messager.alert('错误',data.msg,'error');
+				unMask();
+				return false;
+			}
 			if(data.length == 0){
 				unMask();
 				return false;

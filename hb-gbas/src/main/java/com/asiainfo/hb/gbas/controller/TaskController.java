@@ -1,10 +1,13 @@
 package com.asiainfo.hb.gbas.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+
+import net.sf.json.JSONObject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.asiainfo.hb.core.models.JsonHelper;
+import com.asiainfo.hb.core.util.LogUtil;
 import com.asiainfo.hb.gbas.model.TaskDao;
 
 /**
@@ -37,7 +41,7 @@ public class TaskController {
 	 */
 	@RequestMapping("/index")
 	public String index(){
-		mLog.debug("---index---");
+		mLog.debug("--->index");
 		return "ftl/task/task";
 	}
 	
@@ -50,7 +54,12 @@ public class TaskController {
 		param.put("etl_status", req.getParameter("status"));
 		param.put("gbas_code like", req.getParameter("name"));
 		
-		return mTaskDao.getTaskList(param, req);
+		try {
+			return mTaskDao.getTaskList(param, req);
+		} catch (Exception e) {
+			mLog.error(LogUtil.getExceptionMessage(e));
+		}
+		return new HashMap<String, Object>();
 	}
 	
 	/**
@@ -62,7 +71,7 @@ public class TaskController {
 	@RequestMapping("/execCondition")
 	public String execCondition(HttpServletRequest req, Model model){
 		String gbasCode = req.getParameter("gbasCode");
-		mLog.debug("---execCondition---, gbasCode:" + gbasCode);
+		mLog.debug("--->execCondition, gbasCode:{}", gbasCode);
 		model.addAttribute("nodeData", JsonHelper.getInstance().write(mTaskDao.getNodeData(gbasCode)));
 		return "ftl/task/execCondition";
 	}
@@ -73,19 +82,36 @@ public class TaskController {
 	 */
 	@RequestMapping("/updateStatus")
 	@ResponseBody
-	public void updateStatus(HttpServletRequest req){
+	public Object updateStatus(HttpServletRequest req){
 		String id = req.getParameter("id");
 		String status = req.getParameter("status");
-		mLog.info("------>updateStatus; id=" + id + ", status=" + status);
-		mTaskDao.updateStatus(id, status);
+		mLog.info("------>updateStatus; id={}, status={}", new Object[]{id, status});
+		JSONObject res = new JSONObject();
+		try {
+			mTaskDao.updateStatus(id, status);
+		} catch (Exception e) {
+			mLog.error(LogUtil.getExceptionMessage(e));
+			if(null != e.getCause()){
+				res.put("msg", e.getCause().getMessage());
+			}else{
+				res.put("msg", e.toString());
+			}
+			res.put("flag", "-1");
+		}
+		return res;
 	}
 
 	@RequestMapping("/getLog")
 	@ResponseBody
 	public List<Map<String, Object>> getLog(HttpServletRequest req){
 		String id = req.getParameter("id");
-		mLog.debug("------>getLog; id=" + id);
-		return mTaskDao.queryLog(id);
+		mLog.debug("------>getLog; id={}", id);
+		try {
+			return mTaskDao.queryLog(id);
+		} catch (Exception e) {
+			mLog.error(LogUtil.getExceptionMessage(e));
+		}
+		return new ArrayList<Map<String, Object>>();
 	}
 	
 	@RequestMapping("/getDepsProcStatus")
@@ -93,6 +119,11 @@ public class TaskController {
 	public List<Map<String, Object>> getDepsProcStatus(HttpServletRequest req){
 		String etlCycle = req.getParameter("etlCycle");
 		String gbasCode = req.getParameter("gbasCode");
-		return mTaskDao.getDepsProcStatus(gbasCode, etlCycle);
+		try {
+			return mTaskDao.getDepsProcStatus(gbasCode, etlCycle);
+		} catch (Exception e) {
+			mLog.error(LogUtil.getExceptionMessage(e));
+		}
+		return new ArrayList<Map<String, Object>>();
 	}
 }
