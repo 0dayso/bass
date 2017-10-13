@@ -1,25 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <title>文档编辑</title>
-    <link rel="stylesheet" type="text/css" href="${mvcPath}/resources/js/jquery-easyui-1.5.1/themes/bootstrap/easyui.css"/>
-	<link rel="stylesheet" type="text/css" href="${mvcPath}/resources/js/jquery-easyui-1.5.1/themes/icon.css">
-    <link rel="stylesheet" href="${mvcPath}/resources/lib/editormd/css/editormd.css" />
-    <script src="${mvcPath}/resources/js/jquery-1.8.3.min.js"></script>
-    <script src="${mvcPath}/resources/lib/editormd/editormd.js"></script>
-	<script src="${mvcPath}/resources/js/jquery-easyui-1.5.1/jquery.easyui.min.js"></script>
-	<script src="${mvcPath}/resources/js/jquery-easyui-1.5.1/locale/easyui-lang-zh_CN.js"></script>
+<meta charset="utf-8" />
+<title>文档编辑</title>
+<link rel="stylesheet" type="text/css" href="${mvcPath}/resources/js/jquery-easyui-1.5.1/themes/bootstrap/easyui.css"/>
+<link rel="stylesheet" type="text/css" href="${mvcPath}/resources/js/jquery-easyui-1.5.1/themes/icon.css">
+<link rel="stylesheet" href="${mvcPath}/resources/lib/editormd/css/editormd.css" />
+<script src="${mvcPath}/resources/js/jquery-1.8.3.min.js"></script>
+<script src="${mvcPath}/resources/lib/editormd/editormd.js"></script>
+<script src="${mvcPath}/resources/js/jquery-easyui-1.5.1/jquery.easyui.min.js"></script>
+<script src="${mvcPath}/resources/js/jquery-easyui-1.5.1/locale/easyui-lang-zh_CN.js"></script>
+<script src="${mvcPath}/resources/lib/jqLoading/js/jquery-ui-jqLoding.js"></script>
+<style>
+body{
+	margin: 0;
+	padding-top: 3px;
+}
+
+</style>
 </head>
 <body>
-<div id="test-editormd">                
+<div id="my-editormd">                
     <textarea id="mdContent" style="display:none;">${content!}</textarea>
 </div>
 <script type="text/javascript">
 $(function() {
-    var testEditor = editormd("test-editormd", {
+    var testEditor = editormd("my-editormd", {
         width  : "99%",
-        height : 540,
+        height : $(window).height() -10,
         flowChart : true,
         path   : '${mvcPath}/resources/lib/editormd/lib/',
         onSave : function() {
@@ -36,6 +44,7 @@ var version = '${version}';
 
 function saveContent(){
 	var content = $("#mdContent").html();
+	$("body").jqLoading();
 	$.ajax({
 		type: "POST"
 		,url: "${mvcPath}/docManage/saveMdContent"
@@ -46,6 +55,7 @@ function saveContent(){
 		}
 		,dataType : "json"
 		,success: function(data){
+			$("body").jqLoading("destroy");
 			if(data.flag == -1){
 				$.messager.alert('错误', data.msg,'error');
 				return false;
@@ -57,6 +67,7 @@ function saveContent(){
 
 function submit(){
 	var content = $("#mdContent").html();
+	$("body").jqLoading("");
 	$.ajax({
 		type: "POST"
 		,url: "${mvcPath}/docManage/submitMdContent"
@@ -66,6 +77,7 @@ function submit(){
 		}
 		,dataType : "json"
 		,success: function(data){
+			$("body").jqLoading("destroy");
 			if(data.flag == -1){
 				$.messager.alert('错误', data.msg,'error');
 				return false;

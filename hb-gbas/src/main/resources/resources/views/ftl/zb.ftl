@@ -328,11 +328,11 @@ function userSelect(){
 		<thead>
 			<tr>
 				<!--<th field="itemId" checkbox="true"></th>-->
+				<th data-options="field:'zb_code',width:80">编码</th>
+				<th data-options="field:'zb_name',width:120">名称</th>
 				<th data-options="field:'zb_type',width:60">类型</th>
 				<th data-options="field:'cycle',width:60,formatter:cycleReplace">周期</th>
 				<th data-options="field:'boi_code',width:80,hidden:'true'">一经接口号</th>
-				<th data-options="field:'zb_code',width:80">编码</th>
-				<th data-options="field:'zb_name',width:120">名称</th>
 				<th data-options="field:'remark',width:180">描述</th>
 				
 				<th data-options="field:'rule_type',width:80,hidden:'true'">规则类型</th>

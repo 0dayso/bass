@@ -324,9 +324,9 @@ function userSelect(){
 		<thead>
 			<tr>
 				<!--<th field="itemId" checkbox="true"></th>-->
-				<th data-options="field:'cycle',width:60,formatter:cycleReplace">周期</th>
 				<th data-options="field:'ex_code',width:80">编码</th>
 				<th data-options="field:'ex_name',width:120">名称</th>
+				<th data-options="field:'cycle',width:60,formatter:cycleReplace">周期</th>
 				<th data-options="field:'ex_id',width:80">接口ID</th>
 				<th data-options="field:'boi_code',width:80,hidden:'true'">一经接口号</th>
 				<th data-options="field:'remark',width:180">描述</th>

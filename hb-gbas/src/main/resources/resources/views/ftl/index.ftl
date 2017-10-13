@@ -10,7 +10,7 @@
 <script src="${mvcPath}/resources/js/jquery-easyui-1.5.1/jquery.easyui.min.js"></script>
 <script src="${mvcPath}/resources/js/jquery-easyui-1.5.1/locale/easyui-lang-zh_CN.js"></script>
 <script>
-function addTab(title, url){
+function addTab(id, title, url){
 	
 	if(url == ''){
 		alert('正在开发中……');
@@ -46,23 +46,23 @@ function tabClose(){
 			<div id="menu" class="easyui-accordion" data-options="fit:true,border:false">
 				<div title='基本配置'>
 					<ul style="padding: 0 10px;">
-						<li><a href='#' onclick="addTab('指标配置', '${mvcPath}/zb/index')"><span>指标配置</span></a></li>
-						<li><a href='#' onclick="addTab('接口配置', '${mvcPath}/ex/index')"><span>接口配置</span></a></li>
-						<li><a href='#' onclick="addTab('接口导出配置', '${mvcPath}/exportConfig/index')"><span>接口导出配置</span></a></li>
-						<li><a href='#' onclick="addTab('接口时限告警', '${mvcPath}/monitor/index')"><span>接口时限告警</span></a></li>
-						<li><a href='#' onclick="addTab('短信告警人配置', '${mvcPath}/smsConfig/user/index')"><span>短信告警人配置</span></a></li>
-						<li><a href='#' onclick="addTab('短信告警群组配置', '${mvcPath}/smsConfig/group/index')"><span>短信告警群组配置</span></a></li>
-						<!--<li><a href='#' onclick="addTab('违反稽核告警配置', '')"><span>违反稽核告警配置</span></a></li>-->
-						<li><a href='#' onclick="addTab('文档管理', '${mvcPath}/docManage/index')"><span>文档管理</span></a></li>
+						<li><a href='#' onclick="addTab('1','指标配置', '${mvcPath}/zb/index')"><span>指标配置</span></a></li>
+						<li><a href='#' onclick="addTab('2','接口配置', '${mvcPath}/ex/index')"><span>接口配置</span></a></li>
+						<li><a href='#' onclick="addTab('3','接口导出配置', '${mvcPath}/exportConfig/index')"><span>接口导出配置</span></a></li>
+						<li><a href='#' onclick="addTab('4','接口时限告警', '${mvcPath}/monitor/index')"><span>接口时限告警</span></a></li>
+						<li><a href='#' onclick="addTab('5','短信告警人配置', '${mvcPath}/smsConfig/user/index')"><span>短信告警人配置</span></a></li>
+						<li><a href='#' onclick="addTab('6','短信告警群组配置', '${mvcPath}/smsConfig/group/index')"><span>短信告警群组配置</span></a></li>
+						<!--<li><a href='#' onclick="addTab('7','违反稽核告警配置', '')"><span>违反稽核告警配置</span></a></li>-->
+						<li><a href='#' onclick="addTab('8','文档管理', '${mvcPath}/docManage/index')"><span>文档管理</span></a></li>
 					</ul>
 				</div>
 		
 				<div title='业务'>
 					<ul style="padding: 0 10px;">
-						<li><a href='#' onclick="addTab('任务运行概况', '${mvcPath}/task/index')"><span>任务运行概况</span></a></li>
-						<!--<li><a href='#' onclick="addTab('程序运行分析', '')"><span>程序运行分析</span></a></li>-->
-						<li><a href='#' onclick="addTab('指标波动性展示', '${mvcPath}/analyse/zbFluctuate')"><span>指标波动性展示</span></a></li>
-						<!--<li><a href='#' onclick="addTab('平台健康度监控', '')"><span>平台健康度监控</span></a></li>-->
+						<li><a href='#' onclick="addTab('9','任务运行概况', '${mvcPath}/task/index')"><span>任务运行概况</span></a></li>
+						<!--<li><a href='#' onclick="addTab('10','程序运行分析', '')"><span>程序运行分析</span></a></li>-->
+						<li><a href='#' onclick="addTab('11','指标波动性展示', '${mvcPath}/analyse/zbFluctuate')"><span>指标波动性展示</span></a></li>
+						<!--<li><a href='#' onclick="addTab('12','平台健康度监控', '')"><span>平台健康度监控</span></a></li>-->
 					</ul>
 				</div>
 			</div>

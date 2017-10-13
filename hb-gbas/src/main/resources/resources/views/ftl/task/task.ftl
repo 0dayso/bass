@@ -203,7 +203,7 @@ function queryTask(){
 				<option value="monthly">月</option>
 			</select>
 			<span>状态</span>
-			<select id="qryStatus" class="easyui-combobox" data-options="editable:false,panelHeight:'auto'" style="height: 27px; width: 100px;">
+			<select id="qryStatus" class="easyui-combobox" data-options="editable:false,panelHeight:'auto'" style="height: 27px; width: 120px;">
 				<option value="">---请选择---</option>
 				<option value="0">等待</option>
 				<option value="1">强制开始执行</option>

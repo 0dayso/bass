@@ -9,8 +9,8 @@
     $.fn.jqLoading =function(option) {
         var defaultVal = {
             backgroudColor: "#ECECEC",//背景色
-            backgroundImage: "/hb-bass-navigation/hb-bass-frame/views/ftl/index2/lib/jqLoading/image/loading.gif",//背景图片
-            text: "加载中，请稍候...",//文字 
+            backgroundImage: "../resources/lib/jqLoading/image/loading.gif",//背景图片
+            text: "正在处理，请稍候...",//文字 
             width: 180,//宽度
             height: 60,//高度
             type:0 //0全部遮，1 局部遮
@@ -74,7 +74,7 @@
                 verticalAlign: "middle",
                 background: opt.backgroudColor,
                 borderRadius:"8px",
-                fontSize:"13px"
+                fontSize:"12px"
             });
             
             content.append("<img style='vertical-align:middle;margin:"+(opt.height/4)+"px; 0 0 5px;margin-right:5px;' src='" + opt.backgroundImage + "' /><span style='text-align:center; vertical-align:middle;'>" + opt.text + "</span>");

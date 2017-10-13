@@ -100,7 +100,7 @@ function operation(value, row, index){
 }
 
 function openDocEditPage(docId, version){
-	window.parent.addTab('文档编辑(' + docName + '_' + version + ')' ,'${mvcPath}/docManage/markdown?docId=' + docId + '&version=' + version);
+	window.parent.addTab(docId + "_" + version,'文档编辑(' + docName + '_' + version + ')' ,'${mvcPath}/docManage/markdown?docId=' + docId + '&version=' + version);
 }
 
 </script>
