@@ -64,6 +64,14 @@ if(nodes.length == 0){
 	var render = new dagreD3.render();
 	var svg = d3.select("svg"),
 	inner = svg.append("g");
+	
+	//增加拖拽、缩放事件
+	/**var zoom = d3.behavior.zoom().on("zoom", function() {
+      inner.attr("transform", "translate(" + d3.event.translate + ")" +
+                                  "scale(" + d3.event.scale + ")");
+    });
+	svg.call(zoom);**/
+	
 	render(inner, g);
 	var xCenterOffset = (svg.attr("width") - g.graph().width) / 2;
 	inner.attr("transform", "translate(" + xCenterOffset + ", 20)");

@@ -26,6 +26,10 @@ $(function(){
 function getTemplAnalyseData(){
 	var startTime = $("#startDate").datebox("getValue");
 	var endTime = $("#endDate").datebox("getValue");
+	if(endTime != '' && startTime > endTime){
+		$.messager.alert('提示','开始时间不能晚于结束时间','info');
+		return;
+	}
 	loadMask();
 	$.ajax({
 		url: "${mvcPath}/analyse/getTemplAnalyse",

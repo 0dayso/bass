@@ -270,6 +270,13 @@ public class AnalyseController {
 	 * @throws Exception
 	 */
 	private JSONArray initDate(String startTime, String endTime, String sdfPattern) throws Exception{
+		JSONArray dateArr = new JSONArray();
+		
+		if(!StringUtils.isEmpty(startTime) && !StringUtils.isEmpty(endTime) && startTime.equals(endTime)){
+			dateArr.add(startTime.replace("-", ""));
+			return dateArr;
+		}
+		
 		SimpleDateFormat sdf = new SimpleDateFormat(sdfPattern);
 		Date startDate = null;
 		Date endDate = null;
@@ -279,6 +286,7 @@ public class AnalyseController {
 		if(endTime != null){
 			endTime = endTime.replace("-", "");
 		}
+		
 		
 		if(StringUtils.isEmpty(startTime)){
 			if(StringUtils.isEmpty(endTime)){
@@ -312,7 +320,7 @@ public class AnalyseController {
 		}else{
 			dateList = DateUtil.getDatesBetweenTwoMon(sdf.parse(startTime), sdf.parse(endTime));
 		}
-		JSONArray dateArr = new JSONArray();
+		
 		for(Date date : dateList){
 			dateArr.add(sdf.format(date));
 		}
