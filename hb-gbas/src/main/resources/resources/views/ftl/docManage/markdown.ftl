@@ -10,7 +10,7 @@
 <script src="${mvcPath}/resources/lib/editormd/editormd.js"></script>
 <script src="${mvcPath}/resources/js/jquery-easyui-1.5.1/jquery.easyui.min.js"></script>
 <script src="${mvcPath}/resources/js/jquery-easyui-1.5.1/locale/easyui-lang-zh_CN.js"></script>
-<script src="${mvcPath}/resources/lib/jqLoading/js/jquery-ui-jqLoding.js"></script>
+<script src="${mvcPath}/resources/js/common.js"></script>
 <style>
 body{
 	margin: 0;
@@ -44,7 +44,7 @@ var version = '${version}';
 
 function saveContent(){
 	var content = $("#mdContent").html();
-	$("body").jqLoading();
+	loadMask();
 	$.ajax({
 		type: "POST"
 		,url: "${mvcPath}/docManage/saveMdContent"
@@ -55,19 +55,23 @@ function saveContent(){
 		}
 		,dataType : "json"
 		,success: function(data){
-			$("body").jqLoading("destroy");
+			unMask();
 			if(data.flag == -1){
 				$.messager.alert('错误', data.msg,'error');
 				return false;
 			}
 			$.messager.alert('提示','保存成功','info');
+		},
+		error:function(data, textStatus){
+			unMask();
+			$.messager.alert('错误', '操作失败，错误码：' + data.status,'error');
 		}
 	});
 }
 
 function submit(){
 	var content = $("#mdContent").html();
-	$("body").jqLoading("");
+	loadMask();
 	$.ajax({
 		type: "POST"
 		,url: "${mvcPath}/docManage/submitMdContent"
@@ -77,7 +81,7 @@ function submit(){
 		}
 		,dataType : "json"
 		,success: function(data){
-			$("body").jqLoading("destroy");
+			unMask();
 			if(data.flag == -1){
 				$.messager.alert('错误', data.msg,'error');
 				return false;
@@ -86,6 +90,10 @@ function submit(){
 			wind.window({onBeforeClose:function(){
 				window.parent.tabClose();
 			}});
+		},
+		error:function(data, textStatus){
+			unMask();
+			$.messager.alert('错误', '操作失败，错误码：' + data.status,'error');
 		}
 	});
 }

@@ -80,6 +80,7 @@ function saveZb(){
 	var developer = $('#addDeveloper').val();
 	var optType = $("#optType").val();
 	
+	loadMask();
 	$.ajax({
 		type: "POST"
 		,url: "${mvcPath}/zb/saveZbDef"
@@ -92,6 +93,7 @@ function saveZb(){
 		}
 		,dataType : "json"
 		,success: function(data){
+			unMask();
 			if(data.flag == -1){
 				$.messager.alert('错误', data.msg,'error');
 				return false;
@@ -101,6 +103,10 @@ function saveZb(){
 				queryZb();
 				$('#addZbDialog').dialog('close');
 			}});
+		},
+		error:function(data, textStatus){
+			unMask();
+			$.messager.alert('错误', '操作失败，错误码：' + data.status,'error');
 		}
 	});
 }
@@ -215,6 +221,7 @@ function updateStatus(status, content){
 				},
 				error:function(data, textStatus){
 					unMask();
+					$.messager.alert('错误', '操作失败，错误码：' + data.status,'error');
 				}
 			});
 		}
@@ -449,12 +456,18 @@ function userSelect(){
 			buttons: [{
 					text:'提交',
 					handler:function(){
+						loadMask();
 						$('#zbDefForm').form('submit', {
 							url: '${mvcPath}/zb/saveZbDef',
 							onSubmit: function(param){
-								return $(this).form('enableValidation').form('validate');
+								var valiRes = $(this).form('enableValidation').form('validate');
+								if(!valiRes){
+									unMask();
+								}
+								return valiRes;
 							},
 							success:function(data){
+								unMask();
 								data = JSON.parse(data);
 								if(data.flag == '-1'){
 									$.messager.alert('错误', data.msg, 'error');

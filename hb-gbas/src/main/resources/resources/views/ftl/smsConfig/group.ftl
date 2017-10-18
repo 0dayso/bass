@@ -10,6 +10,7 @@
 <script src="${mvcPath}/resources/js/jquery-easyui-1.5.1/jquery.easyui.min.js"></script>
 <script src="${mvcPath}/resources/js/jquery-easyui-1.5.1/locale/easyui-lang-zh_CN.js"></script>
 <script src="${mvcPath}/resources/js/treegrid-pagination.js"></script>
+<script src="${mvcPath}/resources/js/common.js"></script>
 <script>
 $(function(){
 	$('#groupTable').treegrid().treegrid('clientPaging');
@@ -86,6 +87,7 @@ function delGroup(){
 	
 	$.messager.confirm('提示', '您确定要删除群组<' + row.name + '>吗?', function(r){
 		if (r){
+			loadMask();
 			$.ajax({
 				type: "post",
 				url: '${mvcPath}/smsConfig/delAlarmGroup',
@@ -94,6 +96,7 @@ function delGroup(){
 				},
 				dataType : "json",
 				success: function(data){
+					unMask();
 					if(data.flag == -1){
 						$.messager.alert('错误', data.msg,'error');
 						return false;
@@ -102,6 +105,10 @@ function delGroup(){
 					wind.window({onBeforeClose:function(){
 						queryGroup();
 					}});
+				},
+				error:function(data, textStatus){
+					unMask();
+					$.messager.alert('错误', '操作失败，错误码：' + data.status,'error');
 				}
 			});
 		}
@@ -150,6 +157,7 @@ function addAlarmGroup(){
 }
 
 function saveGroup(operType, groupId, groupName, groupType,userIds){
+	loadMask();
 	$.ajax({
 		type: "post",
 		url: '${mvcPath}/smsConfig/saveAlarmGroup',
@@ -162,6 +170,7 @@ function saveGroup(operType, groupId, groupName, groupType,userIds){
 		},
 		dataType : "json",
 		success: function(data){
+			unMask();
 			if(data.flag == -1){
 				$.messager.alert('错误', data.msg,'error');
 				return false;
@@ -172,6 +181,10 @@ function saveGroup(operType, groupId, groupName, groupType,userIds){
 				$("#addDialog").dialog("close");
 				$("#editDialog").dialog("close");
 			}});
+		},
+		error:function(data, textStatus){
+			unMask();
+			$.messager.alert('错误', '操作失败，错误码：' + data.status,'error');
 		}
 	});
 }
@@ -215,6 +228,7 @@ function userSelect(){
 	}
 	
 	var groupInfo = $('#groupTable').treegrid('getSelected');
+	loadMask();
 	$.ajax({
 		type: "post",
 		url: '${mvcPath}/smsConfig/saveAlarmGroup',
@@ -227,8 +241,13 @@ function userSelect(){
 		},
 		dataType : "json",
 		success: function(data){
+			unMask();
 			$("#userDialog").dialog("close");
 			initGroupUser();
+		},
+		error:function(data, textStatus){
+			unMask();
+			$.messager.alert('错误', '操作失败，错误码：' + data.status,'error');
 		}
 	});
 }
@@ -265,6 +284,7 @@ function delGroupUser(){
 		nums.push(rows[i].acc_nbr);
 	}
 	var groupId = $("#groupId").textbox("getValue").trim();
+	loadMask();
 	$.ajax({
 		type: "post",
 		url: '${mvcPath}/smsConfig/delGroupUser',
@@ -274,6 +294,7 @@ function delGroupUser(){
 		},
 		dataType : "json",
 		success: function(data){
+			unMask();
 			if(data.flag == -1){
 				$.messager.alert('错误', data.msg,'error');
 				return false;
@@ -282,6 +303,10 @@ function delGroupUser(){
 			wind.window({onBeforeClose:function(){
 				initGroupUser();
 			}});
+		},
+		error:function(data, textStatus){
+			unMask();
+			$.messager.alert('错误', '操作失败，错误码：' + data.status,'error');
 		}
 	});
 }

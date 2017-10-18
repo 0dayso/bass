@@ -9,6 +9,7 @@
 <script src="${mvcPath}/resources/js/jquery-1.8.3.min.js"></script>
 <script src="${mvcPath}/resources/js/jquery-easyui-1.5.1/jquery.easyui.min.js"></script>
 <script src="${mvcPath}/resources/js/jquery-easyui-1.5.1/locale/easyui-lang-zh_CN.js"></script>
+<script src="${mvcPath}/resources/js/common.js"></script>
 <script>
 
 function openAddDialog(){
@@ -59,6 +60,7 @@ function saveAlarmUser(){
 	}
 	
 	var alarmId = $("#alarmId").val();
+	loadMask();
 	$.ajax({
 		type: "post",
 		url: '${mvcPath}/smsConfig/saveAlarmUser',
@@ -70,6 +72,7 @@ function saveAlarmUser(){
 		},
 		dataType : "json",
 		success: function(data){
+			unMask();
 			if(data.flag == -1){
 				$.messager.alert('错误', data.msg,'error');
 				return false;
@@ -79,6 +82,10 @@ function saveAlarmUser(){
 				$("#userDialog").dialog("close");
 				queryUser();
 			}});
+		},
+		error:function(data, textStatus){
+			unMask();
+			$.messager.alert('错误', '操作失败，错误码：' + data.status,'error');
 		}
 	});
 }
@@ -96,6 +103,7 @@ function delUser(){
 			for(var i=0; i<rows.length; i++){
 				ids.push(rows[i].id);
 			}
+			loadMask();
 			$.ajax({
 				type: "post",
 				url: '${mvcPath}/smsConfig/delAlarmUser',
@@ -104,6 +112,7 @@ function delUser(){
 				},
 				dataType : "json",
 				success: function(data){
+					unMask();
 					if(data.flag == -1){
 						$.messager.alert('错误', data.msg,'error');
 						return false;
@@ -112,6 +121,10 @@ function delUser(){
 					wind.window({onBeforeClose:function(){
 						queryUser();
 					}});
+				},
+				error:function(data, textStatus){
+					unMask();
+					$.messager.alert('错误', '操作失败，错误码：' + data.status,'error');
 				}
 			});
 		}

@@ -9,6 +9,7 @@
 <script src="${mvcPath}/resources/js/jquery-1.8.3.min.js"></script>
 <script src="${mvcPath}/resources/js/jquery-easyui-1.5.1/jquery.easyui.min.js"></script>
 <script src="${mvcPath}/resources/js/jquery-easyui-1.5.1/locale/easyui-lang-zh_CN.js"></script>
+<script src="${mvcPath}/resources/js/common.js"></script>
 <script>
 
 function openParamDialog(){
@@ -100,6 +101,9 @@ function accept(){
 		}
 	}
 	var taskId = $("#currentConfig").val();
+	
+	loadMask();
+	
 	$.ajax({
 		type: "POST"
 		,url: "${mvcPath}/exportConfig/saveTaskParam"
@@ -109,6 +113,7 @@ function accept(){
 		}
 		,dataType : "json"
 		,success: function(data){
+			unMask();
 			if(data.flag == -1){
 				$.messager.alert('错误',data.msg,'error');
 				return false;
@@ -117,6 +122,10 @@ function accept(){
 			wind.window({onBeforeClose:function(){
 				$("#paramContainer").window('close');
 			}});
+		},
+		error:function(data, textStatus){
+			unMask();
+			$.messager.alert('错误', '操作失败，错误码：' + data.status,'error');
 		}
 	});
 }
@@ -161,6 +170,7 @@ function delConfig(){
 	}
 	$.messager.confirm('提示', '您确定要删除此条配置吗?', function(r){
 		if (r){
+			loadMask();
 			$.ajax({
 				type: "POST"
 				,url: "${mvcPath}/exportConfig/delTaskConfig"
@@ -169,6 +179,7 @@ function delConfig(){
 				}
 				,dataType : "json"
 				,success: function(data){
+					unMask();
 					if(data.flag == -1){
 						$.messager.alert('错误',data.msg,'error');
 						return false;
@@ -178,6 +189,10 @@ function delConfig(){
 						//$('#configTable').datagrid('reload');
 						queryConfig();
 					}});
+				},
+				error:function(data, textStatus){
+					unMask();
+					$.messager.alert('错误', '操作失败，错误码：' + data.status,'error');
 				}
 			});
 		}
@@ -273,12 +288,18 @@ function queryConfig(){
 			buttons: [{
 					text:'提交',
 					handler:function(){
+						loadMask();
 						$('#configForm').form('submit', {
 							url: '${mvcPath}/exportConfig/saveTaskConfig',
 							onSubmit: function(param){
-								return $(this).form('enableValidation').form('validate');
+								var res = $(this).form('enableValidation').form('validate');
+								if(!res){
+									unMask();
+								}
+								return res;
 							},
 							success:function(data){
+								unMask();
 								data = JSON.parse(data);
 								if(data.flag == -1){
 									$.messager.alert('错误',data.msg,'error');

@@ -80,6 +80,7 @@ function saveEx(){
 	var developer = $('#addDeveloper').val();
 	var optType = $("#optType").val();
 	
+	loadMask();
 	$.ajax({
 		type: "POST"
 		,url: "${mvcPath}/ex/saveExDef"
@@ -92,6 +93,7 @@ function saveEx(){
 		}
 		,dataType : "json"
 		,success: function(data){
+			unMask();
 			if(data.flag == '-1'){
 				$.messager.alert('错误', data.msg,'error');
 				return false;
@@ -101,6 +103,10 @@ function saveEx(){
 				queryEx();
 				$('#addExDialog').dialog('close');
 			}});
+		},
+		error:function(data, textStatus){
+			unMask();
+			$.messager.alert('错误', '操作失败，错误码：' + data.status,'error');
 		}
 	});
 }
@@ -213,6 +219,7 @@ function updateStatus(status, content){
 				},
 				error:function(data, textStatus){
 					unMask();
+					$.messager.alert('错误', '操作失败，错误码：' + data.status,'error');
 				}
 			});
 		}
@@ -435,12 +442,18 @@ function userSelect(){
 			buttons: [{
 					text:'提交',
 					handler:function(){
+						loadMask();
 						$('#exDefForm').form('submit', {
 							url: '${mvcPath}/ex/saveExDef',
 							onSubmit: function(param){
-								return $(this).form('enableValidation').form('validate');
+								var res = $(this).form('enableValidation').form('validate');
+								if(!res){
+									unMask();
+								}
+								return res;
 							},
 							success:function(data){
+								unMask();
 								data = JSON.parse(data);
 								if(data.flag == '-1'){
 									$.messager.alert('错误', data.msg,'error');

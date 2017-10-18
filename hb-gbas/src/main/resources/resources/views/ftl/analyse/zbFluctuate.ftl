@@ -108,16 +108,16 @@ function queryGbasData(){
 		},
 		success: function(data, textStatus) {
 			if(data.flag == -1){
-				$.messager.alert('错误', data.msg,'error');
 				unMask();
+				$.messager.alert('错误', data.msg,'error');
 				return false;
 			}
 			showChar(data);
 			unMask();
 		},
 		error:function(data, textStatus){
-			alert("查询指标数据出错");
 			unMask();
+			$.messager.alert('错误', '操作失败，错误码：' + data.status,'error');
 		}
 	});
 }
@@ -181,6 +181,7 @@ function saveTemplate(){
 	$("#undo_redo_to option").each(function(){
         gbasCodes.push($(this).val());
     });
+    loadMask();
 	$.ajax({
 		url: "${mvcPath}/analyse/saveTemplate",
 		type:"post",
@@ -193,6 +194,7 @@ function saveTemplate(){
 			gbasCode: gbasCodes.toString()
 		},
 		success: function(data, textStatus) {
+			unMask();
 			if(data.flag == -1){
 				$.messager.alert('错误', data.msg,'error');
 				return false;
@@ -203,7 +205,8 @@ function saveTemplate(){
 			}});
 		},
 		error:function(data, textStatus){
-			alert("保存模板出错");
+			unMask();
+			$.messager.alert('错误', '操作失败，错误码：' + data.status,'error');
 		}
 	});
 }
@@ -238,6 +241,7 @@ function tempplateOper(operType){
 		idArr.push(tempList[i].id);
 	}
 	
+	loadMask();
 	$.ajax({
 		url: "${mvcPath}/analyse/templageOper",
 		type:"post",
@@ -247,6 +251,7 @@ function tempplateOper(operType){
 			ids: idArr.toString()
 		},
 		success: function(data, textStatus) {
+			unMask();
 			if(data.flag == -1){
 				$.messager.alert('错误', data.msg,'error');
 				return false;
@@ -257,7 +262,8 @@ function tempplateOper(operType){
 			}});
 		},
 		error:function(data, textStatus){
-			alert("操作出错");
+			unMask();
+			$.messager.alert('错误', '操作失败，错误码：' + data.status,'error');
 		}
 	});
 }

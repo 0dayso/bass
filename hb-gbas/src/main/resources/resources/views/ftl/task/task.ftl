@@ -72,6 +72,7 @@ function updateStatus(status, content){
 	
 	$.messager.confirm('提示', '您确定要' + content + '吗?', function(r){
 		if (r){
+			loadMask();
 			$.ajax({
 				type: "POST"
 				,url: "${mvcPath}/task/updateStatus"
@@ -81,6 +82,7 @@ function updateStatus(status, content){
 				}
 				,dataType : "json"
 				,success: function(data){
+					unMask();
 					if(data.flag == -1){
 						$.messager.alert('错误', data.msg,'error');
 						return false;
@@ -89,6 +91,10 @@ function updateStatus(status, content){
 					wind.window({onBeforeClose:function(){
 						queryTask();
 					}});
+				},
+				error:function(data, textStatus){
+					unMask();
+					$.messager.alert('错误', '操作失败，错误码：' + data.status,'error');
 				}
 			});
 		}

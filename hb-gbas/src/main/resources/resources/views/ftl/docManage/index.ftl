@@ -9,6 +9,7 @@
 <script src="${mvcPath}/resources/js/jquery-1.8.3.min.js"></script>
 <script src="${mvcPath}/resources/js/jquery-easyui-1.5.1/jquery.easyui.min.js"></script>
 <script src="${mvcPath}/resources/js/jquery-easyui-1.5.1/locale/easyui-lang-zh_CN.js"></script>
+<script src="${mvcPath}/resources/js/common.js"></script>
 <script>
 
 function openAddDialog(){
@@ -44,6 +45,7 @@ function delDoc(){
 	
 	$.messager.confirm('提示', '您确定要删除所选文档信息吗?', function(r){
 		if (r){
+			loadMask();
 			$.ajax({
 				type: "post",
 				url: '${mvcPath}/docManage/delDoc',
@@ -52,6 +54,7 @@ function delDoc(){
 				},
 				dataType : "json",
 				success: function(data){
+					unMask();
 					if(data.flag == -1){
 						$.messager.alert('错误', data.msg,'error');
 						return false;
@@ -60,6 +63,10 @@ function delDoc(){
 					wind.window({onBeforeClose:function(){
 						queryDoc();
 					}});
+				},
+				error:function(data, textStatus){
+					unMask();
+					$.messager.alert('错误', '操作失败，错误码：' + data.status,'error');
 				}
 			});
 		}
@@ -146,12 +153,18 @@ function openDocEditPage(docId, version){
 			buttons: [{
 					text:'提交',
 					handler:function(){
+						loadMask();
 						$('#docForm').form('submit', {
 							url: '${mvcPath}/docManage/saveDocInfo',
 							onSubmit: function(param){
-								return $(this).form('enableValidation').form('validate');
+								var res = $(this).form('enableValidation').form('validate');
+								if(!res){
+									unMask();
+								}
+								return res;
 							},
 							success:function(data){
+								unMask();
 								data = JSON.parse(data);
 								if(data.flag == -1){
 									$.messager.alert('错误', data.msg,'error');
